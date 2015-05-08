@@ -5,7 +5,7 @@ Issue:
   GITCLONEREPO:
     GitRepo: 'https://github.com/gkhakare/CoreKIs.git'
     TargetMachine: shree
-    TargetState: Cloned 
+    TargetState: Created
     TargetPath: /home/shreyas/Downloads
     GitUser: TechyShreeyash
     GitPassword: shreeyash13

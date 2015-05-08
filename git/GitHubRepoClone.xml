@@ -16,7 +16,7 @@
                 <AttributeFilter Name="TargetPath" Mode="exists"/>
                 <AttributeFilter Name="GitUser" Mode="exists"/>
                 <AttributeFilter Name="GitPassword" Mode="exists"/>
-				<AttributeFilter Name="TargetState" Mode="string" Value="Cloned"/>
+				<AttributeFilter Name="TargetState" Mode="string" Value="Created"/>
 				<AttributeFilter Name="Status" Mode="notexists"/>
 				<AttributeFilter Name="GitRepoName" Mode="exists"/>
 			</SubItem>
@@ -28,13 +28,36 @@
                 <DataType>ProcessingTasks</DataType>
 			</GenerateData>
 
-			<!--Task Do the GIT Clone-->	
+			<!--Task1 Check if GIT package is there -->	
+  
+            <IncAttribute Name="PROTASKS:NumberTotal"/>
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+				TargetMachine=${GCR:TargetMachine}      
+				TargetState=Created
+				User=${GCR:User}
+				Lib=PKG
+				PKG=git
+				Host=${GCR:Host}
+				CurrentState=ReadState
+				/> </NewBlock>]]>
+			</XMLExtract>
+			
+      
+			<GenerateData Alias="VAL"> 
+				<!-- Independent="true" can be applied, if multiple Issues should be generated. In this case pass on the parent IssueID to the resulting Issue <ParentIID>${IID}</ParentIID>, don't forget to include ParentIID=${IID} into the Tasks DataBlock on the Node -->
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>	
+
+
+			<!--Task2 Do the GIT Clone-->	
 			<IncAttribute Name="PROTASKS:NumberTotal"/>
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
 				TargetPath='${GCR:TargetPath}'
 				TargetMachine=${GCR:TargetMachine}
-				TargetState=Cloned
+				TargetState=Created
 				TargetRepo='${GCR:GitRepo}'
 				GitRepoName=${GCR:GitRepoName}
 				User=${GCR:User}
