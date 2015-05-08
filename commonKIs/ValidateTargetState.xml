@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="arago:WorkFlowUserStory:ValidateTargetState">
+	<Title>Validate</Title>
+	<Description>Validation of the CurrentState against the TargetState</Description>
+	
+	<BindAttributes>
+		<Description>Bind to all machine Nodes with Tasks block in Extensions where CurrentState is equal to the TargetState</Description>
+		<AttributeFilter Name="NodeType" Mode="exists"/>
+		<SubItem Name="Extensions"  Alias="EXTS"> 
+			<SubItem Name="Tasks" Alias="TASKS" >
+				<AttributeFilter Name="TargetMachine" Mode="exists"/>
+				<AttributeFilter Name="TargetState" Mode="exists"/>
+				<AttributeFilter Name="CurrentState" Mode="string" Value="${SELF:TargetState}" />	
+				
+			</SubItem> 
+		</SubItem> 	
+		
+	</BindAttributes>
+	
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+	
+	<CreateTrigger>	
+		<IssueCondition>
+			<Description>Triggers if UID in the Node Extensions and  ExtUID attribute of the Validate Block in the Issue matches, ProcessingTasks block exists, and in binding conditions Node:Extensions:Tasks:CurrentState has value equal to TargetState</Description>		 
+			<SubItem Name="Validate"  Alias="VAL" > 
+				<AttributeFilter Name="ExtUID" Mode="string" Value="${TASKS:UID}"/>		
+				<AttributeFilter Name="Status" Mode="notexists"/>		
+			</SubItem> 
+			<SubItem Name="ProcessingTasks" Alias="PROTASKS" > 
+				<TrueFilter/>
+			</SubItem> 
+		
+			
+		</IssueCondition> 
+			
+		<Activate>		
+			
+			<Log> TargetState ${TASKS:CurrentState} has been reached</Log>
+			
+			<IncAttribute Name="PROTASKS:NumberProcessed"/>
+				
+		
+			<SetAttribute Name="VAL:Status" Value="Validated" /> 
+			
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>
+

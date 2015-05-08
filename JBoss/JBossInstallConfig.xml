@@ -1,0 +1,77 @@
+<KnowledgeItem ID="OpexSoftware:JBossInstallConfig:JBossInstallConfigKI" xmlns="http://www.arago.de/KiSchema">
+	<Title>JBossInstallConfig</Title>
+	<Description>Initiates the workflow for Installing JBoss by writing into the MARS model and creating new corresponding data blocks in the Issue</Description>
+
+	<BindAttributes>
+		<AttributeFilter Name="NodeType" Mode="string" Value="Machine"/>
+		<RelatedNode Mode="predecessor" Alias="PRE">
+			<AttributeFilter Name="NodeType" Mode="string" Value="Application"/>
+		</RelatedNode>
+	</BindAttributes>
+
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+
+	<CreateTrigger>
+
+		<IssueCondition>
+			<Description>Searches for an Issue with DataBlock JBossInstallConfig and the necessary information for sucessful completion of workflow</Description>
+			<SubItem Name="JBossInstallConfig" Alias="JIC">
+				<AttributeFilter Name="TargetApp" Mode="string" Value="${PRE:NodeName}"/>
+				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}"/>
+				<AttributeFilter Name="JBossTar_FileName" Mode="exists"/>
+        		        <AttributeFilter Name="JBoss_path" Mode="exists"/>
+        		        <AttributeFilter Name="Download_url" Mode="exists"/>
+				<AttributeFilter Name="TargetState" Mode="string" Value="Created"/>
+				<AttributeFilter Name="Lib" Mode="string" Value="JBossInstallConfig"/>
+				<AttributeFilter Name="Status" Mode="notexists"/>
+				
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			
+			<SetAttribute Name="JIC:Status" Value="WorkflowStarted" /> 
+			
+			<GenerateData Alias="PROTASKS"> 
+				<DataType>ProcessingTasks</DataType> 
+			</GenerateData>
+			
+           <!-- TASK1-->
+           
+			<IncAttribute Name="PROTASKS:NumberTotal"/>
+			
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
+				JBossTar_FileName=${JIC:JBossTar_FileName}
+				TargetMachine=${JIC:TargetMachine}      
+				TargetState=Created
+				JBoss_path='${JIC:JBoss_path}'
+				Download_url='${JIC:Download_url}'
+				Host=${JIC:Host}
+				User=${JIC:User}
+				Lib=${JIC:Lib}
+				CurrentState=ReadState/> 
+				</NewBlock>]]>
+			</XMLExtract> 
+			
+ 
+      
+			<GenerateData Alias="VAL"> 
+				<!-- Independent="true" can be applied, if multiple Issues should be generated. In this case pass on the parent IssueID to the resulting Issue <ParentIID>${IID}</ParentIID>, don't forget to include ParentIID=${IID} into the Tasks DataBlock on the Node -->
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>	
+      
+            
+			 	
+			
+      
+			<!--		<Resolve>Resolved initial Issue with ID ${IID}</Resolve> - use if ChildIssues are created-->
+			
+			<GenerateData> 
+				<DataType>Resolve</DataType>
+				<Status>checkForResolve</Status>
+			</GenerateData>	
+			
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

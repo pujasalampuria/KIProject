@@ -1,0 +1,14 @@
+Issue:
+  NodeID: arago:Workshop:Application:TrainTimes
+  xmlns: http://www.arago.de/IssueSchema
+  IssueSubject: 'Run Workflow for Installation of a Package'
+  OPEXHandlePKG:
+    TargetApp: TrainTimes
+    TargetMachine: CentOS
+    Lib: PKG
+    PKG1: telnet
+    PKG2: tree
+    PKG3: gcc
+    TargetState: InstallUninstall
+    User: root 
+    Host: 192.168.1.19
