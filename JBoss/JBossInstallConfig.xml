@@ -18,11 +18,11 @@
 			<SubItem Name="JBossInstallConfig" Alias="JIC">
 				<AttributeFilter Name="TargetApp" Mode="string" Value="${PRE:NodeName}"/>
 				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}"/>
-				<AttributeFilter Name="JBossTar_FileName" Mode="exists"/>
-        		        <AttributeFilter Name="JBoss_path" Mode="exists"/>
-        		        <AttributeFilter Name="Download_url" Mode="exists"/>
+				<AttributeFilter Name="TargetTar_FileName" Mode="exists"/>
+				<AttributeFilter Name="Untar_folder" Mode="exists"/>
+        		<AttributeFilter Name="Target_path" Mode="exists"/>
+        		<AttributeFilter Name="Download_url" Mode="exists"/>
 				<AttributeFilter Name="TargetState" Mode="string" Value="Created"/>
-				<AttributeFilter Name="Lib" Mode="string" Value="JBossInstallConfig"/>
 				<AttributeFilter Name="Status" Mode="notexists"/>
 				
 			</SubItem>
@@ -41,14 +41,15 @@
 			<IncAttribute Name="PROTASKS:NumberTotal"/>
 			
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				JBossTar_FileName=${JIC:JBossTar_FileName}
+				TargetTar_FileName=${JIC:TargetTar_FileName}
 				TargetMachine=${JIC:TargetMachine}      
+				Untar_folder=${JIC:Untar_folder}      
 				TargetState=Created
-				JBoss_path='${JIC:JBoss_path}'
+				Target_path='${JIC:Target_path}'
 				Download_url='${JIC:Download_url}'
 				Host=${JIC:Host}
 				User=${JIC:User}
-				Lib=${JIC:Lib}
+				Lib=WGET
 				CurrentState=ReadState/> 
 				</NewBlock>]]>
 			</XMLExtract> 
@@ -61,6 +62,31 @@
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>	
       
+      <!-- TASK2-->
+           
+			<IncAttribute Name="PROTASKS:NumberTotal"/>
+			
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
+				TargetTar_FileName=${JIC:TargetTar_FileName}
+				TargetMachine=${JIC:TargetMachine}      
+				TargetState=Created
+				Untar_folder=${JIC:Untar_folder}      
+				Target_path='${JIC:Target_path}'
+				Download_url='${JIC:Download_url}'
+				Host=${JIC:Host}
+				User=${JIC:User}
+				Lib=TAR
+				CurrentState=ReadState/> 
+				</NewBlock>]]>
+			</XMLExtract> 
+			
+ 
+      
+			<GenerateData Alias="VAL"> 
+				<!-- Independent="true" can be applied, if multiple Issues should be generated. In this case pass on the parent IssueID to the resulting Issue <ParentIID>${IID}</ParentIID>, don't forget to include ParentIID=${IID} into the Tasks DataBlock on the Node -->
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
             
 			 	
 			
