@@ -30,7 +30,7 @@
 		<IssueCondition>
 			<Description>Triggers if UID in the Node Extensions and  ExtUID attribute of the Validate Block in the Issue matches, and in binding conditions Node:Extensions:Task:CurrentState has value ReadState</Description>		 
 			<SubItem Name="Validate"  Alias="VAL" > 
-				<AttributeFilter Name="ExtUID" Mode="string" Value="${CURRENTTASK:UID}"/<name />
+				<AttributeFilter Name="ExtUID" Mode="string" Value="${CURRENTTASK:UID}"/>
 				<AttributeFilter Name="Status" Mode="notexists"/>		
 			</SubItem> 
 		</IssueCondition> 
