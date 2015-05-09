@@ -77,7 +77,7 @@
 				User=${JIC:User}
 				Lib=TAR
 				CurrentState=WaitForPrior
-				PriorUID=${NODE:Extensions/Tasks/UID}/> 
+				PriorUID=${VAL:ExtUID}/> 
 				</NewBlock>]]>
 			</XMLExtract> 
 			

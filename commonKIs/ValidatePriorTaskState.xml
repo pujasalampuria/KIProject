@@ -13,13 +13,11 @@
 			<SubItem Name="Tasks" Alias="PRIORTASK" >
 				<AttributeFilter Name="TargetMachine" Mode="exists"/>
 				<AttributeFilter Name="TargetState" Mode="exists"/>
-				<AttributeFilter Name="CurrentState" Mode="string" Value="Created" />
 			</SubItem>
 			<SubItem Name="Tasks" Alias="CURRENTTASK" >
 				<AttributeFilter Name="TargetMachine" Mode="exists"/>
-				<AttributeFilter Name="TargetState" Mode="exists"/>
-				<AttributeFilter Name="CurrentState" Mode="string" Value="WaitForPrior" />
-				<AttributeFilter Name="PriorUID" Mode="string" Value="${PRIORTASK:UID}"/>	
+				<AttributeFilter Name="TargetState" Mode="exists"/>	
+				<AttributeFilter Name="CurrentState" Mode="string" Value="WaitForPrior" />				
 			</SubItem> 
 		</SubItem> 		
 	</BindAttributes>
@@ -30,7 +28,9 @@
 		<IssueCondition>
 			<Description>Triggers if UID in the Node Extensions and  ExtUID attribute of the Validate Block in the Issue matches, and in binding conditions Node:Extensions:Task:CurrentState has value ReadState</Description>		 
 			<SubItem Name="Validate"  Alias="VAL" > 
-				<AttributeFilter Name="ExtUID" Mode="string" Value="${CURRENTTASK:UID}"/>
+				<AttributeFilter Name="ExtUID" Mode="string" Value="${CURRENTTASK:UID}" />
+				<AttributeFilter Name="${CURRENTTASK:PriorUID}" Mode="string" Value="${PRIORTASK:UID}"/>
+				<AttributeFilter Name="${PRIORTASK:CurrentState}" Mode="string" Value="Created" />
 				<AttributeFilter Name="Status" Mode="notexists"/>		
 			</SubItem> 
 		</IssueCondition> 
@@ -40,3 +40,4 @@
 		</Activate>
 	</CreateTrigger>
 </KnowledgeItem>
+
