@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="arago:WorkFlowUserStory:ValidatePriorTaskState">
 	<Title>ValidatePriorTaskState</Title>
-	<Description>Validation if the Prior Task is done and based on that set the state to ReadState</Description>
+	<Description>Validation if the Prior Task is done and based on that create the Validate section appropriately</Description>
 	
 	<BindAttributes>
 		<Description>Bind to all machine Nodes with Tasks block in Extensions where CurrentState is equal to the ReadState and pick the PRIORTASK and CURRENTTASK</Description>
@@ -12,14 +12,7 @@
 		<SubItem Name="Extensions"  Alias="EXTS"> 
 			<SubItem Name="Tasks" Alias="PRIORTASK" >
 				<AttributeFilter Name="TargetMachine" Mode="exists"/>
-				<AttributeFilter Name="TargetState" Mode="exists"/>
-				<AttributeFilter Name="CurrentState" Mode="string" Value="Created" />
-			</SubItem>
-			<SubItem Name="Tasks" Alias="CURRENTTASK" >
-				<AttributeFilter Name="TargetMachine" Mode="exists"/>
-				<AttributeFilter Name="TargetState" Mode="exists"/>
-				<AttributeFilter Name="CurrentState" Mode="string" Value="WaitForPrior" />
-				<AttributeFilter Name="PriorUID" Mode="string" Value="${PRIORTASK:UID}"/>	
+				<AttributeFilter Name="TargetState" Mode="exists"/>		
 			</SubItem> 
 		</SubItem> 		
 	</BindAttributes>
@@ -30,13 +23,34 @@
 		<IssueCondition>
 			<Description>Triggers if UID in the Node Extensions and  ExtUID attribute of the Validate Block in the Issue matches, and in binding conditions Node:Extensions:Task:CurrentState has value ReadState</Description>		 
 			<SubItem Name="Validate"  Alias="VAL" > 
-				<AttributeFilter Name="ExtUID" Mode="string" Value="${CURRENTTASK:UID}" />
-				<AttributeFilter Name="Status" Mode="notexists"/>		
+				<AttributeFilter Name="PriorUID" Mode="exists" />
+				<AttributeFilter Name="PriorUID" Mode="string" Value="${PRIORTASK:UID}" />
+				<AttributeFilter Name="Status" Mode="string" Value="WaitForPrior"/>		
 			</SubItem> 
 		</IssueCondition> 
 			
 		<Activate>
-			<SetAttribute Name="CURRENTTASK:CurrentState" Value="ReadState"/>		
+			<SetAttribute Name="VAL:Status" Value="Waited" />
+			<!-- Sleep for requested time -->
+			<Sleep Time="${VAL:WaitForSecs}" />
+			<If>
+				<VarCondition VarString="${PRIORTASK:CurrentState}" Mode="eq" Value="Created"/>
+				<Then>
+					<GenerateData Alias="VAL"> 
+						<DataType>Validate</DataType>
+						<ExtUID>${VAL:ExtUID}</ExtUID>
+					</GenerateData>
+				</Then>
+				<Else>
+					<GenerateData Alias="VAL"> 
+						<DataType>Validate</DataType>
+						<ExtUID>${VAL:ExtUID}</ExtUID>
+						<PriorUID>${VAL:PriorUID}</PriorUID>
+						<Status>WaitForPrior</WaitForPrior>
+						<WaitForSecs>${VAL:WaitForHowManySecs}</WaitForSecs>
+					</GenerateData>
+				</Else>
+			</If>
 		</Activate>
 	</CreateTrigger>
 </KnowledgeItem>
