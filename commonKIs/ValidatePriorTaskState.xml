@@ -2,7 +2,6 @@
 <KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="arago:WorkFlowUserStory:ValidatePriorTaskState">
 	<Title>ValidatePriorTaskState</Title>
 	<Description>Validation if the Prior Task is done and based on that create the Validate section appropriately</Description>
-	
 	<BindAttributes>
 		<Description>Bind to all machine Nodes with Tasks block in Extensions where CurrentState is equal to the ReadState and pick the PRIORTASK and CURRENTTASK</Description>
 		<AttributeFilter Name="NodeType" Mode="exists"/>
@@ -54,3 +53,4 @@
 		</Activate>
 	</CreateTrigger>
 </KnowledgeItem>
+
