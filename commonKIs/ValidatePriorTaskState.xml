@@ -3,7 +3,7 @@
 	<Title>ValidatePriorTaskState</Title>
 	<Description>Validation if the Prior Task is done and based on that create the Validate section appropriately</Description>
 	<BindAttributes>
-		<Description>Bind to all machine Nodes with Tasks block in Extensions where CurrentState is equal to the ReadState and pick the PRIORTASK and CURRENTTASK</Description>
+		<Description>Bind to all machine Nodes with Tasks block in Extensions where CurrentState is equal to the ReadState</Description>
 		<AttributeFilter Name="NodeType" Mode="exists"/>
 		<SubItem Name="OSInformation" Alias="OSINFO">
 			<AttributeFilter Name="Name" Mode="exists"/>
@@ -20,7 +20,7 @@
 	
 	<CreateTrigger>	
 		<IssueCondition>
-			<Description>Triggers if UID in the Node Extensions and  ExtUID attribute of the Validate Block in the Issue matches, and in binding conditions Node:Extensions:Task:CurrentState has value ReadState</Description>		 
+			<Description>Triggers if UID in the Node Extensions and PriorUID attribute of the Validate Block in the Issue matches AND the Status is WaitForPrior</Description>		 
 			<SubItem Name="Validate"  Alias="VAL" > 
 				<AttributeFilter Name="PriorUID" Mode="exists" />
 				<AttributeFilter Name="PriorUID" Mode="string" Value="${PRIORTASK:UID}" />

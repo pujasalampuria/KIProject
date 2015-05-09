@@ -83,7 +83,9 @@
  
       
 			<GenerateData Alias="VAL"> 
-				<!-- Independent="true" can be applied, if multiple Issues should be generated. In this case pass on the parent IssueID to the resulting Issue <ParentIID>${IID}</ParentIID>, don't forget to include ParentIID=${IID} into the Tasks DataBlock on the Node -->
+				<!-- As the TAR Task cannot start without the WGET task gets Completed/Created 
+				the PriorUID, Status and WaitForSecs are the important attributes 
+				to control the waitFor -->
 				<DataType>Validate</DataType>
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 				<PriorUID>${VAL:ExtUID}</PriorUID>
