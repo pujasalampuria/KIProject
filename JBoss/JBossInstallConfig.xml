@@ -76,7 +76,8 @@
 				Host=${JIC:Host}
 				User=${JIC:User}
 				Lib=TAR
-				CurrentState=ReadState/> 
+				CurrentState=WaitForPrior
+				PriorUID=${NODE:Extensions/Tasks/UID}/> 
 				</NewBlock>]]>
 			</XMLExtract> 
 			

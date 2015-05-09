@@ -63,7 +63,8 @@
 				User=${GCR:User}
 				Host=${GCR:Host}
 				Lib=GITREPO
-				CurrentState=ReadState/> 
+				CurrentState=WaitForPrior
+				PriorUID=${NODE:Extensions/Tasks/UID}/> 
 				</NewBlock>]]>
 			</XMLExtract>
 			
