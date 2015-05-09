@@ -33,7 +33,7 @@
 			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
 				<Parameter Name="User">${TASKS:User}</Parameter>
 				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
-				<Parameter Name="Command">sudo apt-get install ${TASKS:PKG}</Parameter> 
+				<Parameter Name="Command">"sudo apt-get install ${TASKS:PKG}"</Parameter> 
 			</Action>
 			
 			<If>
