@@ -80,7 +80,6 @@
 				</NewBlock>]]>
 			</XMLExtract> 
 			
- 
       
 			<GenerateData Alias="VAL"> 
 				<!-- As the TAR Task cannot start without the WGET task gets Completed/Created 
@@ -88,15 +87,10 @@
 				to control the waitFor -->
 				<DataType>Validate</DataType>
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
-				<PriorUID>${VAL:ExtUID}</PriorUID>
-				<Status>WaitForPrior</WaitForPrior>
-				<WaitForSecs>60</WaitForSecs>
 			</GenerateData>
-            
-			 	
-			
+            			
       
-			<!--		<Resolve>Resolved initial Issue with ID ${IID}</Resolve> - use if ChildIssues are created-->
+			<!--<Resolve>Resolved initial Issue with ID ${IID}</Resolve> - use if ChildIssues are created-->
 			
 			<GenerateData> 
 				<DataType>Resolve</DataType>
