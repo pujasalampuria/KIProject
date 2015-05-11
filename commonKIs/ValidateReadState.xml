@@ -14,6 +14,7 @@
 				<AttributeFilter Name="TargetMachine" Mode="exists"/>
 				<AttributeFilter Name="TargetState" Mode="exists"/>
 				<AttributeFilter Name="CurrentState" Mode="string" Value="ReadState" />
+				<AttributeFilter Name="Lib" Mode="exists"/>
 			</SubItem> 
 		</SubItem> 		
 	</BindAttributes>
@@ -26,6 +27,9 @@
 			<SubItem Name="Validate"  Alias="VAL" > 
 				<AttributeFilter Name="ExtUID" Mode="string" Value="${TASKS:UID}"/>		
 				<AttributeFilter Name="Status" Mode="notexists"/>		
+			</SubItem> 
+			<SubItem Name="ProcessingTasks"  Alias="PROTASKS" > 
+				<AttributeFilter Name="CurrentTask" Mode="eq" Value="${TASKS:TaskNumber}"/>			
 			</SubItem> 
 		</IssueCondition> 
 			

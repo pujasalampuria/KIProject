@@ -1,0 +1,10 @@
+<WebDevelopment xmlns="http://mars-o-matic.com"
+	ID="OpexSoftware:UseCase:Application:HAProxy"
+	NodeType="Application" ApplicationClass="Development" ApplicationSubClass="WebDevelopment" NodeName="HAProxy_App">
+        <Dependencies>
+                <Node ID="OpexSoftware:UseCase:Machine:HAProxy"/>
+                <Node ID="arago:Workshop:Resource:WebServer"/>
+        </Dependencies>
+        <CustomerInformation ID="opex_demo" Name="OpexSoftware" />
+</WebDevelopment>
+

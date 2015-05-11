@@ -27,7 +27,7 @@
 				<AttributeFilter Name="Status" Mode="notexists"/>		
 			</SubItem> 
 			<SubItem Name="ProcessingTasks" Alias="PROTASKS" > 
-				<TrueFilter/>
+				<AttributeFilter Name="CurrentTask" Mode="exists"/>		
 			</SubItem> 
 		
 			
@@ -38,7 +38,7 @@
 			<Log> TargetState ${TASKS:CurrentState} has been reached</Log>
 			
 			<IncAttribute Name="PROTASKS:NumberProcessed"/>
-				
+			<IncAttribute Name="PROTASKS:CurrentTask"/>	
 		
 			<SetAttribute Name="VAL:Status" Value="Validated" /> 
 			
