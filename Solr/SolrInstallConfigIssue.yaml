@@ -1,0 +1,14 @@
+Issue:
+  NodeID: OpexSoftware:UseCase:Application:Solr 
+  xmlns: http://www.arago.de/IssueSchema
+  IssueSubject: 'Please Install,configure and maintain Solr 4'
+  SolrInstallConfig:
+    TargetApp: Solr   
+    TargetMachine: puja 
+    TargetTar_FileName: apache-solr-4.0.0.tgz
+    Target_path: /home/puja/Solr
+    Download_url: https://archive.apache.org/dist/lucene/solr/4.0.0/apache-solr-4.0.0.tgz
+    TargetState: Created
+    Untar_folder: apache-solr-4.0.0 
+    User: puja
+    Host: 192.168.1.86

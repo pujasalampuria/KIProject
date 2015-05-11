@@ -1,0 +1,57 @@
+<KnowledgeItem ID="OpexSoftware:POSTGRESQLDB:__core__CentOS__PKG__Created__" xmlns="http://www.arago.de/KiSchema">
+	<Title>__core__Linux__Postgre__Created__</Title>
+	<Description> This KI searches for the DataBlock called __core__Linux__Postgre__Created__ and ADDEDs the package on the specified Target Machine and writes the current status back to the node. </Description>
+
+	<BindAttributes>
+		<AttributeFilter Name="NodeType" Mode="string" Value="Machine"/>
+		 <SubItem Name="OSInformation" Alias="OSINFO">
+                        <AttributeFilter Name="Name" Mode="string" Value="Ubuntu"/>
+                </SubItem>
+		<SubItem Name="Extensions" Alias="EXT">
+			<SubItem Name="Tasks" Alias="TASKS">
+				<AttributeFilter Name="Database" Mode="exists"/>
+				<AttributeFilter Name="TargetMachine" Mode="exists"/>
+				<AttributeFilter Name="DBUserName" Mode="exists"/>"/>
+				<AttributeFilter Name="NewDBUserName" Mode="exists"/>
+				<AttributeFilter Name="NewDBPassword" Mode="exists"/>
+				<AttributeFilter Name="DBPassword" Mode="exists"/>
+				<AttributeFilter Name="User" Mode="exists"/>
+				<AttributeFilter Name="Host" Mode="exists"/>
+			</SubItem>
+		</SubItem>
+	</BindAttributes>
+	
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:MachineClass}__Postgre__Created__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
+			<SubItem Name="__core__Ubuntu__DBCREATIONPOSTGRESQL__Created__" Alias="ADDED">
+				<AttributeFilter Name="ExtUID" Mode="string" Value="${TASKS:UID}" />
+				<AttributeFilter Name="Status" Mode="notexists"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command">"psql -c \"CREATE DATABASE ${TASKS:Database};\""</Parameter> 
+			</Action>
+			
+			<If>
+				<VarCondition VarString="${SYSTEMRC}" Mode="eq" Value="0"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="ReadState"/>
+				</Then>
+				<Else>
+					<Eject>__Failed to ADDED User ${TASKS:NewDBUserName}__</Eject>
+				</Else>
+			</If>
+
+			<SetAttribute Name="ADDED:Status" Value="created" /> 
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>
+
+
