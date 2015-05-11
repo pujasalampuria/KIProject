@@ -48,6 +48,7 @@
 				NewDBUserName=${PSD:NewDBUserName}
 				NewDBPassword=${PSD:NewDBPassword}
 				Host=${PSD:Host}
+				User=${PSD:User}
 				Lib=${PSU:Lib}
 				CurrentState=ReadState
 				/> </NewBlock>]]>
