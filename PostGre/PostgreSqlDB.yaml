@@ -1,0 +1,16 @@
+Issue:
+  NodeID: OpexSoftware:UseCase:Application:PostgreSQl
+  xmlns: http://www.arago.de/IssueSchema
+  IssueSubject: 'Creation of PostgreSQl database'
+  POSTGRESQLDB:
+    TargetApp: PostgreSQl  
+    Database: TempDB
+    Lib: DBCREATIONPOSTGRESQL    
+    TargetMachine: zeeshan
+    NewDBUserName: zeeshan31
+    NewDBPassword: zeeshan31
+    DBUserName: zeeshan
+    DBPassword: zeeshan
+    TargetState: Created 
+    User: postgres
+    Host: 191.168.1.90
