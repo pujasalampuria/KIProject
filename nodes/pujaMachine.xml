@@ -4,6 +4,7 @@
 	NodeType="Machine" MachineClass="Linux" NodeName="puja" >
     <Dependencies>
        <Node  ID="OpexSoftware:UseCase:Application:JBoss" />
+       <Node  ID="OpexSoftware:UseCase:Application:Solr" />
     </Dependencies>
     <CustomerInformation ID="opex" Name="OpexSoftware"/>
     <Extensions>
