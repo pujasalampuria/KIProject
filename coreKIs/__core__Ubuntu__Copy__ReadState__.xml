@@ -10,7 +10,7 @@
 		<SubItem Name="Extensions" Alias="EXT">
 			<SubItem Name="Tasks" Alias="TASKS">
 				<AttributeFilter Name="Src" Mode="exists"/>
-				<AttributeFilter Name="dest" Mode="exists"/>
+				<AttributeFilter Name="Dest" Mode="exists"/>
 				<AttributeFilter Name="TargetMachine" Mode="exists"/>
 				<AttributeFilter Name="User" Mode="exists"/>
 				<AttributeFilter Name="Host" Mode="exists"/>

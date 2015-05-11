@@ -18,7 +18,7 @@
 			<SubItem Name="HAProxyInstallAndDeployWar" Alias="HIDW">
 				<AttributeFilter Name="TargetApp" Mode="string" Value="${PRE:NodeName}"/>
 				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}"/>
-				<AttributeFilter Name="war" Mode="exists"/>
+				<AttributeFilter Name="War" Mode="exists"/>
 				<AttributeFilter Name="TargetState" Mode="string" Value="Created"/>
 				<AttributeFilter Name="Status" Mode="notexists"/>				
 			</SubItem>
@@ -30,7 +30,19 @@
 			
 			<GenerateData Alias="PROTASKS"> 
 				<DataType>ProcessingTasks</DataType> 
+				<CurrentTask>1</CurrentTask>
 			</GenerateData>
+
+			
+			
+ 
+      
+			<GenerateData Alias="VAL"> 
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>	
+    
+    
 			
            <!-- TASK1:  Install HA Proxy-->
            
@@ -45,7 +57,8 @@
 					User=${HIDW:User}
 					Host=${HIDW:Host}
                                         Lib=PKG
-					CurrentState=ReadState/> 
+					CurrentState=ReadState
+					TaskNumber=${PROTASKS:NumberTotal}/> /> 
 				</NewBlock>]]>
 			</XMLExtract> 
 			
@@ -69,7 +82,8 @@
 					User=${HIDW:User}
 					Host=${HIDW:Host}
 					Lib=PKG
-					CurrentState=ReadState/> 
+					CurrentState=ReadState	
+					TaskNumber=${PROTASKS:NumberTotal}/> 
 				</NewBlock>]]>
 			</XMLExtract> 
 			
@@ -86,24 +100,18 @@
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[
 				<NewBlock>
 				  <Tasks 
-					Src=${HIDW:war}
+					
 					TargetMachine=${HIDW:TargetMachine}      
 					TargetState=Created
 					User=${HIDW:User}
 					Host=${HIDW:Host}
-					Lib=Copy
-					CurrentState=ReadState/> 
+					Src="/opt/autopilot/test-now.war"
+					Dest="/var/lib/tomcat7/webapps"
+                                        Lib=Copy
+					CurrentState=ReadState
+					TaskNumber=1/> /> 
 				</NewBlock>]]>
 			</XMLExtract> 
-			
- 
-      
-			<GenerateData Alias="VAL"> 
-				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
-			</GenerateData>	
-    
-    
          		
 			<GenerateData> 
 				<DataType>Resolve</DataType>
