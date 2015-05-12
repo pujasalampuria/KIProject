@@ -38,7 +38,7 @@
 				<CurrentTask>1</CurrentTask> 
 			</GenerateData>
 			
-           <!-- TASK1-->
+           <!-- TASK1-- START CONFIG SERVER DATABASE INSTANCE-->
            
 			<IncAttribute Name="PROTASKS:NumberTotal"/>
 			
@@ -62,20 +62,18 @@
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>	
       
-      <!-- TASK2-->
+      <!-- TASK2--  START THE MONGOS INSTANCE-->
            
 			<IncAttribute Name="PROTASKS:NumberTotal"/>
 			
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetTar_FileName=${JIC:TargetTar_FileName}
-				TargetMachine=${JIC:TargetMachine}      
-				TargetState=Created
-				Untar_folder=${JIC:Untar_folder}      
-				Target_path='${JIC:Target_path}'
-				Download_url='${JIC:Download_url}'
-				Host=${JIC:Host}
-				User=${JIC:User}
-				Lib=TAR
+				TargetMachine=${DSM:TargetMachine}      
+				TargetState=Created      
+				ConfigServerHostnames=${DSM:ConfigServerHostnames}
+				Host=${DSM:Host}
+				User=${DSM:User}
+				ConfigServerPort=${DSM:ConfigServerPort}
+				Lib=STARTMONGOSINSTANCE
 				TaskNumber=${PROTASKS:NumberTotal}
 				CurrentState=ReadState/> 
 				</NewBlock>]]>
@@ -90,7 +88,86 @@
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
             			
+      <!-- TASK3--  Connect to mongo instance.-->
+           
+			<IncAttribute Name="PROTASKS:NumberTotal"/>
+			
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
+				TargetMachine=${DSM:TargetMachine}      
+				TargetState=Created      
+				MachineRunningMongos=${DSM:MachineRunningMongos}
+				Host=${DSM:Host}
+				User=${DSM:User}
+				MongosPort=${DSM:MongosPort}
+				Lib=CONNECTMONGOSINSTANCE
+				TaskNumber=${PROTASKS:NumberTotal}
+				CurrentState=ReadState/> 
+				</NewBlock>]]>
+			</XMLExtract> 
+			
       
+			<GenerateData Alias="VAL"> 
+				<!-- As the TAR Task cannot start without the WGET task gets Completed/Created 
+				the PriorUID, Status and WaitForSecs are the important attributes 
+				to control the waitFor -->
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
+
+		<!-- TASK4--  add shard to the cluster.-->
+           
+			<IncAttribute Name="PROTASKS:NumberTotal"/>
+			
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
+				TargetMachine=${DSM:TargetMachine}      
+				TargetState=Created      
+				MachineRunningMongos=${DSM:MachineRunningMongos}
+				Host=${DSM:Host}
+				User=${DSM:User}
+				MongosPort=${DSM:MongosPort}
+				Lib=ADDSHARD
+				TaskNumber=${PROTASKS:NumberTotal}
+				CurrentState=ReadState/> 
+				</NewBlock>]]>
+			</XMLExtract> 
+			
+      
+			<GenerateData Alias="VAL"> 
+				<!-- As the TAR Task cannot start without the WGET task gets Completed/Created 
+				the PriorUID, Status and WaitForSecs are the important attributes 
+				to control the waitFor -->
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
+
+
+		<!-- TASK5--  Enable sharding.-->
+           
+			<IncAttribute Name="PROTASKS:NumberTotal"/>
+			
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
+				TargetMachine=${DSM:TargetMachine}      
+				TargetState=Created      
+				MachineRunningMongos=${DSM:MachineRunningMongos}
+				Host=${DSM:Host}
+				User=${DSM:User}
+				MongosPort=${DSM:MongosPort}
+				Lib=ENABLESHARDING
+				Database=${DSM:Database}
+				TaskNumber=${PROTASKS:NumberTotal}
+				CurrentState=ReadState/> 
+				</NewBlock>]]>
+			</XMLExtract> 
+			
+      
+			<GenerateData Alias="VAL"> 
+				<!-- As the TAR Task cannot start without the WGET task gets Completed/Created 
+				the PriorUID, Status and WaitForSecs are the important attributes 
+				to control the waitFor -->
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
+
 			<!--<Resolve>Resolved initial Issue with ID ${IID}</Resolve> - use if ChildIssues are created-->
 			
 			<GenerateData> 
