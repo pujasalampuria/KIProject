@@ -43,8 +43,7 @@
 			
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
 				TargetTar_FileName=${JIC:TargetTar_FileName}
-				TargetMachine=${JIC:TargetMachine}      
-				Untar_folder=${JIC:Untar_folder}      
+				TargetMachine=${JIC:TargetMachine}            
 				TargetState=Created
 				Target_path='${JIC:Target_path}'
 				Download_url='${JIC:Download_url}'
@@ -74,7 +73,6 @@
 				TargetState=Created
 				Untar_folder=${JIC:Untar_folder}      
 				Target_path='${JIC:Target_path}'
-				Download_url='${JIC:Download_url}'
 				Host=${JIC:Host}
 				User=${JIC:User}
 				Lib=TAR
