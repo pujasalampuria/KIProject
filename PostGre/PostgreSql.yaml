@@ -3,7 +3,7 @@ Issue:
   xmlns: http://www.arago.de/IssueSchema
   IssueSubject: 'Creation of PostgreSQl database and Users'
   POSTGRESQLUSER:
-    TargetApp: PostgreSQl  
+    TargetApp: PostgreSQL  
     Database: TempDB
     Lib: USERMANAGEMENTPOSTGRESQL
     TargetMachine: zeeshan 

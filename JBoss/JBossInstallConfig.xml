@@ -20,8 +20,8 @@
 				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}"/>
 				<AttributeFilter Name="TargetTar_FileName" Mode="exists"/>
 				<AttributeFilter Name="Untar_folder" Mode="exists"/>
-        		<AttributeFilter Name="Target_path" Mode="exists"/>
-        		<AttributeFilter Name="Download_url" Mode="exists"/>
+        		        <AttributeFilter Name="Target_path" Mode="exists"/>
+        		        <AttributeFilter Name="Download_url" Mode="exists"/>
 				<AttributeFilter Name="TargetState" Mode="string" Value="Created"/>
 				<AttributeFilter Name="Status" Mode="notexists"/>
 				
@@ -33,7 +33,8 @@
 			<SetAttribute Name="JIC:Status" Value="WorkflowStarted" /> 
 			
 			<GenerateData Alias="PROTASKS"> 
-				<DataType>ProcessingTasks</DataType> 
+				<DataType>ProcessingTasks</DataType>
+				<CurrentTask>1</CurrentTask> 
 			</GenerateData>
 			
            <!-- TASK1-->
@@ -50,6 +51,7 @@
 				Host=${JIC:Host}
 				User=${JIC:User}
 				Lib=WGET
+				TaskNumber=${PROTASKS:NumberTotal}
 				CurrentState=ReadState/> 
 				</NewBlock>]]>
 			</XMLExtract> 
@@ -76,6 +78,7 @@
 				Host=${JIC:Host}
 				User=${JIC:User}
 				Lib=TAR
+				TaskNumber=${PROTASKS:NumberTotal}
 				CurrentState=ReadState/> 
 				</NewBlock>]]>
 			</XMLExtract> 
