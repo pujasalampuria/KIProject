@@ -2,7 +2,7 @@ Issue:
   NodeID: OpexSoftware:UseCase:Application:MongoDB
   xmlns: http://www.arago.de/IssueSchema
   IssueSubject: 'Installing MongoDB cluster'
-  SHARDINGMONGODB:
+  INSTALLMONGODB:
     TargetApp: MongoDB  
     TargetMachine: zeeshan
     TargetState: Created 
