@@ -10,7 +10,6 @@
 		<SubItem Name="Extensions" Alias="EXT">
 			<SubItem Name="Tasks" Alias="TASKS">
 				<AttributeFilter Name="Target_path" Mode="exists"/>
-				<AttributeFilter Name="TargetMachine" Mode="exists"/>
 				<AttributeFilter Name="TargetTar_FileName" Mode="exists"/>
 				<AttributeFilter Name="User" Mode="exists"/>
 				<AttributeFilter Name="Host" Mode="exists"/>

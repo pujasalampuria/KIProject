@@ -12,7 +12,6 @@
 				<AttributeFilter Name="TargetTar_FileName" Mode="exists"/>
 				<AttributeFilter Name="Untar_folder" Mode="exists"/>
                                 <AttributeFilter Name="Target_path" Mode="exists"/>
-				<AttributeFilter Name="TargetMachine" Mode="exists"/>
 				<AttributeFilter Name="User" Mode="exists"/>
 				<AttributeFilter Name="Host" Mode="exists"/>
 			</SubItem>
