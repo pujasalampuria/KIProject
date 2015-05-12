@@ -30,11 +30,10 @@
 		</IssueCondition>
 
 		<Activate>
-			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
-				<Parameter Name="User">${TASKS:User}</Parameter>
-				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+			<Action Capability="ExecuteLocalCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				
 				<Parameter Name="Command">
-					ssh ${TASKS.User}@${TASKS.Host} rm -rf ${TASKS:Dest}
+					ssh ${TASKS:User}@${TASKS:Host} rm -rf ${TASKS:Dest}
 				</Parameter> 
 			</Action>
 			

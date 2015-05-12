@@ -30,13 +30,21 @@
 		</IssueCondition>
 
 		<Activate>
-			<Action Capability="ExecuteScript" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
-				<Parameter Name="User">${TASKS:User}</Parameter>
-				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+		<!-- 	<Action Capability="RunLocalScript" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				
 				<Parameter Name="Command">
 					scp -r ${TASKS:Src} ${TASKS.User}@${TASKS.Host}:${TASKS:Dest}
 				</Parameter> 
-			</Action>
+			</Action> -->
+			<Execute StoreTo="OUTPUT" StoreStatus="SYSTEMRC">
+                <![CDATA[
+                    fileName=`echo "${TASKS:Src}" | rev | cut -d"/" -f1 | rev`  
+                    echo "File name is: ${fileName}"                  
+                	scp -r "${TASKS:Src}" ${TASKS:User}@${TASKS:Host}:/tmp
+                	echo "Running ssh command: sudo cp -rf /tmp/${fileName} ${TASKS:Dest}"
+                	ssh ${TASKS:User}@${TASKS:Host} "sudo cp -rf /tmp/${fileName} ${TASKS:Dest}"
+                ]]>
+            </Execute>
 			
 			<If>
 				<VarCondition VarString="${SYSTEMRC}" Mode="eq" Value="0"/>

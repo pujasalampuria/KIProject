@@ -30,7 +30,7 @@
 				<AttributeFilter Name="Status" Mode="notexists"/>		
 			</SubItem> 
 			<SubItem Name="ProcessingTasks" Alias="PROTASKS" > 
-				<TrueFilter/>
+				<AttributeFilter Name="CurrentTask" Mode="eq" Value="${TASKS:TaskNumber}"/>			
 			</SubItem> 
 	
 			
