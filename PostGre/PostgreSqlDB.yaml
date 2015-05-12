@@ -4,7 +4,7 @@ Issue:
   IssueSubject: 'Creation of PostgreSQl database'
   POSTGRESQLDB:
     TargetApp: PostgreSQL  
-    Database: TempDb
+    Database: TempD
     Lib: DBCREATIONPOSTGRESQL    
     TargetMachine: zeeshan
     NewDBUserName: zeeshan31
