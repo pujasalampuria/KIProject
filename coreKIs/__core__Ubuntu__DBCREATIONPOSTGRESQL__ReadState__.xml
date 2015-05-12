@@ -1,5 +1,5 @@
-<KnowledgeItem ID="OpexSoftware:POSTGRESQLDB:__core__Ubuntu__PostgreDB__ReadState__" xmlns="http://www.arago.de/KiSchema">
-	<Title>__core__Ubuntu__PostgreDB__ReadState__</Title>
+<KnowledgeItem ID="OpexSoftware:POSTGRESQLDB:__core__Ubuntu__DBCREATIONPOSTGRESQL__ReadState__" xmlns="http://www.arago.de/KiSchema">
+	<Title>__core__Ubuntu__DBCREATIONPOSTGRESQL__ReadState__</Title>
 	<Description> This KI searches for the DataBlock called __core__Linux__Postgre__ReadState__ and verifies the CurrentState of the package on the specified Target Machine and writes it back to the node. </Description>
 
 	<BindAttributes>

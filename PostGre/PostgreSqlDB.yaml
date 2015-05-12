@@ -3,8 +3,8 @@ Issue:
   xmlns: http://www.arago.de/IssueSchema
   IssueSubject: 'Creation of PostgreSQl database'
   POSTGRESQLDB:
-    TargetApp: PostgreSQl  
-    Database: TempDB
+    TargetApp: PostgreSQL  
+    Database: TempDb
     Lib: DBCREATIONPOSTGRESQL    
     TargetMachine: zeeshan
     NewDBUserName: zeeshan31

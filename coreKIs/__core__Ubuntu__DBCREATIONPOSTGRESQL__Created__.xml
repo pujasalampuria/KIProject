@@ -1,5 +1,5 @@
-<KnowledgeItem ID="OpexSoftware:POSTGRESQLDB:__core__CentOS__PKG__Created__" xmlns="http://www.arago.de/KiSchema">
-	<Title>__core__Linux__Postgre__Created__</Title>
+<KnowledgeItem ID="OpexSoftware:POSTGRESQLDB:__core__Ubuntu__DBCREATIONPOSTGRESQL__Created__" xmlns="http://www.arago.de/KiSchema">
+	<Title>__core__Ubuntu__DBCREATIONPOSTGRESQL__Created__</Title>
 	<Description> This KI searches for the DataBlock called __core__Linux__Postgre__Created__ and ADDEDs the package on the specified Target Machine and writes the current status back to the node. </Description>
 
 	<BindAttributes>
@@ -10,11 +10,7 @@
 		<SubItem Name="Extensions" Alias="EXT">
 			<SubItem Name="Tasks" Alias="TASKS">
 				<AttributeFilter Name="Database" Mode="exists"/>
-				<AttributeFilter Name="TargetMachine" Mode="exists"/>
-				<AttributeFilter Name="DBUserName" Mode="exists"/>"/>
-				<AttributeFilter Name="NewDBUserName" Mode="exists"/>
-				<AttributeFilter Name="NewDBPassword" Mode="exists"/>
-				<AttributeFilter Name="DBPassword" Mode="exists"/>
+				<AttributeFilter Name="TargetMachine" Mode="exists"/>	
 				<AttributeFilter Name="User" Mode="exists"/>
 				<AttributeFilter Name="Host" Mode="exists"/>
 			</SubItem>
