@@ -13,9 +13,9 @@
 			<SubItem Name="GITCLONEREPO" Alias="GCR">
 				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}"/>
 				<AttributeFilter Name="GitRepo" Mode="exists"/>
-                <AttributeFilter Name="TargetPath" Mode="exists"/>
-                <AttributeFilter Name="GitUser" Mode="exists"/>
-                <AttributeFilter Name="GitPassword" Mode="exists"/>
+                                <AttributeFilter Name="TargetPath" Mode="exists"/>
+                                <AttributeFilter Name="GitUser" Mode="exists"/>
+                                <AttributeFilter Name="GitPassword" Mode="exists"/>
 				<AttributeFilter Name="TargetState" Mode="string" Value="Created"/>
 				<AttributeFilter Name="Status" Mode="notexists"/>
 				<AttributeFilter Name="GitRepoName" Mode="exists"/>
@@ -25,12 +25,13 @@
 	     <Activate>
 			<SetAttribute Name="GCR:Status" Value="WorkflowStarted" /> 
 			<GenerateData Alias="PROTASKS">
-                <DataType>ProcessingTasks</DataType>
+                            <DataType>ProcessingTasks</DataType>
+                            <CurrentTask>1</CurrentTask>
 			</GenerateData>
 
 			<!--Task1 Check if GIT package is there -->	
   
-            <IncAttribute Name="PROTASKS:NumberTotal"/>
+                        <IncAttribute Name="PROTASKS:NumberTotal"/>
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
 				TargetMachine=${GCR:TargetMachine}      
@@ -53,7 +54,8 @@
 
 
 			<!--Task2 Do the GIT Clone-->	
-			<IncAttribute Name="PROTASKS:NumberTotal"/>
+			
+                        <IncAttribute Name="PROTASKS:NumberTotal"/>
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
 				TargetPath='${GCR:TargetPath}'
@@ -65,7 +67,7 @@
 				Host=${GCR:Host}
 				Lib=GITREPO
 				CurrentState=ReadState
-                TaskNumber=${PROTASKS:NumberTotal}
+                                TaskNumber=${PROTASKS:NumberTotal}
 				/></NewBlock>]]>
 			</XMLExtract>
 			

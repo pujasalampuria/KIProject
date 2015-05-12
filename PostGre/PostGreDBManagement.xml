@@ -34,7 +34,8 @@
 			<SetAttribute Name="PSD:Status" Value="WorkflowStarted" /> 
 
 			<GenerateData Alias="PROTASKS"> 
-				<DataType>ProcessingTasks</DataType> 
+				<DataType>ProcessingTasks</DataType>
+				<CurrentTask>1</CurrentTask> 
 			</GenerateData>
 
 			<IncAttribute Name="PROTASKS:NumberTotal"/>
@@ -49,7 +50,8 @@
 				NewDBPassword=${PSD:NewDBPassword}
 				Host=${PSD:Host}
 				User=${PSD:User}
-				Lib=${PSU:Lib}
+				TaskNumber=${PROTASKS:NumberTotal}
+				Lib=${PSD:Lib}
 				CurrentState=ReadState
 				/> </NewBlock>]]>
 			</XMLExtract> 

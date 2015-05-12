@@ -35,7 +35,8 @@
 			<SetAttribute Name="PSU:Status" Value="WorkflowStarted" /> 
 			
 			<GenerateData Alias="PROTASKS"> 
-				<DataType>ProcessingTasks</DataType> 
+				<DataType>ProcessingTasks</DataType>
+				<CurrentTask>1</CurrentTask> 
 			</GenerateData>
 			
 			<IncAttribute Name="PROTASKS:NumberTotal"/>
@@ -50,6 +51,7 @@
 				NewDBPassword=${PSU:NewDBPassword}
 				Host=${PSU:Host}
 				User=${PSU:User}
+				TaskNumber=${PROTASKS:NumberTotal}
 				Lib=${PSU:Lib}
 				CurrentState=ReadState/> 
 				</NewBlock>]]>
