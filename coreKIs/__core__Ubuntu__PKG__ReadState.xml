@@ -33,16 +33,16 @@
 			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
 				<Parameter Name="User">${TASKS:User}</Parameter>
 				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
-				<Parameter Name="Command">dpkg -s ${TASKS:PKG} | grep Status | grep deinstall</Parameter> 
+				<Parameter Name="Command">dpkg -s ${TASKS:PKG}</Parameter> 
 			</Action>
 			
 			<If>
 				<VarCondition VarString="${SYSTEMRC}" Mode="eq" Value="0"/>
 				<Then>
-					<SetAttribute Name="TASKS:CurrentState" Value="Deleted"/>
+					<SetAttribute Name="TASKS:CurrentState" Value="Created"/>
 				</Then>
 				<Else>
-					<SetAttribute Name="TASKS:CurrentState" Value="Created"/>
+					<SetAttribute Name="TASKS:CurrentState" Value="Deleted"/>
 				</Else>
 			</If>			
 			<SetAttribute Name="CHECK:Status" Value="CurrentStateRead" /> 
