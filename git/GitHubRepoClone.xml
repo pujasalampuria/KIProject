@@ -40,6 +40,7 @@
 				PKG=git
 				Host=${GCR:Host}
 				CurrentState=ReadState
+				TaskNumber=${PROTASKS:NumberTotal}
 				/> </NewBlock>]]>
 			</XMLExtract>
 			
@@ -63,9 +64,9 @@
 				User=${GCR:User}
 				Host=${GCR:Host}
 				Lib=GITREPO
-				CurrentState=WaitForPrior
-				PriorUID=${NODE:Extensions/Tasks/UID}/> 
-				</NewBlock>]]>
+				CurrentState=ReadState
+                TaskNumber=${PROTASKS:NumberTotal}
+				/></NewBlock>]]>
 			</XMLExtract>
 			
 			<GenerateData Alias="VAL"> 
