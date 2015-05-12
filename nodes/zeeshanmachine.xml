@@ -4,6 +4,7 @@
 	NodeType="Machine" MachineClass="Linux" NodeName="zeeshan" >
     <Dependencies>
        <Node  ID="OpexSoftware:UseCase:Application:PostgreSQl" />
+       <Node  ID="OpexSoftware:UseCase:Application:MongoDB" />
     </Dependencies>
     <CustomerInformation ID="opex" Name="OpexSoftware"/>
     <Extensions>
