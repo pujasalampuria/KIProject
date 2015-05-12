@@ -18,10 +18,6 @@
 			<SubItem Name="SolrInstallConfig" Alias="SIC">
 				<AttributeFilter Name="TargetApp" Mode="string" Value="${PRE:NodeName}"/>
 				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}"/>
-				<AttributeFilter Name="TargetTar_FileName" Mode="exists"/>
-				<AttributeFilter Name="Untar_folder" Mode="exists"/>
-        		<AttributeFilter Name="Target_path" Mode="exists"/>
-        		<AttributeFilter Name="Download_url" Mode="exists"/>
 				<AttributeFilter Name="TargetState" Mode="string" Value="Created"/>
 				<AttributeFilter Name="Status" Mode="notexists"/>
 				
@@ -34,6 +30,7 @@
 			
 			<GenerateData Alias="PROTASKS"> 
 				<DataType>ProcessingTasks</DataType> 
+				<CurrentTask>1</CurrentTask>
 			</GenerateData>
 			
            <!-- TASK1-->
@@ -41,16 +38,14 @@
 			<IncAttribute Name="PROTASKS:NumberTotal"/>
 			
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetTar_FileName=${SIC:TargetTar_FileName}
+				PKG=openjdk-7-jdk
 				TargetMachine=${SIC:TargetMachine}      
-				Untar_folder=${SIC:Untar_folder}      
 				TargetState=Created
-				Target_path='${SIC:Target_path}'
-				Download_url='${SIC:Download_url}'
-				Host=${SIC:Host}
 				User=${SIC:User}
-				Lib=WGET
-				CurrentState=ReadState/> 
+				Lib=PKG
+				Host=${SIC:Host}
+				CurrentState=ReadState
+				TaskNumber=${PROTASKS:NumberTotal}/> 
 				</NewBlock>]]>
 			</XMLExtract> 
 			
@@ -66,17 +61,15 @@
            
 			<IncAttribute Name="PROTASKS:NumberTotal"/>
 			
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetTar_FileName=${SIC:TargetTar_FileName}
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks       
+				PKG=tomcat6
 				TargetMachine=${SIC:TargetMachine}      
 				TargetState=Created
-				Untar_folder=${SIC:Untar_folder}      
-				Target_path='${SIC:Target_path}'
-				Download_url='${SIC:Download_url}'
-				Host=${SIC:Host}
 				User=${SIC:User}
-				Lib=TAR
-				CurrentState=ReadState/> 
+				Lib=PKG
+				Host=${SIC:Host}
+				CurrentState=ReadState
+				TaskNumber=${PROTASKS:NumberTotal}/> 
 				</NewBlock>]]>
 			</XMLExtract> 
 			
@@ -88,7 +81,76 @@
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
             
-			 	
+        <!-- TASK3-->
+           
+			<IncAttribute Name="PROTASKS:NumberTotal"/>
+			
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks       
+				PKG=tomcat6-common
+				TargetMachine=${SIC:TargetMachine}      
+				TargetState=Created
+				User=${SIC:User}
+				Lib=PKG
+				Host=${SIC:Host}
+				CurrentState=ReadState
+				TaskNumber=${PROTASKS:NumberTotal}/> 
+				</NewBlock>]]>
+			</XMLExtract> 
+			
+ 
+      
+			<GenerateData Alias="VAL"> 
+				<!-- Independent="true" can be applied, if multiple Issues should be generated. In this case pass on the parent IssueID to the resulting Issue <ParentIID>${IID}</ParentIID>, don't forget to include ParentIID=${IID} into the Tasks DataBlock on the Node -->
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
+		<!-- TASK4-->
+           
+			<IncAttribute Name="PROTASKS:NumberTotal"/>
+			
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks       
+				PKG=libtomcat6-java
+				TargetMachine=${SIC:TargetMachine}      
+				TargetState=Created
+				User=${SIC:User}
+				Lib=PKG
+				Host=${SIC:Host}
+				CurrentState=ReadState
+				TaskNumber=${PROTASKS:NumberTotal}/> 
+				</NewBlock>]]>
+			</XMLExtract> 
+			
+ 
+      
+			<GenerateData Alias="VAL"> 
+				<!-- Independent="true" can be applied, if multiple Issues should be generated. In this case pass on the parent IssueID to the resulting Issue <ParentIID>${IID}</ParentIID>, don't forget to include ParentIID=${IID} into the Tasks DataBlock on the Node -->
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
+
+		<!-- TASK5-->
+           
+			<IncAttribute Name="PROTASKS:NumberTotal"/>
+			
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks       
+				PKG=solr-tomcat
+				TargetMachine=${SIC:TargetMachine}      
+				TargetState=Created
+				User=${SIC:User}
+				Lib=PKG
+				Host=${SIC:Host}
+				CurrentState=ReadState
+				TaskNumber=${PROTASKS:NumberTotal}/> 
+				</NewBlock>]]>
+			</XMLExtract> 
+			
+ 
+      
+			<GenerateData Alias="VAL"> 
+				<!-- Independent="true" can be applied, if multiple Issues should be generated. In this case pass on the parent IssueID to the resulting Issue <ParentIID>${IID}</ParentIID>, don't forget to include ParentIID=${IID} into the Tasks DataBlock on the Node -->
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
 			
       
 			<!--		<Resolve>Resolved initial Issue with ID ${IID}</Resolve> - use if ChildIssues are created-->
