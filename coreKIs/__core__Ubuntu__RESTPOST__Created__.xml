@@ -1,0 +1,71 @@
+<KnowledgeItem ID="OpexSoftware:RESTAPI:__core__Ubuntu__RESTPOST__Created__" xmlns="http://www.arago.de/KiSchema">
+	<Title>__core__Ubuntu__RESTPOST__Created__</Title>
+        <Description> This KI searches for the DataBlock called __core__Ubuntu__RESTPOST___Created__  and runs the specified curl command
+        </Description>
+
+	<BindAttributes>
+	       <AttributeFilter Name="NodeType" Mode="string" Value="Machine"/>
+	       <AttributeFilter Name="MachineClass" Mode="string" Value="Linux"/>
+	        	<SubItem Name="Extensions" Alias="EXT">
+			   <SubItem Name="Tasks" Alias="TASK">
+			         <AttributeFilter Name="TargetState" Mode="exists"/>
+				 <AttributeFilter Name="TargetMachine" Mode="exists"/>
+				 <AttributeFilter Name="ToolUrl" Mode="exists"/>
+				 <AttributeFilter Name="PostData" Mode="exists"/>
+				 <AttributeFilter Name="ToolUser" Mode="exists"/>
+                                 <AttributeFilter Name="ToolPasswd" Mode="exists"/>
+
+			   </SubItem>
+			</SubItem>
+	</BindAttributes>
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+			
+	<CreateTrigger>
+	     <IssueCondition>
+	     <Description> Checks Issue for DataBlock __core__Ubuntu__RESTPOST___Created__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
+		<SubItem Name="__core__Ubuntu__RESTPOST___Created__" Alias="CHECK">
+		<AttributeFilter Name="ExtUID" Mode="string" Value="${TASK:UID}"/>
+		<AttributeFilter Name="Status" Mode="notexists"/>	
+	       	</SubItem>
+	     </IssueCondition>
+
+		<Activate>
+		   <Action Capability="ExecuteLocalCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="300">
+		     <Parameter Name="Command">curl -D- -u ${TASK:ToolUser}:${TASK:ToolPasswd} -X POST -d '${TASK:PostData}' -H "${TASK:ContentType}" "${TASK:ToolUrl}"
+		      </Parameter>
+		   </Action>  
+		      <If>
+                	   <VarCondition VarString="${SYSTEMRC}" Mode="eq" Value="0"/>
+			<Then>
+			  <Action Capability="ExecuteLocalCommand" Error="ERROR" Output="CREATEDOUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="300">
+                           <Parameter Name="Command"><![CDATA[echo "${OUTPUT}" | grep -i "201 Created" && touch /tmp/${TASK:UID} ]]></Parameter>
+			  </Action>
+    		         <If>
+    		            <VarCondition VarString="${SYSTEMRC}" Mode="eq" Value="0"/> 
+    		              <Then>
+    		                <SetAttribute Name="TASK:CurrentState" Value="ReadState"/>
+    		              </Then>
+    		         <Else>
+    		            <Action Capability="ExecuteLocalCommand" Error="ERROR" Output="OKOUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="300">
+    		            <Parameter Name="Command"><![CDATA[echo "${OUTPUT}" | grep -i "200 OK" && touch /tmp/${TASK:UID}]]></Parameter>
+    		            </Action>
+                           <If>
+    		            <VarCondition VarString="${SYSTEMRC}" Mode="eq" Value="0"/>   
+    		             <Then>
+    		                <SetAttribute Name="TASK:CurrentState" Value="ReadState"/>
+    		             </Then>
+    		           <Else>
+    		              <Eject>__Failed to run the curl command</Eject>
+    		           </Else>
+    		           </If>
+    		        </Else>  	    
+    		        </If>
+                       </Then>
+		      <Else>
+			 <Eject>__Failed to run the curl command</Eject>
+		      </Else>
+		      </If>
+	                <SetAttribute Name="CHECK:Status" Value="CurrentStateCreate" /> 
+        </Activate>
+     </CreateTrigger>
+</KnowledgeItem>
