@@ -12,7 +12,6 @@
 				<AttributeFilter Name="Path" Mode="exists"/>
 				<AttributeFilter Name="TargetMachine" Mode="exists"/>
 				<AttributeFilter Name="Command" Mode="exists"/>
-				<
 				<AttributeFilter Name="User" Mode="exists"/>
 				<AttributeFilter Name="Host" Mode="exists"/>
 			</SubItem>
