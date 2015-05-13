@@ -31,21 +31,30 @@
 		</IssueCondition>
 
 		<Activate>
-			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
-				<Parameter Name="User">${TASKS:User}</Parameter>
-				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
-				<Parameter Name="Command">"if [ -d ${TASKS:Path} ]; then echo 'Exists'; else echo 'Not found'; fi\""</Parameter> 
-			</Action>
-			
 			<If>
-				<VarCondition VarString="${SYSTEMRC}" Mode="eq" Value="0"/>
+				<VarCondition VarString="${TASKS:PID}" Mode="ne" Value=""/>
 				<Then>
-					<SetAttribute Name="TASKS:CurrentState" Value="Created"/>
+					<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+						<Parameter Name="User">${TASKS:User}</Parameter>
+						<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+						<Parameter Name="Command">"-ef | grep ${TASKS:PID} | grep -v grep"</Parameter> 
+					</Action>
+				
+				<If>
+					<VarCondition VarString="${SYSTEMRC}" Mode="eq" Value="0"/>
+					<Then>
+						<SetAttribute Name="TASKS:CurrentState" Value="ProcessingTask"/>
+					</Then>
+					<Else>
+						<SetAttribute Name="TASKS:CurrentState" Value="Created"/>
+					</Else>
+				</If>
 				</Then>
-				<Else>
-					<SetAttribute Name="TASKS:CurrentState" Value="UserNotAdded"/>
-				</Else>
-			</If>			
+			<Else>
+				<SetAttribute Name="TASKS:CurrentState" Value="Created"/>
+			</Else>
+			</If>
+			
 			<SetAttribute Name="CHECK:Status" Value="CurrentStateRead" /> 
 			
 		</Activate>

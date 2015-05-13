@@ -1,6 +1,6 @@
-<KnowledgeItem ID="OpexSoftware:DEPLOYSHARDEDMONGODBCLUSTER:__core__Ubuntu__CONNECTMONGOSINSTANCE__Created__" xmlns="http://www.arago.de/KiSchema">
-	<Title>__core__Ubuntu__CONNECTMONGOSINSTANCE__Created__</Title>
-	<Description> This KI searches for the DataBlock called __core__Ubuntu__CONNECTMONGOSINSTANCE__Created__ and ADDEDs the package on the specified Target Machine and writes the current status back to the node. </Description>
+<KnowledgeItem ID="OpexSoftware:DEPLOYSHARDEDMONGODBCLUSTER:__core__Ubuntu__STARTMONGOSINSTANCE__Created__" xmlns="http://www.arago.de/KiSchema">
+	<Title>__core__Ubuntu__STARTMONGOSINSTANCE__Created__</Title>
+	<Description> This KI searches for the DataBlock called __core__Ubuntu__STARTMONGOSINSTANCE__Created__ and ADDEDs the package on the specified Target Machine and writes the current status back to the node. </Description>
 
 	<BindAttributes>
 		<AttributeFilter Name="NodeType" Mode="string" Value="Machine"/>
@@ -11,7 +11,7 @@
 			<SubItem Name="Tasks" Alias="TASKS">
 				<AttributeFilter Name="ConfigServerHostnames" Mode="exists"/>
 				<AttributeFilter Name="ConfigServerPort" Mode="exists"/>
-				<AttributeFilteCONNECTMONGOSINSTANCEr Name="TargetMachine" Mode="exists"/>
+				<AttributeFilter Name="TargetMachine" Mode="exists"/>
 				<AttributeFilter Name="User" Mode="exists"/>
 				<AttributeFilter Name="Host" Mode="exists"/>
 			</SubItem>
@@ -33,17 +33,35 @@
 			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
 				<Parameter Name="User">${TASKS:User}</Parameter>
 				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
-				<Parameter Name="Command">"mkdir /data/configdb;mongod --configsvr --dbpath ${TASKS:Path} --port 27019"</Parameter>
+				<Parameter Name="Command"><![CDATA[
+							"nohup mongos --configdb ${TASKS:ConfigServerHostnames}:27019 2>&1&"
+							]]>
+				</Parameter>
 			</Action>
 			
 			<If>
 				<VarCondition VarString="${SYSTEMRC}" Mode="eq" Value="0"/>
 				<Then>
-					<SetAttribute Name="TASKS:CurrentState" Value="ReadState"/>
+					<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+                               		 <Parameter Name="User">${TASKS:User}</Parameter>
+                                	 <Parameter Name="Hostname">${TASKS:Host}</Parameter>
+                                	 <Parameter Name="Command">"echo "${OUTPUT}" | cut -d] -f2 | tr -d '\n'"</Parameter>
+                        		</Action>
+				
+					<If>
+						<VarCondition VarString="${SYSTEMRC}" Mode="eq" Value="0"/>
+						<Then>
+							<SetAttribute Name="TASKS:PID" Value="${OUTPUT}" />
+							<SetAttribute Name="TASKS:CurrentState" Value="ReadState"/>
+						</Then>
+					<Else>
+						<Eject>__Failed to ADDED directory ${TASKS:path}__</Eject>
+					</Else>
+					</If>
 				</Then>
 				<Else>
-					<Eject>__Failed to ADDED directory ${TASKS:path}__</Eject>
-				</Else>
+                                       <Eject>__Failed to ADDED directory ${TASKS:path}__</Eject>
+                                </Else>
 			</If>
 
 			<SetAttribute Name="ADDED:Status" Value="created" /> 

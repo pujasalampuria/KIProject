@@ -7,9 +7,10 @@ Issue:
     TargetMachine: zeeshan
     TargetState: Created
     Path: /data/configdb
-    ConfigServerHostnames: zeeshan
+    ConfigServerHostnames: localhost 
     ConfigServerPort: 27019
-    MachineRunningMongos: zeeshan
+    MachineRunningMongos: localhost
+    ShardName: localhost
     MongosPort: 27017
     Database: TempDB  
     User: zeeshan

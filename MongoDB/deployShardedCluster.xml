@@ -16,7 +16,7 @@
 		<IssueCondition>
 			<Description>Searches for an Issue with DataBlock DEPLOYSHARDEDMONGODBCLUSTER and the necessary information for sucessful completion of workflow</Description>
 			<SubItem Name="DEPLOYSHARDEDMONGODBCLUSTER" Alias="DSM">
-				<AttributeFilter Name="TargetApp" Mode="exits"/>
+				<AttributeFilter Name="TargetApp" Mode="exists"/> 
 				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}"/>
 				<AttributeFilter Name="Database" Mode="exists"/>
 				<AttributeFilter Name="ConfigServerHostnames" Mode="exists"/>
@@ -38,7 +38,7 @@
 				<CurrentTask>1</CurrentTask> 
 			</GenerateData>
 			
-           <!-- TASK1-- START CONFIG SERVER DATABASE INSTANCE-->
+           <!-- TASK1 START CONFIG SERVER DATABASE INSTANCE-->
            
 			<IncAttribute Name="PROTASKS:NumberTotal"/>
 			
@@ -47,9 +47,9 @@
 				TargetState=Created
 				Host=${DSM:Host}
 				User=${DSM:User}
-				Path=${DSM:Path}
+				Path='${DSM:Path}'
 				Lib=RUNCOMMAND
-				Command="mkdir /data/configdb; mongod --configsvr --dbpath ${TASKS:Path} --port 27019"
+				Command='sudo mkdir -p /data/configdb; sudo mongod --configsvr --dbpath ${DSM:Path} --port 27019'
 				TaskNumber=${PROTASKS:NumberTotal}
 				CurrentState=ReadState/> 
 				</NewBlock>]]>
@@ -63,7 +63,7 @@
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>	
       
-      <!-- TASK2--  START THE MONGOS INSTANCE-->
+      <!-- TASK2  START THE MONGOS INSTANCE-->
            
 			<IncAttribute Name="PROTASKS:NumberTotal"/>
 			
@@ -89,7 +89,7 @@
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
             			
-      <!-- TASK3--  Connect to mongo instance.-->
+      <!-- TASK3  Connect to mongo instance.-->
            
 			<IncAttribute Name="PROTASKS:NumberTotal"/>
 			
@@ -115,7 +115,7 @@
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
 
-		<!-- TASK4--  add shard to the cluster.-->
+		<!-- TASK4  add shard to the cluster.-->
            
 			<IncAttribute Name="PROTASKS:NumberTotal"/>
 			
@@ -126,6 +126,7 @@
 				Host=${DSM:Host}
 				User=${DSM:User}
 				MongosPort=${DSM:MongosPort}
+				ShardName=${DSM:ShardName}
 				Lib=ADDSHARD
 				TaskNumber=${PROTASKS:NumberTotal}
 				CurrentState=ReadState/> 
@@ -142,7 +143,7 @@
 			</GenerateData>
 
 
-		<!-- TASK5--  Enable sharding.-->
+		<!-- TASK5  Enable sharding.-->
            
 			<IncAttribute Name="PROTASKS:NumberTotal"/>
 			
