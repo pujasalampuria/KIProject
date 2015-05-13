@@ -32,7 +32,7 @@
 		           TargetMachine=${JMI:TargetMachine}      
 			   TargetState=Created
 			   User=${JMI:User}
-			   Lib=RESTPOST
+			   Lib=CURLPOST
 			   ToolUrl='${JMI:JiraUrl}'
 			   Host=${JMI:Host}
 			   CurrentState=ReadState
