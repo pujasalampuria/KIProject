@@ -1,6 +1,6 @@
-<KnowledgeItem ID="OpexSoftware:DEPLOYSHARDEDMONGODBCLUSTER:__core__Ubuntu__RUNCOMMAND__Created__" xmlns="http://www.arago.de/KiSchema">
-	<Title>__core__Ubuntu__RUNCOMMAND__Created__</Title>
-	<Description> This KI searches for the DataBlock called __core__Ubuntu__RUNCOMMAND__Created__ and rus the command on the specified Target Machine and writes the current status back to the node. </Description>
+<KnowledgeItem ID="OpexSoftware:DEPLOYSHARDEDMONGODBCLUSTER:__core__Ubuntu__CONNECTMONGOSINSTANCE__Created__" xmlns="http://www.arago.de/KiSchema">
+	<Title>__core__Ubuntu__CONNECTMONGOSINSTANCE__Created__</Title>
+	<Description> This KI searches for the DataBlock called __core__Ubuntu__CONNECTMONGOSINSTANCE__Created__ and ADDEDs the package on the specified Target Machine and writes the current status back to the node. </Description>
 
 	<BindAttributes>
 		<AttributeFilter Name="NodeType" Mode="string" Value="Machine"/>
@@ -9,9 +9,9 @@
 		</SubItem>
 		<SubItem Name="Extensions" Alias="EXT">
 			<SubItem Name="Tasks" Alias="TASKS">
-				<AttributeFilter Name="Path" Mode="exists"/>
+				<AttributeFilter Name="MachineRunningMongos" Mode="exists"/>
+				<AttributeFilter Name="MongosPort" Mode="exists"/>
 				<AttributeFilter Name="TargetMachine" Mode="exists"/>
-				<AttributeFilter Name="Command" Mode="exists"/>
 				<AttributeFilter Name="User" Mode="exists"/>
 				<AttributeFilter Name="Host" Mode="exists"/>
 			</SubItem>
@@ -22,8 +22,8 @@
 		
 	<CreateTrigger>
 		<IssueCondition>
-			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__RUNCOMMAND__Created__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
-			<SubItem Name="__core__Ubuntu__RUNCOMMAND__Created__" Alias="ADDED">
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__CONNECTMONGOSINSTANCE__Created__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
+			<SubItem Name="__core__Ubuntu__CONNECTMONGOSINSTANCE__Created__" Alias="ADDED">
 				<AttributeFilter Name="ExtUID" Mode="string" Value="${TASKS:UID}" />
 				<AttributeFilter Name="Status" Mode="notexists"/>	
 			</SubItem>
@@ -33,18 +33,16 @@
 			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
 				<Parameter Name="User">${TASKS:User}</Parameter>
 				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
-				<Parameter Name="Command">"${TASKS:Command}"</Parameter>
+				<Parameter Name="Command">"mkdir /data/configdb;mongod --configsvr --dbpath ${TASKS:Path} --port 27019"</Parameter>
 			</Action>
-			<!-- Run Command will not set the CurrentState to ReadState
-			because no easy way of reading if the command has run
-			so will set the state to Created if command is successful -->
+			
 			<If>
 				<VarCondition VarString="${SYSTEMRC}" Mode="eq" Value="0"/>
 				<Then>
-					<SetAttribute Name="TASKS:CurrentState" Value="Created"/>
+					<SetAttribute Name="TASKS:CurrentState" Value="ReadState"/>
 				</Then>
 				<Else>
-					<Eject>__Failed to execute command ${TASKS:Command}__</Eject>
+					<Eject>__Failed to ADDED directory ${TASKS:path}__</Eject>
 				</Else>
 			</If>
 
