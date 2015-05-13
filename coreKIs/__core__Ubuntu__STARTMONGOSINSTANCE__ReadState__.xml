@@ -12,8 +12,7 @@
 				<AttributeFilter Name="TargetMachine" Mode="exists"/>
 				<AttributeFilter Name="ConfigServerHostnames" Mode="exists"/>
 				<AttributeFilter Name="ConfigServerPort" Mode="exists"/>
-				<AttributeFilter Name="User" Mode="exists"/>
-				<AttributeFilter Name="Path" Mode="exists"/>
+				<AttributeFilter Name="User" Mode="exists"/>	
 				<AttributeFilter Name="Host" Mode="exists"/>
 			</SubItem>
 		</SubItem>
@@ -51,7 +50,7 @@
 				</If>
 				</Then>
 			<Else>
-				<SetAttribute Name="TASKS:CurrentState" Value="Created"/>
+				<SetAttribute Name="TASKS:CurrentState" Value="ProcessingTask"/>
 			</Else>
 			</If>
 			
