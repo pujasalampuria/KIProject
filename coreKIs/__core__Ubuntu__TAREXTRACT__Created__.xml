@@ -9,8 +9,8 @@
 		</SubItem>
 		<SubItem Name="Extensions" Alias="EXT">
 			<SubItem Name="Tasks" Alias="TASKS">
-				<AttributeFilter Name="TargetTar_FileName" Mode="exists"/>
-				<AttributeFilter Name="Target_path" Mode="exists"/>
+				<AttributeFilter Name="TargetTarFileName" Mode="exists"/>
+				<AttributeFilter Name="TargetPath" Mode="exists"/>
 				<AttributeFilter Name="User" Mode="exists"/>
 				<AttributeFilter Name="Host" Mode="exists"/>
 			</SubItem>
@@ -32,7 +32,7 @@
 			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="600">
 				<Parameter Name="User">${TASKS:User}</Parameter>
 				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
-				<Parameter Name="Command">"cd ${TASKS:Target_path};tar -zxvf ${TASKS:TargetTar_FileName}"
+				<Parameter Name="Command">"cd ${TASKS:TargetPath};tar -zxvf ${TASKS:TargetTarFileName}"
 				</Parameter> 
 			</Action>
 			
