@@ -1,6 +1,6 @@
-<KnowledgeItem ID="OpexSoftware:Ubuntu:TAR:__core__Ubuntu__TAR__Created__" xmlns="http://www.arago.de/KiSchema">
-	<Title>__core__Ubuntu__TAR__Created__</Title>
-	<Description> This KI searches for the DataBlock called __core__Ubuntu__TAR__Created__ and Untar on specified Target Machine and writes the current status back to the node. </Description>
+<KnowledgeItem ID="OpexSoftware:Ubuntu:TAREXTRACT:__core__Ubuntu__TAREXTRACT__Created__" xmlns="http://www.arago.de/KiSchema">
+	<Title>__core__Ubuntu__TAREXTRACT__Created__</Title>
+	<Description> This KI searches for the DataBlock called __core__Ubuntu__TAREXTRACT__Created__ and Untar on specified Target Machine and writes the current status back to the node. </Description>
 
 	<BindAttributes>
 		<AttributeFilter Name="NodeType" Mode="string" Value="Machine"/>
@@ -21,8 +21,8 @@
 		
 	<CreateTrigger>
 		<IssueCondition>
-			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__TAR__Created__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
-			<SubItem Name="__core__Ubuntu__TAR__Created__" Alias="ADDED">
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__TAREXTRACT__Created__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
+			<SubItem Name="__core__Ubuntu__TAREXTRACT__Created__" Alias="ADDED">
 				<AttributeFilter Name="ExtUID" Mode="string" Value="${TASKS:UID}" />
 				<AttributeFilter Name="Status" Mode="notexists"/>	
 			</SubItem>

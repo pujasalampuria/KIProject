@@ -75,7 +75,7 @@
 				Target_path='${JIC:Target_path}'
 				Host=${JIC:Host}
 				User=${JIC:User}
-				Lib=TAR
+				Lib=TAREXTRACT
 				TaskNumber=${PROTASKS:NumberTotal}
 				CurrentState=ReadState/> 
 				</NewBlock>]]>

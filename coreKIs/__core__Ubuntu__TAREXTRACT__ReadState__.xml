@@ -1,6 +1,6 @@
-<KnowledgeItem ID="OpexSoftware:Ubuntu:TAR:__core__Ubuntu__TAR__ReadState__" xmlns="http://www.arago.de/KiSchema">
-	<Title>__core__Ubuntu__TAR__ReadState__</Title>
-	<Description> This KI searches for the DataBlock called __core__Ubuntu__TAR__ReadState__ and verifies the CurrentState of the folder on the specified Target Machine and writes it back to the node. </Description>
+<KnowledgeItem ID="OpexSoftware:Ubuntu:TAREXTRACT:__core__Ubuntu__TAREXTRACT__ReadState__" xmlns="http://www.arago.de/KiSchema">
+	<Title>__core__Ubuntu__TAREXTRACT__ReadState__</Title>
+	<Description> This KI searches for the DataBlock called __core__Ubuntu__TAREXTRACT__ReadState__ and verifies the CurrentState of the folder on the specified Target Machine and writes it back to the node. </Description>
 
 	<BindAttributes>
 		<AttributeFilter Name="NodeType" Mode="string" Value="Machine"/>
@@ -22,8 +22,8 @@
 		
 	<CreateTrigger>
 		<IssueCondition>
-			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__TAR__ReadState__ and attribute ExtUID being the same as the machine KI binds to. </Description>
-			<SubItem Name="__core__Ubuntu__TAR__ReadState__" Alias="CHECK">
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__TAREXTRACT__ReadState__ and attribute ExtUID being the same as the machine KI binds to. </Description>
+			<SubItem Name="__core__Ubuntu__TAREXTRACT__ReadState__" Alias="CHECK">
 				<AttributeFilter Name="ExtUID" Mode="string" Value="${TASKS:UID}"/>	
 				<AttributeFilter Name="Status" Mode="notexists"/>	
 			</SubItem>
