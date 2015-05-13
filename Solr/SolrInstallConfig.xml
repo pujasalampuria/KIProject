@@ -43,6 +43,7 @@
 				TargetState=Created
 				User=${SIC:User}
 				Lib=PKG
+				OSName=Ubuntu
 				Host=${SIC:Host}
 				CurrentState=ReadState
 				TaskNumber=${PROTASKS:NumberTotal}/> 
@@ -67,6 +68,7 @@
 				TargetState=Created
 				User=${SIC:User}
 				Lib=PKG
+				OSName=Ubuntu
 				Host=${SIC:Host}
 				CurrentState=ReadState
 				TaskNumber=${PROTASKS:NumberTotal}/> 
@@ -91,6 +93,7 @@
 				TargetState=Created
 				User=${SIC:User}
 				Lib=PKG
+				OSName=Ubuntu
 				Host=${SIC:Host}
 				CurrentState=ReadState
 				TaskNumber=${PROTASKS:NumberTotal}/> 
@@ -114,6 +117,7 @@
 				TargetState=Created
 				User=${SIC:User}
 				Lib=PKG
+				OSName=Ubuntu
 				Host=${SIC:Host}
 				CurrentState=ReadState
 				TaskNumber=${PROTASKS:NumberTotal}/> 
@@ -138,6 +142,7 @@
 				TargetState=Created
 				User=${SIC:User}
 				Lib=PKG
+				OSName=Ubuntu
 				Host=${SIC:Host}
 				CurrentState=ReadState
 				TaskNumber=${PROTASKS:NumberTotal}/> 

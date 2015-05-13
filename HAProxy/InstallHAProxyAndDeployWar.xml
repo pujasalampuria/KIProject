@@ -44,6 +44,7 @@
 				<NewBlock>
 				  <Tasks 
 					PKG=haproxy
+					OSName=Ubuntu
 					TargetMachine=${HIDW:TargetMachine}      
 					TargetState=Created
 					User=${HIDW:User}
@@ -69,6 +70,7 @@
 				<NewBlock>
 				  <Tasks 
 					PKG=tomcat7
+					OSName=Ubuntu
 					TargetMachine=${HIDW:TargetMachine}      
 					TargetState=Created
 					User=${HIDW:User}

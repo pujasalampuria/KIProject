@@ -1,6 +1,6 @@
-<KnowledgeItem ID="OpexSoftware:GITCLONEREPO:__core__Ubuntu__GITREPO__Created__" xmlns="http://www.arago.de/KiSchema">
-	<Title>__core__Ubuntu__GITREPO__Created__</Title>
-	<Description> This KI searches for the DataBlock called __core__Ubuntu__GITREPO__Created__  and clones the desired Git Repository at the specified path.</Description>
+<KnowledgeItem ID="OpexSoftware:GITCLONEREPO:__core__Linux__GITREPO__Created__" xmlns="http://www.arago.de/KiSchema">
+	<Title>__core__Linux__GITREPO__Created__</Title>
+	<Description> This KI searches for the DataBlock called __core__Linux__GITREPO__Created__  and clones the desired Git Repository at the specified path.</Description>
 
 	<BindAttributes>
 		<AttributeFilter Name="NodeType" Mode="string" Value="Machine"/>
@@ -22,8 +22,8 @@
 		
 	<CreateTrigger>
 		<IssueCondition>
-			<Description> Checks Issue for DataBlock __core__Ubuntu__GITREPO__Created__and attribute ExtUID being the same as in the Node the KI binds to. </Description>
-			<SubItem Name="__core__Ubuntu__GITREPO__Created__" Alias="CHECK">
+			<Description> Checks Issue for DataBlock __core__Linux__GITREPO__Created__and attribute ExtUID being the same as in the Node the KI binds to. </Description>
+			<SubItem Name="__core__Linux__GITREPO__Created__" Alias="CHECK">
 				<AttributeFilter Name="ExtUID" Mode="string" Value="${TASK:UID}"/>
 				<AttributeFilter Name="Status" Mode="notexists"/>	
 			</SubItem>

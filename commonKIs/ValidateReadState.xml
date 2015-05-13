@@ -34,11 +34,23 @@
 		</IssueCondition> 
 			
 		<Activate>		
-			<GenerateData> 
-				<DataType>__core__${OSINFO:Name}__${TASKS:Lib}__ReadState__</DataType>
-				<TargetMachine>${TASKS:TargetMachine}</TargetMachine> 
-				<ExtUID>${VAL:ExtUID}</ExtUID>
-			</GenerateData>		
+			<If>
+				<VarCondition VarString="${TASKS:OSName}" Mode="exists"/>
+				<Then>
+					<GenerateData> 
+						<DataType>__core__${OSINFO:Name}__${TASKS:Lib}__ReadState__</DataType>
+						<TargetMachine>${TASKS:TargetMachine}</TargetMachine> 
+						<ExtUID>${VAL:ExtUID}</ExtUID>
+					</GenerateData>
+				</Then>
+				<Else>
+					<GenerateData> 
+						<DataType>__core__${NODE:MachineClass}__${TASKS:Lib}__ReadState__</DataType>
+						<TargetMachine>${TASKS:TargetMachine}</TargetMachine> 
+						<ExtUID>${VAL:ExtUID}</ExtUID>
+					</GenerateData>
+				</Else>
+			</If>		
 		</Activate>
 	</CreateTrigger>
 </KnowledgeItem>

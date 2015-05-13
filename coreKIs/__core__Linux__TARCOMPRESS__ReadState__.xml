@@ -1,16 +1,16 @@
-<KnowledgeItem ID="OpexSoftware:Ubuntu:STOPSERVICE:__core__Ubuntu__STOPSERVICE__ReadState__" xmlns="http://www.arago.de/KiSchema">
-	<Title>__core__Ubuntu__STOPSERVICE__ReadState__</Title>
-	<Description> This KI searches for the DataBlock called __core__Ubuntu__STOPSERVICE__ReadState__ and verifies the status of specified service and writes it back to the node. </Description>
+<KnowledgeItem ID="OpexSoftware:Linux:TARCOMPRESS:__core__Linux__TARCOMPRESS__ReadState__" xmlns="http://www.arago.de/KiSchema">
+	<Title>__core__Linux__TARCOMPRESS__ReadState__</Title>
+	<Description> This KI searches for the DataBlock called __core__Linux__TARCOMPRESS__ReadState__ and verifies the CurrentState of the folder on the specified Target Machine and writes it back to the node. </Description>
 
 	<BindAttributes>
 		<AttributeFilter Name="NodeType" Mode="string" Value="Machine"/>
 		<SubItem Name="OSInformation" Alias="OSINFO">
-			<AttributeFilter Name="Name" Mode="string" Value="Ubuntu"/>
+			<AttributeFilter Name="Name" Mode="string" Value="Linux"/>
 		</SubItem>
 		<SubItem Name="Extensions" Alias="EXT">
 			<SubItem Name="Tasks" Alias="TASKS">
-				<AttributeFilter Name="ServiceName" Mode="exists"/>
-				<AttributeFilter Name="TargetMachine" Mode="exists"/>
+				<AttributeFilter Name="UntarFolder" Mode="exists"/>
+                <AttributeFilter Name="TargetPath" Mode="exists"/>
 				<AttributeFilter Name="User" Mode="exists"/>
 				<AttributeFilter Name="Host" Mode="exists"/>
 			</SubItem>
@@ -21,8 +21,8 @@
 		
 	<CreateTrigger>
 		<IssueCondition>
-			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__STOPSERVICE__ReadState__ and attribute ExtUID being the same as the machine KI binds to. </Description>
-			<SubItem Name="__core__Ubuntu__STOPSERVICE__ReadState__" Alias="CHECK">
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__TARCOMPRESS__ReadState__ and attribute ExtUID being the same as the machine KI binds to. </Description>
+			<SubItem Name="__core__Linux__TARCOMPRESS__ReadState__" Alias="CHECK">
 				<AttributeFilter Name="ExtUID" Mode="string" Value="${TASKS:UID}"/>	
 				<AttributeFilter Name="Status" Mode="notexists"/>	
 			</SubItem>
@@ -32,17 +32,20 @@
 			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
 				<Parameter Name="User">${TASKS:User}</Parameter>
 				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
-				<Parameter Name="Command">"sudo service ${TASKS:ServiceName} status"</Parameter> 
+				<Parameter Name="Command">
+                  <![CDATA[
+					cd ${TASKS:TargetPath} && ls ${TASKS:UntarFolder}.tar.gz
+                   ]]>
+				</Parameter> 
 			</Action>
 			
 			<If>
 				<VarCondition VarString="${SYSTEMRC}" Mode="eq" Value="0"/>
 				<Then>
-					<SetAttribute Name="TASKS:CurrentState" Value="Deleted"/>
+					<SetAttribute Name="TASKS:CurrentState" Value="Created"/>
 				</Then>
 				<Else>
-					<SetAttribute Name="TASKS:CurrentState" Value="Created"/>
-					
+					<SetAttribute Name="TASKS:CurrentState" Value="Deleted"/>
 				</Else>
 			</If>			
 			<SetAttribute Name="CHECK:Status" Value="CurrentStateRead" /> 

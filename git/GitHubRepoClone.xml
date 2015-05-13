@@ -38,6 +38,7 @@
 				TargetState=Created
 				User=${GCR:User}
 				Lib=PKG
+				OSName=Ubuntu
 				PKG=git
 				Host=${GCR:Host}
 				CurrentState=ReadState
@@ -67,7 +68,7 @@
 				Host=${GCR:Host}
 				Lib=GITREPO
 				CurrentState=ReadState
-                                TaskNumber=${PROTASKS:NumberTotal}
+                TaskNumber=${PROTASKS:NumberTotal}
 				/></NewBlock>]]>
 			</XMLExtract>
 			

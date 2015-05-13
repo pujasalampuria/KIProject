@@ -1,15 +1,15 @@
-<KnowledgeItem ID="OpexSoftware:Ubuntu:TARCOMPRESS:__core__Ubuntu__TARCOMPRESS__Created__" xmlns="http://www.arago.de/KiSchema">
-	<Title>__core__Ubuntu__TARCOMPRESS__Created__</Title>
-	<Description> This KI searches for the DataBlock called __core__Ubuntu__TARCOMPRESS__Created__ and Untar on specified Target Machine and writes the current status back to the node. </Description>
+<KnowledgeItem ID="OpexSoftware:Linux:TAREXTRACT:__core__Linux__TAREXTRACT__Created__" xmlns="http://www.arago.de/KiSchema">
+	<Title>__core__Linux__TAREXTRACT__Created__</Title>
+	<Description> This KI searches for the DataBlock called __core__Linux__TAREXTRACT__Created__ and Untar on specified Target Machine and writes the current status back to the node. </Description>
 
 	<BindAttributes>
 		<AttributeFilter Name="NodeType" Mode="string" Value="Machine"/>
 		<SubItem Name="OSInformation" Alias="OSINFO">
-			<AttributeFilter Name="Name" Mode="string" Value="Ubuntu"/>
+			<AttributeFilter Name="Name" Mode="string" Value="Linux"/>
 		</SubItem>
 		<SubItem Name="Extensions" Alias="EXT">
 			<SubItem Name="Tasks" Alias="TASKS">
-				<AttributeFilter Name="UntarFolder" Mode="exists"/>
+				<AttributeFilter Name="TargetTarFileName" Mode="exists"/>
 				<AttributeFilter Name="TargetPath" Mode="exists"/>
 				<AttributeFilter Name="User" Mode="exists"/>
 				<AttributeFilter Name="Host" Mode="exists"/>
@@ -21,8 +21,8 @@
 		
 	<CreateTrigger>
 		<IssueCondition>
-			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__TARCOMPRESS__Created__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
-			<SubItem Name="__core__Ubuntu__TARCOMPRESS__Created__" Alias="ADDED">
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__TAREXTRACT__Created__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
+			<SubItem Name="__core__Linux__TAREXTRACT__Created__" Alias="ADDED">
 				<AttributeFilter Name="ExtUID" Mode="string" Value="${TASKS:UID}" />
 				<AttributeFilter Name="Status" Mode="notexists"/>	
 			</SubItem>
@@ -34,7 +34,7 @@
 				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
 				<Parameter Name="Command">
                     <![CDATA[
-					cd ${TASKS:TargetPath} && tar -zcvf ${TASKS:UntarFolder}.tar.gz ${TASKS:UntarFolder}
+					cd ${TASKS:TargetPath} && tar -zxvf ${TASKS:TargetTarFileName}
 					]]>
 				</Parameter> 
 			</Action>
@@ -45,7 +45,7 @@
 					<SetAttribute Name="TASKS:CurrentState" Value="ReadState"/>
 				</Then>
 				<Else>
-					<Eject>__Failed to Compress Folder__</Eject>
+					<Eject>__Failed to Untar File__</Eject>
 				</Else>
 			</If>
 

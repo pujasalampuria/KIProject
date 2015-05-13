@@ -41,6 +41,7 @@
 				User=${LPHP:User}
 				Host=${LPHP:Host}
 				Lib=PKG
+				OSName=Ubuntu
 				CurrentState=ReadState
 				TaskNumber=${PROTASKS:NumberTotal}
 				/> </NewBlock>]]>
@@ -60,7 +61,8 @@
 				TargetState=Created
 				User=${LPHP:User}
 				Host=${LPHP:Host}
-				Lib=PKG 	
+				Lib=PKG 
+				OSName=Ubuntu	
 				CurrentState=ReadState
 				TaskNumber=${PROTASKS:NumberTotal}
 				/> </NewBlock>]]>
@@ -81,6 +83,7 @@
 				User=${LPHP:User}
 				Host=${LPHP:Host}
 				Lib=PKG
+				OSName=Ubuntu
 				CurrentState=ReadState
 				TaskNumber=${PROTASKS:NumberTotal}
 				/> </NewBlock>]]>
@@ -101,6 +104,7 @@
                       		User=${LPHP:User}
                         	Host=${LPHP:Host}
                      		Lib=PKG
+                     		OSName=Ubuntu
                        		CurrentState=ReadState
                     		TaskNumber=${PROTASKS:NumberTotal}
                       		/> </NewBlock>]]>
@@ -121,6 +125,7 @@
                  		User=${LPHP:User}
                                 Host=${LPHP:Host}
                           	Lib=PKG
+                          	OSName=Ubuntu
                   		CurrentState=ReadState
                               	TaskNumber=${PROTASKS:NumberTotal}
                       		/> </NewBlock>]]>
@@ -141,6 +146,7 @@
                                 User=${LPHP:User}
                         	Host=${LPHP:Host}
                                 Lib=PKG
+                                OSName=Ubuntu
                                 CurrentState=ReadState
                                 TaskNumber=${PROTASKS:NumberTotal}
                            	/> </NewBlock>]]>

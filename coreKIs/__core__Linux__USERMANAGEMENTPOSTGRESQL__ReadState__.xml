@@ -1,11 +1,11 @@
-<KnowledgeItem ID="OpexSoftware:POSTGRESQLUSER:__core__Ubuntu__USERMANAGEMENTPOSTGRESQL__ReadState__" xmlns="http://www.arago.de/KiSchema">
-	<Title>__core__Ubuntu__USERMANAGEMENTPOSTGRESQL__ReadState__</Title>
-	<Description> This KI searches for the DataBlock called __core__Ubuntu__USERMANAGEMENTPOSTGRESQL__ReadState__ and verifies the CurrentState of the package on the specified Target Machine and writes it back to the node. </Description>
+<KnowledgeItem ID="OpexSoftware:POSTGRESQLUSER:__core__Linux__USERMANAGEMENTPOSTGRESQL__ReadState__" xmlns="http://www.arago.de/KiSchema">
+	<Title>__core__Linux__USERMANAGEMENTPOSTGRESQL__ReadState__</Title>
+	<Description> This KI searches for the DataBlock called __core__Linux__USERMANAGEMENTPOSTGRESQL__ReadState__ and verifies the CurrentState of the package on the specified Target Machine and writes it back to the node. </Description>
 
 	<BindAttributes>
 		<AttributeFilter Name="NodeType" Mode="string" Value="Machine"/>
 		<SubItem Name="OSInformation" Alias="OSINFO">
-			<AttributeFilter Name="Name" Mode="string" Value="Ubuntu"/>
+			<AttributeFilter Name="Name" Mode="string" Value="Linux"/>
 		</SubItem>
 		<SubItem Name="Extensions" Alias="EXT">
 			<SubItem Name="Tasks" Alias="TASKS">
@@ -26,7 +26,7 @@
 	<CreateTrigger>
 		<IssueCondition>
 			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__USERMANAGEMENTPOSTGRESQL__ReadState__ and attribute ExtUID being the same as the machine KI binds to. </Description>
-			<SubItem Name="__core__Ubuntu__USERMANAGEMENTPOSTGRESQL__ReadState__" Alias="CHECK">
+			<SubItem Name="__core__Linux__USERMANAGEMENTPOSTGRESQL__ReadState__" Alias="CHECK">
 				<AttributeFilter Name="ExtUID" Mode="string" Value="${TASKS:UID}"/>	
 				<AttributeFilter Name="Status" Mode="notexists"/>	
 			</SubItem>

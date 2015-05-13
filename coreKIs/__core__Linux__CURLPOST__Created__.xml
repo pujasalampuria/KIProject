@@ -1,6 +1,6 @@
-<KnowledgeItem ID="OpexSoftware:RESTAPI:__core__Ubuntu__CURLPOST__Created__" xmlns="http://www.arago.de/KiSchema">
-	<Title>__core__Ubuntu__CURLPOST__Created__</Title>
-        <Description> This KI searches for the DataBlock called __core__Ubuntu__CURLPOST___Created__  and runs the specified RESTAPI</Description>
+<KnowledgeItem ID="OpexSoftware:RESTAPI:__core__Linux__CURLPOST__Created__" xmlns="http://www.arago.de/KiSchema">
+	<Title>__core__Linux__CURLPOST__Created__</Title>
+        <Description> This KI searches for the DataBlock called __core__Linux__CURLPOST___Created__  and runs the specified RESTAPI</Description>
 
 	<BindAttributes>
 	       <AttributeFilter Name="NodeType" Mode="string" Value="Machine"/>
@@ -20,8 +20,8 @@
 			
 	<CreateTrigger>
 	     <IssueCondition>
-	     <Description> Checks Issue for DataBlock __core__Ubuntu__CURLPOST___Created__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
-		<SubItem Name="__core__Ubuntu__CURLPOST___Created__" Alias="CHECK">
+	     <Description> Checks Issue for DataBlock __core__Linux__CURLPOST___Created__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
+		<SubItem Name="__core__Linux__CURLPOST___Created__" Alias="CHECK">
 		<AttributeFilter Name="ExtUID" Mode="string" Value="${TASK:UID}"/>
 		<AttributeFilter Name="Status" Mode="notexists"/>	
 	       	</SubItem>

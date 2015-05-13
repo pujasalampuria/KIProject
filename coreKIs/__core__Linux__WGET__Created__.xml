@@ -1,11 +1,11 @@
-<KnowledgeItem ID="OpexSoftware:Ubuntu:WGET:__core__Ubuntu__WGET__Created__" xmlns="http://www.arago.de/KiSchema">
-	<Title>__core__Ubuntu__WGET__Created__</Title>
-	<Description> This KI searches for the DataBlock called __core__Ubuntu__WGET__Created__ and WGET on specified Target Machine and writes the current status back to the node. </Description>
+<KnowledgeItem ID="OpexSoftware:Linux:WGET:__core__Linux__WGET__Created__" xmlns="http://www.arago.de/KiSchema">
+	<Title>__core__Linux__WGET__Created__</Title>
+	<Description> This KI searches for the DataBlock called __core__Linux__WGET__Created__ and WGET on specified Target Machine and writes the current status back to the node. </Description>
 
 	<BindAttributes>
 		<AttributeFilter Name="NodeType" Mode="string" Value="Machine"/>
 		<SubItem Name="OSInformation" Alias="OSINFO">
-			<AttributeFilter Name="Name" Mode="string" Value="Ubuntu"/>
+			<AttributeFilter Name="Name" Mode="string" Value="Linux"/>
 		</SubItem>
 		<SubItem Name="Extensions" Alias="EXT">
 			<SubItem Name="Tasks" Alias="TASKS">
@@ -22,7 +22,7 @@
 	<CreateTrigger>
 		<IssueCondition>
 			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__WGET__Created__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
-			<SubItem Name="__core__Ubuntu__WGET__Created__" Alias="ADDED">
+			<SubItem Name="__core__Linux__WGET__Created__" Alias="ADDED">
 				<AttributeFilter Name="ExtUID" Mode="string" Value="${TASKS:UID}" />
 				<AttributeFilter Name="Status" Mode="notexists"/>	
 			</SubItem>
