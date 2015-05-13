@@ -1,6 +1,6 @@
-<KnowledgeItem ID="OpexSoftware:Ubuntu:Copy:__core__Ubuntu__Copy__Created__" xmlns="http://www.arago.de/KiSchema">
-	<Title>__core__Ubuntu__Copy__Created__</Title>
-	<Description> This KI searches for the DataBlock called __core__CentOS__Copy__Created__ and copies the specified source at the specified destination on the specified Target Machine and writes the current status back to the node. </Description>
+<KnowledgeItem ID="OpexSoftware:Ubuntu:COPY:__core__Ubuntu__COPY__Created__" xmlns="http://www.arago.de/KiSchema">
+	<Title>__core__Ubuntu__COPY__Created__</Title>
+	<Description> This KI searches for the DataBlock called __core__CentOS__COPY__Created__ and copies the specified source at the specified destination on the specified Target Machine and writes the current status back to the node. </Description>
 
 	<BindAttributes>
 		<AttributeFilter Name="NodeType" Mode="string" Value="Machine"/>
@@ -22,8 +22,8 @@
 		
 	<CreateTrigger>
 		<IssueCondition>
-			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__Copy__Created__ and attribute ExtUID being the same as the machine KI binds to. </Description>
-			<SubItem Name="__core__Ubuntu__Copy__Created__" Alias="CHECK">
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__COPY__Created__ and attribute ExtUID being the same as the machine KI binds to. </Description>
+			<SubItem Name="__core__Ubuntu__COPY__Created__" Alias="CHECK">
 				<AttributeFilter Name="ExtUID" Mode="string" Value="${TASKS:UID}"/>	
 				<AttributeFilter Name="Status" Mode="notexists"/>	
 			</SubItem>
