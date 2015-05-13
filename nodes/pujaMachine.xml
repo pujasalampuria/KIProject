@@ -5,6 +5,7 @@
     <Dependencies>
        <Node  ID="OpexSoftware:UseCase:Application:JBoss" />
        <Node  ID="OpexSoftware:UseCase:Application:Solr" />
+       <Node  ID="OpexSoftware:UseCase:Application:Supervisor" />
     </Dependencies>
     <CustomerInformation ID="opex" Name="OpexSoftware"/>
     <Extensions>
