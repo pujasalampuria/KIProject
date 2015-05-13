@@ -32,7 +32,10 @@
 			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="600">
 				<Parameter Name="User">${TASKS:User}</Parameter>
 				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
-				<Parameter Name="Command">"mkdir -p ${TASKS:TargetPath} && cd ${TASKS:TargetPath} && sudo wget -N ${TASKS:DownloadUrl}"
+				<Parameter Name="Command">
+                    <![CDATA[
+					mkdir -p ${TASKS:TargetPath} && cd ${TASKS:TargetPath} && sudo wget -N ${TASKS:DownloadUrl}
+					]]>
 				</Parameter> 
 			</Action>
 			
