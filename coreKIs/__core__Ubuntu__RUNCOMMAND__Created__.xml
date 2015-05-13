@@ -33,7 +33,7 @@
 			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
 				<Parameter Name="User">${TASKS:User}</Parameter>
 				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
-				<Parameter Name="Command">"${TASKS:Command}"</Parameter>
+				<Parameter Name="Command">"${TASKS:Command} && touch /tmp/${TASKS:UID}"</Parameter>
 			</Action>
 			<!-- Run Command will not set the CurrentState to ReadState
 			because no easy way of reading if the command has run
@@ -41,7 +41,7 @@
 			<If>
 				<VarCondition VarString="${SYSTEMRC}" Mode="eq" Value="0"/>
 				<Then>
-					<SetAttribute Name="TASKS:CurrentState" Value="Created"/>
+					<SetAttribute Name="TASKS:CurrentState" Value="ReadState"/>
 				</Then>
 				<Else>
 					<Eject>__Failed to execute command ${TASKS:Command}__</Eject>
