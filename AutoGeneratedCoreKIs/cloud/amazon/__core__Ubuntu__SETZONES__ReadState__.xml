@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: ec2_elb_lb
+description:
+  - Returns information about the load balancer.
+  - Will be marked changed when called only if state is changed.
+short_description: Creates or destroys Amazon ELB.
+version_added: "1.5"
+options:
+  state:
+    description:
+      - Create or destroy the ELB
+    required: true
+  name:
+    description:
+      - The name of the ELB
+    required: true
+  listeners:
+    description:
+      - List of ports/protocols for this ELB to listen on (see example)
+    required: false
+  purge_listeners:
+    description:
+      - Purge existing listeners on ELB that are not found in listeners
+    required: false
+    default: true
+  zones:
+    description:
+      - List of availability zones to enable on this ELB
+    required: false
+  purge_zones:
+    description:
+      - Purge existing availability zones on ELB that are not found in zones
+    required: false
+    default: false
+  security_group_ids:
+    description:
+      - A list of security groups to apply to the elb
+    require: false
+    default: None
+    version_added: "1.6"
+  health_check:
+    description:
+      - An associative array of health check configuration settigs (see example)
+    require: false
+    default: None
+  region:
+    description:
+      - The AWS region to use. If not specified then the value of the EC2_REGION environment variable, if any, is used.
+    required: false
+    aliases: ['aws_region', 'ec2_region']
+  subnets:
+    description:
+      - A list of VPC subnets to use when creating ELB. Zones should be empty if using this. 
+    required: false
+    default: None
+    aliases: []
+    version_added: "1.7"
+  purge_subnets:
+    description:
+      - Purge existing subnet on ELB that are not found in subnets
+    required: false
+    default: false  
+    version_added: "1.7"
+  scheme:
+    description:
+      - The scheme to use when creating the ELB. For a private VPC-visible ELB use 'internal'.
+    required: false
+    default: 'internet-facing'
+    version_added: "1.7"
+  validate_certs:
+    description:
+      - When set to "no", SSL certificates will not be validated for boto versions >= 2.6.0.
+    required: false
+    default: "yes"
+    choices: ["yes", "no"]
+    aliases: []
+    version_added: "1.5"
+  connection_draining_timeout:
+    description:
+      - Wait a specified timeout allowing connections to drain before terminating an instance
+    required: false
+    aliases: []
+    version_added: "1.8"
+  cross_az_load_balancing:
+    description:
+      - Distribute load across all configured Availablity Zones
+    required: false
+    default: "no"
+    choices: ["yes", "no"]
+    aliases: []
+    version_added: "1.8"
+
+extends_documentation_fragment: aws
+"""
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:EC2_ELB_LB:__core__Ubuntu__SETZONES__ReadState__">
+	<Title>__core__Ubuntu__SETZONES__ReadState__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__SETZONES__ReadState__ and Creates or destroys Amazon ELB. and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="Ubuntu"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetPath"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="Exists" Name="state"/>
+        <AttributeFilter Mode="Exists" Name="name"/>
+        <AttributeFilter Mode="exists" Name="module" Value="ec2_elb_lb"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__WGET__ReadState__ and attribute ExtUID being the same as the machine KI binds to. </Description>
+			<SubItem Alias="CHECK" Name="__core__Ubuntu__WGET__ReadState__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>	
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="Created"/>
+				</Then>
+				<Else>
+					<SetAttribute Name="TASKS:CurrentState" Value="Deleted"/>
+				</Else>
+			</If>			
+			<SetAttribute Name="CHECK:Status" Value="CurrentStateRead"/> 
+			
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

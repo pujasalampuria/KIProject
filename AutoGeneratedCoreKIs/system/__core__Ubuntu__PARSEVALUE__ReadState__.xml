@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: sysctl
+short_description: Manage entries in sysctl.conf.
+description:
+    - This module manipulates sysctl entries and optionally performs a C(/sbin/sysctl -p) after changing them.
+version_added: "1.0"
+options:
+    name:
+        description:
+            - The dot-separated path (aka I(key)) specifying the sysctl variable.
+        required: true
+        default: null
+        aliases: [ 'key' ]
+    value:
+        description:
+            - Desired value of the sysctl key.
+        required: false
+        default: null
+        aliases: [ 'val' ]
+    state:
+        description:
+            - Whether the entry should be present or absent in the sysctl file.
+        choices: [ "present", "absent" ]
+        default: present
+    ignoreerrors:
+        description:
+            - Use this option to ignore errors about unknown keys.
+        choices: [ "yes", "no" ]
+        default: no
+    reload:
+        description:
+            - If C(yes), performs a I(/sbin/sysctl -p) if the C(sysctl_file) is
+              updated. If C(no), does not reload I(sysctl) even if the
+              C(sysctl_file) is updated.
+        choices: [ "yes", "no" ]
+        default: "yes"
+    sysctl_file:
+        description:
+            - Specifies the absolute path to C(sysctl.conf), if not C(/etc/sysctl.conf).
+        required: false
+        default: /etc/sysctl.conf
+    sysctl_set:
+        description:
+            - Verify token value with the sysctl command and set with -w if necessary
+        choices: [ "yes", "no" ]
+        required: false
+        version_added: 1.5
+        default: False
+notes: []
+requirements: []
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:SYSCTL:__core__Ubuntu__PARSEVALUE__ReadState__">
+	<Title>__core__Ubuntu__PARSEVALUE__ReadState__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__PARSEVALUE__ReadState__ and Manage entries in sysctl.conf. and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="Ubuntu"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetPath"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="Exists" Name="name"/>
+        <AttributeFilter Mode="exists" Name="module" Value="sysctl"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__WGET__ReadState__ and attribute ExtUID being the same as the machine KI binds to. </Description>
+			<SubItem Alias="CHECK" Name="__core__Ubuntu__WGET__ReadState__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>	
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="Created"/>
+				</Then>
+				<Else>
+					<SetAttribute Name="TASKS:CurrentState" Value="Deleted"/>
+				</Else>
+			</If>			
+			<SetAttribute Name="CHECK:Status" Value="CurrentStateRead"/> 
+			
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

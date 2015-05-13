@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: apt_rpm
+short_description: apt_rpm package manager
+description:
+  - Manages packages with I(apt-rpm). Both low-level (I(rpm)) and high-level (I(apt-get)) package manager binaries required.
+version_added: "1.5"
+options:
+  pkg:
+    description:
+      - name of package to install, upgrade or remove.
+    required: true
+    default: null
+  state:
+    description:
+      - Indicates the desired package state
+    required: false
+    default: present
+    choices: [ "absent", "present" ]
+  update_cache:
+    description:
+      - update the package database first C(apt-get update).
+    required: false
+    default: no
+    choices: [ "yes", "no" ]
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:APT_RPM:__core__Ubuntu__INSTALLPACKAGES__Deleted__">
+	<Title>__core__Ubuntu__INSTALLPACKAGES__Deleted__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__INSTALLPACKAGES__Deleted__ and apt_rpm package manager and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<AttributeFilter Mode="string" Name="MachineClass" Value="Linux"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="Ubuntu"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetMachine"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="Exists" Name="pkg"/>
+        <AttributeFilter Mode="exists" Name="module" Value="apt_rpm"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+	
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__PKG__Deleted__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
+			<SubItem Alias="UNINSTALL" Name="__core__Ubuntu__PKG__Deleted__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="ReadState"/>
+				</Then>
+				<Else>
+					<Eject/>
+				</Else>
+			</If>
+			<SetAttribute Name="UNINSTALL:Status" Value="uninstalled"/> 
+
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

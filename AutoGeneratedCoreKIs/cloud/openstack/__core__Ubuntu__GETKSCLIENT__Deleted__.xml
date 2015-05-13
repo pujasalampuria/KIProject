@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: quantum_floating_ip_associate
+version_added: "1.2"
+deprecated: Deprecated in 1.9. Use os_floating_ip instead
+short_description: Associate or disassociate a particular floating IP with an instance
+description:
+   - Associates or disassociates a specific floating IP with a particular instance
+options:
+   login_username:
+     description:
+        - login username to authenticate to keystone
+     required: true
+     default: admin
+   login_password:
+     description:
+        - password of login user
+     required: true
+     default: 'yes'
+   login_tenant_name:
+     description:
+        - the tenant name of the login user
+     required: true
+     default: true
+   auth_url:
+     description:
+        - the keystone url for authentication
+     required: false
+     default: 'http://127.0.0.1:35357/v2.0/'
+   region_name:
+     description:
+        - name of the region
+     required: false
+     default: None
+   state:
+     description:
+        - indicates the desired state of the resource
+     choices: ['present', 'absent']
+     default: present
+   instance_name:
+     description:
+        - name of the instance to which the public IP should be assigned
+     required: true
+     default: None
+   ip_address:
+     description:
+        - floating ip that should be assigned to the instance
+     required: true
+     default: None
+requirements: ["quantumclient", "neutronclient", "keystoneclient"]
+'''
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:_QUANTUM_FLOATING_IP_ASSOCIATE:__core__Ubuntu__GETKSCLIENT__Deleted__">
+	<Title>__core__Ubuntu__GETKSCLIENT__Deleted__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__GETKSCLIENT__Deleted__ and Associate or disassociate a particular floating IP with an instance and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<AttributeFilter Mode="string" Name="MachineClass" Value="Linux"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="Ubuntu"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetMachine"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="Exists" Name="login_username"/>
+        <AttributeFilter Mode="Exists" Name="login_password"/>
+        <AttributeFilter Mode="Exists" Name="login_tenant_name"/>
+        <AttributeFilter Mode="Exists" Name="instance_name"/>
+        <AttributeFilter Mode="exists" Name="module" Value="quantum_floating_ip_associate"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+	
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__PKG__Deleted__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
+			<SubItem Alias="UNINSTALL" Name="__core__Ubuntu__PKG__Deleted__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="ReadState"/>
+				</Then>
+				<Else>
+					<Eject/>
+				</Else>
+			</If>
+			<SetAttribute Name="UNINSTALL:Status" Value="uninstalled"/> 
+
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

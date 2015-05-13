@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: gce_lb
+version_added: "1.5"
+short_description: create/destroy GCE load-balancer resources
+description:
+    - This module can create and destroy Google Compute Engine C(loadbalancer)
+      and C(httphealthcheck) resources.  The primary LB resource is the
+      C(load_balancer) resource and the health check parameters are all
+      prefixed with I(httphealthcheck).
+      The full documentation for Google Compute Engine load balancing is at
+      U(https://developers.google.com/compute/docs/load-balancing/).  However,
+      the ansible module simplifies the configuration by following the
+      libcloud model.
+      Full install/configuration instructions for the gce* modules can
+      be found in the comments of ansible/test/gce_tests.py.
+options:
+  httphealthcheck_name:
+    description:
+      - the name identifier for the HTTP health check
+    required: false
+    default: null
+  httphealthcheck_port:
+    description:
+      - the TCP port to use for HTTP health checking
+    required: false
+    default: 80
+  httphealthcheck_path:
+    description:
+      - the url path to use for HTTP health checking
+    required: false
+    default: "/"
+  httphealthcheck_interval:
+    description:
+      - the duration in seconds between each health check request
+    required: false
+    default: 5
+  httphealthcheck_timeout:
+    description:
+      - the timeout in seconds before a request is considered a failed check
+    required: false
+    default: 5
+  httphealthcheck_unhealthy_count:
+    description:
+      - number of consecutive failed checks before marking a node unhealthy
+    required: false
+    default: 2
+  httphealthcheck_healthy_count:
+    description:
+      - number of consecutive successful checks before marking a node healthy
+    required: false
+    default: 2
+  httphealthcheck_host:
+    description:
+      - host header to pass through on HTTP check requests
+    required: false
+    default: null
+  name:
+    description:
+      - name of the load-balancer resource
+    required: false
+    default: null
+  protocol:
+    description:
+      - the protocol used for the load-balancer packet forwarding, tcp or udp
+    required: false
+    default: "tcp" 
+    choices: ['tcp', 'udp']
+  region:
+    description:
+      - the GCE region where the load-balancer is defined
+    required: false
+  external_ip:
+    description:
+      - the external static IPv4 (or auto-assigned) address for the LB
+    required: false
+    default: null
+  port_range:
+    description:
+      - the port (range) to forward, e.g. 80 or 8000-8888 defaults to all ports
+    required: false
+    default: null
+  members:
+    description:
+      - a list of zone/nodename pairs, e.g ['us-central1-a/www-a', ...]
+    required: false
+    aliases: ['nodes']
+  state:
+    description:
+      - desired state of the LB
+    default: "present"
+    choices: ["active", "present", "absent", "deleted"]
+    aliases: []
+  service_account_email:
+    version_added: "1.6"
+    description:
+      - service account email
+    required: false
+    default: null
+    aliases: []
+  pem_file:
+    version_added: "1.6"
+    description:
+      - path to the pem file associated with the service account email
+    required: false
+    default: null
+    aliases: []
+  project_id:
+    version_added: "1.6"
+    description:
+      - your GCE project ID
+    required: false
+    default: null
+    aliases: []
+
+requirements: [ "libcloud" ]
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:GCE_LB:__core__Ubuntu__GCELB__Created__">
+	<Title>__core__Ubuntu__GCELB__Created__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__GCELB__Created__ and create/destroy GCE load-balancer resources and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<AttributeFilter Mode="string" Name="MachineClass" Value="Linux"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="CentOS"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetMachine"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="exists" Name="module" Value="gce_lb"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+	
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__PKG__Created__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
+			<SubItem Alias="INSTALL" Name="__core__CentOS__PKG__Created__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="ReadState"/>
+				</Then>
+				<Else>
+					<Eject/>
+				</Else>
+			</If>
+
+			<SetAttribute Name="INSTALL:Status" Value="created"/> 
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

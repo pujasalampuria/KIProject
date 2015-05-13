@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: pip
+short_description: Manages Python library dependencies.
+description:
+     - "Manage Python library dependencies. To use this module, one of the following keys is required: C(name)
+       or C(requirements)."
+version_added: "0.7"
+options:
+  name:
+    description:
+      - The name of a Python library to install or the url of the remote package.
+    required: false
+    default: null
+  version:
+    description:
+      - The version number to install of the Python library specified in the I(name) parameter
+    required: false
+    default: null
+  requirements:
+    description:
+      - The path to a pip requirements file
+    required: false
+    default: null
+  virtualenv:
+    description:
+      - An optional path to a I(virtualenv) directory to install into
+    required: false
+    default: null
+  virtualenv_site_packages:
+    version_added: "1.0"
+    description:
+      - Whether the virtual environment will inherit packages from the
+        global site-packages directory.  Note that if this setting is
+        changed on an already existing virtual environment it will not
+        have any effect, the environment must be deleted and newly
+        created.
+    required: false
+    default: "no"
+    choices: [ "yes", "no" ]
+  virtualenv_command:
+    version_aded: "1.1"
+    description:
+      - The command or a pathname to the command to create the virtual
+        environment with. For example C(pyvenv), C(virtualenv),
+        C(virtualenv2), C(~/bin/virtualenv), C(/usr/local/bin/virtualenv).
+    required: false
+    default: virtualenv
+  state:
+    description:
+      - The state of module
+    required: false
+    default: present
+    choices: [ "present", "absent", "latest" ]
+  extra_args:
+    description:
+      - Extra arguments passed to pip.
+    required: false
+    default: null
+    version_added: "1.0"
+  chdir:
+    description:
+      - cd into this directory before running the command
+    version_added: "1.3"
+    required: false
+    default: null
+  executable:
+    description:
+      - The explicit executable or a pathname to the executable to be used to
+        run pip for a specific version of Python installed in the system. For
+        example C(pip-3.3), if there are both Python 2.7 and 3.3 installations
+        in the system and you want to run pip for the Python 3.3 installation.
+    version_added: "1.3"
+    required: false
+    default: null
+notes:
+   - Please note that virtualenv (U(http://www.virtualenv.org/)) must be installed on the remote host if the virtualenv parameter is specified and the virtualenv needs to be initialized.
+requirements: [ "virtualenv", "pip" ]
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:PIP:__core__Ubuntu__GETFULLNAME__ReadState__">
+	<Title>__core__Ubuntu__GETFULLNAME__ReadState__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__GETFULLNAME__ReadState__ and Manages Python library dependencies. and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="Ubuntu"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetPath"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="exists" Name="module" Value="pip"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__WGET__ReadState__ and attribute ExtUID being the same as the machine KI binds to. </Description>
+			<SubItem Alias="CHECK" Name="__core__Ubuntu__WGET__ReadState__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>	
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="Created"/>
+				</Then>
+				<Else>
+					<SetAttribute Name="TASKS:CurrentState" Value="Deleted"/>
+				</Else>
+			</If>			
+			<SetAttribute Name="CHECK:Status" Value="CurrentStateRead"/> 
+			
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

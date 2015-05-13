@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: quantum_floating_ip
+version_added: "1.2"
+deprecated: Deprecated in 1.9. Use os_floating_ip instead
+short_description: Add/Remove floating IP from an instance
+description:
+   - Add or Remove a floating IP to an instance
+options:
+   login_username:
+     description:
+        - login username to authenticate to keystone
+     required: true
+     default: admin
+   login_password:
+     description:
+        - Password of login user
+     required: true
+     default: 'yes'
+   login_tenant_name:
+     description:
+        - The tenant name of the login user
+     required: true
+     default: 'yes'
+   auth_url:
+     description:
+        - The keystone url for authentication
+     required: false
+     default: 'http://127.0.0.1:35357/v2.0/'
+   region_name:
+     description:
+        - Name of the region
+     required: false
+     default: None
+   state:
+     description:
+        - Indicate desired state of the resource
+     choices: ['present', 'absent']
+     default: present
+   network_name:
+     description:
+        - Name of the network from which IP has to be assigned to VM. Please make sure the network is an external network
+     required: true
+     default: None
+   instance_name:
+     description:
+        - The name of the instance to which the IP address should be assigned
+     required: true
+     default: None
+   internal_network_name:
+     description:
+        - The name of the network of the port to associate with the floating ip. Necessary when VM multiple networks.
+     required: false
+     default: None
+     version_added: "1.5"
+requirements: ["novaclient", "quantumclient", "neutronclient", "keystoneclient"]
+'''
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:_QUANTUM_FLOATING_IP:__core__Ubuntu__GETFLOATINGIP__ReadState__">
+	<Title>__core__Ubuntu__GETFLOATINGIP__ReadState__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__GETFLOATINGIP__ReadState__ and Add/Remove floating IP from an instance and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="Ubuntu"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetPath"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="Exists" Name="login_username"/>
+        <AttributeFilter Mode="Exists" Name="login_password"/>
+        <AttributeFilter Mode="Exists" Name="login_tenant_name"/>
+        <AttributeFilter Mode="Exists" Name="network_name"/>
+        <AttributeFilter Mode="Exists" Name="instance_name"/>
+        <AttributeFilter Mode="exists" Name="module" Value="quantum_floating_ip"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__WGET__ReadState__ and attribute ExtUID being the same as the machine KI binds to. </Description>
+			<SubItem Alias="CHECK" Name="__core__Ubuntu__WGET__ReadState__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>	
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="Created"/>
+				</Then>
+				<Else>
+					<SetAttribute Name="TASKS:CurrentState" Value="Deleted"/>
+				</Else>
+			</If>			
+			<SetAttribute Name="CHECK:Status" Value="CurrentStateRead"/> 
+			
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

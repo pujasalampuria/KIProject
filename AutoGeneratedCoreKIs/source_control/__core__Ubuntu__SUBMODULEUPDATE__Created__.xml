@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: git
+version_added: "0.0.1"
+short_description: Deploy software (or files) from git checkouts
+description:
+    - Manage I(git) checkouts of repositories to deploy files or software.
+options:
+    repo:
+        required: true
+        aliases: [ name ]
+        description:
+            - git, SSH, or HTTP protocol address of the git repository.
+    dest:
+        required: true
+        description:
+            - Absolute path of where the repository should be checked out to.
+              This parameter is required, unless C(clone) is set to C(no)
+              This change was made in version 1.8.3. Prior to this version,
+              the C(dest) parameter was always required.
+    version:
+        required: false
+        default: "HEAD"
+        description:
+            - What version of the repository to check out.  This can be the
+              full 40-character I(SHA-1) hash, the literal string C(HEAD), a
+              branch name, or a tag name.
+    accept_hostkey:
+        required: false
+        default: "no"
+        choices: [ "yes", "no" ]
+        version_added: "1.5"
+        description:
+            - if C(yes), adds the hostkey for the repo url if not already 
+              added. If ssh_args contains "-o StrictHostKeyChecking=no", 
+              this parameter is ignored.
+    ssh_opts:
+        required: false
+        default: None
+        version_added: "1.5"
+        description:
+            - Creates a wrapper script and exports the path as GIT_SSH
+              which git then automatically uses to override ssh arguments.
+              An example value could be "-o StrictHostKeyChecking=no"
+    key_file:
+        required: false
+        default: None
+        version_added: "1.5"
+        description:
+            - Specify an optional private key file to use for the checkout.
+    reference:
+        required: false
+        default: null
+        version_added: "1.4"
+        description:
+            - Reference repository (see "git clone - -reference ...")
+    remote:
+        required: false
+        default: "origin"
+        description:
+            - Name of the remote.
+    refspec:
+        required: false
+        default: null
+        version_added: "1.9"
+        description:
+            - Add an additional refspec to be fetched.
+              If version is set to a I(SHA-1) not reachable from any branch
+              or tag, this option may be necessary to specify the ref containing
+              the I(SHA-1).
+              Uses the same syntax as the 'git fetch' command.
+              An example value could be "refs/meta/config".
+    force:
+        required: false
+        default: "no"
+        choices: [ "yes", "no" ]
+        version_added: "0.7"
+        description:
+            - If C(yes), any modified files in the working
+              repository will be discarded.  Prior to 0.7, this was always
+              'yes' and could not be disabled.  Prior to 1.9, the default was
+              `yes`
+    depth:
+        required: false
+        default: null
+        version_added: "1.2"
+        description:
+            - Create a shallow clone with a history truncated to the specified
+              number or revisions. The minimum possible value is C(1), otherwise
+              ignored.
+    clone:
+        required: false
+        default: "yes"
+        choices: [ "yes", "no" ]
+        version_added: "1.9"
+        description:
+            - If C(no), do not clone the repository if it does not exist locally
+    update:
+        required: false
+        default: "yes"
+        choices: [ "yes", "no" ]
+        version_added: "1.2"
+        description:
+            - If C(no), do not retrieve new revisions from the origin repository
+    executable:
+        required: false
+        default: null
+        version_added: "1.4"
+        description:
+            - Path to git executable to use. If not supplied,
+              the normal mechanism for resolving binary paths will be used.
+    bare:
+        required: false
+        default: "no"
+        choices: [ "yes", "no" ]
+        version_added: "1.4"
+        description:
+            - if C(yes), repository will be created as a bare repo, otherwise
+              it will be a standard repo with a workspace.
+
+    recursive:
+        required: false
+        default: "yes"
+        choices: [ "yes", "no" ]
+        version_added: "1.6"
+        description:
+            - if C(no), repository will be cloned without the - -recursive
+              option, skipping sub-modules.
+
+    track_submodules:
+        required: false
+        default: "no"
+        choices: ["yes", "no"]
+        version_added: "1.8"
+        description:
+            - if C(yes), submodules will track the latest commit on their
+              master branch (or other branch specified in .gitmodules).  If
+              C(no), submodules will be kept at the revision specified by the
+              main project. This is equivalent to specifying the - -remote flag
+              to git submodule update.
+
+notes:
+    - "If the task seems to be hanging, first verify remote host is in C(known_hosts).
+      SSH will prompt user to authorize the first contact with a remote host.  To avoid this prompt, 
+      one solution is to add the remote host public key in C(/etc/ssh/ssh_known_hosts) before calling 
+      the git module, with the following command: ssh-keyscan -H remote_host.com >> /etc/ssh/ssh_known_hosts."
+'''
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:GIT:__core__Ubuntu__SUBMODULEUPDATE__Created__">
+	<Title>__core__Ubuntu__SUBMODULEUPDATE__Created__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__SUBMODULEUPDATE__Created__ and Deploy software (or files) from git checkouts and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<AttributeFilter Mode="string" Name="MachineClass" Value="Linux"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="CentOS"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetMachine"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="Exists" Name="repo"/>
+        <AttributeFilter Mode="Exists" Name="dest"/>
+        <AttributeFilter Mode="exists" Name="module" Value="git"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+	
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__PKG__Created__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
+			<SubItem Alias="INSTALL" Name="__core__CentOS__PKG__Created__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="ReadState"/>
+				</Then>
+				<Else>
+					<Eject/>
+				</Else>
+			</If>
+
+			<SetAttribute Name="INSTALL:Status" Value="created"/> 
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

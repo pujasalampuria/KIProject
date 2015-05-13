@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: acl
+version_added: "1.4"
+short_description: Sets and retrieves file ACL information.
+description:
+     - Sets and retrieves file ACL information.
+options:
+  name:
+    required: true
+    default: null
+    description:
+      - The full path of the file or object.
+    aliases: ['path']
+
+  state:
+    required: false
+    default: query
+    choices: [ 'query', 'present', 'absent' ]
+    description:
+      - defines whether the ACL should be present or not.  The C(query) state gets the current acl without changing it, for use in 'register' operations.
+
+  follow:
+    required: false
+    default: yes
+    choices: [ 'yes', 'no' ]
+    description:
+      - whether to follow symlinks on the path if a symlink is encountered.
+
+  default:
+    version_added: "1.5"
+    required: false
+    default: no
+    choices: [ 'yes', 'no' ]
+    description:
+      - if the target is a directory, setting this to yes will make it the default acl for entities created inside the directory. It causes an error if name is a file.
+
+  entity:
+    version_added: "1.5"
+    required: false
+    description:
+      - actual user or group that the ACL applies to when matching entity types user or group are selected.
+
+  etype:
+    version_added: "1.5"
+    required: false
+    default: null
+    choices: [ 'user', 'group', 'mask', 'other' ]
+    description:
+      - the entity type of the ACL to apply, see setfacl documentation for more info.
+
+
+  permissions:
+    version_added: "1.5"
+    required: false
+    default: null
+    description:
+      - Permissions to apply/remove can be any combination of r, w and  x (read, write and execute respectively)
+
+  entry:
+    required: false
+    default: null
+    description:
+      - DEPRECATED. The acl to set or remove.  This must always be quoted in the form of '<etype>:<qualifier>:<perms>'.  The qualifier may be empty for some types, but the type and perms are always requried. '-' can be used as placeholder when you do not care about permissions. This is now superseded by entity, type and permissions fields.
+
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:ACL:__core__Ubuntu__RUNACL__Deleted__">
+	<Title>__core__Ubuntu__RUNACL__Deleted__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__RUNACL__Deleted__ and Sets and retrieves file ACL information. and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<AttributeFilter Mode="string" Name="MachineClass" Value="Linux"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="Ubuntu"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetMachine"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="Exists" Name="name"/>
+        <AttributeFilter Mode="exists" Name="module" Value="acl"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+	
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__PKG__Deleted__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
+			<SubItem Alias="UNINSTALL" Name="__core__Ubuntu__PKG__Deleted__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="ReadState"/>
+				</Then>
+				<Else>
+					<Eject/>
+				</Else>
+			</If>
+			<SetAttribute Name="UNINSTALL:Status" Value="uninstalled"/> 
+
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

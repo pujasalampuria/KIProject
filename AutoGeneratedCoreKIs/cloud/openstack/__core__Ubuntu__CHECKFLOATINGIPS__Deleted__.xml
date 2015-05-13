@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: nova_compute
+version_added: "1.2"
+deprecated: Deprecated in 1.9. Use os_server instead
+short_description: Create/Delete VMs from OpenStack
+description:
+   - Create or Remove virtual machines from Openstack.
+options:
+   login_username:
+     description:
+        - login username to authenticate to keystone
+     required: true
+     default: admin
+   login_password:
+     description:
+        - Password of login user
+     required: true
+     default: 'yes'
+   login_tenant_name:
+     description:
+        - The tenant name of the login user
+     required: true
+     default: 'yes'
+   auth_url:
+     description:
+        - The keystone url for authentication
+     required: false
+     default: 'http://127.0.0.1:35357/v2.0/'
+   region_name:
+     description:
+        - Name of the region
+     required: false
+     default: None
+   state:
+     description:
+        - Indicate desired state of the resource
+     choices: ['present', 'absent']
+     default: present
+   name:
+     description:
+        - Name that has to be given to the instance
+     required: true
+     default: None
+   image_id:
+     description:
+        - The id of the base image to boot. Mutually exclusive with image_name
+     required: true
+     default: None
+   image_name:
+     description:
+        - The name of the base image to boot. Mutually exclusive with image_id
+     required: true
+     default: None
+     version_added: "1.8"
+   image_exclude:
+     description:
+        - Text to use to filter image names, for the case, such as HP, where there are multiple image names matching the common identifying portions. image_exclude is a negative match filter - it is text that may not exist in the image name. Defaults to "(deprecated)"
+     version_added: "1.8"
+   flavor_id:
+     description:
+        - The id of the flavor in which the new VM has to be created. Mutually exclusive with flavor_ram
+     required: false
+     default: 1
+   flavor_ram:
+     description:
+        - The minimum amount of ram in MB that the flavor in which the new VM has to be created must have. Mutually exclusive with flavor_id
+     required: false
+     default: 1
+     version_added: "1.8"
+   flavor_include:
+     description:
+        - Text to use to filter flavor names, for the case, such as Rackspace, where there are multiple flavors that have the same ram count. flavor_include is a positive match filter - it must exist in the flavor name.
+     version_added: "1.8"
+   key_name:
+     description:
+        - The key pair name to be used when creating a VM
+     required: false
+     default: None
+   security_groups:
+     description:
+        - The name of the security group to which the VM should be added
+     required: false
+     default: None
+   nics:
+     description:
+        - A list of network id's to which the VM's interface should be attached
+     required: false
+     default: None
+   auto_floating_ip:
+     description:
+        - Should a floating ip be auto created and assigned
+     required: false
+     default: 'no'
+     version_added: "1.8"
+   floating_ips:
+     description:
+        - list of valid floating IPs that pre-exist to assign to this node
+     required: false
+     default: None
+     version_added: "1.8"
+   floating_ip_pools:
+     description:
+        - list of floating IP pools from which to choose a floating IP
+     required: false
+     default: None
+     version_added: "1.8"
+   availability_zone:
+     description:
+        - Name of the availability zone
+     required: false
+     default: None
+     version_added: "1.8"
+   meta:
+     description:
+        - A list of key value pairs that should be provided as a metadata to the new VM
+     required: false
+     default: None
+   wait:
+     description:
+        - If the module should wait for the VM to be created.
+     required: false
+     default: 'yes'
+   wait_for:
+     description:
+        - The amount of time the module should wait for the VM to get into active state
+     required: false
+     default: 180
+   config_drive:
+     description:
+        - Whether to boot the server with config drive enabled
+     required: false
+     default: 'no'
+     version_added: "1.8"
+   user_data:
+     description:
+        - Opaque blob of data which is made available to the instance
+     required: false
+     default: None
+     version_added: "1.6"
+   scheduler_hints:
+     description:
+        - Arbitrary key/value pairs to the scheduler for custom use
+     required: false
+     default: None
+     version_added: "1.9"
+requirements: ["novaclient"]
+'''
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:_NOVA_COMPUTE:__core__Ubuntu__CHECKFLOATINGIPS__Deleted__">
+	<Title>__core__Ubuntu__CHECKFLOATINGIPS__Deleted__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__CHECKFLOATINGIPS__Deleted__ and Create/Delete VMs from OpenStack and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<AttributeFilter Mode="string" Name="MachineClass" Value="Linux"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="Ubuntu"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetMachine"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="Exists" Name="login_username"/>
+        <AttributeFilter Mode="Exists" Name="login_password"/>
+        <AttributeFilter Mode="Exists" Name="login_tenant_name"/>
+        <AttributeFilter Mode="Exists" Name="name"/>
+        <AttributeFilter Mode="Exists" Name="image_id"/>
+        <AttributeFilter Mode="Exists" Name="image_name"/>
+        <AttributeFilter Mode="exists" Name="module" Value="nova_compute"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+	
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__PKG__Deleted__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
+			<SubItem Alias="UNINSTALL" Name="__core__Ubuntu__PKG__Deleted__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="ReadState"/>
+				</Then>
+				<Else>
+					<Eject/>
+				</Else>
+			</If>
+			<SetAttribute Name="UNINSTALL:Status" Value="uninstalled"/> 
+
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

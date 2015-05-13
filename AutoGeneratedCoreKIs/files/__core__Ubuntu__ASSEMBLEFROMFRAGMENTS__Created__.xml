@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: assemble
+short_description: Assembles a configuration file from fragments
+description:
+     - Assembles a configuration file from fragments. Often a particular
+       program will take a single configuration file and does not support a
+       C(conf.d) style structure where it is easy to build up the configuration
+       from multiple sources. M(assemble) will take a directory of files that can be
+       local or have already been transferred to the system, and concatenate them
+       together to produce a destination file. Files are assembled in string sorting order.
+       Puppet calls this idea I(fragments).
+version_added: "0.5"
+options:
+  src:
+    description:
+      - An already existing directory full of source files.
+    required: true
+    default: null
+    aliases: []
+  dest:
+    description:
+      - A file to create using the concatenation of all of the source files.
+    required: true
+    default: null
+  backup:
+    description:
+      - Create a backup file (if C(yes)), including the timestamp information so
+        you can get the original file back if you somehow clobbered it
+        incorrectly.
+    required: false
+    choices: [ "yes", "no" ]
+    default: "no"
+  delimiter:
+    description:
+      - A delimiter to separate the file contents.
+    version_added: "1.4"
+    required: false
+    default: null
+  remote_src:
+    description:
+      - If False, it will search for src at originating/master machine, if True it will
+        go to the remote/target machine for the src. Default is True.
+    choices: [ "True", "False" ]
+    required: false
+    default: "True"
+    version_added: "1.4"
+  regexp:
+    description:
+      - Assemble files only if C(regex) matches the filename. If not set,
+        all files are assembled. All "\\" (backslash) must be escaped as
+        "\\\\" to comply yaml syntax. Uses Python regular expressions; see
+        U(http://docs.python.org/2/library/re.html).
+    required: false
+    default: null
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:ASSEMBLE:__core__Ubuntu__ASSEMBLEFROMFRAGMENTS__Created__">
+	<Title>__core__Ubuntu__ASSEMBLEFROMFRAGMENTS__Created__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__ASSEMBLEFROMFRAGMENTS__Created__ and Assembles a configuration file from fragments and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<AttributeFilter Mode="string" Name="MachineClass" Value="Linux"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="CentOS"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetMachine"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="Exists" Name="src"/>
+        <AttributeFilter Mode="Exists" Name="dest"/>
+        <AttributeFilter Mode="exists" Name="module" Value="assemble"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+	
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__PKG__Created__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
+			<SubItem Alias="INSTALL" Name="__core__CentOS__PKG__Created__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="ReadState"/>
+				</Then>
+				<Else>
+					<Eject/>
+				</Else>
+			</If>
+
+			<SetAttribute Name="INSTALL:Status" Value="created"/> 
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

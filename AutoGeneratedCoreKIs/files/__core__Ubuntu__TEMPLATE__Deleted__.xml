@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: template
+version_added: historical
+short_description: Templates a file out to a remote server.
+description:
+     - Templates are processed by the Jinja2 templating language
+       (U(http://jinja.pocoo.org/docs/)) - documentation on the template
+       formatting can be found in the Template Designer Documentation
+       (U(http://jinja.pocoo.org/docs/templates/)).
+     - "Six additional variables can be used in templates: C(ansible_managed) 
+       (configurable via the C(defaults) section of C(ansible.cfg)) contains a string
+       which can be used to describe the template name, host, modification time of the
+       template file and the owner uid, C(template_host) contains the node name of 
+       the template's machine, C(template_uid) the owner, C(template_path) the
+       absolute path of the template, C(template_fullpath) is the absolute path of the 
+       template, and C(template_run_date) is the date that the template was rendered. Note that including
+       a string that uses a date in the template will result in the template being marked 'changed'
+       each time."
+options:
+  src:
+    description:
+      - Path of a Jinja2 formatted template on the local server. This can be a relative or absolute path.
+    required: true
+    default: null
+    aliases: []
+  dest:
+    description:
+      - Location to render the template to on the remote machine.
+    required: true
+    default: null
+  backup:
+    description:
+      - Create a backup file including the timestamp information so you can get
+        the original file back if you somehow clobbered it incorrectly.
+    required: false
+    choices: [ "yes", "no" ]
+    default: "no"
+  validate:
+    description:
+      - The validation command to run before copying into place. 
+      - The path to the file to validate is passed in via '%s' which must be present as in the visudo example below.
+      - validation to run before copying into place. The command is passed 
+        securely so shell features like expansion and pipes won't work.
+    required: false
+    default: ""
+    version_added: "1.2"
+notes:
+  - "Since Ansible version 0.9, templates are loaded with C(trim_blocks=True)."
+requirements: []
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:TEMPLATE:__core__Ubuntu__TEMPLATE__Deleted__">
+	<Title>__core__Ubuntu__TEMPLATE__Deleted__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__TEMPLATE__Deleted__ and Templates a file out to a remote server. and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<AttributeFilter Mode="string" Name="MachineClass" Value="Linux"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="Ubuntu"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetMachine"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="Exists" Name="src"/>
+        <AttributeFilter Mode="Exists" Name="dest"/>
+        <AttributeFilter Mode="exists" Name="module" Value="template"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+	
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__PKG__Deleted__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
+			<SubItem Alias="UNINSTALL" Name="__core__Ubuntu__PKG__Deleted__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="ReadState"/>
+				</Then>
+				<Else>
+					<Eject/>
+				</Else>
+			</If>
+			<SetAttribute Name="UNINSTALL:Status" Value="uninstalled"/> 
+
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

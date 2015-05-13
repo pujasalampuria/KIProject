@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: ec2_facts
+short_description: Gathers facts about remote hosts within ec2 (aws)
+version_added: "1.0"
+options:
+    validate_certs:
+        description:
+            - If C(no), SSL certificates will not be validated. This should only be used
+              on personally controlled sites using self-signed certificates.
+        required: false
+        default: 'yes'
+        choices: ['yes', 'no']
+        version_added: 1.5.1
+description:
+     - This module fetches data from the metadata servers in ec2 (aws) as per
+       http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-metadata.html.
+       The module must be called from within the EC2 instance itself.
+notes:
+    - Parameters to filter on ec2_facts may be added later.
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:EC2_FACTS:__core__Ubuntu__RUN__ReadState__">
+	<Title>__core__Ubuntu__RUN__ReadState__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__RUN__ReadState__ and Gathers facts about remote hosts within ec2 (aws) and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="Ubuntu"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetPath"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="exists" Name="module" Value="ec2_facts"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__WGET__ReadState__ and attribute ExtUID being the same as the machine KI binds to. </Description>
+			<SubItem Alias="CHECK" Name="__core__Ubuntu__WGET__ReadState__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>	
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="Created"/>
+				</Then>
+				<Else>
+					<SetAttribute Name="TASKS:CurrentState" Value="Deleted"/>
+				</Else>
+			</If>			
+			<SetAttribute Name="CHECK:Status" Value="CurrentStateRead"/> 
+			
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

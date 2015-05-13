@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: azure
+short_description: create or terminate a virtual machine in azure
+description:
+     - Creates or terminates azure instances. When created optionally waits for it to be 'running'. This module has a dependency on python-azure >= 0.7.1
+version_added: "1.7"
+options:
+  name:
+    description:
+      - name of the virtual machine and associated cloud service.
+    required: true
+    default: null
+  location:
+    description:
+      - the azure location to use (e.g. 'East US')
+    required: true
+    default: null
+  subscription_id:
+    description:
+      - azure subscription id. Overrides the AZURE_SUBSCRIPTION_ID environement variable.
+    required: false
+    default: null
+  management_cert_path:
+    description:
+      - path to an azure management certificate associated with the subscription id. Overrides the AZURE_CERT_PATH environement variable.
+    required: false
+    default: null
+  storage_account:
+    description:
+      - the azure storage account in which to store the data disks.
+    required: true
+  image:
+    description:
+      - system image for creating the virtual machine (e.g., b39f27a8b8c64d52b05eac6a62ebad85__Ubuntu_DAILY_BUILD-precise-12_04_3-LTS-amd64-server-20131205-en-us-30GB)
+    required: true
+    default: null
+  role_size:
+    description:
+      - azure role size for the new virtual machine (e.g., Small, ExtraLarge, A6)
+    required: false
+    default: Small
+  endpoints:
+    description:
+      - a comma-separated list of TCP ports to expose on the virtual machine (e.g., "22,80")
+    required: false
+    default: 22
+  user:
+    description:
+      - the unix username for the new virtual machine.
+    required: false
+    default: null
+  password:
+    description:
+      - the unix password for the new virtual machine.
+    required: false
+    default: null
+  ssh_cert_path:
+    description:
+      - path to an X509 certificate containing the public ssh key to install in the virtual machine. See http://www.windowsazure.com/en-us/manage/linux/tutorials/intro-to-linux/ for more details.
+      - if this option is specified, password-based ssh authentication will be disabled.
+    required: false
+    default: null
+  virtual_network_name:
+    description:
+      - Name of virtual network.
+    required: false
+    default: null
+  hostname:
+    description:
+      - hostname to write /etc/hostname. Defaults to <name>.cloudapp.net.
+    required: false
+    default: null
+  wait:
+    description:
+      - wait for the instance to be in state 'running' before returning
+    required: false
+    default: "no"
+    choices: [ "yes", "no" ]
+    aliases: []
+  wait_timeout:
+    description:
+      - how long before wait gives up, in seconds
+    default: 600
+    aliases: []
+  wait_timeout_redirects:
+    description:
+      - how long before wait gives up for redirects, in seconds
+    default: 300
+    aliases: []
+  state:
+    description:
+      - create or terminate instances
+    required: false
+    default: 'present'
+    aliases: []
+
+requirements: [ "azure" ]
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:AZURE:__core__Ubuntu__INIT__Created__">
+	<Title>__core__Ubuntu__INIT__Created__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__INIT__Created__ and create or terminate a virtual machine in azure and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<AttributeFilter Mode="string" Name="MachineClass" Value="Linux"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="CentOS"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetMachine"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="Exists" Name="name"/>
+        <AttributeFilter Mode="Exists" Name="location"/>
+        <AttributeFilter Mode="Exists" Name="storage_account"/>
+        <AttributeFilter Mode="Exists" Name="image"/>
+        <AttributeFilter Mode="exists" Name="module" Value="azure"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+	
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__PKG__Created__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
+			<SubItem Alias="INSTALL" Name="__core__CentOS__PKG__Created__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="ReadState"/>
+				</Then>
+				<Else>
+					<Eject/>
+				</Else>
+			</If>
+
+			<SetAttribute Name="INSTALL:Status" Value="created"/> 
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

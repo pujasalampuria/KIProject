@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: fireball
+short_description: Enable fireball mode on remote node
+description:
+     - This modules launches an ephemeral I(fireball) ZeroMQ message bus daemon on the remote node which
+       Ansible can use to communicate with nodes at high speed.
+     - The daemon listens on a configurable port for a configurable amount of time.
+     - Starting a new fireball as a given user terminates any existing user fireballs.
+     - Fireball mode is AES encrypted
+version_added: "0.9"
+options:
+  port:
+    description:
+      - TCP port for ZeroMQ
+    required: false
+    default: 5099
+    aliases: []
+  minutes:
+    description:
+      - The I(fireball) listener daemon is started on nodes and will stay around for
+        this number of minutes before turning itself off.
+    required: false
+    default: 30
+notes:
+    - See the advanced playbooks chapter for more about using fireball mode.
+requirements: [ "zmq", "keyczar" ]
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:FIREBALL:__core__Ubuntu__SERVE__Created__">
+	<Title>__core__Ubuntu__SERVE__Created__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__SERVE__Created__ and Enable fireball mode on remote node and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<AttributeFilter Mode="string" Name="MachineClass" Value="Linux"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="CentOS"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetMachine"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="exists" Name="module" Value="fireball"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+	
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__PKG__Created__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
+			<SubItem Alias="INSTALL" Name="__core__CentOS__PKG__Created__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="ReadState"/>
+				</Then>
+				<Else>
+					<Eject/>
+				</Else>
+			</If>
+
+			<SetAttribute Name="INSTALL:Status" Value="created"/> 
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

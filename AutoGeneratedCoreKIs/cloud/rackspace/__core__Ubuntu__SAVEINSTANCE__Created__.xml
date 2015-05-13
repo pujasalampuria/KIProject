@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: rax_cdb
+short_description: create/delete or resize a Rackspace Cloud Databases instance
+description:
+  - creates / deletes or resize a Rackspace Cloud Databases instance
+    and optionally waits for it to be 'running'. The name option needs to be
+    unique since it's used to identify the instance.
+version_added: "1.8"
+options:
+  name:
+    description:
+      - Name of the databases server instance
+    default: null
+  flavor:
+    description:
+      - flavor to use for the instance 1 to 6 (i.e. 512MB to 16GB)
+    default: 1
+  volume:
+    description:
+      - Volume size of the database 1-150GB
+    default: 2
+  state:
+    description:
+      - Indicate desired state of the resource
+    choices: ['present', 'absent']
+    default: present
+  wait:
+    description:
+      - wait for the instance to be in state 'running' before returning
+    default: "no"
+    choices: [ "yes", "no" ]
+  wait_timeout:
+    description:
+      - how long before wait gives up, in seconds
+    default: 300
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:RAX_CDB:__core__Ubuntu__SAVEINSTANCE__Created__">
+	<Title>__core__Ubuntu__SAVEINSTANCE__Created__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__SAVEINSTANCE__Created__ and create/delete or resize a Rackspace Cloud Databases instance and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<AttributeFilter Mode="string" Name="MachineClass" Value="Linux"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="CentOS"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetMachine"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="exists" Name="module" Value="rax_cdb"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+	
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__PKG__Created__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
+			<SubItem Alias="INSTALL" Name="__core__CentOS__PKG__Created__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="ReadState"/>
+				</Then>
+				<Else>
+					<Eject/>
+				</Else>
+			</If>
+
+			<SetAttribute Name="INSTALL:Status" Value="created"/> 
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

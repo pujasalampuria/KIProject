@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: setup
+version_added: historical
+short_description: Gathers facts about remote hosts
+options:
+    filter:
+        version_added: "1.1"
+        description:
+            - if supplied, only return facts that match this shell-style (fnmatch) wildcard.
+        required: false
+        default: '*'
+    fact_path:
+        version_added: "1.3"
+        description:
+            - path used for local ansible facts (*.fact) - files in this dir
+              will be run (if executable) and their results be added to ansible_local facts
+              if a file is not executable it is read.
+              File/results format can be json or ini-format
+        required: false
+        default: '/etc/ansible/facts.d'
+description:
+     - This module is automatically called by playbooks to gather useful
+       variables about remote hosts that can be used in playbooks. It can also be
+       executed directly by C(/usr/bin/ansible) to check what variables are
+       available to a host. Ansible provides many I(facts) about the system,
+       automatically.
+notes:
+    - More ansible facts will be added with successive releases. If I(facter) or
+      I(ohai) are installed, variables from these programs will also be snapshotted
+      into the JSON file for usage in templating. These variables are prefixed
+      with C(facter_) and C(ohai_) so it's easy to tell their source. All variables are
+      bubbled up to the caller. Using the ansible facts and choosing to not
+      install I(facter) and I(ohai) means you can avoid Ruby-dependencies on your
+      remote systems. (See also M(facter) and M(ohai).)
+    - The filter option filters only the first level subkey below ansible_facts.
+    - If the target host is Windows, you will not currently have the ability to use
+      C(fact_path) or C(filter) as this is provided by a simpler implementation of the module.
+      Different facts are returned for Windows hosts.
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:SETUP:__core__Ubuntu__RUNSETUP__Deleted__">
+	<Title>__core__Ubuntu__RUNSETUP__Deleted__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__RUNSETUP__Deleted__ and Gathers facts about remote hosts and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<AttributeFilter Mode="string" Name="MachineClass" Value="Linux"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="Ubuntu"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetMachine"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="exists" Name="module" Value="setup"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+	
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__PKG__Deleted__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
+			<SubItem Alias="UNINSTALL" Name="__core__Ubuntu__PKG__Deleted__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="ReadState"/>
+				</Then>
+				<Else>
+					<Eject/>
+				</Else>
+			</If>
+			<SetAttribute Name="UNINSTALL:Status" Value="uninstalled"/> 
+
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

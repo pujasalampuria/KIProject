@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: ini_file
+short_description: Tweak settings in INI files
+extends_documentation_fragment: files
+description:
+     - Manage (add, remove, change) individual settings in an INI-style file without having
+       to manage the file as a whole with, say, M(template) or M(assemble). Adds missing
+       sections if they don't exist.
+     - Comments are discarded when the source file is read, and therefore will not 
+       show up in the destination file.
+version_added: "0.9"
+options:
+  dest:
+    description:
+      - Path to the INI-style file; this file is created if required
+    required: true
+    default: null
+  section:
+    description:
+      - Section name in INI file. This is added if C(state=present) automatically when
+        a single value is being set.
+    required: true
+    default: null
+  option:
+    description:
+      - if set (required for changing a I(value)), this is the name of the option.
+      - May be omitted if adding/removing a whole I(section).
+    required: false
+    default: null
+  value:
+    description:
+     - the string value to be associated with an I(option). May be omitted when removing an I(option).
+    required: false
+    default: null
+  backup:
+    description:
+      - Create a backup file including the timestamp information so you can get
+        the original file back if you somehow clobbered it incorrectly.
+    required: false
+    default: "no"
+    choices: [ "yes", "no" ]
+  others:
+     description:
+       - all arguments accepted by the M(file) module also work here
+     required: false
+notes:
+   - While it is possible to add an I(option) without specifying a I(value), this makes
+     no sense.
+   - A section named C(default) cannot be added by the module, but if it exists, individual
+     options within the section can be updated. (This is a limitation of Python's I(ConfigParser).)
+     Either use M(template) to create a base INI file with a C([default]) section, or use
+     M(lineinfile) to add the missing line.
+requirements: [ ConfigParser ]
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:INI_FILE:__core__Ubuntu__IDENTITY__Created__">
+	<Title>__core__Ubuntu__IDENTITY__Created__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__IDENTITY__Created__ and Tweak settings in INI files and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<AttributeFilter Mode="string" Name="MachineClass" Value="Linux"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="CentOS"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetMachine"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="Exists" Name="dest"/>
+        <AttributeFilter Mode="Exists" Name="section"/>
+        <AttributeFilter Mode="exists" Name="module" Value="ini_file"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+	
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__PKG__Created__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
+			<SubItem Alias="INSTALL" Name="__core__CentOS__PKG__Created__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="ReadState"/>
+				</Then>
+				<Else>
+					<Eject/>
+				</Else>
+			</If>
+
+			<SetAttribute Name="INSTALL:Status" Value="created"/> 
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

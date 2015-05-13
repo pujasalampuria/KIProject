@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: group
+version_added: "0.0.2"
+short_description: Add or remove groups
+requirements: [ groupadd, groupdel, groupmod ]
+description:
+    - Manage presence of groups on a host.
+options:
+    name:
+        required: true
+        description:
+            - Name of the group to manage.
+    gid:
+        required: false
+        description:
+            - Optional I(GID) to set for the group.
+    state:
+        required: false
+        default: "present"
+        choices: [ present, absent ]
+        description:
+            - Whether the group should be present or not on the remote host.
+    system:
+        required: false
+        default: "no"
+        choices: [ "yes", "no" ]
+        description:
+            - If I(yes), indicates that the group created is a system group.
+
+'''
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:GROUP:__core__Ubuntu__GROUPADD__ReadState__">
+	<Title>__core__Ubuntu__GROUPADD__ReadState__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__GROUPADD__ReadState__ and Add or remove groups and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="Ubuntu"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetPath"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="Exists" Name="name"/>
+        <AttributeFilter Mode="exists" Name="module" Value="group"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__WGET__ReadState__ and attribute ExtUID being the same as the machine KI binds to. </Description>
+			<SubItem Alias="CHECK" Name="__core__Ubuntu__WGET__ReadState__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>	
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="Created"/>
+				</Then>
+				<Else>
+					<SetAttribute Name="TASKS:CurrentState" Value="Deleted"/>
+				</Else>
+			</If>			
+			<SetAttribute Name="CHECK:Status" Value="CurrentStateRead"/> 
+			
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

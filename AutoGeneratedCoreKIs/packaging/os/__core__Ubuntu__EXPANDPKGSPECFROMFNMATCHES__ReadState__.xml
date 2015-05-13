@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: apt
+short_description: Manages apt-packages
+description:
+  - Manages I(apt) packages (such as for Debian/Ubuntu).
+version_added: "0.0.2"
+options:
+  name:
+    description:
+      - A package name, like C(foo), or package specifier with version, like C(foo=1.0). Name wildcards (fnmatch) like C(apt*) and version wildcards like C(foo=1.0*) are also supported.
+    required: false
+    default: null
+  state:
+    description:
+      - Indicates the desired package state. C(latest) ensures that the latest version is installed. C(build-dep) ensures the package build dependencies are installed.
+    required: false
+    default: present
+    choices: [ "latest", "absent", "present", "build-dep" ]
+  update_cache:
+    description:
+      - Run the equivalent of C(apt-get update) before the operation. Can be run as part of the package installation or as a separate step.
+    required: false
+    default: no
+    choices: [ "yes", "no" ]
+  cache_valid_time:
+    description:
+      - If C(update_cache) is specified and the last run is less or equal than I(cache_valid_time) seconds ago, the C(update_cache) gets skipped.
+    required: false
+    default: no
+  purge:
+    description:
+     - Will force purging of configuration files if the module state is set to I(absent).
+    required: false
+    default: no
+    choices: [ "yes", "no" ]
+  default_release:
+    description:
+      - Corresponds to the C(-t) option for I(apt) and sets pin priorities
+    required: false
+    default: null
+  install_recommends:
+    description:
+      - Corresponds to the C(- -no-install-recommends) option for I(apt). Default behavior (C(yes)) replicates apt's default behavior; C(no) does not install recommended packages. Suggested packages are never installed.
+    required: false
+    default: yes
+    choices: [ "yes", "no" ]
+  force:
+    description:
+      - If C(yes), force installs/removes.
+    required: false
+    default: "no"
+    choices: [ "yes", "no" ]
+  upgrade:
+    description:
+      - 'If yes or safe, performs an aptitude safe-upgrade.'
+      - 'If full, performs an aptitude full-upgrade.'
+      - 'If dist, performs an apt-get dist-upgrade.'
+      - 'Note: This does not upgrade a specific package, use state=latest for that.'
+    version_added: "1.1"
+    required: false
+    default: "yes"
+    choices: [ "yes", "safe", "full", "dist"]
+  dpkg_options:
+    description:
+      - Add dpkg options to apt command. Defaults to '-o "Dpkg::Options::=- -force-confdef" -o "Dpkg::Options::=- -force-confold"'
+      - Options should be supplied as comma separated list
+    required: false
+    default: 'force-confdef,force-confold'
+  deb:
+     description:
+       - Path to a .deb package on the remote machine.
+     required: false
+     version_added: "1.6"
+requirements: [ python-apt, aptitude ]
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:APT:__core__Ubuntu__EXPANDPKGSPECFROMFNMATCHES__ReadState__">
+	<Title>__core__Ubuntu__EXPANDPKGSPECFROMFNMATCHES__ReadState__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__EXPANDPKGSPECFROMFNMATCHES__ReadState__ and Manages apt-packages and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="Ubuntu"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetPath"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="exists" Name="module" Value="apt"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__WGET__ReadState__ and attribute ExtUID being the same as the machine KI binds to. </Description>
+			<SubItem Alias="CHECK" Name="__core__Ubuntu__WGET__ReadState__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>	
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="Created"/>
+				</Then>
+				<Else>
+					<SetAttribute Name="TASKS:CurrentState" Value="Deleted"/>
+				</Else>
+			</If>			
+			<SetAttribute Name="CHECK:Status" Value="CurrentStateRead"/> 
+			
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

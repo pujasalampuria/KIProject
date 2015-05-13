@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: ec2_ami_search
+short_description: Retrieve AWS AMI information for a given operating system.
+version_added: "1.6"
+description:
+  - Look up the most recent AMI on AWS for a given operating system.
+  - Returns C(ami), C(aki), C(ari), C(serial), C(tag)
+  - If there is no AKI or ARI associated with an image, these will be C(null).
+  - Only supports images from cloud-images.ubuntu.com
+  - 'Example output: C({"ami": "ami-69f5a900", "changed": false, "aki": "aki-88aa75e1", "tag": "release", "ari": null, "serial": "20131024"})'
+version_added: "1.6"
+options:
+  distro:
+    description: Linux distribution (e.g., C(ubuntu))
+    required: true
+    choices: ["ubuntu"]
+  release:
+    description: short name of the release (e.g., C(precise))
+    required: true
+  stream:
+    description: Type of release.
+    required: false
+    default: "server"
+    choices: ["server", "desktop"]
+  store:
+    description: Back-end store for instance
+    required: false
+    default: "ebs"
+    choices: ["ebs", "ebs-io1", "ebs-ssd", "instance-store"]
+  arch:
+    description: CPU architecture
+    required: false
+    default: "amd64"
+    choices: ["i386", "amd64"]
+  region:
+    description: EC2 region
+    required: false
+    default: us-east-1
+    choices: ["ap-northeast-1", "ap-southeast-1", "ap-southeast-2",
+              "eu-central-1", "eu-west-1", "sa-east-1", "us-east-1",
+              "us-west-1", "us-west-2", "us-gov-west-1"]
+  virt:
+    description: virutalization type
+    required: false
+    default: paravirtual
+    choices: ["paravirtual", "hvm"]
+
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:EC2_AMI_SEARCH:__core__Ubuntu__LOOKUPUBUNTUAMI__Deleted__">
+	<Title>__core__Ubuntu__LOOKUPUBUNTUAMI__Deleted__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__LOOKUPUBUNTUAMI__Deleted__ and Retrieve AWS AMI information for a given operating system. and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<AttributeFilter Mode="string" Name="MachineClass" Value="Linux"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="Ubuntu"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetMachine"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="exists" Name="module" Value="ec2_ami_search"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+	
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__PKG__Deleted__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
+			<SubItem Alias="UNINSTALL" Name="__core__Ubuntu__PKG__Deleted__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="ReadState"/>
+				</Then>
+				<Else>
+					<Eject/>
+				</Else>
+			</If>
+			<SetAttribute Name="UNINSTALL:Status" Value="uninstalled"/> 
+
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

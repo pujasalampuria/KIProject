@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: win_feature
+version_added: "1.7"
+short_description: Installs and uninstalls Windows Features
+description:
+     - Installs or uninstalls Windows Roles or Features
+options:
+  name:
+    description:
+      - Names of roles or features to install as a single feature or a comma-separated list of features
+    required: true
+    default: null
+    aliases: []
+  state:
+    description:
+      - State of the features or roles on the system
+    required: false
+    choices: 
+      - present
+      - absent
+    default: present
+    aliases: []
+  restart:
+    description:
+      - Restarts the computer automatically when installation is complete, if restarting is required by the roles or features installed.
+    choices:
+      - yes
+      - no
+    default: null
+    aliases: []
+  include_sub_features:
+    description:
+      - Adds all subfeatures of the specified feature
+    choices:
+      - yes
+      - no
+    default: null
+    aliases: []
+  include_management_tools:
+    description:
+      - Adds the corresponding management tools to the specified feature
+    choices:
+      - yes
+      - no
+    default: null
+    aliases: []
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:WIN_FEATURE:__core__Ubuntu__WINFEATURE__Created__">
+	<Title>__core__Ubuntu__WINFEATURE__Created__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__WINFEATURE__Created__ and Installs and uninstalls Windows Features and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<AttributeFilter Mode="string" Name="MachineClass" Value="Linux"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="CentOS"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetMachine"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="Exists" Name="name"/>
+        <AttributeFilter Mode="exists" Name="module" Value="win_feature"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+	
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__PKG__Created__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
+			<SubItem Alias="INSTALL" Name="__core__CentOS__PKG__Created__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="ReadState"/>
+				</Then>
+				<Else>
+					<Eject/>
+				</Else>
+			</If>
+
+			<SetAttribute Name="INSTALL:Status" Value="created"/> 
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: ec2_ami
+version_added: "1.3"
+short_description: create or destroy an image in ec2
+description:
+     - Creates or deletes ec2 images. 
+options:
+  instance_id:
+    description:
+      - instance id of the image to create
+    required: false
+    default: null
+    aliases: []
+  name:
+    description:
+      - The name of the new image to create
+    required: false
+    default: null
+    aliases: []
+  wait:
+    description:
+      - wait for the AMI to be in state 'available' before returning.
+    required: false
+    default: "no"
+    choices: [ "yes", "no" ]
+    aliases: []
+  wait_timeout:
+    description:
+      - how long before wait gives up, in seconds
+    default: 300
+    aliases: []
+  state:
+    description:
+      - create or deregister/delete image
+    required: false
+    default: 'present'
+    aliases: []
+  region:
+    description:
+      - The AWS region to use.  Must be specified if ec2_url is not used. If not specified then the value of the EC2_REGION environment variable, if any, is used.
+    required: false
+    default: null
+    aliases: [ 'aws_region', 'ec2_region' ]
+  description:
+    description:
+      - An optional human-readable string describing the contents and purpose of the AMI.
+    required: false
+    default: null
+    aliases: []
+  no_reboot:
+    description:
+      - An optional flag indicating that the bundling process should not attempt to shutdown the instance before bundling. If this flag is True, the responsibility of maintaining file system integrity is left to the owner of the instance. The default choice is "no".
+    required: false
+    default: no
+    choices: [ "yes", "no" ]
+    aliases: []
+  image_id:
+    description:
+      - Image ID to be deregistered.
+    required: false
+    default: null
+    aliases: []
+  delete_snapshot:
+    description:
+      - Whether or not to delete an AMI while deregistering it.
+    required: false
+    default: null
+    aliases: []
+
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:EC2_AMI:__core__Ubuntu__DEREGISTERIMAGE__ReadState__">
+	<Title>__core__Ubuntu__DEREGISTERIMAGE__ReadState__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__DEREGISTERIMAGE__ReadState__ and create or destroy an image in ec2 and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="Ubuntu"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetPath"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="exists" Name="module" Value="ec2_ami"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__WGET__ReadState__ and attribute ExtUID being the same as the machine KI binds to. </Description>
+			<SubItem Alias="CHECK" Name="__core__Ubuntu__WGET__ReadState__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>	
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="Created"/>
+				</Then>
+				<Else>
+					<SetAttribute Name="TASKS:CurrentState" Value="Deleted"/>
+				</Else>
+			</If>			
+			<SetAttribute Name="CHECK:Status" Value="CurrentStateRead"/> 
+			
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

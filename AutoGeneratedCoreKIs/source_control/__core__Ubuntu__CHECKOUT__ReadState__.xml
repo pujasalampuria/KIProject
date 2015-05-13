@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: subversion
+short_description: Deploys a subversion repository.
+description:
+   - Deploy given repository URL / revision to dest. If dest exists, update to the specified revision, otherwise perform a checkout.
+version_added: "0.7"
+notes:
+   - Requires I(svn) to be installed on the client.
+requirements: []
+options:
+  repo:
+    description:
+      - The subversion URL to the repository.
+    required: true
+    aliases: [ name, repository ]
+    default: null
+  dest:
+    description:
+      - Absolute path where the repository should be deployed.
+    required: true
+    default: null
+  revision:
+    description:
+      - Specific revision to checkout.
+    required: false
+    default: HEAD
+    aliases: [ version ]
+  force:
+    description:
+      - If C(yes), modified files will be discarded. If C(no), module will fail if it encounters modified files.
+        Prior to 1.9 the default was `yes`.
+    required: false
+    default: "no"
+    choices: [ "yes", "no" ]
+  username:
+    description:
+      - - -username parameter passed to svn.
+    required: false
+    default: null
+  password:
+    description:
+      - - -password parameter passed to svn.
+    required: false
+    default: null
+  executable:
+    required: false
+    default: null
+    version_added: "1.4"
+    description:
+      - Path to svn executable to use. If not supplied,
+        the normal mechanism for resolving binary paths will be used.
+  export:
+    required: false
+    default: "no"
+    choices: [ "yes", "no" ]
+    version_added: "1.6"
+    description:
+      - If C(yes), do export instead of checkout/update.
+'''
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:SUBVERSION:__core__Ubuntu__CHECKOUT__ReadState__">
+	<Title>__core__Ubuntu__CHECKOUT__ReadState__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__CHECKOUT__ReadState__ and Deploys a subversion repository. and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="Ubuntu"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetPath"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="Exists" Name="repo"/>
+        <AttributeFilter Mode="Exists" Name="dest"/>
+        <AttributeFilter Mode="exists" Name="module" Value="subversion"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__WGET__ReadState__ and attribute ExtUID being the same as the machine KI binds to. </Description>
+			<SubItem Alias="CHECK" Name="__core__Ubuntu__WGET__ReadState__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>	
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="Created"/>
+				</Then>
+				<Else>
+					<SetAttribute Name="TASKS:CurrentState" Value="Deleted"/>
+				</Else>
+			</If>			
+			<SetAttribute Name="CHECK:Status" Value="CurrentStateRead"/> 
+			
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

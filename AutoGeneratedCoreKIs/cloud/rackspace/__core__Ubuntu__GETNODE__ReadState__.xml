@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: rax_clb_nodes
+short_description: add, modify and remove nodes from a Rackspace Cloud Load Balancer
+description:
+  - Adds, modifies and removes nodes from a Rackspace Cloud Load Balancer
+version_added: "1.4"
+options:
+  address:
+    required: false
+    description:
+      - IP address or domain name of the node
+  condition:
+    required: false
+    choices:
+      - enabled
+      - disabled
+      - draining
+    description:
+      - Condition for the node, which determines its role within the load
+        balancer
+  load_balancer_id:
+    required: true
+    type: integer
+    description:
+      - Load balancer id
+  node_id:
+    required: false
+    type: integer
+    description:
+      - Node id
+  port:
+    required: false
+    type: integer
+    description:
+      - Port number of the load balanced service on the node
+  state:
+    required: false
+    default: "present"
+    choices:
+      - present
+      - absent
+    description:
+      - Indicate desired state of the node
+  type:
+    required: false
+    choices:
+      - primary
+      - secondary
+    description:
+      - Type of node
+  wait:
+    required: false
+    default: "no"
+    choices:
+      - "yes"
+      - "no"
+    description:
+      - Wait for the load balancer to become active before returning
+  wait_timeout:
+    required: false
+    type: integer
+    default: 30
+    description:
+      - How long to wait before giving up and returning an error
+  weight:
+    required: false
+    description:
+      - Weight of node
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:RAX_CLB_NODES:__core__Ubuntu__GETNODE__ReadState__">
+	<Title>__core__Ubuntu__GETNODE__ReadState__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__GETNODE__ReadState__ and add, modify and remove nodes from a Rackspace Cloud Load Balancer and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="Ubuntu"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetPath"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="Exists" Name="load_balancer_id"/>
+        <AttributeFilter Mode="exists" Name="module" Value="rax_clb_nodes"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__WGET__ReadState__ and attribute ExtUID being the same as the machine KI binds to. </Description>
+			<SubItem Alias="CHECK" Name="__core__Ubuntu__WGET__ReadState__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>	
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="Created"/>
+				</Then>
+				<Else>
+					<SetAttribute Name="TASKS:CurrentState" Value="Deleted"/>
+				</Else>
+			</If>			
+			<SetAttribute Name="CHECK:Status" Value="CurrentStateRead"/> 
+			
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: glance_image
+version_added: "1.2"
+deprecated: Deprecated in 1.9. Use os_image instead
+short_description: Add/Delete images from glance
+description:
+   - Add or Remove images from the glance repository.
+options:
+   login_username:
+     description:
+        - login username to authenticate to keystone
+     required: true
+     default: admin
+   login_password:
+     description:
+        - Password of login user
+     required: true
+     default: 'yes'
+   login_tenant_name:
+     description:
+        - The tenant name of the login user
+     required: true
+     default: 'yes'
+   auth_url:
+     description:
+        - The keystone url for authentication
+     required: false
+     default: 'http://127.0.0.1:35357/v2.0/'
+   region_name:
+     description:
+        - Name of the region
+     required: false
+     default: None
+   state:
+     description:
+        - Indicate desired state of the resource
+     choices: ['present', 'absent']
+     default: present
+   name:
+     description:
+        - Name that has to be given to the image
+     required: true
+     default: None
+   disk_format:
+     description:
+        - The format of the disk that is getting uploaded
+     required: false
+     default: qcow2
+   container_format:
+     description:
+        - The format of the container
+     required: false
+     default: bare
+   owner:
+     description:
+        - The owner of the image
+     required: false
+     default: None
+   min_disk:
+     description:
+        - The minimum disk space required to deploy this image
+     required: false
+     default: None
+   min_ram:
+     description:
+        - The minimum ram required to deploy this image
+     required: false
+     default: None
+   is_public:
+     description:
+        - Whether the image can be accessed publicly
+     required: false
+     default: 'yes'
+   copy_from:
+     description:
+        - A url from where the image can be downloaded, mutually exclusive with file parameter
+     required: false
+     default: None
+   timeout:
+     description:
+        - The time to wait for the image process to complete in seconds
+     required: false
+     default: 180
+   file:
+     description:
+        - The path to the file which has to be uploaded, mutually exclusive with copy_from
+     required: false
+     default: None
+   endpoint_type:
+     description:
+        - The name of the glance service's endpoint URL type
+     choices: [publicURL, internalURL]
+     required: false
+     default: publicURL
+     version_added: "1.7"
+requirements: ["glanceclient", "keystoneclient"]
+
+'''
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:_GLANCE_IMAGE:__core__Ubuntu__GLANCEDELETEIMAGE__Deleted__">
+	<Title>__core__Ubuntu__GLANCEDELETEIMAGE__Deleted__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__GLANCEDELETEIMAGE__Deleted__ and Add/Delete images from glance and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<AttributeFilter Mode="string" Name="MachineClass" Value="Linux"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="Ubuntu"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetMachine"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="Exists" Name="login_username"/>
+        <AttributeFilter Mode="Exists" Name="login_password"/>
+        <AttributeFilter Mode="Exists" Name="login_tenant_name"/>
+        <AttributeFilter Mode="Exists" Name="name"/>
+        <AttributeFilter Mode="exists" Name="module" Value="glance_image"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+	
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__PKG__Deleted__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
+			<SubItem Alias="UNINSTALL" Name="__core__Ubuntu__PKG__Deleted__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="ReadState"/>
+				</Then>
+				<Else>
+					<Eject/>
+				</Else>
+			</If>
+			<SetAttribute Name="UNINSTALL:Status" Value="uninstalled"/> 
+
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

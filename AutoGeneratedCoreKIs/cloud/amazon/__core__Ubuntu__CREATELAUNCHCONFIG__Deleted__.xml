@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: ec2_lc
+short_description: Create or delete AWS Autoscaling Launch Configurations
+description:
+  - Can create or delete AwS Autoscaling Configurations
+  - Works with the ec2_asg module to manage Autoscaling Groups
+notes:
+  - "Amazon ASG Autoscaling Launch Configurations are immutable once created, so modifying the configuration
+    after it is changed will not modify the launch configuration on AWS. You must create a new config and assign
+    it to the ASG instead."
+version_added: "1.6"
+options:
+  state:
+    description:
+      - register or deregister the instance
+    required: true
+    choices: ['present', 'absent']
+  name:
+    description:
+      - Unique name for configuration
+    required: true
+  instance_type:
+    description:
+      - instance type to use for the instance
+    required: true
+    default: null
+    aliases: []
+  image_id:
+    description:
+      - The AMI unique identifier to be used for the group
+    required: false
+  key_name:
+    description:
+      - The SSH key name to be used for access to managed instances
+    required: false
+  security_groups:
+    description:
+      - A list of security groups into which instances should be found
+    required: false
+  region:
+    description:
+      - The AWS region to use. If not specified then the value of the EC2_REGION environment variable, if any, is used.
+    required: false
+    aliases: ['aws_region', 'ec2_region']
+  volumes:
+    description:
+      - a list of volume dicts, each containing device name and optionally ephemeral id or snapshot id. Size and type (and number of iops for io device type) must be specified for a new volume or a root volume, and may be passed for a snapshot volume. For any volume, a volume size less than 1 will be interpreted as a request not to create the volume.
+    required: false
+    default: null
+    aliases: []
+  user_data:
+    description:
+      - opaque blob of data which is made available to the ec2 instance
+    required: false
+    default: null
+    aliases: []
+  kernel_id:
+    description:
+      - Kernel id for the EC2 instance
+    required: false
+    default: null
+    aliases: []    
+  spot_price:
+    description:
+      - The spot price you are bidding. Only applies for an autoscaling group with spot instances.
+    required: false
+    default: null
+  instance_monitoring:
+    description:
+      - whether instances in group are launched with detailed monitoring.
+    required: false
+    default: false
+    aliases: []
+  assign_public_ip:
+    description:
+      - Used for Auto Scaling groups that launch instances into an Amazon Virtual Private Cloud. Specifies whether to assign a public IP address to each instance launched in a Amazon VPC.
+    required: false
+    aliases: []
+    version_added: "1.8"
+  ramdisk_id:
+    description:
+      - A RAM disk id for the instances.
+    required: false
+    default: null
+    aliases: []
+    version_added: "1.8"
+  instance_profile_name:
+    description:
+      - The name or the Amazon Resource Name (ARN) of the instance profile associated with the IAM role for the instances.
+    required: false
+    default: null
+    aliases: []
+    version_added: "1.8"
+  ebs_optimized:
+    description:
+      - Specifies whether the instance is optimized for EBS I/O (true) or not (false).
+    required: false
+    default: false
+    aliases: []
+    version_added: "1.8"
+extends_documentation_fragment: aws
+"""
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:EC2_LC:__core__Ubuntu__CREATELAUNCHCONFIG__Deleted__">
+	<Title>__core__Ubuntu__CREATELAUNCHCONFIG__Deleted__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__CREATELAUNCHCONFIG__Deleted__ and Create or delete AWS Autoscaling Launch Configurations and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<AttributeFilter Mode="string" Name="MachineClass" Value="Linux"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="Ubuntu"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetMachine"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="Exists" Name="state"/>
+        <AttributeFilter Mode="Exists" Name="name"/>
+        <AttributeFilter Mode="Exists" Name="instance_type"/>
+        <AttributeFilter Mode="exists" Name="module" Value="ec2_lc"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+	
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__PKG__Deleted__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
+			<SubItem Alias="UNINSTALL" Name="__core__Ubuntu__PKG__Deleted__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="ReadState"/>
+				</Then>
+				<Else>
+					<Eject/>
+				</Else>
+			</If>
+			<SetAttribute Name="UNINSTALL:Status" Value="uninstalled"/> 
+
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

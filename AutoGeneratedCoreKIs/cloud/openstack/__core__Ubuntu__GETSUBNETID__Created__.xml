@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: quantum_router_interface
+deprecated: Deprecated in 1.9. Use os_router_interface instead
+version_added: "1.2"
+short_description: Attach/Dettach a subnet's interface to a router
+description:
+   - Attach/Dettach a subnet interface to a router, to provide a gateway for the subnet.
+options:
+   login_username:
+     description:
+        - login username to authenticate to keystone
+     required: true
+     default: admin
+   login_password:
+     description:
+        - Password of login user
+     required: true
+     default: 'yes'
+   login_tenant_name:
+     description:
+        - The tenant name of the login user
+     required: true
+     default: 'yes'
+   auth_url:
+     description:
+        - The keystone URL for authentication
+     required: false
+     default: 'http://127.0.0.1:35357/v2.0/'
+   region_name:
+     description:
+        - Name of the region
+     required: false
+     default: None
+   state:
+     description:
+        - Indicate desired state of the resource
+     choices: ['present', 'absent']
+     default: present
+   router_name:
+     description:
+        - Name of the router to which the subnet's interface should be attached.
+     required: true
+     default: None
+   subnet_name:
+     description:
+        - Name of the subnet to whose interface should be attached to the router.
+     required: true
+     default: None
+   tenant_name:
+     description:
+        - Name of the tenant whose subnet has to be attached.
+     required: false
+     default: None
+requirements: ["quantumclient", "keystoneclient"]
+'''
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:_QUANTUM_ROUTER_INTERFACE:__core__Ubuntu__GETSUBNETID__Created__">
+	<Title>__core__Ubuntu__GETSUBNETID__Created__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__GETSUBNETID__Created__ and Attach/Dettach a subnet's interface to a router and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<AttributeFilter Mode="string" Name="MachineClass" Value="Linux"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="CentOS"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetMachine"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="Exists" Name="login_username"/>
+        <AttributeFilter Mode="Exists" Name="login_password"/>
+        <AttributeFilter Mode="Exists" Name="login_tenant_name"/>
+        <AttributeFilter Mode="Exists" Name="router_name"/>
+        <AttributeFilter Mode="Exists" Name="subnet_name"/>
+        <AttributeFilter Mode="exists" Name="module" Value="quantum_router_interface"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+	
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__PKG__Created__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
+			<SubItem Alias="INSTALL" Name="__core__CentOS__PKG__Created__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="ReadState"/>
+				</Then>
+				<Else>
+					<Eject/>
+				</Else>
+			</If>
+
+			<SetAttribute Name="INSTALL:Status" Value="created"/> 
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: rax_files_objects
+short_description: Upload, download, and delete objects in Rackspace Cloud Files
+description:
+  - Upload, download, and delete objects in Rackspace Cloud Files
+version_added: "1.5"
+options:
+  clear_meta:
+    description:
+      - Optionally clear existing metadata when applying metadata to existing objects.
+        Selecting this option is only appropriate when setting type=meta
+    choices:
+      - "yes"
+      - "no"
+    default: "no"
+  container:
+    description:
+      - The container to use for file object operations.
+    required: true
+    default: null
+  dest:
+    description:
+      - The destination of a "get" operation; i.e. a local directory, "/home/user/myfolder".
+        Used to specify the destination of an operation on a remote object; i.e. a file name,
+        "file1", or a comma-separated list of remote objects, "file1,file2,file17"
+  expires:
+    description:
+      - Used to set an expiration on a file or folder uploaded to Cloud Files.
+        Requires an integer, specifying expiration in seconds
+    default: null
+  meta:
+    description:
+      - A hash of items to set as metadata values on an uploaded file or folder
+    default: null
+  method:
+    description:
+      - The method of operation to be performed.  For example, put to upload files
+        to Cloud Files, get to download files from Cloud Files or delete to delete
+        remote objects in Cloud Files
+    choices:
+      - get
+      - put
+      - delete
+    default: get
+  src:
+    description:
+      - Source from which to upload files.  Used to specify a remote object as a source for
+        an operation, i.e. a file name, "file1", or a comma-separated list of remote objects,
+        "file1,file2,file17".  src and dest are mutually exclusive on remote-only object operations
+    default: null
+  structure:
+    description:
+      - Used to specify whether to maintain nested directory structure when downloading objects
+        from Cloud Files.  Setting to false downloads the contents of a container to a single,
+        flat directory
+    choices:
+      - yes
+      - "no"
+    default: "yes"
+  state:
+    description:
+      - Indicate desired state of the resource
+    choices: ['present', 'absent']
+    default: present
+  type:
+    description:
+      - Type of object to do work on
+      - Metadata object or a file object
+    choices:
+      - file
+      - meta
+    default: file
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:RAX_FILES_OBJECTS:__core__Ubuntu__PUTMETA__Created__">
+	<Title>__core__Ubuntu__PUTMETA__Created__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__PUTMETA__Created__ and Upload, download, and delete objects in Rackspace Cloud Files and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<AttributeFilter Mode="string" Name="MachineClass" Value="Linux"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="CentOS"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetMachine"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="Exists" Name="container"/>
+        <AttributeFilter Mode="exists" Name="module" Value="rax_files_objects"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+	
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__PKG__Created__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
+			<SubItem Alias="INSTALL" Name="__core__CentOS__PKG__Created__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="ReadState"/>
+				</Then>
+				<Else>
+					<Eject/>
+				</Else>
+			</If>
+
+			<SetAttribute Name="INSTALL:Status" Value="created"/> 
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: ec2_elb
+short_description: De-registers or registers instances from EC2 ELBs
+description:
+  - This module de-registers or registers an AWS EC2 instance from the ELBs
+    that it belongs to.
+  - Returns fact "ec2_elbs" which is a list of elbs attached to the instance
+    if state=absent is passed as an argument.
+  - Will be marked changed when called only if there are ELBs found to operate on.
+version_added: "1.2"
+options:
+  state:
+    description:
+      - register or deregister the instance
+    required: true
+    choices: ['present', 'absent']
+  instance_id:
+    description:
+      - EC2 Instance ID
+    required: true
+  ec2_elbs:
+    description:
+      - List of ELB names, required for registration. The ec2_elbs fact should be used if there was a previous de-register.
+    required: false
+    default: None
+  region:
+    description:
+      - The AWS region to use. If not specified then the value of the EC2_REGION environment variable, if any, is used.
+    required: false
+    aliases: ['aws_region', 'ec2_region']
+  enable_availability_zone:
+    description:
+      - Whether to enable the availability zone of the instance on the target ELB if the availability zone has not already
+        been enabled. If set to no, the task will fail if the availability zone is not enabled on the ELB.
+    required: false
+    default: yes
+    choices: [ "yes", "no" ]
+  wait:
+    description:
+      - Wait for instance registration or deregistration to complete successfully before returning.  
+    required: false
+    default: yes
+    choices: [ "yes", "no" ] 
+  validate_certs:
+    description:
+      - When set to "no", SSL certificates will not be validated for boto versions >= 2.6.0.
+    required: false
+    default: "yes"
+    choices: ["yes", "no"]
+    aliases: []
+    version_added: "1.5"
+  wait_timeout:
+    description:
+      - Number of seconds to wait for an instance to change state. If 0 then this module may return an error if a transient error occurs. If non-zero then any transient errors are ignored until the timeout is reached. Ignored when wait=no.
+    required: false
+    default: 0
+    version_added: "1.6"
+extends_documentation_fragment: aws
+"""
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:EC2_ELB:__core__Ubuntu__DEREGISTER__Deleted__">
+	<Title>__core__Ubuntu__DEREGISTER__Deleted__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__DEREGISTER__Deleted__ and De-registers or registers instances from EC2 ELBs and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<AttributeFilter Mode="string" Name="MachineClass" Value="Linux"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="Ubuntu"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetMachine"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="Exists" Name="state"/>
+        <AttributeFilter Mode="Exists" Name="instance_id"/>
+        <AttributeFilter Mode="exists" Name="module" Value="ec2_elb"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+	
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__PKG__Deleted__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
+			<SubItem Alias="UNINSTALL" Name="__core__Ubuntu__PKG__Deleted__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="ReadState"/>
+				</Then>
+				<Else>
+					<Eject/>
+				</Else>
+			</If>
+			<SetAttribute Name="UNINSTALL:Status" Value="uninstalled"/> 
+
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

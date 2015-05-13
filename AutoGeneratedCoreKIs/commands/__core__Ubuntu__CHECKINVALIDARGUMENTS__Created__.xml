@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: command
+version_added: historical
+short_description: Executes a command on a remote node
+description:
+     - The M(command) module takes the command name followed by a list of space-delimited arguments.
+     - The given command will be executed on all selected nodes. It will not be
+       processed through the shell, so variables like C($HOME) and operations
+       like C("<"), C(">"), C("|"), and C("&") will not work (use the M(shell)
+       module if you need these features).
+options:
+  free_form:
+    description:
+      - the command module takes a free form command to run.  There is no parameter actually named 'free form'.
+        See the examples!
+    required: true
+    default: null
+    aliases: []
+  creates:
+    description:
+      - a filename, when it already exists, this step will B(not) be run.
+    required: no
+    default: null
+  removes:
+    description:
+      - a filename, when it does not exist, this step will B(not) be run.
+    version_added: "0.8"
+    required: no
+    default: null
+  chdir:
+    description:
+      - cd into this directory before running the command
+    version_added: "0.6"
+    required: false
+    default: null
+  executable:
+    description:
+      - change the shell used to execute the command. Should be an absolute path to the executable.
+    required: false
+    default: null
+    version_added: "0.9"
+  warn:
+    version_added: "1.8"
+    default: yes
+    description:
+      - if command warnings are on in ansible.cfg, do not warn about this particular line if set to no/false.
+    required: false
+    default: True
+notes:
+    -  If you want to run a command through the shell (say you are using C(<),
+       C(>), C(|), etc), you actually want the M(shell) module instead. The
+       M(command) module is much more secure as it's not affected by the user's
+       environment.
+    -  " C(creates), C(removes), and C(chdir) can be specified after the command. For instance, if you only want to run a command if a certain file does not exist, use this."
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:COMMAND:__core__Ubuntu__CHECKINVALIDARGUMENTS__Created__">
+	<Title>__core__Ubuntu__CHECKINVALIDARGUMENTS__Created__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__CHECKINVALIDARGUMENTS__Created__ and Executes a command on a remote node and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<AttributeFilter Mode="string" Name="MachineClass" Value="Linux"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="CentOS"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetMachine"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="Exists" Name="free_form"/>
+        <AttributeFilter Mode="exists" Name="module" Value="command"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+	
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__PKG__Created__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
+			<SubItem Alias="INSTALL" Name="__core__CentOS__PKG__Created__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="ReadState"/>
+				</Then>
+				<Else>
+					<Eject/>
+				</Else>
+			</If>
+
+			<SetAttribute Name="INSTALL:Status" Value="created"/> 
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

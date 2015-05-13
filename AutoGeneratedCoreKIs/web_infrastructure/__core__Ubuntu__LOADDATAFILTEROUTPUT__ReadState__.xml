@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: django_manage
+short_description: Manages a Django application.
+description:
+     - Manages a Django application using the I(manage.py) application frontend to I(django-admin). With the I(virtualenv) parameter, all management commands will be executed by the given I(virtualenv) installation.
+version_added: "1.1"
+options:
+  command:
+    choices: [ 'cleanup', 'collectstatic', 'flush', 'loaddata', 'migrate', 'runfcgi', 'syncdb', 'test', 'validate', ]
+    description:
+      - The name of the Django management command to run. Built in commands are cleanup, collectstatic, flush, loaddata, migrate, runfcgi, syncdb, test, and validate. Other commands can be entered, but will fail if they're unknown to Django.
+    required: true
+  app_path:
+    description:
+      - The path to the root of the Django application where B(manage.py) lives.
+    required: true
+  settings:
+    description:
+      - The Python path to the application's settings module, such as 'myapp.settings'.
+    required: false
+  pythonpath:
+    description:
+      - A directory to add to the Python path. Typically used to include the settings module if it is located external to the application directory.
+    required: false
+  virtualenv:
+    description:
+      - An optional path to a I(virtualenv) installation to use while running the manage application.
+    required: false
+  apps:
+    description:
+      - A list of space-delimited apps to target. Used by the 'test' command.
+    required: false
+  cache_table:
+    description:
+      - The name of the table used for database-backed caching. Used by the 'createcachetable' command.
+    required: false
+  database:
+    description:
+      - The database to target. Used by the 'createcachetable', 'flush', 'loaddata', and 'syncdb' commands.
+    required: false
+  failfast:
+    description:
+      - Fail the command immediately if a test fails. Used by the 'test' command.
+    required: false
+    default: "no"
+    choices: [ "yes", "no" ]
+  fixtures:
+    description:
+      - A space-delimited list of fixture file names to load in the database. B(Required) by the 'loaddata' command.
+    required: false
+  skip:
+    description:
+     - Will skip over out-of-order missing migrations, you can only use this parameter with I(migrate)
+    required: false
+    version_added: "1.3"
+  merge:
+    description:
+     - Will run out-of-order or missing migrations as they are not rollback migrations, you can only use this parameter with 'migrate' command
+    required: false
+    version_added: "1.3"
+  link:
+    description:
+     - Will create links to the files instead of copying them, you can only use this parameter with 'collectstatic' command
+    required: false
+    version_added: "1.3"
+notes:
+   - I(virtualenv) (U(http://www.virtualenv.org)) must be installed on the remote host if the virtualenv parameter is specified.
+   - This module will create a virtualenv if the virtualenv parameter is specified and a virtualenv does not already exist at the given location.
+   - This module assumes English error messages for the 'createcachetable' command to detect table existence, unfortunately.
+   - To be able to use the migrate command, you must have south installed and added as an app in your settings
+   - To be able to use the collectstatic command, you must have enabled staticfiles in your settings
+requirements: [ "virtualenv", "django" ]
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:DJANGO_MANAGE:__core__Ubuntu__LOADDATAFILTEROUTPUT__ReadState__">
+	<Title>__core__Ubuntu__LOADDATAFILTEROUTPUT__ReadState__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__LOADDATAFILTEROUTPUT__ReadState__ and Manages a Django application. and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="Ubuntu"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetPath"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="Exists" Name="command"/>
+        <AttributeFilter Mode="Exists" Name="app_path"/>
+        <AttributeFilter Mode="exists" Name="module" Value="django_manage"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__WGET__ReadState__ and attribute ExtUID being the same as the machine KI binds to. </Description>
+			<SubItem Alias="CHECK" Name="__core__Ubuntu__WGET__ReadState__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>	
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="Created"/>
+				</Then>
+				<Else>
+					<SetAttribute Name="TASKS:CurrentState" Value="Deleted"/>
+				</Else>
+			</If>			
+			<SetAttribute Name="CHECK:Status" Value="CurrentStateRead"/> 
+			
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

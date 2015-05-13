@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: rax_dns
+short_description: Manage domains on Rackspace Cloud DNS
+description:
+     - Manage domains on Rackspace Cloud DNS
+version_added: 1.5
+options:
+  comment:
+    description:
+      - Brief description of the domain. Maximum length of 160 characters
+  email:
+    desctiption:
+      - Email address of the domain administrator
+  name:
+    description:
+      - Domain name to create
+  state:
+    description:
+      - Indicate desired state of the resource
+    choices:
+      - present
+      - absent
+    default: present
+  ttl:
+    description:
+      - Time to live of domain in seconds
+    default: 3600
+notes:
+  - "It is recommended that plays utilizing this module be run with
+    C(serial: 1) to avoid exceeding the API request limit imposed by
+    the Rackspace CloudDNS API"
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:RAX_DNS:__core__Ubuntu__RAXDNS__ReadState__">
+	<Title>__core__Ubuntu__RAXDNS__ReadState__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__RAXDNS__ReadState__ and Manage domains on Rackspace Cloud DNS and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="Ubuntu"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetPath"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="exists" Name="module" Value="rax_dns"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__WGET__ReadState__ and attribute ExtUID being the same as the machine KI binds to. </Description>
+			<SubItem Alias="CHECK" Name="__core__Ubuntu__WGET__ReadState__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>	
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="Created"/>
+				</Then>
+				<Else>
+					<SetAttribute Name="TASKS:CurrentState" Value="Deleted"/>
+				</Else>
+			</If>			
+			<SetAttribute Name="CHECK:Status" Value="CurrentStateRead"/> 
+			
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: elasticache
+short_description: Manage cache clusters in Amazon Elasticache.
+description:
+  - Manage cache clusters in Amazon Elasticache.
+  - Returns information about the specified cache cluster.
+version_added: "1.4"
+requirements: [ "boto" ]
+options:
+  state:
+    description:
+      - C(absent) or C(present) are idempotent actions that will create or destroy a cache cluster as needed. C(rebooted) will reboot the cluster, resulting in a momentary outage.
+    choices: ['present', 'absent', 'rebooted']
+    required: true
+  name:
+    description:
+      - The cache cluster identifier
+    required: true
+  engine:
+    description:
+      - Name of the cache engine to be used (memcached or redis)
+    required: false
+    default: memcached
+  cache_engine_version:
+    description:
+      - The version number of the cache engine
+    required: false
+    default: 1.4.14
+  node_type:
+    description:
+      - The compute and memory capacity of the nodes in the cache cluster
+    required: false
+    default: cache.m1.small
+  num_nodes:
+    description:
+      - The initial number of cache nodes that the cache cluster will have
+    required: false
+  cache_port:
+    description:
+      - The port number on which each of the cache nodes will accept connections
+    required: false
+    default: 11211
+  security_group_ids:
+    description:
+      - A list of vpc security group names to associate with this cache cluster. Only use if inside a vpc
+    required: false
+    default: ['default']
+    version_added: "1.6"
+  cache_security_groups:
+    description:
+      - A list of cache security group names to associate with this cache cluster
+    required: false
+    default: ['default']
+  zone:
+    description:
+      - The EC2 Availability Zone in which the cache cluster will be created
+    required: false
+    default: None
+  wait:
+    description:
+      - Wait for cache cluster result before returning
+    required: false
+    default: yes
+    choices: [ "yes", "no" ]
+  hard_modify:
+    description:
+      - Whether to destroy and recreate an existing cache cluster if necessary in order to modify its state
+    required: false
+    default: no
+    choices: [ "yes", "no" ]
+  aws_secret_key:
+    description:
+      - AWS secret key. If not set then the value of the AWS_SECRET_KEY environment variable is used. 
+    required: false
+    default: None
+    aliases: ['ec2_secret_key', 'secret_key']
+  aws_access_key:
+    description:
+      - AWS access key. If not set then the value of the AWS_ACCESS_KEY environment variable is used.
+    required: false
+    default: None
+    aliases: ['ec2_access_key', 'access_key']
+  region:
+    description:
+      - The AWS region to use. If not specified then the value of the EC2_REGION environment variable, if any, is used.
+    required: false
+    aliases: ['aws_region', 'ec2_region']
+
+"""
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:ELASTICACHE:__core__Ubuntu__REFRESHDATA__Created__">
+	<Title>__core__Ubuntu__REFRESHDATA__Created__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__REFRESHDATA__Created__ and Manage cache clusters in Amazon Elasticache. and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<AttributeFilter Mode="string" Name="MachineClass" Value="Linux"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="CentOS"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetMachine"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="Exists" Name="state"/>
+        <AttributeFilter Mode="Exists" Name="name"/>
+        <AttributeFilter Mode="exists" Name="module" Value="elasticache"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+	
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__PKG__Created__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
+			<SubItem Alias="INSTALL" Name="__core__CentOS__PKG__Created__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="ReadState"/>
+				</Then>
+				<Else>
+					<Eject/>
+				</Else>
+			</If>
+
+			<SetAttribute Name="INSTALL:Status" Value="created"/> 
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

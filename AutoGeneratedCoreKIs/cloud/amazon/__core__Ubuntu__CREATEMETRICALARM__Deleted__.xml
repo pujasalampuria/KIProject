@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--module: ec2_metric_alarm
+short_description: "Create/update or delete AWS Cloudwatch 'metric alarms'"
+description:
+ - Can create or delete AWS metric alarms
+ - Metrics you wish to alarm on must already exist
+version_added: "1.6"
+options:
+    state:
+        description:
+          - register or deregister the alarm
+        required: true
+        choices: ['present', 'absent']
+    name:
+        desciption:
+          - Unique name for the alarm
+        required: true
+    metric:
+        description:
+          - Name of the monitored metric (e.g. CPUUtilization)
+          - Metric must already exist
+        required: false
+    namespace:
+        description:
+          - Name of the appropriate namespace ('AWS/EC2', 'System/Linux', etc.), which determines the category it will appear under in cloudwatch
+        required: false
+    statistic:
+        description:
+          - Operation applied to the metric
+          - Works in conjunction with period and evaluation_periods to determine the comparison value
+        required: false
+        options: ['SampleCount','Average','Sum','Minimum','Maximum']
+    comparison:
+        description:
+          - Determines how the threshold value is compared
+        required: false
+        options: ['<=','<','>','>=']
+    threshold:
+        description:
+          - Sets the min/max bound for triggering the alarm
+        required: false
+    period:
+        description:
+          - The time (in seconds) between metric evaluations
+        required: false
+    evaluation_periods:
+        description:
+          - The number of times in which the metric is evaluated before final calculation
+        required: false
+    unit:
+        description:
+          - The threshold's unit of measurement
+        required: false
+        options: ['Seconds','Microseconds','Milliseconds','Bytes','Kilobytes','Megabytes','Gigabytes','Terabytes','Bits','Kilobits','Megabits','Gigabits','Terabits','Percent','Count','Bytes/Second','Kilobytes/Second','Megabytes/Second','Gigabytes/Second','Terabytes/Second','Bits/Second','Kilobits/Second','Megabits/Second','Gigabits/Second','Terabits/Second','Count/Second','None']
+    description:
+        description:
+          - A longer desciption of the alarm
+        required: false
+    dimensions:
+        description:
+          - Describes to what the alarm is applied
+        required: false
+    alarm_actions:
+        description:
+          - A list of the names action(s) taken when the alarm is in the 'alarm' status
+        required: false
+    insufficient_data_actions:
+        description:
+          - A list of the names of action(s) to take when the alarm is in the 'insufficient_data' status
+        required: false
+    ok_actions:
+        description:
+          - A list of the names of action(s) to take when the alarm is in the 'ok' status
+        required: false
+extends_documentation_fragment: aws
+"""
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:EC2_METRIC_ALARM:__core__Ubuntu__CREATEMETRICALARM__Deleted__">
+	<Title>__core__Ubuntu__CREATEMETRICALARM__Deleted__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__CREATEMETRICALARM__Deleted__ and "Create/update or delete AWS Cloudwatch 'metric alarms'" and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<AttributeFilter Mode="string" Name="MachineClass" Value="Linux"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="Ubuntu"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetMachine"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="Exists" Name="state"/>
+        <AttributeFilter Mode="Exists" Name="desciption"/>
+        <AttributeFilter Mode="exists" Name="module" Value=""/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+	
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__PKG__Deleted__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
+			<SubItem Alias="UNINSTALL" Name="__core__Ubuntu__PKG__Deleted__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="ReadState"/>
+				</Then>
+				<Else>
+					<Eject/>
+				</Else>
+			</If>
+			<SetAttribute Name="UNINSTALL:Status" Value="uninstalled"/> 
+
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

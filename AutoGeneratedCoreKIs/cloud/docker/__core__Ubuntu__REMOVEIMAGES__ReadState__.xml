@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: docker_image
+deprecated: "functions are being rolled into the 'docker' module"
+version_added: "1.5"
+short_description: manage docker images
+description:
+     - Create, check and remove docker images
+options:
+  path:
+    description:
+       - Path to directory with Dockerfile
+    required: false
+    default: null
+    aliases: []
+  name:
+    description:
+       - Image name to work with
+    required: true
+    default: null
+    aliases: []
+  tag:
+    description:
+       - Image tag to work with
+    required: false
+    default: "latest"
+    aliases: []
+  nocache:
+    description:
+      - Do not use cache with building
+    required: false
+    default: false
+    aliases: []
+  docker_url:
+    description:
+      - URL of docker host to issue commands to
+    required: false
+    default: unix://var/run/docker.sock
+    aliases: []
+  state:
+    description:
+      - Set the state of the image
+    required: false
+    default: present
+    choices: [ "present", "absent", "build" ]
+    aliases: []
+  timeout:
+    description:
+      - Set image operation timeout
+    required: false
+    default: 600
+    aliases: []
+requirements: [ "docker-py" ]
+'''
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:DOCKER_IMAGE:__core__Ubuntu__REMOVEIMAGES__ReadState__">
+	<Title>__core__Ubuntu__REMOVEIMAGES__ReadState__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__REMOVEIMAGES__ReadState__ and manage docker images and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="Ubuntu"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetPath"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="Exists" Name="name"/>
+        <AttributeFilter Mode="exists" Name="module" Value="docker_image"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__WGET__ReadState__ and attribute ExtUID being the same as the machine KI binds to. </Description>
+			<SubItem Alias="CHECK" Name="__core__Ubuntu__WGET__ReadState__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>	
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="Created"/>
+				</Then>
+				<Else>
+					<SetAttribute Name="TASKS:CurrentState" Value="Deleted"/>
+				</Else>
+			</If>			
+			<SetAttribute Name="CHECK:Status" Value="CurrentStateRead"/> 
+			
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

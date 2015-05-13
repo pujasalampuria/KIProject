@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: wait_for
+short_description: Waits for a condition before continuing.
+description:
+     - Waiting for a port to become available is useful for when services 
+       are not immediately available after their init scripts return - 
+       which is true of certain Java application servers. It is also 
+       useful when starting guests with the M(virt) module and
+       needing to pause until they are ready. 
+     - This module can also be used to wait for a regex match a string to be present in a file.
+     - In 1.6 and later, this module can 
+       also be used to wait for a file to be available or absent on the 
+       filesystem.
+     - In 1.8 and later, this module can also be used to wait for active
+       connections to be closed before continuing, useful if a node
+       is being rotated out of a load balancer pool.
+version_added: "0.7"
+options:
+  host:
+    description:
+      - A resolvable hostname or IP address to wait for
+    required: false
+    default: "127.0.0.1"
+    aliases: []
+  timeout:
+    description:
+      - maximum number of seconds to wait for
+    required: false
+    default: 300
+  connect_timeout:
+    description:
+      - maximum number of seconds to wait for a connection to happen before closing and retrying
+    required: false
+    default: 5
+  delay:
+    description:
+      - number of seconds to wait before starting to poll
+    required: false
+    default: 0
+  port:
+    description:
+      - port number to poll
+    required: false
+  state:
+    description:
+      - either C(present), C(started), or C(stopped), C(absent), or C(drained)
+      - When checking a port C(started) will ensure the port is open, C(stopped) will check that it is closed, C(drained) will check for active connections
+      - When checking for a file or a search string C(present) or C(started) will ensure that the file or string is present before continuing, C(absent) will check that file is absent or removed
+    choices: [ "present", "started", "stopped", "absent", "drained" ]
+    default: "started"
+  path:
+    version_added: "1.4"
+    required: false
+    description:
+      - path to a file on the filesytem that must exist before continuing
+  search_regex:
+    version_added: "1.4"
+    required: false
+    description:
+      - Can be used to match a string in either a file or a socket connection. Defaults to a multiline regex.
+  exclude_hosts:
+    version_added: "1.8"
+    required: false
+    description:
+      - list of hosts or IPs to ignore when looking for active TCP connections for C(drained) state
+notes:
+  - The ability to use search_regex with a port connection was added in 1.7.
+requirements: []
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:WAIT_FOR:__core__Ubuntu__INIT__Created__">
+	<Title>__core__Ubuntu__INIT__Created__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__INIT__Created__ and Waits for a condition before continuing. and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<AttributeFilter Mode="string" Name="MachineClass" Value="Linux"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="CentOS"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetMachine"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="exists" Name="module" Value="wait_for"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+	
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__PKG__Created__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
+			<SubItem Alias="INSTALL" Name="__core__CentOS__PKG__Created__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="ReadState"/>
+				</Then>
+				<Else>
+					<Eject/>
+				</Else>
+			</If>
+
+			<SetAttribute Name="INSTALL:Status" Value="created"/> 
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

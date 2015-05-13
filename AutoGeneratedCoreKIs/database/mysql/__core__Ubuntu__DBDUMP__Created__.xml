@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: mysql_db
+short_description: Add or remove MySQL databases from a remote host.
+description:
+   - Add or remove MySQL databases from a remote host.
+version_added: "0.6"
+options:
+  name:
+    description:
+      - name of the database to add or remove
+    required: true
+    default: null
+    aliases: [ db ]
+  login_user:
+    description:
+      - The username used to authenticate with
+    required: false
+    default: null
+  login_password:
+    description:
+      - The password used to authenticate with
+    required: false
+    default: null
+  login_host:
+    description:
+      - Host running the database
+    required: false
+    default: localhost
+  login_port:
+    description:
+      - Port of the MySQL server. Requires login_host be defined as other then localhost if login_port is used
+    required: false
+    default: 3306
+  login_unix_socket:
+    description:
+      - The path to a Unix domain socket for local connections
+    required: false
+    default: null
+  state:
+    description:
+      - The database state
+    required: false
+    default: present
+    choices: [ "present", "absent", "dump", "import" ]
+  collation:
+    description:
+      - Collation mode
+    required: false
+    default: null
+  encoding:
+    description:
+      - Encoding mode
+    required: false
+    default: null
+  target:
+    description:
+      - Location, on the remote host, of the dump file to read from or write to. Uncompressed SQL
+        files (C(.sql)) as well as bzip2 (C(.bz2)) and gzip (C(.gz)) compressed files are supported.
+    required: false
+notes:
+   - Requires the MySQLdb Python package on the remote host. For Ubuntu, this
+     is as easy as apt-get install python-mysqldb. (See M(apt).)
+   - Both I(login_password) and I(login_user) are required when you are
+     passing credentials. If none are present, the module will attempt to read
+     the credentials from C(~/.my.cnf), and finally fall back to using the MySQL
+     default login of C(root) with no password.
+requirements: [ ConfigParser ]
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:MYSQL_DB:__core__Ubuntu__DBDUMP__Created__">
+	<Title>__core__Ubuntu__DBDUMP__Created__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__DBDUMP__Created__ and Add or remove MySQL databases from a remote host. and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<AttributeFilter Mode="string" Name="MachineClass" Value="Linux"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="CentOS"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetMachine"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="Exists" Name="name"/>
+        <AttributeFilter Mode="exists" Name="module" Value="mysql_db"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+	
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__PKG__Created__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
+			<SubItem Alias="INSTALL" Name="__core__CentOS__PKG__Created__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="ReadState"/>
+				</Then>
+				<Else>
+					<Eject/>
+				</Else>
+			</If>
+
+			<SetAttribute Name="INSTALL:Status" Value="created"/> 
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

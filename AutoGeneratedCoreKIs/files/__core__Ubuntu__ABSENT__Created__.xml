@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: lineinfile
+extends_documentation_fragment: files
+short_description: Ensure a particular line is in a file, or replace an
+                   existing line using a back-referenced regular expression.
+description:
+  - This module will search a file for a line, and ensure that it is present or absent.
+  - This is primarily useful when you want to change a single line in
+    a file only. See the M(replace) module if you want to change
+    multiple, similar lines; for other cases, see the M(copy) or
+    M(template) modules.
+version_added: "0.7"
+options:
+  dest:
+    required: true
+    aliases: [ name, destfile ]
+    description:
+      - The file to modify.
+  regexp:
+    required: false
+    version_added: 1.7
+    description:
+      - The regular expression to look for in every line of the file. For
+        C(state=present), the pattern to replace if found; only the last line
+        found will be replaced. For C(state=absent), the pattern of the line
+        to remove.  Uses Python regular expressions; see
+        U(http://docs.python.org/2/library/re.html).
+  state:
+    required: false
+    choices: [ present, absent ]
+    default: "present"
+    aliases: []
+    description:
+      - Whether the line should be there or not.
+  line:
+    required: false
+    description:
+      - Required for C(state=present). The line to insert/replace into the
+        file. If C(backrefs) is set, may contain backreferences that will get
+        expanded with the C(regexp) capture groups if the regexp matches. The
+        backreferences should be double escaped (see examples).
+  backrefs:
+    required: false
+    default: "no"
+    choices: [ "yes", "no" ]
+    version_added: "1.1"
+    description:
+      - Used with C(state=present). If set, line can contain backreferences
+        (both positional and named) that will get populated if the C(regexp)
+        matches. This flag changes the operation of the module slightly;
+        C(insertbefore) and C(insertafter) will be ignored, and if the C(regexp)
+        doesn't match anywhere in the file, the file will be left unchanged.
+        If the C(regexp) does match, the last matching line will be replaced by
+        the expanded line parameter.
+  insertafter:
+    required: false
+    default: EOF
+    description:
+      - Used with C(state=present). If specified, the line will be inserted
+        after the last match of specified regular expression. A special value is
+        available; C(EOF) for inserting the line at the end of the file. 
+        If specified regular expresion has no matches, EOF will be used instead.
+        May not be used with C(backrefs).
+    choices: [ 'EOF', '*regex*' ]
+  insertbefore:
+    required: false
+    version_added: "1.1"
+    description:
+      - Used with C(state=present). If specified, the line will be inserted
+        before the last match of specified regular expression. A value is 
+        available; C(BOF) for inserting the line at the beginning of the file.
+        If specified regular expresion has no matches, the line will be
+        inserted at the end of the file.  May not be used with C(backrefs).
+    choices: [ 'BOF', '*regex*' ]
+  create:
+    required: false
+    choices: [ "yes", "no" ]
+    default: "no"
+    description:
+      - Used with C(state=present). If specified, the file will be created
+        if it does not already exist. By default it will fail if the file
+        is missing.
+  backup:
+     required: false
+     default: "no"
+     choices: [ "yes", "no" ]
+     description:
+       - Create a backup file including the timestamp information so you can
+         get the original file back if you somehow clobbered it incorrectly.
+  validate:
+     required: false
+     description:
+       - validation to run before copying into place. 
+         Use %s in the command to indicate the current file to validate.
+         The command is passed securely so shell features like
+         expansion and pipes won't work.
+     required: false
+     default: None
+     version_added: "1.4"
+  others:
+     description:
+       - All arguments accepted by the M(file) module also work here.
+     required: false
+"""
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:LINEINFILE:__core__Ubuntu__ABSENT__Created__">
+	<Title>__core__Ubuntu__ABSENT__Created__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__ABSENT__Created__ and Ensure a particular line is in a file, or replace an and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<AttributeFilter Mode="string" Name="MachineClass" Value="Linux"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="CentOS"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetMachine"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="Exists" Name="dest"/>
+        <AttributeFilter Mode="exists" Name="module" Value="lineinfile"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+	
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__PKG__Created__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
+			<SubItem Alias="INSTALL" Name="__core__CentOS__PKG__Created__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="ReadState"/>
+				</Then>
+				<Else>
+					<Eject/>
+				</Else>
+			</If>
+
+			<SetAttribute Name="INSTALL:Status" Value="created"/> 
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

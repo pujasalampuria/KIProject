@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: script
+version_added: "0.9"
+short_description: Runs a local script on a remote node after transferring it
+description:
+     - "The M(script) module takes the script name followed by a list of
+       space-delimited arguments. "
+     - "The local script at path will be transferred to the remote node and then executed. "
+     - "The given script will be processed through the shell environment on the remote node. "
+     - "This module does not require python on the remote system, much like
+       the M(raw) module. "
+options:
+  free_form:
+    description:
+      - path to the local script file followed by optional arguments.
+    required: true
+    default: null
+    aliases: []
+  creates:
+    description:
+      - a filename, when it already exists, this step will B(not) be run.
+    required: no
+    default: null
+    version_added: "1.5"
+  removes:
+    description:
+      - a filename, when it does not exist, this step will B(not) be run.
+    required: no
+    default: null
+    version_added: "1.5"
+notes:
+  - It is usually preferable to write Ansible modules than pushing scripts. Convert your script to an Ansible module for bonus points!
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:SCRIPT:__core__Ubuntu__SCRIPT__ReadState__">
+	<Title>__core__Ubuntu__SCRIPT__ReadState__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__SCRIPT__ReadState__ and Runs a local script on a remote node after transferring it and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="Ubuntu"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetPath"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="Exists" Name="free_form"/>
+        <AttributeFilter Mode="exists" Name="module" Value="script"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__WGET__ReadState__ and attribute ExtUID being the same as the machine KI binds to. </Description>
+			<SubItem Alias="CHECK" Name="__core__Ubuntu__WGET__ReadState__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>	
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="Created"/>
+				</Then>
+				<Else>
+					<SetAttribute Name="TASKS:CurrentState" Value="Deleted"/>
+				</Else>
+			</If>			
+			<SetAttribute Name="CHECK:Status" Value="CurrentStateRead"/> 
+			
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

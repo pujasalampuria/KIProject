@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: mount
+short_description: Control active and configured mount points
+description:
+     - This module controls active and configured mount points in C(/etc/fstab).
+version_added: "0.6"
+options:
+  name:
+    description:
+      - "path to the mount point, eg: C(/mnt/files)"
+    required: true
+    default: null
+    aliases: []
+  src:
+    description:
+      - device to be mounted on I(name).
+    required: true
+    default: null
+  fstype:
+    description:
+      - file-system type
+    required: true
+    default: null
+  opts:
+    description:
+      - mount options (see fstab(8))
+    required: false
+    default: null
+  dump:
+    description:
+      - dump (see fstab(8))
+    required: false
+    default: null
+  passno:
+    description:
+      - passno (see fstab(8))
+    required: false
+    default: null
+  state:
+    description:
+      - If C(mounted) or C(unmounted), the device will be actively mounted or unmounted
+        as needed and appropriately configured in I(fstab). 
+        C(absent) and C(present) only deal with
+        I(fstab) but will not affect current mounting. If specifying C(mounted) and the mount
+        point is not present, the mount point will be created. Similarly, specifying C(absent)        will remove the mount point directory.
+    required: true
+    choices: [ "present", "absent", "mounted", "unmounted" ]
+    default: null
+  fstab:
+    description:
+      - file to use instead of C(/etc/fstab). You shouldn't use that option
+        unless you really know what you are doing. This might be useful if
+        you need to configure mountpoints in a chroot environment.
+    required: false
+    default: /etc/fstab
+
+notes: []
+requirements: []
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:MOUNT:__core__Ubuntu__WRITEFSTAB__ReadState__">
+	<Title>__core__Ubuntu__WRITEFSTAB__ReadState__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__WRITEFSTAB__ReadState__ and Control active and configured mount points and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="Ubuntu"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetPath"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="Exists" Name="name"/>
+        <AttributeFilter Mode="Exists" Name="src"/>
+        <AttributeFilter Mode="Exists" Name="fstype"/>
+        <AttributeFilter Mode="Exists" Name="state"/>
+        <AttributeFilter Mode="exists" Name="module" Value="mount"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__WGET__ReadState__ and attribute ExtUID being the same as the machine KI binds to. </Description>
+			<SubItem Alias="CHECK" Name="__core__Ubuntu__WGET__ReadState__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>	
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="Created"/>
+				</Then>
+				<Else>
+					<SetAttribute Name="TASKS:CurrentState" Value="Deleted"/>
+				</Else>
+			</If>			
+			<SetAttribute Name="CHECK:Status" Value="CurrentStateRead"/> 
+			
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: cloudformation
+short_description: create a AWS CloudFormation stack
+description:
+     - Launches an AWS CloudFormation stack and waits for it complete.
+version_added: "1.1"
+options:
+  stack_name:
+    description:
+      - name of the cloudformation stack
+    required: true
+    default: null
+    aliases: []
+  disable_rollback:
+    description:
+      - If a stacks fails to form, rollback will remove the stack
+    required: false
+    default: "false"
+    choices: [ "true", "false" ]
+    aliases: []
+  template_parameters:
+    description:
+      - a list of hashes of all the template variables for the stack
+    required: false
+    default: {}
+    aliases: []
+  region:
+    description:
+      - The AWS region to use. If not specified then the value of the EC2_REGION environment variable, if any, is used.
+    required: true
+    default: null
+    aliases: ['aws_region', 'ec2_region']
+  state:
+    description:
+      - If state is "present", stack will be created.  If state is "present" and if stack exists and template has changed, it will be updated.
+        If state is "absent", stack will be removed.
+    required: true
+    default: null
+    aliases: []
+  template:
+    description:
+      - the path of the cloudformation template
+    required: true
+    default: null
+    aliases: []
+  stack_policy:
+    description:
+      - the path of the cloudformation stack policy
+    required: false
+    default: null
+    aliases: []
+    version_added: "x.x"
+  tags:
+    description:
+      - Dictionary of tags to associate with stack and it's resources during stack creation. Cannot be updated later.
+        Requires at least Boto version 2.6.0.
+    required: false
+    default: null
+    aliases: []
+    version_added: "1.4"
+  aws_secret_key:
+    description:
+      - AWS secret key. If not set then the value of the AWS_SECRET_KEY environment variable is used.
+    required: false
+    default: null
+    aliases: [ 'ec2_secret_key', 'secret_key' ]
+    version_added: "1.5"
+  aws_access_key:
+    description:
+      - AWS access key. If not set then the value of the AWS_ACCESS_KEY environment variable is used.
+    required: false
+    default: null
+    aliases: [ 'ec2_access_key', 'access_key' ]
+    version_added: "1.5"
+  region:
+    description:
+      - The AWS region to use. If not specified then the value of the EC2_REGION environment variable, if any, is used.
+    required: false
+    aliases: ['aws_region', 'ec2_region']
+    version_added: "1.5"
+
+requirements: [ "boto" ]
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:CLOUDFORMATION:__core__Ubuntu__STACKOPERATION__ReadState__">
+	<Title>__core__Ubuntu__STACKOPERATION__ReadState__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__STACKOPERATION__ReadState__ and create a AWS CloudFormation stack and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="Ubuntu"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetPath"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="Exists" Name="stack_name"/>
+        <AttributeFilter Mode="Exists" Name="region"/>
+        <AttributeFilter Mode="Exists" Name="state"/>
+        <AttributeFilter Mode="Exists" Name="template"/>
+        <AttributeFilter Mode="exists" Name="module" Value="cloudformation"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__WGET__ReadState__ and attribute ExtUID being the same as the machine KI binds to. </Description>
+			<SubItem Alias="CHECK" Name="__core__Ubuntu__WGET__ReadState__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>	
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="Created"/>
+				</Then>
+				<Else>
+					<SetAttribute Name="TASKS:CurrentState" Value="Deleted"/>
+				</Else>
+			</If>			
+			<SetAttribute Name="CHECK:Status" Value="CurrentStateRead"/> 
+			
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

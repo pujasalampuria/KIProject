@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: service
+version_added: "0.1"
+short_description:  Manage services.
+description:
+    - Controls services on remote hosts. Supported init systems include BSD init,
+      OpenRC, SysV, Solaris SMF, systemd, upstart.
+options:
+    name:
+        required: true
+        description:
+        - Name of the service.
+    state:
+        required: false
+        choices: [ started, stopped, restarted, reloaded ]
+        description:
+          - C(started)/C(stopped) are idempotent actions that will not run
+            commands unless necessary.  C(restarted) will always bounce the
+            service.  C(reloaded) will always reload. B(At least one of state
+            and enabled are required.)
+    sleep:
+        required: false
+        version_added: "1.3"
+        description:
+        - If the service is being C(restarted) then sleep this many seconds
+          between the stop and start command. This helps to workaround badly
+          behaving init scripts that exit immediately after signaling a process
+          to stop.
+    pattern:
+        required: false
+        version_added: "0.7"
+        description:
+        - If the service does not respond to the status command, name a
+          substring to look for as would be found in the output of the I(ps)
+          command as a stand-in for a status result.  If the string is found,
+          the service will be assumed to be running.
+    enabled:
+        required: false
+        choices: [ "yes", "no" ]
+        description:
+        - Whether the service should start on boot. B(At least one of state and
+          enabled are required.)
+
+    runlevel:
+        required: false
+        default: 'default'
+        description:
+        - "For OpenRC init scripts (ex: Gentoo) only.  The runlevel that this service belongs to."
+    arguments:
+        description:
+        - Additional arguments provided on the command line
+        aliases: [ 'args' ]
+'''
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:SERVICE:__core__Ubuntu__CHECKSERVICECHANGED__Deleted__">
+	<Title>__core__Ubuntu__CHECKSERVICECHANGED__Deleted__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__CHECKSERVICECHANGED__Deleted__ and Manage services. and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<AttributeFilter Mode="string" Name="MachineClass" Value="Linux"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="Ubuntu"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetMachine"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="Exists" Name="name"/>
+        <AttributeFilter Mode="exists" Name="module" Value="service"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+	
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__PKG__Deleted__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
+			<SubItem Alias="UNINSTALL" Name="__core__Ubuntu__PKG__Deleted__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="ReadState"/>
+				</Then>
+				<Else>
+					<Eject/>
+				</Else>
+			</If>
+			<SetAttribute Name="UNINSTALL:Status" Value="uninstalled"/> 
+
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

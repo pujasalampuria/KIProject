@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: rds_param_group
+version_added: "1.5"
+short_description: manage RDS parameter groups
+description:
+     - Creates, modifies, and deletes RDS parameter groups. This module has a dependency on python-boto >= 2.5.
+options:
+  state:
+    description:
+      - Specifies whether the group should be present or absent.
+    required: true
+    default: present
+    aliases: []
+    choices: [ 'present' , 'absent' ]
+  name:
+    description:
+      - Database parameter group identifier.
+    required: true
+    default: null
+    aliases: []
+  description:
+    description:
+      - Database parameter group description. Only set when a new group is added.
+    required: false
+    default: null
+    aliases: []
+  engine:
+    description:
+      - The type of database for this group. Required for state=present.
+    required: false
+    default: null
+    aliases: []
+    choices: [ 'mysql5.1', 'mysql5.5', 'mysql5.6', 'oracle-ee-11.2', 'oracle-se-11.2', 'oracle-se1-11.2', 'postgres9.3', 'sqlserver-ee-10.5', 'sqlserver-ee-11.0', 'sqlserver-ex-10.5', 'sqlserver-ex-11.0', 'sqlserver-se-10.5', 'sqlserver-se-11.0', 'sqlserver-web-10.5', 'sqlserver-web-11.0']
+  immediate:
+    description:
+      - Whether to apply the changes immediately, or after the next reboot of any associated instances.
+    required: false
+    default: null
+    aliases: []
+  params:
+    description:
+      - Map of parameter names and values. Numeric values may be represented as K for kilo (1024), M for mega (1024^2), G for giga (1024^3), or T for tera (1024^4), and these values will be expanded into the appropriate number before being set in the parameter group.
+    required: false
+    default: null
+    aliases: []
+    choices: [ 'mysql5.1', 'mysql5.5', 'mysql5.6', 'oracle-ee-11.2', 'oracle-se-11.2', 'oracle-se1-11.2', 'postgres9.3', 'sqlserver-ee-10.5', 'sqlserver-ee-11.0', 'sqlserver-ex-10.5', 'sqlserver-ex-11.0', 'sqlserver-se-10.5', 'sqlserver-se-11.0', 'sqlserver-web-10.5', 'sqlserver-web-11.0']
+  region:
+    description:
+      - The AWS region to use. If not specified then the value of the EC2_REGION environment variable, if any, is used.
+    required: true
+    default: null
+    aliases: [ 'aws_region', 'ec2_region' ]
+  aws_access_key:
+    description:
+      - AWS access key. If not set then the value of the AWS_ACCESS_KEY environment variable is used.
+    required: false
+    default: null
+    aliases: [ 'ec2_access_key', 'access_key' ]
+  aws_secret_key:
+    description:
+      - AWS secret key. If not set then the value of the AWS_SECRET_KEY environment variable is used. 
+    required: false
+    default: null
+    aliases: [ 'ec2_secret_key', 'secret_key' ]
+requirements: [ "boto" ]
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:RDS_PARAM_GROUP:__core__Ubuntu__STR__ReadState__">
+	<Title>__core__Ubuntu__STR__ReadState__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__STR__ReadState__ and manage RDS parameter groups and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="Ubuntu"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetPath"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="Exists" Name="state"/>
+        <AttributeFilter Mode="Exists" Name="region"/>
+        <AttributeFilter Mode="exists" Name="module" Value="rds_param_group"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__WGET__ReadState__ and attribute ExtUID being the same as the machine KI binds to. </Description>
+			<SubItem Alias="CHECK" Name="__core__Ubuntu__WGET__ReadState__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>	
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="Created"/>
+				</Then>
+				<Else>
+					<SetAttribute Name="TASKS:CurrentState" Value="Deleted"/>
+				</Else>
+			</If>			
+			<SetAttribute Name="CHECK:Status" Value="CurrentStateRead"/> 
+			
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: ec2_snapshot
+short_description: creates a snapshot from an existing volume
+description:
+    - creates an EC2 snapshot from an existing EBS volume
+version_added: "1.5"
+options:
+  region:
+    description:
+      - The AWS region to use. If not specified then the value of the EC2_REGION environment variable, if any, is used.
+    required: false
+    aliases: ['aws_region', 'ec2_region']
+  volume_id:
+    description:
+      - volume from which to take the snapshot
+    required: false
+  description:
+    description:
+      - description to be applied to the snapshot
+    required: false
+  instance_id:
+    description:
+    - instance that has the required volume to snapshot mounted
+    required: false
+  device_name:
+    description:
+    - device name of a mounted volume to be snapshotted
+    required: false
+  snapshot_tags:
+    description:
+      - a hash/dictionary of tags to add to the snapshot
+    required: false
+    version_added: "1.6"
+  wait:
+    description:
+      - wait for the snapshot to be ready
+    choices: ['yes', 'no']
+    required: false
+    default: yes
+    version_added: "1.5.1"
+  wait_timeout:
+    description:
+      - how long before wait gives up, in seconds
+      - specify 0 to wait forever
+    required: false
+    default: 0
+    version_added: "1.5.1"
+  state:
+    description:
+      - whether to add or create a snapshot
+    required: false
+    default: present
+    choices: ['absent', 'present']
+    version_added: "1.9"
+  snapshot_id:
+    description:
+      - snapshot id to remove
+    required: false
+    version_added: "1.9"
+
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:EC2_SNAPSHOT:__core__Ubuntu__EC2SNAPSHOT__ReadState__">
+	<Title>__core__Ubuntu__EC2SNAPSHOT__ReadState__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__EC2SNAPSHOT__ReadState__ and creates a snapshot from an existing volume and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="Ubuntu"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetPath"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="exists" Name="module" Value="ec2_snapshot"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__WGET__ReadState__ and attribute ExtUID being the same as the machine KI binds to. </Description>
+			<SubItem Alias="CHECK" Name="__core__Ubuntu__WGET__ReadState__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>	
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="Created"/>
+				</Then>
+				<Else>
+					<SetAttribute Name="TASKS:CurrentState" Value="Deleted"/>
+				</Else>
+			</If>			
+			<SetAttribute Name="CHECK:Status" Value="CurrentStateRead"/> 
+			
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

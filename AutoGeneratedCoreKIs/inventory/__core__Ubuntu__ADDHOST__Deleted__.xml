@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: add_host
+short_description: add a host (and alternatively a group) to the ansible-playbook in-memory inventory
+description:
+  - Use variables to create new hosts and groups in inventory for use in later plays of the same playbook.
+    Takes variables so you can define the new hosts more fully.
+version_added: "0.9"
+options:
+  name:
+    aliases: [ 'hostname', 'host' ]
+    description:
+    - The hostname/ip of the host to add to the inventory, can include a colon and a port number.
+    required: true
+  groups:
+    aliases: [ 'groupname', 'group' ]
+    description:
+    - The groups to add the hostname to, comma separated.
+    required: false
+notes:
+    - This module bypasses the play host loop and only runs once for all the hosts in the play, if you need it
+      to iterate use a with_ directive.
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:ADD_HOST:__core__Ubuntu__ADDHOST__Deleted__">
+	<Title>__core__Ubuntu__ADDHOST__Deleted__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__ADDHOST__Deleted__ and add a host (and alternatively a group) to the ansible-playbook in-memory inventory and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<AttributeFilter Mode="string" Name="MachineClass" Value="Linux"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="Ubuntu"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetMachine"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="Exists" Name="name"/>
+        <AttributeFilter Mode="exists" Name="module" Value="add_host"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+	
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__PKG__Deleted__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
+			<SubItem Alias="UNINSTALL" Name="__core__Ubuntu__PKG__Deleted__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="ReadState"/>
+				</Then>
+				<Else>
+					<Eject/>
+				</Else>
+			</If>
+			<SetAttribute Name="UNINSTALL:Status" Value="uninstalled"/> 
+
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

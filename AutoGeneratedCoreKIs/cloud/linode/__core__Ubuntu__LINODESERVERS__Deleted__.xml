@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: linode
+short_description: create / delete / stop / restart an instance in Linode Public Cloud
+description:
+     - creates / deletes a Linode Public Cloud instance and optionally waits for it to be 'running'.
+version_added: "1.3"
+options:
+  state:
+    description:
+     - Indicate desired state of the resource
+    choices: ['present', 'active', 'started', 'absent', 'deleted', 'stopped', 'restarted']
+    default: present
+  api_key:
+    description:
+     - Linode API key
+    default: null
+  name:
+    description:
+     - Name to give the instance (alphanumeric, dashes, underscore)
+     - To keep sanity on the Linode Web Console, name is prepended with LinodeID_
+    default: null
+    type: string
+  linode_id:
+    description:
+     - Unique ID of a linode server
+    aliases: lid
+    default: null
+    type: integer
+  plan:
+    description:
+     - plan to use for the instance (Linode plan)
+    default: null
+    type: integer
+  payment_term:
+    description:
+     - payment term to use for the instance (payment term in months)
+    default: 1
+    type: integer
+    choices: [1, 12, 24]
+  password:
+    description:
+     - root password to apply to a new server (auto generated if missing)
+    default: null
+    type: string
+  ssh_pub_key:
+    description:
+     - SSH public key applied to root user
+    default: null
+    type: string
+  swap:
+    description:
+     - swap size in MB
+    default: 512
+    type: integer
+  distribution:
+    description:
+     - distribution to use for the instance (Linode Distribution)
+    default: null
+    type: integer
+  datacenter:
+    description:
+     - datacenter to create an instance in (Linode Datacenter)
+    default: null
+    type: integer
+  wait:
+    description:
+     - wait for the instance to be in state 'running' before returning
+    default: "no"
+    choices: [ "yes", "no" ]
+  wait_timeout:
+    description:
+     - how long before wait gives up, in seconds
+    default: 300
+requirements: [ "linode-python", "pycurl" ]
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:LINODE:__core__Ubuntu__LINODESERVERS__Deleted__">
+	<Title>__core__Ubuntu__LINODESERVERS__Deleted__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__LINODESERVERS__Deleted__ and create / delete / stop / restart an instance in Linode Public Cloud and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<AttributeFilter Mode="string" Name="MachineClass" Value="Linux"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="Ubuntu"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetMachine"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="exists" Name="module" Value="linode"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+	
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__PKG__Deleted__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
+			<SubItem Alias="UNINSTALL" Name="__core__Ubuntu__PKG__Deleted__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="ReadState"/>
+				</Then>
+				<Else>
+					<Eject/>
+				</Else>
+			</If>
+			<SetAttribute Name="UNINSTALL:Status" Value="uninstalled"/> 
+
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

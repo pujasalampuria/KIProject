@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: apt_repository
+short_description: Add and remove APT repositories
+description:
+    - Add or remove an APT repositories in Ubuntu and Debian.
+notes:
+    - This module works on Debian and Ubuntu and requires C(python-apt).
+    - This module supports Debian Squeeze (version 6) as well as its successors.
+    - This module treats Debian and Ubuntu distributions separately. So PPA could be installed only on Ubuntu machines.
+options:
+    repo:
+        required: true
+        default: none
+        description:
+            - A source string for the repository.
+    state:
+        required: false
+        choices: [ "absent", "present" ]
+        default: "present"
+        description:
+            - A source string state.
+    mode:
+        required: false
+        default: 0644
+        description:
+            - The octal mode for newly created files in sources.list.d
+        version_added: "1.6"
+    update_cache:
+        description:
+            - Run the equivalent of C(apt-get update) when a change occurs.  Cache updates are run after making changes.
+        required: false
+        default: "yes"
+        choices: [ "yes", "no" ]
+    validate_certs:
+        version_added: '1.8'
+        description:
+            - If C(no), SSL certificates for the target repo will not be validated. This should only be used
+              on personally controlled sites using self-signed certificates.
+        required: false
+        default: 'yes'
+        choices: ['yes', 'no']
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:APT_REPOSITORY:__core__Ubuntu__GETADDPPASIGNINGKEYCALLBACK__ReadState__">
+	<Title>__core__Ubuntu__GETADDPPASIGNINGKEYCALLBACK__ReadState__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__GETADDPPASIGNINGKEYCALLBACK__ReadState__ and Add and remove APT repositories and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="Ubuntu"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetPath"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="Exists" Name="repo"/>
+        <AttributeFilter Mode="exists" Name="module" Value="apt_repository"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__WGET__ReadState__ and attribute ExtUID being the same as the machine KI binds to. </Description>
+			<SubItem Alias="CHECK" Name="__core__Ubuntu__WGET__ReadState__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>	
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="Created"/>
+				</Then>
+				<Else>
+					<SetAttribute Name="TASKS:CurrentState" Value="Deleted"/>
+				</Else>
+			</If>			
+			<SetAttribute Name="CHECK:Status" Value="CurrentStateRead"/> 
+			
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

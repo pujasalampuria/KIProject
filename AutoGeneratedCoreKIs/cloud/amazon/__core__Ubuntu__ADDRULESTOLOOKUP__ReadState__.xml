@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: ec2_group
+version_added: "1.3"
+short_description: maintain an ec2 VPC security group.
+description:
+    - maintains ec2 security groups. This module has a dependency on python-boto >= 2.5
+options:
+  name:
+    description:
+      - Name of the security group.
+    required: true
+  description:
+    description:
+      - Description of the security group.
+    required: true
+  vpc_id:
+    description:
+      - ID of the VPC to create the group in.
+    required: false
+  rules:
+    description:
+      - List of firewall inbound rules to enforce in this group (see example).
+    required: false
+  rules_egress:
+    description:
+      - List of firewall outbound rules to enforce in this group (see example).
+    required: false
+    version_added: "1.6"
+  region:
+    description:
+      - the EC2 region to use
+    required: false
+    default: null
+    aliases: []
+  state:
+    version_added: "1.4"
+    description:
+      - Create or delete a security group
+    required: false
+    default: 'present'
+    choices: [ "present", "absent" ]
+    aliases: []
+  purge_rules:
+    version_added: "1.8"
+    description:
+      - Purge existing rules on security group that are not found in rules
+    required: false
+    default: 'true'
+    aliases: []
+  purge_rules_egress:
+    version_added: "1.8"
+    description:
+      - Purge existing rules_egress on security group that are not found in rules_egress
+    required: false
+    default: 'true'
+    aliases: []
+
+extends_documentation_fragment: aws
+
+notes:
+  - If a rule declares a group_name and that group doesn't exist, it will be
+    automatically created. In that case, group_desc should be provided as well.
+    The module will refuse to create a depended-on group without a description.
+'''
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:EC2_GROUP:__core__Ubuntu__ADDRULESTOLOOKUP__ReadState__">
+	<Title>__core__Ubuntu__ADDRULESTOLOOKUP__ReadState__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__ADDRULESTOLOOKUP__ReadState__ and maintain an ec2 VPC security group. and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="Ubuntu"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetPath"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="Exists" Name="name"/>
+        <AttributeFilter Mode="exists" Name="module" Value="ec2_group"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__WGET__ReadState__ and attribute ExtUID being the same as the machine KI binds to. </Description>
+			<SubItem Alias="CHECK" Name="__core__Ubuntu__WGET__ReadState__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>	
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="Created"/>
+				</Then>
+				<Else>
+					<SetAttribute Name="TASKS:CurrentState" Value="Deleted"/>
+				</Else>
+			</If>			
+			<SetAttribute Name="CHECK:Status" Value="CurrentStateRead"/> 
+			
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

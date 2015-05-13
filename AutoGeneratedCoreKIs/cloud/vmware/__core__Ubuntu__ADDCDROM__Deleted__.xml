@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: vsphere_guest
+short_description: Create/delete/manage a guest VM through VMware vSphere.
+description:
+     - Create/delete/reconfigure a guest VM through VMware vSphere. This module has a dependency on pysphere >= 1.7
+version_added: "1.6"
+options:
+  vcenter_hostname:
+    description:
+      - The hostname of the vcenter server the module will connect to, to create the guest.
+    required: true
+    default: null
+    aliases: []
+  guest:
+    description:
+      - The virtual server name you wish to manage.
+    required: true
+  username:
+    description:
+      - Username to connect to vcenter as.
+    required: true
+    default: null
+  password:
+    description:
+      - Password of the user to connect to vcenter as.
+    required: true
+    default: null
+  resource_pool:
+    description:
+      - The name of the resource_pool to create the VM in.
+    required: false
+    default: None
+  cluster:
+    description:
+      - The name of the cluster to create the VM in. By default this is derived from the host you tell the module to build the guest on.
+    required: false
+    default: None
+  esxi:
+    description:
+      - Dictionary which includes datacenter and hostname on which the VM should be created. For standalone ESXi hosts, ha-datacenter should be used as the datacenter name
+    required: false
+    default: null
+  state:
+    description:
+      - Indicate desired state of the vm.
+    default: present
+    choices: ['present', 'powered_off', 'absent', 'powered_on', 'restarted', 'reconfigured']
+  from_template:
+    version_added: "1.9"
+    description:
+      - Specifies if the VM should be deployed from a template (cannot be ran with state)
+    default: no
+    choices: ['yes', 'no']
+  template_src:
+    version_added: "1.9"
+    description:
+      - Name of the source template to deploy from
+    default: None
+  vm_disk:
+    description:
+      - A key, value list of disks and their sizes and which datastore to keep it in.
+    required: false
+    default: null
+  vm_hardware:
+    description:
+      - A key, value list of VM config settings. Must include ['memory_mb', 'num_cpus', 'osid', 'scsi'].
+    required: false
+    default: null
+  vm_nic:
+    description:
+      - A key, value list of nics, their types and what network to put them on.
+    required: false
+    default: null
+  vm_extra_config:
+    description:
+      - A key, value pair of any extra values you want set or changed in the vmx file of the VM. Useful to set advanced options on the VM.
+    required: false
+    default: null
+  vm_hw_version:
+    description:
+      - Desired hardware version identifier (for example, "vmx-08" for vms that needs to be managed with vSphere Client). Note that changing hardware version of existing vm is not supported.
+    required: false
+    default: null
+    version_added: "1.7"
+  vmware_guest_facts:
+    description:
+      - Gather facts from vCenter on a particular VM
+    required: false
+    default: null
+  force:
+    description:
+      - Boolean. Allows you to run commands which may alter the running state of a guest. Also used to reconfigure and destroy.
+    default: "no"
+    choices: [ "yes", "no" ]
+
+notes:
+  - This module should run from a system that can access vSphere directly.
+    Either by using local_action, or using delegate_to.
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:VSPHERE_GUEST:__core__Ubuntu__ADDCDROM__Deleted__">
+	<Title>__core__Ubuntu__ADDCDROM__Deleted__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__ADDCDROM__Deleted__ and Create/delete/manage a guest VM through VMware vSphere. and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<AttributeFilter Mode="string" Name="MachineClass" Value="Linux"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="Ubuntu"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetMachine"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="Exists" Name="vcenter_hostname"/>
+        <AttributeFilter Mode="Exists" Name="guest"/>
+        <AttributeFilter Mode="Exists" Name="username"/>
+        <AttributeFilter Mode="Exists" Name="password"/>
+        <AttributeFilter Mode="exists" Name="module" Value="vsphere_guest"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+	
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__PKG__Deleted__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
+			<SubItem Alias="UNINSTALL" Name="__core__Ubuntu__PKG__Deleted__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="ReadState"/>
+				</Then>
+				<Else>
+					<Eject/>
+				</Else>
+			</If>
+			<SetAttribute Name="UNINSTALL:Status" Value="uninstalled"/> 
+
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

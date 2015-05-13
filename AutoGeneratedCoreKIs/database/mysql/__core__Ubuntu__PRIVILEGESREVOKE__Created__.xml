@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: mysql_user
+short_description: Adds or removes a user from a MySQL database.
+description:
+   - Adds or removes a user from a MySQL database.
+version_added: "0.6"
+options:
+  name:
+    description:
+      - name of the user (role) to add or remove
+    required: true
+    default: null
+  password:
+    description:
+      - set the user's password
+    required: false
+    default: null
+  host:
+    description:
+      - the 'host' part of the MySQL username
+    required: false
+    default: localhost
+  login_user:
+    description:
+      - The username used to authenticate with
+    required: false
+    default: null
+  login_password:
+    description:
+      - The password used to authenticate with
+    required: false
+    default: null
+  login_host:
+    description:
+      - Host running the database
+    required: false
+    default: localhost
+  login_port:
+    description:
+      - Port of the MySQL server
+    required: false
+    default: 3306
+    version_added: '1.4'
+  login_unix_socket:
+    description:
+      - The path to a Unix domain socket for local connections
+    required: false
+    default: null
+  priv:
+    description:
+      - "MySQL privileges string in the format: C(db.table:priv1,priv2)"
+    required: false
+    default: null
+  append_privs:
+    description:
+      - Append the privileges defined by priv to the existing ones for this
+        user instead of overwriting existing ones.
+    required: false
+    choices: [ "yes", "no" ]
+    default: "no"
+    version_added: "1.4"
+  state:
+    description:
+      - Whether the user should exist.  When C(absent), removes
+        the user.
+    required: false
+    default: present
+    choices: [ "present", "absent" ]
+  check_implicit_admin:
+    description:
+      - Check if mysql allows login as root/nopassword before trying supplied credentials.
+    required: false
+    default: false
+    version_added: "1.3"
+notes:
+   - Requires the MySQLdb Python package on the remote host. For Ubuntu, this
+     is as easy as apt-get install python-mysqldb.
+   - Both C(login_password) and C(login_username) are required when you are
+     passing credentials. If none are present, the module will attempt to read
+     the credentials from C(~/.my.cnf), and finally fall back to using the MySQL
+     default login of 'root' with no password.
+   - "MySQL server installs with default login_user of 'root' and no password. To secure this user
+     as part of an idempotent playbook, you must create at least two tasks: the first must change the root user's password,
+     without providing any login_user/login_password details. The second must drop a ~/.my.cnf file containing
+     the new root credentials. Subsequent runs of the playbook will then succeed by reading the new credentials from
+     the file."
+
+requirements: [ "ConfigParser", "MySQLdb" ]
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:MYSQL_USER:__core__Ubuntu__PRIVILEGESREVOKE__Created__">
+	<Title>__core__Ubuntu__PRIVILEGESREVOKE__Created__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__PRIVILEGESREVOKE__Created__ and Adds or removes a user from a MySQL database. and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<AttributeFilter Mode="string" Name="MachineClass" Value="Linux"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="CentOS"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetMachine"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="Exists" Name="name"/>
+        <AttributeFilter Mode="exists" Name="module" Value="mysql_user"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+	
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__PKG__Created__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
+			<SubItem Alias="INSTALL" Name="__core__CentOS__PKG__Created__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="ReadState"/>
+				</Then>
+				<Else>
+					<Eject/>
+				</Else>
+			</If>
+
+			<SetAttribute Name="INSTALL:Status" Value="created"/> 
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

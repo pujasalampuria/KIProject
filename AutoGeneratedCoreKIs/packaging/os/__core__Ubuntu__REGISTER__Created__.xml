@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: redhat_subscription
+short_description: Manage Red Hat Network registration and subscriptions using the C(subscription-manager) command
+description:
+    - Manage registration and subscription to the Red Hat Network entitlement platform.
+version_added: "1.2"
+notes:
+    - In order to register a system, subscription-manager requires either a username and password, or an activationkey.
+requirements:
+    - subscription-manager
+options:
+    state:
+        description:
+          - whether to register and subscribe (C(present)), or unregister (C(absent)) a system
+        required: false
+        choices: [ "present", "absent" ]
+        default: "present"
+    username:
+        description:
+            - Red Hat Network username
+        required: False
+        default: null
+    password:
+        description:
+            - Red Hat Network password
+        required: False
+        default: null
+    server_hostname:
+        description:
+            - Specify an alternative Red Hat Network server
+        required: False
+        default: Current value from C(/etc/rhsm/rhsm.conf) is the default
+    server_insecure:
+        description:
+            - Allow traffic over insecure http
+        required: False
+        default: Current value from C(/etc/rhsm/rhsm.conf) is the default
+    rhsm_baseurl:
+        description:
+            - Specify CDN baseurl
+        required: False
+        default: Current value from C(/etc/rhsm/rhsm.conf) is the default
+    autosubscribe:
+        description:
+            - Upon successful registration, auto-consume available subscriptions
+        required: False
+        default: False
+    activationkey:
+        description:
+            - supply an activation key for use with registration
+        required: False
+        default: null
+    pool:
+        description:
+            - Specify a subscription pool name to consume.  Regular expressions accepted.
+        required: False
+        default: '^$'
+'''
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:REDHAT_SUBSCRIPTION:__core__Ubuntu__REGISTER__Created__">
+	<Title>__core__Ubuntu__REGISTER__Created__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__REGISTER__Created__ and Manage Red Hat Network registration and subscriptions using the C(subscription-manager) command and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<AttributeFilter Mode="string" Name="MachineClass" Value="Linux"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="CentOS"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetMachine"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="exists" Name="module" Value="redhat_subscription"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+	
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__PKG__Created__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
+			<SubItem Alias="INSTALL" Name="__core__CentOS__PKG__Created__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="ReadState"/>
+				</Then>
+				<Else>
+					<Eject/>
+				</Else>
+			</If>
+
+			<SetAttribute Name="INSTALL:Status" Value="created"/> 
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

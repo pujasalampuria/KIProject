@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: rhn_channel
+short_description: Adds or removes Red Hat software channels
+description:
+    - Adds or removes Red Hat software channels
+version_added: "1.1"
+notes:
+    - this module fetches the system id from RHN. 
+requirements:
+    - none
+options:
+    name:
+        description:
+            - name of the software channel
+        required: true
+        default: null
+    sysname:
+        description:
+            - name of the system as it is known in RHN/Satellite
+        required: true
+        default: null
+    state:
+        description:
+            - whether the channel should be present or not
+        required: false
+        default: present
+    url:
+        description: 
+            - The full url to the RHN/Satellite api
+        required: true
+    user:
+        description:
+            - RHN/Satellite user
+        required: true
+    password:
+        description:
+            - "the user's password"
+        required: true
+'''
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:RHN_CHANNEL:__core__Ubuntu__UNSUBSCRIBECHANNELS__Deleted__">
+	<Title>__core__Ubuntu__UNSUBSCRIBECHANNELS__Deleted__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__UNSUBSCRIBECHANNELS__Deleted__ and Adds or removes Red Hat software channels and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<AttributeFilter Mode="string" Name="MachineClass" Value="Linux"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="Ubuntu"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetMachine"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="Exists" Name="name"/>
+        <AttributeFilter Mode="Exists" Name="sysname"/>
+        <AttributeFilter Mode="Exists" Name="url"/>
+        <AttributeFilter Mode="Exists" Name="user"/>
+        <AttributeFilter Mode="exists" Name="module" Value="rhn_channel"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+	
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__PKG__Deleted__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
+			<SubItem Alias="UNINSTALL" Name="__core__Ubuntu__PKG__Deleted__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="ReadState"/>
+				</Then>
+				<Else>
+					<Eject/>
+				</Else>
+			</If>
+			<SetAttribute Name="UNINSTALL:Status" Value="uninstalled"/> 
+
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

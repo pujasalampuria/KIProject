@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: rax_scaling_group
+short_description: Manipulate Rackspace Cloud Autoscale Groups
+description:
+    - Manipulate Rackspace Cloud Autoscale Groups
+version_added: 1.7
+options:
+  config_drive:
+    description:
+      - Attach read-only configuration drive to server as label config-2
+    default: no
+    choices:
+      - "yes"
+      - "no"
+    version_added: 1.8
+  cooldown:
+    description:
+      - The period of time, in seconds, that must pass before any scaling can
+        occur after the previous scaling. Must be an integer between 0 and
+        86400 (24 hrs).
+  disk_config:
+    description:
+      - Disk partitioning strategy
+    choices:
+      - auto
+      - manual
+    default: auto
+  files:
+    description:
+      - 'Files to insert into the instance. Hash of C(remotepath: localpath)'
+    default: null
+  flavor:
+    description:
+      - flavor to use for the instance
+    required: true
+  image:
+    description:
+      - image to use for the instance. Can be an C(id), C(human_id) or C(name)
+    required: true
+  key_name:
+    description:
+      - key pair to use on the instance
+    default: null
+  loadbalancers:
+    description:
+      - List of load balancer C(id) and C(port) hashes
+  max_entities:
+    description:
+      - The maximum number of entities that are allowed in the scaling group.
+        Must be an integer between 0 and 1000.
+    required: true
+  meta:
+    description:
+      - A hash of metadata to associate with the instance
+    default: null
+  min_entities:
+    description:
+      - The minimum number of entities that are allowed in the scaling group.
+        Must be an integer between 0 and 1000.
+    required: true
+  name:
+    description:
+      - Name to give the scaling group
+    required: true
+  networks:
+    description:
+      - The network to attach to the instances. If specified, you must include
+        ALL networks including the public and private interfaces. Can be C(id)
+        or C(label).
+    default:
+      - public
+      - private
+  server_name:
+    description:
+      - The base name for servers created by Autoscale
+    required: true
+  state:
+    description:
+      - Indicate desired state of the resource
+    choices:
+      - present
+      - absent
+    default: present
+  user_data:
+    description:
+      - Data to be uploaded to the servers config drive. This option implies
+        I(config_drive). Can be a file path or a string
+    version_added: 1.8
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:RAX_SCALING_GROUP:__core__Ubuntu__RAXASG__Deleted__">
+	<Title>__core__Ubuntu__RAXASG__Deleted__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__RAXASG__Deleted__ and Manipulate Rackspace Cloud Autoscale Groups and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<AttributeFilter Mode="string" Name="MachineClass" Value="Linux"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="Ubuntu"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetMachine"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="Exists" Name="flavor"/>
+        <AttributeFilter Mode="Exists" Name="image"/>
+        <AttributeFilter Mode="Exists" Name="max_entities"/>
+        <AttributeFilter Mode="Exists" Name="min_entities"/>
+        <AttributeFilter Mode="Exists" Name="name"/>
+        <AttributeFilter Mode="Exists" Name="server_name"/>
+        <AttributeFilter Mode="exists" Name="module" Value="rax_scaling_group"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+	
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__PKG__Deleted__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
+			<SubItem Alias="UNINSTALL" Name="__core__Ubuntu__PKG__Deleted__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="ReadState"/>
+				</Then>
+				<Else>
+					<Eject/>
+				</Else>
+			</If>
+			<SetAttribute Name="UNINSTALL:Status" Value="uninstalled"/> 
+
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

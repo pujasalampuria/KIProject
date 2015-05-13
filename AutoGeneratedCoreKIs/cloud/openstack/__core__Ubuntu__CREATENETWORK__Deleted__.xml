@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: quantum_network
+version_added: "1.4"
+deprecated: Deprecated in 1.9. Use os_network instead
+short_description: Creates/Removes networks from OpenStack
+description:
+   - Add or Remove network from OpenStack.
+options:
+   login_username:
+     description:
+        - login username to authenticate to keystone
+     required: true
+     default: admin
+   login_password:
+     description:
+        - Password of login user
+     required: true
+     default: 'yes'
+   login_tenant_name:
+     description:
+        - The tenant name of the login user
+     required: true
+     default: 'yes'
+   tenant_name:
+     description:
+        - The name of the tenant for whom the network is created
+     required: false
+     default: None
+   auth_url:
+     description:
+        - The keystone url for authentication
+     required: false
+     default: 'http://127.0.0.1:35357/v2.0/'
+   region_name:
+     description:
+        - Name of the region
+     required: false
+     default: None
+   state:
+     description:
+        - Indicate desired state of the resource
+     choices: ['present', 'absent']
+     default: present
+   name:
+     description:
+        - Name to be assigned to the nework
+     required: true
+     default: None
+   provider_network_type:
+     description:
+        - The type of the network to be created, gre, vlan, local. Available types depend on the plugin. The Quantum service decides if not specified.
+     required: false
+     default: None
+   provider_physical_network:
+     description:
+        - The physical network which would realize the virtual network for flat and vlan networks.
+     required: false
+     default: None
+   provider_segmentation_id:
+     description:
+        - The id that has to be assigned to the network, in case of vlan networks that would be vlan id and for gre the tunnel id
+     required: false
+     default: None
+   router_external:
+     description:
+        - If 'yes', specifies that the virtual network is a external network (public).
+     required: false
+     default: false
+   shared:
+     description:
+        - Whether this network is shared or not
+     required: false
+     default: false
+   admin_state_up:
+     description:
+        - Whether the state should be marked as up or down
+     required: false
+     default: true
+requirements: ["quantumclient", "neutronclient", "keystoneclient"]
+
+'''
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:_QUANTUM_NETWORK:__core__Ubuntu__CREATENETWORK__Deleted__">
+	<Title>__core__Ubuntu__CREATENETWORK__Deleted__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__CREATENETWORK__Deleted__ and Creates/Removes networks from OpenStack and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<AttributeFilter Mode="string" Name="MachineClass" Value="Linux"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="Ubuntu"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetMachine"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="Exists" Name="login_username"/>
+        <AttributeFilter Mode="Exists" Name="login_password"/>
+        <AttributeFilter Mode="Exists" Name="login_tenant_name"/>
+        <AttributeFilter Mode="Exists" Name="name"/>
+        <AttributeFilter Mode="exists" Name="module" Value="quantum_network"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+	
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__PKG__Deleted__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
+			<SubItem Alias="UNINSTALL" Name="__core__Ubuntu__PKG__Deleted__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="ReadState"/>
+				</Then>
+				<Else>
+					<Eject/>
+				</Else>
+			</If>
+			<SetAttribute Name="UNINSTALL:Status" Value="uninstalled"/> 
+
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

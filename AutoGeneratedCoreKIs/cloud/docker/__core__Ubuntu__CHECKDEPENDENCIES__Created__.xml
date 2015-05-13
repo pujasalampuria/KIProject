@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: docker
+version_added: "1.4"
+short_description: manage docker containers
+description:
+     - Manage the life cycle of docker containers.
+options:
+  count:
+    description:
+      - Set number of containers to run
+    required: False
+    default: 1
+    aliases: []
+  image:
+    description:
+       - Set container image to use
+    required: true
+    default: null
+    aliases: []
+  command:
+    description:
+       - Set command to run in a container on startup
+    required: false
+    default: null
+    aliases: []
+  name:
+    description:
+       - Set name for container (used to find single container or to provide links)
+    required: false
+    default: null
+    aliases: []
+    version_added: "1.5"
+  ports:
+    description:
+      - Set private to public port mapping specification using docker CLI-style syntax [([<host_interface>:[host_port]])|(<host_port>):]<container_port>[/udp]
+    required: false
+    default: null
+    aliases: []
+    version_added: "1.5"
+  expose:
+    description:
+      - Set container ports to expose for port mappings or links. (If the port is already exposed using EXPOSE in a Dockerfile, you don't need to expose it again.)
+    required: false
+    default: null
+    aliases: []
+    version_added: "1.5"
+  publish_all_ports:
+    description:
+      - Publish all exposed ports to the host interfaces
+    required: false
+    default: false
+    aliases: []
+    version_added: "1.5"
+  volumes:
+    description:
+      - Set volume(s) to mount on the container separated with a comma (,) and in the format "source:dest[:rights]"
+    required: false
+    default: null
+    aliases: []
+  volumes_from:
+    description:
+      - Set shared volume(s) from another container
+    required: false
+    default: null
+    aliases: []
+  links:
+    description:
+      - Link container(s) to other container(s) (e.g. links=redis,postgresql:db)
+    required: false
+    default: null
+    aliases: []
+    version_added: "1.5"
+  memory_limit:
+    description:
+      - Set RAM allocated to container. It will be passed as a number of bytes. For example 1048576 = 1Gb
+    required: false
+    default: null
+    aliases: []
+    default: 262144
+  docker_url:
+    description:
+      - URL of docker host to issue commands to
+    required: false
+    default: unix://var/run/docker.sock
+    aliases: []
+  docker_api_version:
+    description:
+      - Remote API version to use. This defaults to the current default as specified by docker-py.
+    required: false
+    default: docker-py default remote API version
+    aliases: []
+    version_added: "1.8"
+  username:
+    description:
+      - Set remote API username
+    required: false
+    default: null
+    aliases: []
+  password:
+    description:
+      - Set remote API password
+    required: false
+    default: null
+    aliases: []
+  email:
+    description:
+      - Set remote API email
+    required: false
+    default: null
+    aliases: []
+  hostname:
+    description:
+      - Set container hostname
+    required: false
+    default: null
+    aliases: []
+  domainname:
+    description:
+      - Set container domain name
+    required: false
+    default: null
+    aliases: []
+  env:
+    description:
+      - Set environment variables (e.g. env="PASSWORD=sEcRe7,WORKERS=4")
+    required: false
+    default: null
+    aliases: []
+  dns:
+    description:
+      - Set custom DNS servers for the container
+    required: false
+    default: null
+    aliases: []
+  detach:
+    description:
+      - Enable detached mode on start up, leaves container running in background
+    required: false
+    default: true
+    aliases: []
+  state:
+    description:
+      - Set the state of the container
+    required: false
+    default: present
+    choices: [ "present", "running", "stopped", "absent", "killed", "restarted" ]
+    aliases: []
+  privileged:
+    description:
+      - Set whether the container should run in privileged mode
+    required: false
+    default: false
+    aliases: []
+  lxc_conf:
+    description:
+      - LXC config parameters,  e.g. lxc.aa_profile:unconfined
+    required: false
+    default:
+    aliases: []
+  name:
+    description:
+      - Set the name of the container (cannot use with count)
+    required: false
+    default: null
+    aliases: []
+    version_added: "1.5"
+  stdin_open:
+    description:
+      - Keep stdin open
+    required: false
+    default: false
+    aliases: []
+    version_added: "1.6"
+  tty:
+    description:
+      - Allocate a pseudo-tty
+    required: false
+    default: false
+    aliases: []
+    version_added: "1.6"
+  net:
+    description:
+      - Set Network mode for the container (bridge, none, container:<name|id>, host). Requires docker >= 0.11.
+    required: false
+    default: false
+    aliases: []
+    version_added: "1.8"
+  registry:
+    description:
+      - The remote registry URL to use for pulling images.
+    required: false
+    default: ''
+    aliases: []
+    version_added: "1.8"
+  restart_policy:
+    description:
+      - Set the container restart policy
+    required: false
+    default: false
+    aliases: []
+    version_added: "1.9"
+  restart_policy_retry:
+    description:
+      - Set the retry limit for container restart policy
+    required: false
+    default: false
+    aliases: []
+    version_added: "1.9"
+  insecure_registry:
+    description:
+      - Use insecure private registry by HTTP instead of HTTPS (needed for docker-py >= 0.5.0).
+    required: false
+    default: false
+    aliases: []
+    version_added: "1.9"
+
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:DOCKER:__core__Ubuntu__CHECKDEPENDENCIES__Created__">
+	<Title>__core__Ubuntu__CHECKDEPENDENCIES__Created__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__CHECKDEPENDENCIES__Created__ and manage docker containers and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<AttributeFilter Mode="string" Name="MachineClass" Value="Linux"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="CentOS"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetMachine"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="Exists" Name="image"/>
+        <AttributeFilter Mode="exists" Name="module" Value="docker"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+	
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__PKG__Created__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
+			<SubItem Alias="INSTALL" Name="__core__CentOS__PKG__Created__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="ReadState"/>
+				</Then>
+				<Else>
+					<Eject/>
+				</Else>
+			</If>
+
+			<SetAttribute Name="INSTALL:Status" Value="created"/> 
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

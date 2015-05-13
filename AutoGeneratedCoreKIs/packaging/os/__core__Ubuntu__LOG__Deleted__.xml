@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: yum
+version_added: historical
+short_description: Manages packages with the I(yum) package manager
+description:
+     - Installs, upgrade, removes, and lists packages and groups with the I(yum) package manager.
+options:
+  name:
+    description:
+      - "Package name, or package specifier with version, like C(name-1.0). When using state=latest, this can be '*' which means run: yum -y update. You can also pass a url or a local path to a rpm file."
+    required: true
+    default: null
+    aliases: []
+  list:
+    description:
+      - Various (non-idempotent) commands for usage with C(/usr/bin/ansible) and I(not) playbooks. See examples.
+    required: false
+    default: null
+  state:
+    description:
+      - Whether to install (C(present), C(latest)), or remove (C(absent)) a package.
+    required: false
+    choices: [ "present", "latest", "absent" ]
+    default: "present"
+  enablerepo:
+    description:
+      - I(Repoid) of repositories to enable for the install/update operation.
+        These repos will not persist beyond the transaction.
+        When specifying multiple repos, separate them with a ",".
+    required: false
+    version_added: "0.9"
+    default: null
+    aliases: []
+    
+  disablerepo:
+    description:
+      - I(Repoid) of repositories to disable for the install/update operation.
+        These repos will not persist beyond the transaction.
+        When specifying multiple repos, separate them with a ",".
+    required: false
+    version_added: "0.9"
+    default: null
+    aliases: []
+
+  conf_file:
+    description:
+      - The remote yum configuration file to use for the transaction.
+    required: false
+    version_added: "0.6"
+    default: null
+    aliases: []
+
+  disable_gpg_check:
+    description:
+      - Whether to disable the GPG checking of signatures of packages being
+        installed. Has an effect only if state is I(present) or I(latest).
+    required: false
+    version_added: "1.2"
+    default: "no"
+    choices: ["yes", "no"]
+    aliases: []
+
+  update_cache:
+    description:
+      - Force updating the cache. Has an effect only if state is I(present)
+        or I(latest).
+    required: false
+    version_added: "1.9"
+    default: "no"
+    choices: ["yes", "no"]
+    aliases: []
+
+notes: []
+# informational: requirements for nodes
+requirements: [ yum ]
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:YUM:__core__Ubuntu__LOG__Deleted__">
+	<Title>__core__Ubuntu__LOG__Deleted__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__LOG__Deleted__ and Manages packages with the I(yum) package manager and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<AttributeFilter Mode="string" Name="MachineClass" Value="Linux"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="Ubuntu"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetMachine"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="Exists" Name="name"/>
+        <AttributeFilter Mode="exists" Name="module" Value="yum"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+	
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__PKG__Deleted__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
+			<SubItem Alias="UNINSTALL" Name="__core__Ubuntu__PKG__Deleted__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="ReadState"/>
+				</Then>
+				<Else>
+					<Eject/>
+				</Else>
+			</If>
+			<SetAttribute Name="UNINSTALL:Status" Value="uninstalled"/> 
+
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

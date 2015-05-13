@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: gce_net
+version_added: "1.5"
+short_description: create/destroy GCE networks and firewall rules
+description:
+    - This module can create and destroy Google Compue Engine networks and
+      firewall rules U(https://developers.google.com/compute/docs/networking).
+      The I(name) parameter is reserved for referencing a network while the
+      I(fwname) parameter is used to reference firewall rules.
+      IPv4 Address ranges must be specified using the CIDR
+      U(http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing) format.
+      Full install/configuration instructions for the gce* modules can
+      be found in the comments of ansible/test/gce_tests.py.
+options:
+  allowed:
+    description:
+      - the protocol:ports to allow ('tcp:80' or 'tcp:80,443' or 'tcp:80-800')
+    required: false
+    default: null
+    aliases: []
+  ipv4_range:
+    description:
+      - the IPv4 address range in CIDR notation for the network
+    required: false
+    aliases: ['cidr']
+  fwname:
+    description:
+      - name of the firewall rule
+    required: false
+    default: null
+    aliases: ['fwrule']
+  name:
+    description:
+      - name of the network
+    required: false
+    default: null
+    aliases: []
+  src_range:
+    description:
+      - the source IPv4 address range in CIDR notation
+    required: false
+    default: null
+    aliases: ['src_cidr']
+  src_tags:
+    description:
+      - the source instance tags for creating a firewall rule
+    required: false
+    default: null
+    aliases: []
+  target_tags:
+    version_added: "1.9"
+    description:
+      - the target instance tags for creating a firewall rule
+    required: false
+    default: null
+    aliases: []
+  state:
+    description:
+      - desired state of the persistent disk
+    required: false
+    default: "present"
+    choices: ["active", "present", "absent", "deleted"]
+    aliases: []
+  service_account_email:
+    version_added: "1.6"
+    description:
+      - service account email
+    required: false
+    default: null
+    aliases: []
+  pem_file:
+    version_added: "1.6"
+    description:
+      - path to the pem file associated with the service account email
+    required: false
+    default: null
+    aliases: []
+  project_id:
+    version_added: "1.6"
+    description:
+      - your GCE project ID
+    required: false
+    default: null
+    aliases: []
+
+requirements: [ "libcloud" ]
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:GCE_NET:__core__Ubuntu__FORMATALLOWED__ReadState__">
+	<Title>__core__Ubuntu__FORMATALLOWED__ReadState__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__FORMATALLOWED__ReadState__ and create/destroy GCE networks and firewall rules and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="Ubuntu"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetPath"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="exists" Name="module" Value="gce_net"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__WGET__ReadState__ and attribute ExtUID being the same as the machine KI binds to. </Description>
+			<SubItem Alias="CHECK" Name="__core__Ubuntu__WGET__ReadState__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>	
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="Created"/>
+				</Then>
+				<Else>
+					<SetAttribute Name="TASKS:CurrentState" Value="Deleted"/>
+				</Else>
+			</If>			
+			<SetAttribute Name="CHECK:Status" Value="CurrentStateRead"/> 
+			
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

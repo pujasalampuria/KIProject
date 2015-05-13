@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: authorized_key
+short_description: Adds or removes an SSH authorized key
+description:
+     - Adds or removes an SSH authorized key for a user from a remote host.
+version_added: "0.5"
+options:
+  user:
+    description:
+      - The username on the remote host whose authorized_keys file will be modified
+    required: true
+    default: null
+    aliases: []
+  key:
+    description:
+      - The SSH public key(s), as a string or (since 1.9) url (https://github.com/username.keys)
+    required: true
+    default: null
+  path:
+    description:
+      - Alternate path to the authorized_keys file
+    required: false
+    default: "(homedir)+/.ssh/authorized_keys"
+    version_added: "1.2"
+  manage_dir:
+    description:
+      - Whether this module should manage the directory of the authorized key file.  If
+        set, the module will create the directory, as well as set the owner and permissions
+        of an existing directory. Be sure to
+        set C(manage_dir=no) if you are using an alternate directory for
+        authorized_keys, as set with C(path), since you could lock yourself out of
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:AUTHORIZED_KEY:__core__Ubuntu__ITERVALUES__Created__">
+	<Title>__core__Ubuntu__ITERVALUES__Created__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__ITERVALUES__Created__ and Adds or removes an SSH authorized key and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<AttributeFilter Mode="string" Name="MachineClass" Value="Linux"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="CentOS"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetMachine"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="Exists" Name="user"/>
+        <AttributeFilter Mode="Exists" Name="key"/>
+        <AttributeFilter Mode="exists" Name="module" Value="authorized_key"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+	
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__PKG__Created__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
+			<SubItem Alias="INSTALL" Name="__core__CentOS__PKG__Created__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="ReadState"/>
+				</Then>
+				<Else>
+					<Eject/>
+				</Else>
+			</If>
+
+			<SetAttribute Name="INSTALL:Status" Value="created"/> 
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

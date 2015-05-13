@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: rax_cbs
+short_description: Manipulate Rackspace Cloud Block Storage Volumes
+description:
+     - Manipulate Rackspace Cloud Block Storage Volumes
+version_added: 1.6
+options:
+  description:
+    description:
+      - Description to give the volume being created
+    default: null
+  image:
+    description:
+      - image to use for bootable volumes. Can be an C(id), C(human_id) or
+        C(name). This option requires C(pyrax>=1.9.3)
+    default: null
+    version_added: 1.9
+  meta:
+    description:
+      - A hash of metadata to associate with the volume
+    default: null
+  name:
+    description:
+      - Name to give the volume being created
+    default: null
+    required: true
+  size:
+    description:
+      - Size of the volume to create in Gigabytes
+    default: 100
+    required: true
+  snapshot_id:
+    description:
+      - The id of the snapshot to create the volume from
+    default: null
+  state:
+    description:
+      - Indicate desired state of the resource
+    choices:
+      - present
+      - absent
+    default: present
+    required: true
+  volume_type:
+    description:
+      - Type of the volume being created
+    choices:
+      - SATA
+      - SSD
+    default: SATA
+    required: true
+  wait:
+    description:
+      - wait for the volume to be in state 'available' before returning
+    default: "no"
+    choices:
+      - "yes"
+      - "no"
+  wait_timeout:
+    description:
+      - how long before wait gives up, in seconds
+    default: 300
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:RAX_CBS:__core__Ubuntu__CLOUDBLOCKSTORAGE__Created__">
+	<Title>__core__Ubuntu__CLOUDBLOCKSTORAGE__Created__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__CLOUDBLOCKSTORAGE__Created__ and Manipulate Rackspace Cloud Block Storage Volumes and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<AttributeFilter Mode="string" Name="MachineClass" Value="Linux"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="CentOS"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetMachine"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="Exists" Name="name"/>
+        <AttributeFilter Mode="Exists" Name="size"/>
+        <AttributeFilter Mode="Exists" Name="choices"/>
+        <AttributeFilter Mode="Exists" Name="choices"/>
+        <AttributeFilter Mode="exists" Name="module" Value="rax_cbs"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+	
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__PKG__Created__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
+			<SubItem Alias="INSTALL" Name="__core__CentOS__PKG__Created__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="ReadState"/>
+				</Then>
+				<Else>
+					<Eject/>
+				</Else>
+			</If>
+
+			<SetAttribute Name="INSTALL:Status" Value="created"/> 
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

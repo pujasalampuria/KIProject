@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--- - -
+module: gce_pd
+version_added: "1.4"
+short_description: utilize GCE persistent disk resources
+description:
+    - This module can create and destroy unformatted GCE persistent disks
+      U(https://developers.google.com/compute/docs/disks#persistentdisks).
+      It also supports attaching and detaching disks from running instances.
+      Full install/configuration instructions for the gce* modules can
+      be found in the comments of ansible/test/gce_tests.py.
+options:
+  detach_only:
+    description:
+      - do not destroy the disk, merely detach it from an instance
+    required: false
+    default: "no"
+    choices: ["yes", "no"]
+    aliases: []
+  instance_name:
+    description:
+      - instance name if you wish to attach or detach the disk 
+    required: false
+    default: null 
+    aliases: []
+  mode:
+    description:
+      - GCE mount mode of disk, READ_ONLY (default) or READ_WRITE
+    required: false
+    default: "READ_ONLY" 
+    choices: ["READ_WRITE", "READ_ONLY"]
+    aliases: []
+  name:
+    description:
+      - name of the disk
+    required: true
+    default: null 
+    aliases: []
+  size_gb:
+    description:
+      - whole integer size of disk (in GB) to create, default is 10 GB
+    required: false
+    default: 10
+    aliases: []
+  image:
+    description:
+      - the source image to use for the disk
+    required: false
+    default: null
+    aliases: []
+    version_added: "1.7"
+  snapshot:
+    description:
+      - the source snapshot to use for the disk
+    required: false
+    default: null
+    aliases: []
+    version_added: "1.7"
+  state:
+    description:
+      - desired state of the persistent disk
+    required: false
+    default: "present"
+    choices: ["active", "present", "absent", "deleted"]
+    aliases: []
+  zone:
+    description:
+      - zone in which to create the disk
+    required: false
+    default: "us-central1-b"
+    aliases: []
+  service_account_email:
+    version_added: "1.6"
+    description:
+      - service account email
+    required: false
+    default: null
+    aliases: []
+  pem_file:
+    version_added: "1.6"
+    description:
+      - path to the pem file associated with the service account email
+    required: false
+    default: null
+    aliases: []
+  project_id:
+    version_added: "1.6"
+    description:
+      - your GCE project ID
+    required: false
+    default: null
+    aliases: []
+  disk_type:
+    version_added: "1.9"
+    description:
+      - type of disk provisioned
+    required: false
+    default: "pd-standard"
+    choices: ["pd-standard", "pd-ssd"]
+    aliases: []
+
+requirements: [ "libcloud" ]
+--><KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:GCE_PD:__core__Ubuntu__GCEPD__Created__">
+	<Title>__core__Ubuntu__GCEPD__Created__</Title>
+	<Description>This KI searches for the DataBlock called __core__Ubuntu__GCEPD__Created__ and utilize GCE persistent disk resources and writes the current status back to the node.</Description>
+
+	<BindAttributes>
+		<AttributeFilter Mode="string" Name="NodeType" Value="Machine"/>
+		<AttributeFilter Mode="string" Name="MachineClass" Value="Linux"/>
+		<SubItem Alias="OSINFO" Name="OSInformation">
+			<AttributeFilter Mode="string" Name="Name" Value="CentOS"/>
+		</SubItem>
+		<SubItem Alias="EXT" Name="Extensions">
+			<SubItem Alias="TASKS" Name="Tasks">
+				<AttributeFilter Mode="exists" Name="TargetMachine"/>
+				<AttributeFilter Mode="exists" Name="User"/>
+				<AttributeFilter Mode="exists" Name="Host"/>
+			<AttributeFilter Mode="Exists" Name="name"/>
+        <AttributeFilter Mode="exists" Name="module" Value="gce_pd"/>
+      </SubItem>
+		</SubItem>
+	</BindAttributes>
+	
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__PKG__Created__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
+			<SubItem Alias="INSTALL" Name="__core__CentOS__PKG__Created__">
+				<AttributeFilter Mode="string" Name="ExtUID" Value="${TASKS:UID}"/>
+				<AttributeFilter Mode="notexists" Name="Status"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"/> 
+			</Action>
+			
+			<If>
+				<VarCondition Mode="eq" Value="0" VarString="${SYSTEMRC}"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="ReadState"/>
+				</Then>
+				<Else>
+					<Eject/>
+				</Else>
+			</If>
+
+			<SetAttribute Name="INSTALL:Status" Value="created"/> 
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>
