@@ -155,7 +155,7 @@
 				ServiceName="haproxy"
 				Host=${HIDW:Host}
 				User=${HIDW:User}
-				Lib=START_SERVICE
+				Lib=STARTSERVICE
 				CurrentState=ReadState
 				TaskNumber=${PROTASKS:NumberTotal}/> 
 				</NewBlock>]]>
