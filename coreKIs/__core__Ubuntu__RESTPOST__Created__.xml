@@ -1,7 +1,6 @@
 <KnowledgeItem ID="OpexSoftware:RESTAPI:__core__Ubuntu__RESTPOST__Created__" xmlns="http://www.arago.de/KiSchema">
 	<Title>__core__Ubuntu__RESTPOST__Created__</Title>
-        <Description> This KI searches for the DataBlock called __core__Ubuntu__RESTPOST___Created__  and runs the specified curl command
-        </Description>
+        <Description> This KI searches for the DataBlock called __core__Ubuntu__RESTPOST___Created__  and runs the specified RESTAPI</Description>
 
 	<BindAttributes>
 	       <AttributeFilter Name="NodeType" Mode="string" Value="Machine"/>
