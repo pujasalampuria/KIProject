@@ -18,10 +18,10 @@
 			<SubItem Name="JBossInstallConfig" Alias="JIC">
 				<AttributeFilter Name="TargetApp" Mode="string" Value="${PRE:NodeName}"/>
 				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}"/>
-				<AttributeFilter Name="TargetTar_FileName" Mode="exists"/>
-				<AttributeFilter Name="Untar_folder" Mode="exists"/>
-        		        <AttributeFilter Name="Target_path" Mode="exists"/>
-        		        <AttributeFilter Name="Download_url" Mode="exists"/>
+				<AttributeFilter Name="TargetTarFileName" Mode="exists"/>
+				<AttributeFilter Name="UntarFolder" Mode="exists"/>
+        		        <AttributeFilter Name="TargetPath" Mode="exists"/>
+        		        <AttributeFilter Name="DownloadUrl" Mode="exists"/>
 				<AttributeFilter Name="TargetState" Mode="string" Value="Created"/>
 				<AttributeFilter Name="Status" Mode="notexists"/>
 				
@@ -42,11 +42,11 @@
 			<IncAttribute Name="PROTASKS:NumberTotal"/>
 			
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetTar_FileName=${JIC:TargetTar_FileName}
+				TargetTarFileName=${JIC:TargetTarFileName}
 				TargetMachine=${JIC:TargetMachine}            
 				TargetState=Created
-				Target_path='${JIC:Target_path}'
-				Download_url='${JIC:Download_url}'
+				TargetPath='${JIC:TargetPath}'
+				DownloadUrl='${JIC:DownloadUrl}'
 				Host=${JIC:Host}
 				User=${JIC:User}
 				Lib=WGET
@@ -68,11 +68,11 @@
 			<IncAttribute Name="PROTASKS:NumberTotal"/>
 			
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetTar_FileName=${JIC:TargetTar_FileName}
+				TargetTarFileName=${JIC:TargetTarFileName}
 				TargetMachine=${JIC:TargetMachine}      
 				TargetState=Created
-				Untar_folder=${JIC:Untar_folder}      
-				Target_path='${JIC:Target_path}'
+				UntarFolder=${JIC:UntarFolder}      
+				TargetPath='${JIC:TargetPath}'
 				Host=${JIC:Host}
 				User=${JIC:User}
 				Lib=TAREXTRACT

@@ -5,10 +5,10 @@ Issue:
   JBossInstallConfig:
     TargetApp: JBoss  
     TargetMachine: puja 
-    TargetTar_FileName: jboss-as-7.1.1.Final.tar.gz
-    Target_path: /home/puja/JBoss
-    Download_url: http://download.jboss.org/jbossas/7.1/jboss-as-7.1.1.Final/jboss-as-7.1.1.Final.tar.gz
+    TargetTarFileName: jboss-as-7.1.1.Final.tar.gz
+    TargetPath: /home/puja/JBoss
+    DownloadUrl: http://download.jboss.org/jbossas/7.1/jboss-as-7.1.1.Final/jboss-as-7.1.1.Final.tar.gz
     TargetState: Created
-    Untar_folder: jboss-as-7.1.1.Final 
+    UntarFolder: jboss-as-7.1.1.Final 
     User: puja
     Host: 192.168.1.86
