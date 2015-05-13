@@ -45,7 +45,7 @@
 					<SetAttribute Name="TASKS:CurrentState" Value="Created"/>
 				</Then>
 				<Else>
-					<Eject>__Failed to ADDED directory ${TASKS:path}__</Eject>
+					<Eject>__Failed to execute command ${TASKS:Command}__</Eject>
 				</Else>
 			</If>
 
