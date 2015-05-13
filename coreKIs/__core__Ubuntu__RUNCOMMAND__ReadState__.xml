@@ -4,16 +4,14 @@
 
 	<BindAttributes>
 		<AttributeFilter Name="NodeType" Mode="string" Value="Machine"/>
-		<AttributeFilter Name="MachineClass" Mode="string" Value="Linux"/>
 		<SubItem Name="OSInformation" Alias="OSINFO">
-			<AttributeFilter Name="Name" Mode="string" Value="CentOS"/>
+			<AttributeFilter Name="Name" Mode="string" Value="Ubuntu"/>
 		</SubItem>
 		<SubItem Name="Extensions" Alias="EXT">
 			<SubItem Name="Tasks" Alias="TASKS">
-				<AttributeFilter Name="Path" Mode="exists"/>
-				<AttributeFilter Name="Command" Mode="exists"/>
 				<AttributeFilter Name="TargetMachine" Mode="exists"/>
 				<AttributeFilter Name="User" Mode="exists"/>
+				<AttributeFilter Name="Path" Mode="exists"/>
 				<AttributeFilter Name="Host" Mode="exists"/>
 			</SubItem>
 		</SubItem>
@@ -30,15 +28,24 @@
 			</SubItem>
 		</IssueCondition>
 
-		<!-- Run Command will not set the CurrentState to Created
-			because there is no command to check. -->
-
 		<Activate>
-			  <SetAttribute Name="TASKS:CurrentState" Value="Created"/>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command">"ls /tmp/${TASKS:UID}"</Parameter> 
+			</Action>
+			
+			<If>
+				<VarCondition VarString="${SYSTEMRC}" Mode="eq" Value="0"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="Created"/>
+				</Then>
+				<Else>
+					<SetAttribute Name="TASKS:CurrentState" Value="UserNotAdded"/>
+				</Else>
+			</If>			
+			<SetAttribute Name="CHECK:Status" Value="CurrentStateRead" /> 
 			
 		</Activate>
 	</CreateTrigger>
 </KnowledgeItem>
-
-
-
