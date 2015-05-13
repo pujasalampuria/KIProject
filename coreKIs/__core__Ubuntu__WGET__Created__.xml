@@ -10,7 +10,7 @@
 		<SubItem Name="Extensions" Alias="EXT">
 			<SubItem Name="Tasks" Alias="TASKS">
 				<AttributeFilter Name="Target_path" Mode="exists"/>
-                                <AttributeFilter Name="Download_url" Mode="exists"/>
+                <AttributeFilter Name="Download_url" Mode="exists"/>
 				<AttributeFilter Name="User" Mode="exists"/>
 				<AttributeFilter Name="Host" Mode="exists"/>
 			</SubItem>
@@ -32,7 +32,7 @@
 			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="600">
 				<Parameter Name="User">${TASKS:User}</Parameter>
 				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
-				<Parameter Name="Command">"mkdir -p ${TASKS:Target_path};cd ${TASKS:Target_path};sudo wget -N ${TASKS:Download_url}"
+				<Parameter Name="Command">"mkdir -p ${TASKS:Target_path} && cd ${TASKS:Target_path} && sudo wget -N ${TASKS:Download_url}"
 				</Parameter> 
 			</Action>
 			
