@@ -1,6 +1,6 @@
 <KnowledgeItem ID="OpexSoftware:POSTGRESQLUSER:__core__Ubuntu__RUNCOMMAND__Created__" xmlns="http://www.arago.de/KiSchema">
 	<Title>__core__Ubuntu__RUNCOMMAND__Created__</Title>
-	<Description> This KI searches for the DataBlock called __core__Ubuntu__RUNCOMMAND__Created__ and ADDEDs the package on the specified Target Machine and writes the current status back to the node. </Description>
+	<Description> This KI searches for the DataBlock called __core__Ubuntu__RUNCOMMAND__Created__ and rus the command on the specified Target Machine and writes the current status back to the node. </Description>
 
 	<BindAttributes>
 		<AttributeFilter Name="NodeType" Mode="string" Value="Machine"/>
@@ -11,6 +11,8 @@
 			<SubItem Name="Tasks" Alias="TASKS">
 				<AttributeFilter Name="Path" Mode="exists"/>
 				<AttributeFilter Name="TargetMachine" Mode="exists"/>
+				<AttributeFilter Name="Command" Mode="exists"/>
+				<
 				<AttributeFilter Name="User" Mode="exists"/>
 				<AttributeFilter Name="Host" Mode="exists"/>
 			</SubItem>
@@ -32,13 +34,15 @@
 			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
 				<Parameter Name="User">${TASKS:User}</Parameter>
 				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
-				<Parameter Name="Command">"mkdir /data/configdb;mongod --configsvr --dbpath ${TASKS:Path} --port 27019"</Parameter>
+				<Parameter Name="Command">"${TASKS:Command}"</Parameter>
 			</Action>
-			
+			<!-- Run Command will not set the CurrentState to ReadState
+			because no easy way of reading if the command has run
+			so will set the state to Created if command is successful -->
 			<If>
 				<VarCondition VarString="${SYSTEMRC}" Mode="eq" Value="0"/>
 				<Then>
-					<SetAttribute Name="TASKS:CurrentState" Value="ReadState"/>
+					<SetAttribute Name="TASKS:CurrentState" Value="Created"/>
 				</Then>
 				<Else>
 					<Eject>__Failed to ADDED directory ${TASKS:path}__</Eject>

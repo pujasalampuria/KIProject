@@ -49,6 +49,7 @@
 				User=${DSM:User}
 				Path=${DSM:Path}
 				Lib=RUNCOMMAND
+				Command="mkdir /data/configdb; mongod --configsvr --dbpath ${TASKS:Path} --port 27019"
 				TaskNumber=${PROTASKS:NumberTotal}
 				CurrentState=ReadState/> 
 				</NewBlock>]]>
