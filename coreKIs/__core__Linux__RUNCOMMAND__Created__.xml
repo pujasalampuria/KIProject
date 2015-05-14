@@ -37,9 +37,6 @@
 							  ]]>
 				</Parameter>
 			</Action>
-			<!-- Run Command will not set the CurrentState to ReadState
-			because no easy way of reading if the command has run
-			so will set the state to Created if command is successful -->
 			<If>
 				<VarCondition VarString="${SYSTEMRC}" Mode="eq" Value="0"/>
 				<Then>
