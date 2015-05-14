@@ -13,4 +13,4 @@ Issue:
     DBPassword: zeeshan
     TargetState: Created 
     User: postgres
-    Host: 191.168.1.90
+    Host: 192.168.1.90
