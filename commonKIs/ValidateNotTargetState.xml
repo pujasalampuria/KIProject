@@ -40,7 +40,7 @@
 		<Activate>		
 			
 			<If>
-				<VarCondition VarString="${TASKS:OSName}" Mode="exists"/>
+				<VarCondition VarString="${TASKS:OSName}" Mode="neq" Value=""/>
 				<Then>
 					<GenerateData> 
 						<DataType>__core__${OSINFO:Name}__${TASKS:Lib}__${TASKS:TargetState}__</DataType>
