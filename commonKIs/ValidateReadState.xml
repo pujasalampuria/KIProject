@@ -34,9 +34,9 @@
 			</SubItem> 
 		</IssueCondition> 
 			
-		<Activate>		
+		<Activate>	
 			<If>
-				<VarCondition VarString="${TASKS:OSName}" Mode="ne" Value=""/>
+				<VarCondition VarString="${TASKS:OSSpecific}" Mode="string" Value="Y"/>
 				<Then>
 					<GenerateData> 
 						<DataType>__core__${OSINFO:Name}__${TASKS:Lib}__ReadState__</DataType>

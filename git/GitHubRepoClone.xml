@@ -1,62 +1,68 @@
-<KnowledgeItem ID="OpexSoftware:GITCLONEREPO:GitHubRepoClone" xmlns="http://www.arago.de/KiSchema">
+<KnowledgeItem ID="OpexSoftware:GITCLONEREPO:GitHubRepoClone"
+	xmlns="http://www.arago.de/KiSchema">
 	<Title>GitHubRepoClone</Title>
-	<Description>Initiates the workflow for cloning a Git Repository</Description>
+	<Description>Initiates the workflow for cloning a Git Repository
+	</Description>
 	<BindAttributes>
-		<AttributeFilter Name="NodeType" Mode="string" Value="Machine"/>
+		<AttributeFilter Name="NodeType" Mode="string" Value="Machine" />
 	</BindAttributes>
 
 	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
 
 	<CreateTrigger>
-	     <IssueCondition>
-		 <Description>Searches for an Issue with DataBlock GITCLONEREPO and triggers the workflow for sucessful completion</Description>
+		<IssueCondition>
+			<Description>Searches for an Issue with DataBlock GITCLONEREPO and
+				triggers the workflow for sucessful completion</Description>
 			<SubItem Name="GITCLONEREPO" Alias="GCR">
-				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}"/>
-				<AttributeFilter Name="GitRepo" Mode="exists"/>
-                                <AttributeFilter Name="TargetPath" Mode="exists"/>
-                                <AttributeFilter Name="GitUser" Mode="exists"/>
-                                <AttributeFilter Name="GitPassword" Mode="exists"/>
-				<AttributeFilter Name="TargetState" Mode="string" Value="Created"/>
-				<AttributeFilter Name="Status" Mode="notexists"/>
-				<AttributeFilter Name="GitRepoName" Mode="exists"/>
+				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}" />
+				<AttributeFilter Name="GitRepo" Mode="exists" />
+				<AttributeFilter Name="TargetPath" Mode="exists" />
+				<AttributeFilter Name="GitUser" Mode="exists" />
+				<AttributeFilter Name="GitPassword" Mode="exists" />
+				<AttributeFilter Name="TargetState" Mode="string" Value="Created" />
+				<AttributeFilter Name="Status" Mode="notexists" />
+				<AttributeFilter Name="GitRepoName" Mode="exists" />
 			</SubItem>
 		</IssueCondition>
 
-	     <Activate>
-			<SetAttribute Name="GCR:Status" Value="WorkflowStarted" /> 
+		<Activate>
+			<SetAttribute Name="GCR:Status" Value="WorkflowStarted" />
 			<GenerateData Alias="PROTASKS">
-                            <DataType>ProcessingTasks</DataType>
-                            <CurrentTask>1</CurrentTask>
+				<DataType>ProcessingTasks</DataType>
+				<CurrentTask>1</CurrentTask>
 			</GenerateData>
 
-			<!--Task1 Check if GIT package is there -->	
-  
-                        <IncAttribute Name="PROTASKS:NumberTotal"/>
+			<!--Task1 Check if GIT package is there -->
+
+			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
 				TargetMachine=${GCR:TargetMachine}      
 				TargetState=Created
 				User=${GCR:User}
 				Lib=PKG
-				OSName=Ubuntu
+				OSSpecific=Y
 				PKG=git
 				Host=${GCR:Host}
 				CurrentState=ReadState
 				TaskNumber=${PROTASKS:NumberTotal}
 				/> </NewBlock>]]>
 			</XMLExtract>
-			
-      
-			<GenerateData Alias="VAL"> 
-				<!-- Independent="true" can be applied, if multiple Issues should be generated. In this case pass on the parent IssueID to the resulting Issue <ParentIID>${IID}</ParentIID>, don't forget to include ParentIID=${IID} into the Tasks DataBlock on the Node -->
+
+
+			<GenerateData Alias="VAL">
+				<!-- Independent="true" can be applied, if multiple Issues should be 
+					generated. In this case pass on the parent IssueID to the resulting Issue 
+					<ParentIID>${IID}</ParentIID>, don't forget to include ParentIID=${IID} into 
+					the Tasks DataBlock on the Node -->
 				<DataType>Validate</DataType>
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
-			</GenerateData>	
+			</GenerateData>
 
 
-			<!--Task2 Do the GIT Clone-->	
-			
-                        <IncAttribute Name="PROTASKS:NumberTotal"/>
+			<!--Task2 Do the GIT Clone -->
+
+			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
 				TargetPath='${GCR:TargetPath}'
@@ -71,19 +77,23 @@
                 TaskNumber=${PROTASKS:NumberTotal}
 				/></NewBlock>]]>
 			</XMLExtract>
-			
-			<GenerateData Alias="VAL"> 
-		       <!-- Independent="true" can be applied, if multiple Issues should be generated. In this case pass on the parent IssueID to the resulting Issue <ParentIID>${IID}</ParentIID>, don't forget to include ParentIID=${IID} into the Tasks DataBlock on the Node -->
+
+			<GenerateData Alias="VAL">
+				<!-- Independent="true" can be applied, if multiple Issues should be 
+					generated. In this case pass on the parent IssueID to the resulting Issue 
+					<ParentIID>${IID}</ParentIID>, don't forget to include ParentIID=${IID} into 
+					the Tasks DataBlock on the Node -->
 				<DataType>Validate</DataType>
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
-			</GenerateData>	
-      
-			<!--<Resolve>Resolved initial Issue with ID ${IID}</Resolve> - use if ChildIssues are created-->
-			
-			<GenerateData> 
+			</GenerateData>
+
+			<!--<Resolve>Resolved initial Issue with ID ${IID}</Resolve> - use if 
+				ChildIssues are created -->
+
+			<GenerateData>
 				<DataType>Resolve</DataType>
 				<Status>checkForResolve</Status>
-			</GenerateData>	
+			</GenerateData>
 		</Activate>
 	</CreateTrigger>
 </KnowledgeItem>
