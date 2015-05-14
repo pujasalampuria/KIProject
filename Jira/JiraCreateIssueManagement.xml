@@ -29,7 +29,7 @@
             <IncAttribute Name="PROTASKS:NumberTotal"/>
 
 		<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
-		           TargetMachine=${JMI:TargetMachine}      
+		       TargetMachine=${JMI:TargetMachine}      
 			   TargetState=Created
 			   User=${JMI:User}
 			   Lib=CURLPOST
