@@ -18,11 +18,8 @@
 			<SubItem Name="POSTGRESQLUSER" Alias="PSU">
 				<AttributeFilter Name="TargetApp" Mode="string" Value="${PRE:NodeName}"/>
 				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}"/>
-				<AttributeFilter Name="Database" Mode="exists"/>
 				<AttributeFilter Name="NewDBUserName" Mode="exists"/>
 				<AttributeFilter Name="NewDBPassword" Mode="exists"/>
-				<AttributeFilter Name="DBUserName" Mode="exists"/>
-				<AttributeFilter Name="DBPassword" Mode="exists"/>
 				<AttributeFilter Name="TargetState" Mode="string" Value="Created"/>
 				<AttributeFilter Name="Status" Mode="notexists"/>
 				
@@ -40,12 +37,9 @@
 			
 			<IncAttribute Name="PROTASKS:NumberTotal"/>
 			
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				Database=${PSU:Database}
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 			
 				TargetMachine=${PSU:TargetMachine}      
 				TargetState=Created
-				DBUserName=${PSU:DBUserName}
-				DBPassword=${PSU:DBPassword}
 				NewDBUserName=${PSU:NewDBUserName}
 				NewDBPassword=${PSU:NewDBPassword}
 				Host=${PSU:Host}

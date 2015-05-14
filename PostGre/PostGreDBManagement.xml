@@ -19,10 +19,6 @@
 				<AttributeFilter Name="TargetApp" Mode="string" Value="${PRE:NodeName}"/>
 				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}"/>
 				<AttributeFilter Name="Database" Mode="exists"/>
-        		<AttributeFilter Name="NewDBUserName" Mode="exists"/>
-        		<AttributeFilter Name="NewDBPassword" Mode="exists"/>
-        		<AttributeFilter Name="DBUserName" Mode="exists"/>
-        		<AttributeFilter Name="DBPassword" Mode="exists"/>
 				<AttributeFilter Name="TargetState" Mode="string" Value="Created"/>
 				<AttributeFilter Name="Lib" Mode="string" Value="DBCREATIONPOSTGRESQL"/>
 				<AttributeFilter Name="Status" Mode="notexists"/>
@@ -43,11 +39,7 @@
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
 				Database=${PSD:Database}
 				TargetMachine=${PSD:TargetMachine}      
-				TargetState=Created
-				DBUserName=${PSD:DBUserName}
-				DBPassword=${PSD:DBPassword}
-				NewDBUserName=${PSD:NewDBUserName}
-				NewDBPassword=${PSD:NewDBPassword}
+				TargetState=Created				
 				Host=${PSD:Host}
 				User=${PSD:User}
 				TaskNumber=${PROTASKS:NumberTotal}
