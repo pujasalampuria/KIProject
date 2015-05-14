@@ -31,9 +31,7 @@
 				<Parameter Name="User">${TASKS:User}</Parameter>
 				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
 				<Parameter Name="Command">
-                    <![CDATA[
-					cd ${TASKS:TargetPath} && tar -zcvf ${TASKS:UntarFolder}.tar.gz ${TASKS:UntarFolder}
-					]]>
+                    <![CDATA["cd ${TASKS:TargetPath} && tar -zcvf ${TASKS:UntarFolder}.tar.gz ${TASKS:UntarFolder}"]]>
 				</Parameter> 
 			</Action>
 			

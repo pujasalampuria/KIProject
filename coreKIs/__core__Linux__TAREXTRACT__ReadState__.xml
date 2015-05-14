@@ -32,9 +32,7 @@
 				<Parameter Name="User">${TASKS:User}</Parameter>
 				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
 				<Parameter Name="Command">
-                  <![CDATA[
-					cd ${TASKS:TargetPath} && ls ${TASKS:UntarFolder}
-                 ]]>
+                  <![CDATA["cd ${TASKS:TargetPath} && ls ${TASKS:UntarFolder}"]]>
 				</Parameter> 
 			</Action>
 			

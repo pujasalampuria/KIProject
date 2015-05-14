@@ -33,9 +33,7 @@
 				<Parameter Name="User">${TASKS:User}</Parameter>
 				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
 				<Parameter Name="Command">
-                    <![CDATA[
-					echo -e ${TASKS:FileContent} > /tmp/${TASKS:FileName} && ls ${TASKS:FilePath}/${TASKS:FileName} && diff /tmp/${TASKS:FileName} ${TASKS:FilePath}/${TASKS:FileName}
-                     ]]>
+                    <![CDATA["echo -e ${TASKS:FileContent} > /tmp/${TASKS:FileName} && ls ${TASKS:FilePath}/${TASKS:FileName} && diff /tmp/${TASKS:FileName} ${TASKS:FilePath}/${TASKS:FileName}"]]>
 				</Parameter> 
 			</Action>
 			

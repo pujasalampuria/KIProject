@@ -30,9 +30,7 @@
 			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
 				<Parameter Name="User">${TASKS:User}</Parameter>
 				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
-				<Parameter Name="Command"><![CDATA[
-								"${TASKS:Command} && touch /tmp/${TASKS:UID}"
-							  ]]>
+				<Parameter Name="Command"><![CDATA["${TASKS:Command} && touch /tmp/${TASKS:UID}"]]>
 				</Parameter>
 			</Action>
 			<If>

@@ -33,9 +33,7 @@
 			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
 				<Parameter Name="User">${TASKS:User}</Parameter>
 				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
-				<Parameter Name="Command"><![CDATA[
-							"nohup mongos --configdb ${TASKS:ConfigServerHostnames}:27019 2>&1&"
-							]]>
+				<Parameter Name="Command"><![CDATA["nohup mongos --configdb ${TASKS:ConfigServerHostnames}:27019 2>&1&"]]>
 				</Parameter>
 			</Action>
 			
