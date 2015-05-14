@@ -6,9 +6,9 @@ Issue:
     TargetApp: PostgreSQL  
     Database: TempDB
     Lib: USERMANAGEMENTPOSTGRESQL
-    TargetMachine: zeeshan 
-    NewDBUserName: zeeshan16
-    NewDBPassword: zeeshan16
+    TargetMachine: zeeshan
+    NewDBUserName: zeeshan18
+    NewDBPassword: zeeshan18
     DBUserName: zeeshan
     DBPassword: zeeshan
     TargetState: Created 

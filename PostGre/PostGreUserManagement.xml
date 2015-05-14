@@ -24,7 +24,6 @@
 				<AttributeFilter Name="DBUserName" Mode="exists"/>
 				<AttributeFilter Name="DBPassword" Mode="exists"/>
 				<AttributeFilter Name="TargetState" Mode="string" Value="Created"/>
-				<AttributeFilter Name="Lib" Mode="string" Value="USERMANAGEMENTPOSTGRESQL"/>
 				<AttributeFilter Name="Status" Mode="notexists"/>
 				
 			</SubItem>
@@ -52,11 +51,14 @@
 				Host=${PSU:Host}
 				User=${PSU:User}
 				TaskNumber=${PROTASKS:NumberTotal}
-				Lib=${PSU:Lib}
+				Command1='psql -c \"CREATE USER ${PSU:NewDBUserName} WITH PASSWORD'
+				Command2='${PSU:NewDBPassword}' 
+				Command3='\"'
+				Lib=RUNCOMMAND
 				CurrentState=ReadState/> 
 				</NewBlock>]]>
 			</XMLExtract> 
-			
+			<SetAttribute Name="NODE:Extensions/Tasks/Command" Value="${NODE:Extensions/Tasks/Command1} '${NODE:Extensions/Tasks/Command2}';${NODE:Extensions/Tasks/Command3}"/>
  
       
 			<GenerateData Alias="VAL"> 

@@ -38,7 +38,7 @@
 					<SetAttribute Name="TASKS:CurrentState" Value="Created"/>
 				</Then>
 				<Else>
-					<SetAttribute Name="TASKS:CurrentState" Value="UserNotAdded"/>
+					<SetAttribute Name="TASKS:CurrentState" Value="NotRUN"/>
 				</Else>
 			</If>			
 			<SetAttribute Name="CHECK:Status" Value="CurrentStateRead" /> 

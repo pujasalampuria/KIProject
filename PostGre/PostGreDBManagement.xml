@@ -51,7 +51,8 @@
 				Host=${PSD:Host}
 				User=${PSD:User}
 				TaskNumber=${PROTASKS:NumberTotal}
-				Lib=${PSD:Lib}
+				Lib=RUNCOMMAND
+				Command='psql -c \"CREATE DATABASE ${PSD:Database};\"'
 				CurrentState=ReadState
 				/> </NewBlock>]]>
 			</XMLExtract> 
