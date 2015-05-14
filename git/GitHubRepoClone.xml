@@ -72,7 +72,7 @@
 				GitRepoName=${GCR:GitRepoName}
 				User=${GCR:User}
 				Host=${GCR:Host}
-				Lib=GITREPO
+				Lib=GITCLONE
 				CurrentState=ReadState
                 TaskNumber=${PROTASKS:NumberTotal}
 				/></NewBlock>]]>
