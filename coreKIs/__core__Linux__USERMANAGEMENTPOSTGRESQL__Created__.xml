@@ -4,9 +4,7 @@
 
 	<BindAttributes>
 		<AttributeFilter Name="NodeType" Mode="string" Value="Machine"/>
-		<SubItem Name="OSInformation" Alias="OSINFO">
-			<AttributeFilter Name="Name" Mode="string" Value="Linux"/>
-		</SubItem>
+		<AttributeFilter Name="MachineClass" Mode="string" Value="Linux"/>
 		<SubItem Name="Extensions" Alias="EXT">
 			<SubItem Name="Tasks" Alias="TASKS">
 				<AttributeFilter Name="Database" Mode="exists"/>

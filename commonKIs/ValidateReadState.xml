@@ -6,6 +6,7 @@
 	<BindAttributes>
 		<Description>Bind to all machine Nodes with Tasks block in Extensions where CurrentState is equal to the ReadState</Description>
 		<AttributeFilter Name="NodeType" Mode="exists"/>
+		<AttributeFilter Name="MachineClass" Mode="string" Value="Linux"/>
 		<SubItem Name="OSInformation" Alias="OSINFO">
 			<AttributeFilter Name="Name" Mode="exists"/>
 		</SubItem>
