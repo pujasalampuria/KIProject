@@ -1,6 +1,6 @@
-<KnowledgeItem ID="OpexSoftware:WorkFlowUserStory:InstallMongoDB" xmlns="http://www.arago.de/KiSchema">
-	<Title>InstallMongoDB</Title>
-	<Description>Initiates the workflow for installing mongoDB</Description>
+<KnowledgeItem ID="OpexSoftware:WorkFlowUserStory:AptUpdateSource" xmlns="http://www.arago.de/KiSchema">
+	<Title>AptUpdateSource</Title>
+	<Description>Initiates the workflow for updating APT Source </Description>
 	<BindAttributes>
 		<AttributeFilter Name="NodeType" Mode="string" Value="Machine"/>
 	</BindAttributes>
@@ -9,8 +9,8 @@
 
 	<CreateTrigger>
 	     <IssueCondition>
-		 <Description>Searches for an Issue with DataBlock INSTALLMONGODB and triggers the workflow for sucessful completion</Description>
-			<SubItem Name="INSTALLMONGODB" Alias="IMD">
+		 <Description>Searches for an Issue with DataBlock APTUPDATESOURCE and triggers the workflow for sucessful completion</Description>
+			<SubItem Name="APTUPDATESOURCE" Alias="IMD">
 				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}"/>
 				<AttributeFilter Name="TargetState" Mode="string" Value="Created"/>
 				<AttributeFilter Name="Status" Mode="notexists"/>
@@ -54,30 +54,6 @@
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>	
 
-			<!--Task2 Check if MongoDB package is there -->	
-  
-            <IncAttribute Name="PROTASKS:NumberTotal"/>
-
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
-				TargetMachine=${IMD:TargetMachine}      
-				TargetState=Created
-				User=${IMD:User}
-				Lib=PKG
-				OSSpecific=Y
-				PKG=mongodb-org
-				Host=${IMD:Host}
-				CurrentState=ReadState
-				TaskNumber=${PROTASKS:NumberTotal}
-				/> </NewBlock>]]>
-			</XMLExtract>
-			
-      
-			<GenerateData Alias="VAL"> 
-				<!-- Independent="true" can be applied, if multiple Issues should be generated. In this case pass on the parent IssueID to the resulting Issue <ParentIID>${IID}</ParentIID>, don't forget to include ParentIID=${IID} into the Tasks DataBlock on the Node -->
-				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
-			</GenerateData>	
-      
 			<!--<Resolve>Resolved initial Issue with ID ${IID}</Resolve> - use if ChildIssues are created-->
 			
 			<GenerateData> 
