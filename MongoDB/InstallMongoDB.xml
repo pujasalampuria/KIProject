@@ -1,4 +1,4 @@
-<KnowledgeItem ID="OpexSoftware:MONGODBINSTALL:InstallMongoDB" xmlns="http://www.arago.de/KiSchema">
+<KnowledgeItem ID="OpexSoftware:WorkFlowUserStory:InstallMongoDB" xmlns="http://www.arago.de/KiSchema">
 	<Title>InstallMongoDB</Title>
 	<Description>Initiates the workflow for installing mongoDB</Description>
 	<BindAttributes>
@@ -25,7 +25,36 @@
                             <CurrentTask>1</CurrentTask>
 			</GenerateData>
 
-			<!--Task1 Check if MongoDB package is there -->	
+			<!--Task1 Check if MongoDB package is there -->
+			
+			<IncAttribute Name="PROTASKS:NumberTotal"/>
+			
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+				TargetMachine=${IMD:TargetMachine}      
+				TargetState=Created
+				User=${IMD:User}
+				Lib=APTSOURCEMODIFICATION
+				PKG=mongodb-org
+				OSSpecific=Y
+				Host=${IMD:Host}
+				AptRepoUrl='${IMD:AptRepoUrl}'
+				AptArchiveType=${IMD:AptArchiveType}
+				AptDistribution='${IMD:AptDistribution}'
+				AptComponents=${IMD:AptComponents}
+				AptKey=${IMD:AptKey}
+				CurrentState=ReadState
+				TaskNumber=${PROTASKS:NumberTotal}
+				/> </NewBlock>]]>
+			</XMLExtract>
+			
+      
+			<GenerateData Alias="VAL"> 
+				<!-- Independent="true" can be applied, if multiple Issues should be generated. In this case pass on the parent IssueID to the resulting Issue <ParentIID>${IID}</ParentIID>, don't forget to include ParentIID=${IID} into the Tasks DataBlock on the Node -->
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>	
+
+			<!--Task2 Check if MongoDB package is there -->	
   
             <IncAttribute Name="PROTASKS:NumberTotal"/>
 
@@ -34,7 +63,7 @@
 				TargetState=Created
 				User=${IMD:User}
 				Lib=PKG
-				OSName=Ubuntu
+				OSSpecific=Y
 				PKG=mongodb-org
 				Host=${IMD:Host}
 				CurrentState=ReadState
