@@ -1,6 +1,6 @@
-<KnowledgeItem ID="OpexSoftware:GITPULLREPO:GitHubRepoPull" xmlns="http://www.arago.de/KiSchema">
-	<Title>GitHubRepoPull</Title>
-	<Description>Initiates the workflow to do a Git pull on a Repository
+<KnowledgeItem ID="OpexSoftware:WorkFlowUserStory:GitHubRepoClone" xmlns="http://www.arago.de/KiSchema">
+	<Title>GitHubRepoClone</Title>
+	<Description>Initiates the workflow for cloning a Git Repository
 	</Description>
 	<BindAttributes>
 		<AttributeFilter Name="NodeType" Mode="string" Value="Machine" />
@@ -10,41 +10,74 @@
 
 	<CreateTrigger>
 		<IssueCondition>
-			<Description>Searches for an Issue with DataBlock GITPULLREPO and
+			<Description>Searches for an Issue with DataBlock GITCLONEREPO and
 				triggers the workflow for sucessful completion</Description>
-			<SubItem Name="GITPULLREPO" Alias="GPR">
+			<SubItem Name="GITCLONEREPO" Alias="GCR">
 				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}" />
+				<AttributeFilter Name="GitRepoUrl" Mode="exists" />
 				<AttributeFilter Name="TargetPath" Mode="exists" />
 				<AttributeFilter Name="GitUser" Mode="exists" />
 				<AttributeFilter Name="GitPassword" Mode="exists" />
 				<AttributeFilter Name="TargetState" Mode="string" Value="Created" />
 				<AttributeFilter Name="Status" Mode="notexists" />
 				<AttributeFilter Name="GitRepoName" Mode="exists" />
+				<AttributeFilter Name="GitBranch" Mode="exists" />
+				<AttributeFilter Name="GitOrigin" Mode="exists" />
 			</SubItem>
 		</IssueCondition>
 
 		<Activate>
-			<SetAttribute Name="GPR:Status" Value="WorkflowStarted" />
+			<SetAttribute Name="GCR:Status" Value="WorkflowStarted" />
 			<GenerateData Alias="PROTASKS">
 				<DataType>ProcessingTasks</DataType>
 				<CurrentTask>1</CurrentTask>
 			</GenerateData>
 
-
-			<!--Task Do the GIT Pull -->
+			<!--Task1 Check if GIT package is there -->
 
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
-				TargetPath='${GPR:TargetPath}'
-				TargetMachine=${GPR:TargetMachine}
+				TargetMachine=${GCR:TargetMachine}      
 				TargetState=Created
-				GitRepoName=${GPR:GitRepoName}
-				User=${GPR:User}
-				Host=${GPR:Host}
-				Lib=GITPULL
+				User=${GCR:User}
+				Lib=PKG
+				OSSpecific=Y
+				PKG=git
+				Host=${GCR:Host}
+				CurrentState=ReadState
+				TaskNumber=${PROTASKS:NumberTotal}
+				/> </NewBlock>]]>
+			</XMLExtract>
+
+
+			<GenerateData Alias="VAL">
+				<!-- Independent="true" can be applied, if multiple Issues should be 
+					generated. In this case pass on the parent IssueID to the resulting Issue 
+					<ParentIID>${IID}</ParentIID>, don't forget to include ParentIID=${IID} into 
+					the Tasks DataBlock on the Node -->
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
+
+
+			<!--Task2 Do the GIT Clone -->
+
+			<IncAttribute Name="PROTASKS:NumberTotal" />
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+				TargetPath='${GCR:TargetPath}'
+				TargetMachine=${GCR:TargetMachine}
+				TargetState=Created
+				GitRepoURL='${GCR:GitRepoUrl}'
+				GitRepoName=${GCR:GitRepoName}
+				User=${GCR:User}
+				Host=${GCR:Host}
+				Lib=GITCLONE
 				CurrentState=ReadState
                 TaskNumber=${PROTASKS:NumberTotal}
+                GitBranch=${GCR:GitBranch}
+                GitOrigin=${GCR:GitOrigin}
 				/></NewBlock>]]>
 			</XMLExtract>
 

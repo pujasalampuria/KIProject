@@ -1,4 +1,4 @@
-<KnowledgeItem ID="OpexSoftware:PKG:__core__Ubuntu__PKG__Created__" xmlns="http://www.arago.de/KiSchema">
+<KnowledgeItem ID="OpexSoftware:Ubuntu:PKG:__core__Ubuntu__PKG__Created__" xmlns="http://www.arago.de/KiSchema">
 	<Title>__core__Ubuntu__PKG__Created__</Title>
 	<Description> This KI searches for the DataBlock called __core__Ubuntu__PKG__Created__ and installs the package on the specified Target Machine and writes the current status back to the node. </Description>
 

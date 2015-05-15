@@ -1,4 +1,4 @@
-<KnowledgeItem ID="OpexSoftware:GITCLONEREPO:__core__Linux__GITCLONE__Created__" xmlns="http://www.arago.de/KiSchema">
+<KnowledgeItem ID="OpexSoftware:Linux:GITCLONE:__core__Linux__GITCLONE__Created__" xmlns="http://www.arago.de/KiSchema">
 	<Title>__core__Linux__GITCLONE__Created__</Title>
 	<Description> This KI searches for the DataBlock called __core__Linux__GITCLONE__Created__  and clones the desired Git Repository at the specified path.</Description>
 
@@ -13,6 +13,8 @@
 				<AttributeFilter Name="GitRepoURL" Mode="exists"/>
                 <AttributeFilter Name="Host" Mode="exists"/>
 				<AttributeFilter Name="TargetPath" Mode="exists"/>
+				<AttributeFilter Name="GitBranch" Mode="exists" />
+				<AttributeFilter Name="GitOrigin" Mode="exists" />
 			</SubItem>
 		</SubItem>
 	</BindAttributes>
@@ -28,13 +30,12 @@
 			</SubItem>
 		</IssueCondition>
 
-		<Activate>
-		  	<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+	 <Activate> 
+		    <Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
 				<Parameter Name="User">${TASK:User}</Parameter>
 				<Parameter Name="Hostname">${TASK:Host}</Parameter>
-				<Parameter Name="Command"><![CDATA["cd ${TASK:TargetPath} && git clone ${TASK:GitRepoURL}"]]></Parameter> 
+				<Parameter Name="Command"><![CDATA["cd ${TASK:TargetPath} && git clone -b ${TASK:GitBranch} -o ${TASK:GitOrigin} ${TASK:GitRepoURL}"]]></Parameter> 
 			</Action>
-			
 			<If>
 				<VarCondition VarString="${SYSTEMRC}" Mode="eq" Value="0"/>
 				<Then>
