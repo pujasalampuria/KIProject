@@ -1,4 +1,4 @@
-<KnowledgeItem ID="OpexSoftware:JIRAMODIFYISSUE:JiraModifyIssueManage" xmlns="http://www.arago.de/KiSchema">
+<KnowledgeItem ID="OpexSoftware:WorkFlowUserStory:JiraModifyIssueManage" xmlns="http://www.arago.de/KiSchema">
 	<Title>JiraModifyIssueManage</Title>
 	<Description>Initiates the workflow for updating issue in Jira</Description>
 	<BindAttributes>

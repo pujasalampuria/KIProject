@@ -1,4 +1,4 @@
-<KnowledgeItem ID="OpexSoftware:GITPULLREPO:GitHubRepoPull" xmlns="http://www.arago.de/KiSchema">
+<KnowledgeItem ID="OpexSoftware:WorkFlowUserStory:GitHubRepoPull" xmlns="http://www.arago.de/KiSchema">
 	<Title>GitHubRepoPull</Title>
 	<Description>Initiates the workflow to do a Git pull on a Repository
 	</Description>

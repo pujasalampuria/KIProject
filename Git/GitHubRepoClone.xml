@@ -1,4 +1,4 @@
-<KnowledgeItem ID="OpexSoftware:GITCLONEREPO:GitHubRepoClone" xmlns="http://www.arago.de/KiSchema">
+<KnowledgeItem ID="OpexSoftware:WorkFlowUserStory:GitHubRepoClone" xmlns="http://www.arago.de/KiSchema">
 	<Title>GitHubRepoClone</Title>
 	<Description>Initiates the workflow for cloning a Git Repository
 	</Description>
