@@ -1,0 +1,98 @@
+<KnowledgeItem ID="OpexSoftware:WorkFlowUserStory:DeployShardedCluster" xmlns="http://www.arago.de/KiSchema">
+	<Title>DeployShardedMongoDBCluster</Title>
+	<Description>Initiates the workflow for Configure Sharded MongoDB Cluster by writing into the MARS model and creating new corresponding data blocks in the Issue</Description>
+
+	<BindAttributes>
+		<AttributeFilter Name="NodeType" Mode="string" Value="Machine"/>
+		<!-- <RelatedNode Mode="predecessor" Alias="PRE">
+			<AttributeFilter Name="NodeType" Mode="string" Value="Application"/>
+		</RelatedNode> -->
+	</BindAttributes>
+
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+
+	<CreateTrigger>
+
+		<IssueCondition>
+			<Description>Searches for an Issue with DataBlock DEPLOYSHARDEDMONGODBCLUSTER and the necessary information for sucessful completion of workflow</Description>
+			<SubItem Name="DEPLOYSHARDEDMONGODBCLUSTER" Alias="DSM">
+				<AttributeFilter Name="TargetApp" Mode="exists"/> 
+				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}"/>
+				<AttributeFilter Name="Database" Mode="exists"/>
+				<AttributeFilter Name="ConfigServerHostnames" Mode="exists"/>
+        	   	<AttributeFilter Name="MachineRunningMongos" Mode="exists"/>
+        		<AttributeFilter Name="ConfigServerPort" Mode="exists"/>
+        		<AttributeFilter Name="MongosPort" Mode="exists"/>
+				<AttributeFilter Name="TargetState" Mode="string" Value="Created"/>
+				<AttributeFilter Name="Status" Mode="notexists"/>
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			
+			<SetAttribute Name="DSM:Status" Value="WorkflowStarted" /> 
+			
+			<GenerateData Alias="PROTASKS"> 
+				<DataType>ProcessingTasks</DataType>
+				<CurrentTask>1</CurrentTask> 
+			</GenerateData>
+			
+           <!-- TASK1 START CONFIG SERVER DATABASE INSTANCE-->
+           
+			<IncAttribute Name="PROTASKS:NumberTotal"/>
+			
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
+				TargetMachine=${DSM:TargetMachine}            
+				TargetState=Created
+				Host=${DSM:Host}
+				User=${DSM:User}
+				Path='${DSM:Path}'
+				Lib=RUNCOMMAND
+				Command='sudo mkdir -p ${DSM:Path} &amp;&amp; sudo mongod --fork --syslog --configsvr --dbpath ${DSM:Path} --port 27019'
+				TaskNumber=${PROTASKS:NumberTotal}
+				CurrentState=ReadState/> 
+				</NewBlock>]]>
+			</XMLExtract> 
+      
+			<GenerateData Alias="VAL"> 
+				<!-- Independent="true" can be applied, if multiple Issues should be generated. In this case pass on the parent IssueID to the resulting Issue <ParentIID>${IID}</ParentIID>, don't forget to include ParentIID=${IID} into the Tasks DataBlock on the Node -->
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
+      
+      <!-- TASK2  START THE MONGOS INSTANCE-->
+           
+			<IncAttribute Name="PROTASKS:NumberTotal"/>
+			
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
+				TargetMachine=${DSM:TargetMachine}      
+				TargetState=Created      
+				ConfigServerHostnames=${DSM:ConfigServerHostnames}
+				Host=${DSM:Host}
+				User=${DSM:User}
+				ConfigServerPort=${DSM:ConfigServerPort}
+				Lib=RUNCOMMAND
+				Command='sudo mongos --fork --syslog --configdb ${DSM:ConfigServerHostnames}:27019'
+				TaskNumber=${PROTASKS:NumberTotal}
+				CurrentState=ReadState/> 
+				</NewBlock>]]>
+			</XMLExtract> 
+      
+			<GenerateData Alias="VAL"> 
+				<!-- As the TAR Task cannot start without the WGET task gets Completed/Created 
+				the PriorUID, Status and WaitForSecs are the important attributes 
+				to control the waitFor -->
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
+			
+			<!--		<Resolve>Resolved initial Issue with ID ${IID}</Resolve> - use if ChildIssues are created-->
+			
+			<GenerateData> 
+				<DataType>Resolve</DataType>
+				<Status>checkForResolve</Status>
+			</GenerateData>	
+
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>
