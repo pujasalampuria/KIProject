@@ -1,0 +1,14 @@
+Issue:
+  NodeID: OpexSoftware:UseCase:Machine:shree
+  xmlns: http://www.arago.de/IssueSchema
+  IssueSubject: 'Do a Git pull on the given Repository'
+  GITPULLREPO:
+    TargetMachine: shree
+    TargetState: Created
+    TargetPath: /home/shreyas/
+    GitUser: Techy
+    GitPassword: shree
+    GitRepoName: CoreKIs
+    User: shreyas
+    Host: 192.168.1.57
+

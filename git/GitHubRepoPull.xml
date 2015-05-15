@@ -1,0 +1,69 @@
+<KnowledgeItem ID="OpexSoftware:GITPULLREPO:GitHubRepoPull" xmlns="http://www.arago.de/KiSchema">
+	<Title>GitHubRepoPull</Title>
+	<Description>Initiates the workflow to do a Git pull on a Repository
+	</Description>
+	<BindAttributes>
+		<AttributeFilter Name="NodeType" Mode="string" Value="Machine" />
+	</BindAttributes>
+
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+
+	<CreateTrigger>
+		<IssueCondition>
+			<Description>Searches for an Issue with DataBlock GITPULLREPO and
+				triggers the workflow for sucessful completion</Description>
+			<SubItem Name="GITPULLREPO" Alias="GPR">
+				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}" />
+				<AttributeFilter Name="TargetPath" Mode="exists" />
+				<AttributeFilter Name="GitUser" Mode="exists" />
+				<AttributeFilter Name="GitPassword" Mode="exists" />
+				<AttributeFilter Name="TargetState" Mode="string" Value="Created" />
+				<AttributeFilter Name="Status" Mode="notexists" />
+				<AttributeFilter Name="GitRepoName" Mode="exists" />
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<SetAttribute Name="GPR:Status" Value="WorkflowStarted" />
+			<GenerateData Alias="PROTASKS">
+				<DataType>ProcessingTasks</DataType>
+				<CurrentTask>1</CurrentTask>
+			</GenerateData>
+
+
+			<!--Task Do the GIT Pull -->
+
+			<IncAttribute Name="PROTASKS:NumberTotal" />
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+				TargetPath='${GPR:TargetPath}'
+				TargetMachine=${GPR:TargetMachine}
+				TargetState=Created
+				GitRepoName=${GPR:GitRepoName}
+				User=${GPR:User}
+				Host=${GPR:Host}
+				Lib=GITPULL
+				CurrentState=ReadState
+                TaskNumber=${PROTASKS:NumberTotal}
+				/></NewBlock>]]>
+			</XMLExtract>
+
+			<GenerateData Alias="VAL">
+				<!-- Independent="true" can be applied, if multiple Issues should be 
+					generated. In this case pass on the parent IssueID to the resulting Issue 
+					<ParentIID>${IID}</ParentIID>, don't forget to include ParentIID=${IID} into 
+					the Tasks DataBlock on the Node -->
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
+
+			<!--<Resolve>Resolved initial Issue with ID ${IID}</Resolve> - use if 
+				ChildIssues are created -->
+
+			<GenerateData>
+				<DataType>Resolve</DataType>
+				<Status>checkForResolve</Status>
+			</GenerateData>
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>
