@@ -12,4 +12,5 @@ Issue:
     GitRepoName: CoreKIs
     User: shreyas
     Host: 192.168.1.57
-
+    GitBranch: UnderDevelopment
+    GitOrigin: master

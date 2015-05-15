@@ -1,5 +1,4 @@
-<KnowledgeItem ID="OpexSoftware:GITCLONEREPO:GitHubRepoClone"
-	xmlns="http://www.arago.de/KiSchema">
+<KnowledgeItem ID="OpexSoftware:GITCLONEREPO:GitHubRepoClone" xmlns="http://www.arago.de/KiSchema">
 	<Title>GitHubRepoClone</Title>
 	<Description>Initiates the workflow for cloning a Git Repository
 	</Description>
@@ -22,6 +21,8 @@
 				<AttributeFilter Name="TargetState" Mode="string" Value="Created" />
 				<AttributeFilter Name="Status" Mode="notexists" />
 				<AttributeFilter Name="GitRepoName" Mode="exists" />
+				<AttributeFilter Name="GitBranch" Mode="exists" />
+				<AttributeFilter Name="GitOrigin" Mode="exists" />
 			</SubItem>
 		</IssueCondition>
 
@@ -75,6 +76,8 @@
 				Lib=GITCLONE
 				CurrentState=ReadState
                 TaskNumber=${PROTASKS:NumberTotal}
+                GitBranch=${GCR:GitBranch}
+                GitOrigin=${GCR:GitOrigin}
 				/></NewBlock>]]>
 			</XMLExtract>
 
