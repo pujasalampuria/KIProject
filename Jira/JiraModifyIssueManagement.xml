@@ -1,0 +1,61 @@
+<KnowledgeItem ID="OpexSoftware:JIRAMODIFYISSUE:JiraModifyIssueManage" xmlns="http://www.arago.de/KiSchema">
+	<Title>JiraModifyIssueManage</Title>
+	<Description>Initiates the workflow for updating issue in Jira</Description>
+	<BindAttributes>
+		<AttributeFilter Name="NodeType" Mode="string" Value="Machine"/>
+	</BindAttributes>
+
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+
+	<CreateTrigger>
+	     <IssueCondition>
+		 <Description>Searches for an Issue with DataBlock JIRAMODIFYISSUE and triggers the workflow for sucessful completion</Description>
+			<SubItem Name="JIRAMODIFYISSUE" Alias="JMI">
+				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}"/>
+				<AttributeFilter Name="TargetState" Mode="string" Value="Created"/>
+				<AttributeFilter Name="Status" Mode="notexists"/>
+			</SubItem>
+		</IssueCondition>
+
+	     <Activate>
+			<SetAttribute Name="JMI:Status" Value="WorkflowStarted" /> 
+			<GenerateData Alias="PROTASKS">
+                <DataType>ProcessingTasks</DataType>
+                <CurrentTask>1</CurrentTask>
+			</GenerateData>
+
+			<!--Task Modify an issue in Jira-->	
+			<IncAttribute Name="PROTASKS:NumberTotal"/>
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+			   TargetMachine=${JMI:TargetMachine}      
+			   TargetState=Created
+			   User=${JMI:User}
+			   Lib=CURLPUT
+			   Key=${JMI:IssueKey}
+			   ToolUrl='${JMI:JiraUrl}'
+			   Host=${JMI:Host}
+			   CurrentState=ReadState
+			   ToolUser=${JMI:JiraUser}
+			   ToolPasswd=${JMI:JiraPassword}
+			   PutData='{"fields":{"summary":"${JMI:Summary}","description":"${JMI:Description}"}}'
+			   TaskNumber=${PROTASKS:NumberTotal}
+			   ContentType='Content-Type:application/json'
+			   </NewBlock>]]>
+			</XMLExtract>
+			
+			<GenerateData Alias="VAL"> 
+		       <!-- Independent="true" can be applied, if multiple Issues should be generated. In this case pass on the parent IssueID to the resulting Issue <ParentIID>${IID}</ParentIID>, don't forget to include ParentIID=${IID} into the Tasks DataBlock on the Node -->
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>	
+      
+			<!--<Resolve>Resolved initial Issue with ID ${IID}</Resolve> - use if ChildIssues are created-->
+			
+			<GenerateData> 
+				<DataType>Resolve</DataType>
+				<Status>checkForResolve</Status>
+			</GenerateData>	
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>
