@@ -15,7 +15,7 @@
 				triggers the workflow for sucessful completion</Description>
 			<SubItem Name="GITCLONEREPO" Alias="GCR">
 				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}" />
-				<AttributeFilter Name="GitRepo" Mode="exists" />
+				<AttributeFilter Name="GitRepoUrl" Mode="exists" />
 				<AttributeFilter Name="TargetPath" Mode="exists" />
 				<AttributeFilter Name="GitUser" Mode="exists" />
 				<AttributeFilter Name="GitPassword" Mode="exists" />
@@ -68,7 +68,7 @@
 				TargetPath='${GCR:TargetPath}'
 				TargetMachine=${GCR:TargetMachine}
 				TargetState=Created
-				TargetRepo='${GCR:GitRepo}'
+				GitRepoURL='${GCR:GitRepoUrl}'
 				GitRepoName=${GCR:GitRepoName}
 				User=${GCR:User}
 				Host=${GCR:Host}

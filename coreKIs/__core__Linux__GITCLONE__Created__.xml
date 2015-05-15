@@ -10,10 +10,9 @@
 				<AttributeFilter Name="TargetState" Mode="exists"/>
 				<AttributeFilter Name="TargetMachine" Mode="exists"/>
 				<AttributeFilter Name="User" Mode="exists"/>
-				<AttributeFilter Name="TargetRepo" Mode="exists"/>
+				<AttributeFilter Name="GitRepoURL" Mode="exists"/>
                 <AttributeFilter Name="Host" Mode="exists"/>
 				<AttributeFilter Name="TargetPath" Mode="exists"/>
-                <AttributeFilter Name="GitRepoName" Mode="exists"/>
 			</SubItem>
 		</SubItem>
 	</BindAttributes>
@@ -33,7 +32,7 @@
 		  	<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
 				<Parameter Name="User">${TASK:User}</Parameter>
 				<Parameter Name="Hostname">${TASK:Host}</Parameter>
-				<Parameter Name="Command"><![CDATA["cd ${TASK:TargetPath} && git clone ${TASK:TargetRepo}"]]></Parameter> 
+				<Parameter Name="Command"><![CDATA["cd ${TASK:TargetPath} && git clone ${TASK:GitRepoURL}"]]></Parameter> 
 			</Action>
 			
 			<If>

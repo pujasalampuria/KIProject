@@ -10,7 +10,7 @@
     <OSInformation Name="Ubuntu" MajorVersion="12" Vendor="Ubuntu"/>
 	<NetworkInformation>
 		<InterfaceInformation>
-			<Interface Name="eth1" IP="192.168.1.75"/>
+			<Interface Name="eth1" IP="192.168.1.57"/>
 		</InterfaceInformation>
 	</NetworkInformation>
 </Linux>
