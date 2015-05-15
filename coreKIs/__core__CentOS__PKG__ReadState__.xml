@@ -1,6 +1,6 @@
-<KnowledgeItem ID="OpexSoftware:POSTGRESQLUSER:__core__CentOS__PKG__ReadState__" xmlns="http://www.arago.de/KiSchema">
-	<Title>__core__Ubuntu__POSTGRESQLUSER__ReadState___</Title>
-	<Description> This KI searches for the DataBlock called __core____core__Ubuntu__POSTGRESQLUSER__ReadState__ and verifies the CurrentState of the package on the specified Target Machine and writes it back to the node. </Description>
+<KnowledgeItem ID="OpexSoftware:CentOS:PKG:__core__CentOS__PKG__ReadState__" xmlns="http://www.arago.de/KiSchema">
+	<Title>__core__CentOS__PKG__ReadState__</Title>
+	<Description> This KI searches for the DataBlock called __core__CentOS__PKG__ReadState__ and verifies the CurrentState of the package on the specified Target Machine and writes it back to the node. </Description>
 
 	<BindAttributes>
 		<AttributeFilter Name="NodeType" Mode="string" Value="Machine"/>
@@ -22,7 +22,7 @@
 		
 	<CreateTrigger>
 		<IssueCondition>
-			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__POSTGRESQLUSER__ReadState__ and attribute ExtUID being the same as the machine KI binds to. </Description>
+			<Description> Checks Issue for DataBlock __core__CentOS__PKG__ReadState__ and attribute ExtUID being the same as the machine KI binds to. </Description>
 			<SubItem Name="__core__CentOS__PKG__ReadState__" Alias="CHECK">
 				<AttributeFilter Name="ExtUID" Mode="string" Value="${TASKS:UID}"/>	
 				<AttributeFilter Name="Status" Mode="notexists"/>	

@@ -1,4 +1,4 @@
-<KnowledgeItem ID="OpexSoftware:STARTSERVICE:__core__Linux__STARTSERVICE__Created__" xmlns="http://www.arago.de/KiSchema">
+<KnowledgeItem ID="OpexSoftware:Linux:STARTSERVICE:__core__Linux__STARTSERVICE__Created__" xmlns="http://www.arago.de/KiSchema">
 	<Title>__core__Linux__STARTSERVICE__Created__</Title>
 	<Description> This KI searches for the DataBlock called __core__Linux__STARTSERVICE__Created__ and start the specified service and writes the current status back to the node. </Description>
 
@@ -20,7 +20,7 @@
 		
 	<CreateTrigger>
 		<IssueCondition>
-			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__STARTSERVICE__Created__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
+			<Description> Checks Issue for DataBlock __core__${NODE:MachineClass}__STARTSERVICE__Created__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
 			<SubItem Name="__core__Linux__STARTSERVICE__Created__" Alias="INSTALL">
 				<AttributeFilter Name="ExtUID" Mode="string" Value="${TASKS:UID}" />
 				<AttributeFilter Name="Status" Mode="notexists"/>	

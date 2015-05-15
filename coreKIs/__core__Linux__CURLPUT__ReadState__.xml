@@ -1,4 +1,4 @@
-<KnowledgeItem ID="OpexSoftware:RESTAPI:__core__Linux__CURLPUT__ReadState__" xmlns="http://www.arago.de/KiSchema">
+<KnowledgeItem ID="OpexSoftware:Linux:CURLPUT:__core__Linux__CURLPUT__ReadState__" xmlns="http://www.arago.de/KiSchema">
 	<Title>__core__Linux__CURLPUT__ReadState__</Title>
 	<Description> This KI searches for the DataBlock called __core__Linux__CURLPUT__ReadState__
 	</Description>

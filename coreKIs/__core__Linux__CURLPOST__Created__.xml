@@ -1,8 +1,6 @@
-<KnowledgeItem ID="OpexSoftware:RESTAPI:__core__Linux__CURLPOST__Created__" xmlns="http://www.arago.de/KiSchema">
+<KnowledgeItem ID="OpexSoftware:Linux:CURLPOST:__core__Linux__CURLPOST__Created__" xmlns="http://www.arago.de/KiSchema">
 	<Title>__core__Linux__CURLPOST__Created__</Title>
-	<Description> This KI searches for the DataBlock called
-		__core__Linux__CURLPOST___Created__ and runs the specified RESTAPI
-	</Description>
+	<Description> This KI searches for the DataBlock called __core__Linux__CURLPOST___Created__ and runs the specified RESTAPI </Description>
 
 	<BindAttributes>
 		<AttributeFilter Name="NodeType" Mode="string" Value="Machine" />
@@ -24,9 +22,7 @@
 
 	<CreateTrigger>
 		<IssueCondition>
-			<Description> Checks Issue for DataBlock
-				__core__Linux__CURLPOST___Created__ and attribute ExtUID being the
-				same as in the Node the KI binds to. </Description>
+			<Description> Checks Issue for DataBlock __core__Linux__CURLPOST___Created__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
 			<SubItem Name="__core__Linux__CURLPOST__Created__" Alias="CHECK">
 				<AttributeFilter Name="ExtUID" Mode="string" Value="${TASK:UID}" />
 				<AttributeFilter Name="Status" Mode="notexists" />
@@ -36,9 +32,7 @@
 		<Activate>
 			<Action Capability="ExecuteLocalCommand" Error="ERROR" Output="OUTPUT"
 				Result="RESULT" SystemRC="SYSTEMRC" Timeout="300">
-				<Parameter Name="Command">curl -D- -u
-					${TASK:ToolUser}:${TASK:ToolPasswd} -X POST -d '${TASK:PostData}'
-					-H "${TASK:ContentType}" "${TASK:ToolUrl}"
+				<Parameter Name="Command">curl -D- -u ${TASK:ToolUser}:${TASK:ToolPasswd} -X POST -d '${TASK:PostData}' -H "${TASK:ContentType}" "${TASK:ToolUrl}"
 				</Parameter>
 			</Action>
 			<If>

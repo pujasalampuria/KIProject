@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="arago:WorkFlowUserStory:ValidateNotTargetState">
+<KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:WorkFlowUserStory:ValidateNotTargetState">
 	<Title>Validate</Title>
 	<Description>Validation which checks the CurrentState not being TargetState or ReadState</Description>
 	

@@ -1,4 +1,4 @@
-<KnowledgeItem ID="OpexSoftware:GITCLONEREPO:__core__Linux__GITCLONE__Created__" xmlns="http://www.arago.de/KiSchema">
+<KnowledgeItem ID="OpexSoftware:Linux:GITCLONE:__core__Linux__GITCLONE__Created__" xmlns="http://www.arago.de/KiSchema">
 	<Title>__core__Linux__GITCLONE__Created__</Title>
 	<Description> This KI searches for the DataBlock called __core__Linux__GITCLONE__Created__  and clones the desired Git Repository at the specified path.</Description>
 
@@ -11,7 +11,7 @@
 				<AttributeFilter Name="TargetMachine" Mode="exists"/>
 				<AttributeFilter Name="User" Mode="exists"/>
 				<AttributeFilter Name="GitRepoURL" Mode="exists"/>
-                <AttributeFilter Name="Host" Mode="exists"/>
+                		<AttributeFilter Name="Host" Mode="exists"/>
 				<AttributeFilter Name="TargetPath" Mode="exists"/>
 			</SubItem>
 		</SubItem>
