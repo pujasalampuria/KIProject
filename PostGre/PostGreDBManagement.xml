@@ -20,7 +20,6 @@
 				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}"/>
 				<AttributeFilter Name="Database" Mode="exists"/>
 				<AttributeFilter Name="TargetState" Mode="string" Value="Created"/>
-				<AttributeFilter Name="Lib" Mode="string" Value="DBCREATIONPOSTGRESQL"/>
 				<AttributeFilter Name="Status" Mode="notexists"/>
 			</SubItem>
 		</IssueCondition>
