@@ -1,4 +1,4 @@
-<KnowledgeItem ID="OpexSoftware:GITPULLREPO:__core__Linux__GITPULL__Created__" xmlns="http://www.arago.de/KiSchema">
+<KnowledgeItem ID="OpexSoftware:Linux:GITPULL:__core__Linux__GITPULL__Created__" xmlns="http://www.arago.de/KiSchema">
 	<Title>__core__Linux__GITPULL__Created__</Title>
 	<Description> This KI searches for the DataBlock called __core__Linux__GITPULL__Created__  and does a git pull on the Git Repository.</Description>
 

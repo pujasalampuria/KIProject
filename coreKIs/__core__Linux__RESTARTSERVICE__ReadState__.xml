@@ -19,7 +19,7 @@
 		
 	<CreateTrigger>
 		<IssueCondition>
-			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__RESTARTSERVICE__ReadState__ and attribute ExtUID being the same as the machine KI binds to. </Description>
+			<Description> Checks Issue for DataBlock __core__${NODE:MachineClass}__RESTARTSERVICE__ReadState__ and attribute ExtUID being the same as the machine KI binds to. </Description>
 			<SubItem Name="__core__Linux__RESTARTSERVICE__ReadState__" Alias="CHECK">
 				<AttributeFilter Name="ExtUID" Mode="string" Value="${TASKS:UID}"/>	
 				<AttributeFilter Name="Status" Mode="notexists"/>	
