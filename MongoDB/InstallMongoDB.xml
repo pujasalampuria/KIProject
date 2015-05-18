@@ -2,19 +2,21 @@
 	<Title>InstallMongoDB</Title>
 	<Description>Initiates the workflow for installing mongoDB</Description>
 	<BindAttributes>
-		<AttributeFilter Name="NodeType" Mode="string" Value="Machine"/>
+       <RelatedNode Mode="predecessor" Alias="PRE">
+			<AttributeFilter Name="NodeType" Mode="string" Value="Application"/>
+	   </RelatedNode> 	
 	</BindAttributes>
 
 	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
 
 	<CreateTrigger>
 	     <IssueCondition>
-		 <Description>Searches for an Issue with DataBlock INSTALLMONGODB and triggers the workflow for sucessful completion</Description>
+		 <Description>Searches for an Issue with DataBlock INSTALLMONGODB and triggers the workflow for successful completion</Description>
 			<SubItem Name="INSTALLMONGODB" Alias="IMD">
 				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}"/>
 				<AttributeFilter Name="TargetState" Mode="string" Value="Created"/>
 				<AttributeFilter Name="Status" Mode="notexists"/>
-				<AttributeFilter Name="TargetApp" Mode="exists"/>
+				<AttributeFilter Name="TargetApp" Mode="string" Value="${PRE:NodeName}"/>
 			</SubItem>
 		</IssueCondition>
 

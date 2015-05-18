@@ -3,7 +3,7 @@ Issue:
   xmlns: http://www.arago.de/IssueSchema
   IssueSubject: 'Create an Issue in Jira'
   JIRACREATEISSUE:
-    TargetMachine: shree
+    TargetMachine: Shree
     TargetState: Created
     JiraUrl: http://192.168.1.57:9999/rest/api/2/issue/
     ProjectKey: KIP

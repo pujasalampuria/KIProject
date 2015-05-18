@@ -4,8 +4,7 @@
 	NodeType="Application"
 	NodeName="LAMPStack"
 	ApplicationClass="Enterprise"
-	ApplicationSubClass="EnterpriseInfrastructure"
-	>
+	ApplicationSubClass="EnterpriseInfrastructure">
      <Dependencies>
      	<Node ID="OpexSoftware:UseCase:Machine:Ashish" />
      </Dependencies>	 	

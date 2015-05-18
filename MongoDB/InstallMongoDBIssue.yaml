@@ -4,7 +4,7 @@ Issue:
   IssueSubject: 'Installing MongoDB cluster'
   INSTALLMONGODB:
     TargetApp: MongoDB  
-    TargetMachine: zeeshan
+    TargetMachine: Zeeshan
     TargetState: Created
     AptKey: 7F0CEB10
     AptRepoUrl: http://repo.mongodb.org/apt/ubuntu  

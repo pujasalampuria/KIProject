@@ -18,7 +18,7 @@
 
 		<IssueCondition>
 			<Description>Searches for an Issue with DataBlock SolrInstallConfig
-				and the necessary information for sucessful completion of workflow
+				and the necessary information for successful completion of workflow
 			</Description>
 			<SubItem Name="SolrInstallConfig" Alias="SIC">
 				<AttributeFilter Name="TargetApp" Mode="string"

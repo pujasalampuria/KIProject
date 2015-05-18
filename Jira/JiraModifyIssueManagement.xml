@@ -9,7 +9,7 @@
 
 	<CreateTrigger>
 	     <IssueCondition>
-		 <Description>Searches for an Issue with DataBlock JIRAMODIFYISSUE and triggers the workflow for sucessful completion</Description>
+		 <Description>Searches for an Issue with DataBlock JIRAMODIFYISSUE and triggers the workflow for successful completion</Description>
 			<SubItem Name="JIRAMODIFYISSUE" Alias="JMI">
 				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}"/>
 				<AttributeFilter Name="TargetState" Mode="string" Value="Created"/>

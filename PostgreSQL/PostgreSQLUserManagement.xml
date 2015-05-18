@@ -1,6 +1,6 @@
-<KnowledgeItem ID="OpexSofware:POSTGRESQLDB:PostGreDBManagement" xmlns="http://www.arago.de/KiSchema">
-	<Title>PostGreDBManagement</Title>
-	<Description>Initiates the workflow for creating DataBase on Postgre</Description>
+<KnowledgeItem ID="OpexSoftware:POSTGRESQLUSER:PostGreUserManagement" xmlns="http://www.arago.de/KiSchema">
+	<Title>PostGreUserManagement</Title>
+	<Description>Initiates the workflow for handling packages by writing into the MARS model and creating new corresponding data blocks in the Issue</Description>
 
 	<BindAttributes>
 		<AttributeFilter Name="NodeType" Mode="string" Value="Machine"/>
@@ -14,45 +14,56 @@
 	<CreateTrigger>
 
 		<IssueCondition>
-			<Description>Searches for an Issue with DataBlock POSTGRESQLDB and the necessary information for sucessful completion of workflow</Description>
-			<SubItem Name="POSTGRESQLDB" Alias="PSD">
+			<Description>Searches for an Issue with DataBlock POSTGRESQLUSER and the necessary information for successful completion of workflow</Description>
+			<SubItem Name="POSTGRESQLUSER" Alias="PSU">
 				<AttributeFilter Name="TargetApp" Mode="string" Value="${PRE:NodeName}"/>
 				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}"/>
-				<AttributeFilter Name="Database" Mode="exists"/>
+				<AttributeFilter Name="NewDBUserName" Mode="exists"/>
+				<AttributeFilter Name="NewDBPassword" Mode="exists"/>
 				<AttributeFilter Name="TargetState" Mode="string" Value="Created"/>
 				<AttributeFilter Name="Status" Mode="notexists"/>
+				
 			</SubItem>
 		</IssueCondition>
 
 		<Activate>
 			
-			<SetAttribute Name="PSD:Status" Value="WorkflowStarted" /> 
-
+			<SetAttribute Name="PSU:Status" Value="WorkflowStarted" /> 
+			
 			<GenerateData Alias="PROTASKS"> 
 				<DataType>ProcessingTasks</DataType>
 				<CurrentTask>1</CurrentTask> 
 			</GenerateData>
-
+			
 			<IncAttribute Name="PROTASKS:NumberTotal"/>
-
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				Database=${PSD:Database}
-				TargetMachine=${PSD:TargetMachine}      
-				TargetState=Created				
-				Host=${PSD:Host}
-				User=${PSD:User}
+			
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 			
+				TargetMachine=${PSU:TargetMachine}      
+				TargetState=Created
+				NewDBUserName=${PSU:NewDBUserName}
+				NewDBPassword=${PSU:NewDBPassword}
+				Host=${PSU:Host}
+				User=${PSU:User}
 				TaskNumber=${PROTASKS:NumberTotal}
+				Command1='psql -c \"CREATE USER ${PSU:NewDBUserName} WITH PASSWORD'
+				Command2='${PSU:NewDBPassword}' 
+				Command3='\"'
 				Lib=RUNCOMMAND
-				Command='psql -c \"CREATE DATABASE ${PSD:Database};\"'
-				CurrentState=ReadState
-				/> </NewBlock>]]>
+				CurrentState=ReadState/> 
+				</NewBlock>]]>
 			</XMLExtract> 
+			<SetAttribute Name="NODE:Extensions/Tasks/Command" Value="${NODE:Extensions/Tasks/Command1} '${NODE:Extensions/Tasks/Command2}';${NODE:Extensions/Tasks/Command3}"/>
+ 
       
 			<GenerateData Alias="VAL"> 
 				<!-- Independent="true" can be applied, if multiple Issues should be generated. In this case pass on the parent IssueID to the resulting Issue <ParentIID>${IID}</ParentIID>, don't forget to include ParentIID=${IID} into the Tasks DataBlock on the Node -->
 				<DataType>Validate</DataType>
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>	
+      
+            
+			 	
+			
       
 			<!--		<Resolve>Resolved initial Issue with ID ${IID}</Resolve> - use if ChildIssues are created-->
 			

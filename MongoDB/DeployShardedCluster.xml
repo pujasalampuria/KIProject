@@ -4,9 +4,9 @@
 
 	<BindAttributes>
 		<AttributeFilter Name="NodeType" Mode="string" Value="Machine"/>
-		<!-- <RelatedNode Mode="predecessor" Alias="PRE">
+		<RelatedNode Mode="predecessor" Alias="PRE">
 			<AttributeFilter Name="NodeType" Mode="string" Value="Application"/>
-		</RelatedNode> -->
+		</RelatedNode> 
 	</BindAttributes>
 
 	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
@@ -14,7 +14,7 @@
 	<CreateTrigger>
 
 		<IssueCondition>
-			<Description>Searches for an Issue with DataBlock DEPLOYSHARDEDMONGODBCLUSTER and the necessary information for sucessful completion of workflow</Description>
+			<Description>Searches for an Issue with DataBlock DEPLOYSHARDEDMONGODBCLUSTER and the necessary information for successful completion of workflow</Description>
 			<SubItem Name="DEPLOYSHARDEDMONGODBCLUSTER" Alias="DSM">
 				<AttributeFilter Name="TargetApp" Mode="exists"/> 
 				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}"/>

@@ -2,9 +2,7 @@
 	ID="OpexSoftware:UseCase:Application:Solr"
 	NodeType="Application" ApplicationClass="Development" ApplicationSubClass="WebDevelopment" NodeName="Solr">
         <Dependencies>
-                <Node ID="arago:Workshop:Resource:AppServer"/>
-                <Node ID="arago:Workshop:Resource:Database"/>
-                <Node ID="arago:Workshop:Resource:WebServer"/>
+                <Node ID="OpexSoftware:UseCase:Machine:Puja" />
         </Dependencies>
         <CustomerInformation ID="opex_demo" Name="OpexSoftware" />
 </WebDevelopment>

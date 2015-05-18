@@ -9,7 +9,7 @@
 
 	<CreateTrigger>
 	     <IssueCondition>
-		 <Description>Searches for an Issue with DataBlock APTUPDATESOURCE and triggers the workflow for sucessful completion</Description>
+		 <Description>Searches for an Issue with DataBlock APTUPDATESOURCE and triggers the workflow for successful completion</Description>
 			<SubItem Name="APTUPDATESOURCE" Alias="IMD">
 				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}"/>
 				<AttributeFilter Name="TargetState" Mode="string" Value="Created"/>

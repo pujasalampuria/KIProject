@@ -4,7 +4,7 @@ Issue:
   IssueSubject: 'Please Install,configure and maintain Solr '
   SolrInstallConfig:
     TargetApp: Solr   
-    TargetMachine: puja 
+    TargetMachine: Puja 
     TargetState: Created
     User: puja
     Host: 192.168.1.86
