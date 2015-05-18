@@ -1,0 +1,84 @@
+<KnowledgeItem ID="OpexSoftware:WorkFlowUserStory:ZookeeperInstallation" xmlns="http://www.arago.de/KiSchema">
+	<Title>Install ZooKeeper</Title>
+          <Description>Initiates the workflow for installing and starting the zookeeper</Description>
+	    <BindAttributes>
+           <RelatedNode Mode="predecessor" Alias="PRE">
+			   <AttributeFilter Name="NodeType" Mode="string" Value="Application"/>
+		   </RelatedNode>
+	    </BindAttributes>
+
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+
+	<CreateTrigger>
+      <IssueCondition>
+      <Description>Searches for an Issue with DataBlock INSTALLZOOKEEPER and triggers the workflow for sucessful completion</Description>
+		 <SubItem Name="INSTALLZOOKEEPER" Alias="IZK">
+		    <AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}"/>
+		    <AttributeFilter Name="TargetState" Mode="string" Value="Created"/>
+		    <AttributeFilter Name="Status" Mode="notexists"/>
+		    <AttributeFilter Name="TargetApp" Mode="string" Value="${PRE:NodeName}"/>
+		 </SubItem>
+	  </IssueCondition>
+
+	     <Activate>
+	     	<SetAttribute Name="IZK:Status" Value="WorkflowStarted" /> 
+	     	   <GenerateData Alias="PROTASKS">
+	     	      <DataType>ProcessingTasks</DataType>
+	     	      <CurrentTask>1</CurrentTask>
+	     	   </GenerateData>
+
+	     <!--Task1 Install Zookeeper on target Machine-->	
+  
+        <IncAttribute Name="PROTASKS:NumberTotal"/>
+
+		<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+		       TargetMachine=${IZK:TargetMachine}      
+			   TargetState=Created
+			   User=${IZK:User}
+			   Lib=PKG
+			   PKG=zookeeper
+			   Host=${IZK:Host}
+			   CurrentState=ReadState
+			   OSSpecific=Y
+			   TaskNumber=${PROTASKS:NumberTotal}
+			 /> </NewBlock>]]>
+		</XMLExtract>
+		
+        <GenerateData Alias="VAL"> 
+	    <!-- Independent="true" can be applied, if multiple Issues should be generated. In this case pass on the parent IssueID to the resulting Issue <ParentIID>${IID}</ParentIID>, don't forget to include ParentIID=${IID} into the Tasks DataBlock on the Node -->
+		  <DataType>Validate</DataType>
+		  <ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+	    </GenerateData>	
+			
+	    <!--Task2 Start ZooKeeper-->	
+  
+        <IncAttribute Name="PROTASKS:NumberTotal"/>
+
+		<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+		       TargetMachine=${IZK:TargetMachine}      
+			   TargetState=Created
+			   User=${IZK:User}
+			   Lib=RUNCOMMAND
+			   Host=${IZK:Host}
+			   CurrentState=ReadState
+			   Command='sudo /usr/share/zookeeper/bin/zkServer.sh start'
+			   TaskNumber=${PROTASKS:NumberTotal}
+			 /> </NewBlock>]]>
+		</XMLExtract>
+		
+        <GenerateData Alias="VAL"> 
+	    <!-- Independent="true" can be applied, if multiple Issues should be generated. In this case pass on the parent IssueID to the resulting Issue <ParentIID>${IID}</ParentIID>, don't forget to include ParentIID=${IID} into the Tasks DataBlock on the Node -->
+		  <DataType>Validate</DataType>
+		  <ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+	    </GenerateData>	
+			
+
+		<!--<Resolve>Resolved initial Issue with ID ${IID}</Resolve> - use if ChildIssues are created-->
+	    <GenerateData> 
+	       <DataType>Resolve</DataType>
+		   <Status>checkForResolve</Status>
+	    </GenerateData>	
+	</Activate>
+    </CreateTrigger>
+</KnowledgeItem>
+																	

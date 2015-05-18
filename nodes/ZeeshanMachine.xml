@@ -5,10 +5,6 @@
 	NodeType="Machine" 
 	MachineClass="Linux" 
 	NodeName="Zeeshan" >
-    <Dependencies>
-       <Node  ID="OpexSoftware:UseCase:Application:PostgreSQl" />
-       <Node  ID="OpexSoftware:UseCase:Application:MongoDB" />
-    </Dependencies>
     <CustomerInformation ID="opex.com" Name="OpexSoftware"/>
     <Extensions>
       <ssh User="zeeshan"/>
