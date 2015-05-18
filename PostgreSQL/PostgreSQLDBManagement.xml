@@ -14,7 +14,7 @@
 	<CreateTrigger>
 
 		<IssueCondition>
-			<Description>Searches for an Issue with DataBlock POSTGRESQLDB and the necessary information for sucessful completion of workflow</Description>
+			<Description>Searches for an Issue with DataBlock POSTGRESQLDB and the necessary information for successful completion of workflow</Description>
 			<SubItem Name="POSTGRESQLDB" Alias="PSD">
 				<AttributeFilter Name="TargetApp" Mode="string" Value="${PRE:NodeName}"/>
 				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}"/>

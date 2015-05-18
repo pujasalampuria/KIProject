@@ -9,7 +9,7 @@
 
 	<CreateTrigger>
 	     <IssueCondition>
-		 <Description>Searches for an Issue with DataBlock INSTALLMONGODB and triggers the workflow for sucessful completion</Description>
+		 <Description>Searches for an Issue with DataBlock INSTALLMONGODB and triggers the workflow for successful completion</Description>
 			<SubItem Name="INSTALLMONGODB" Alias="IMD">
 				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}"/>
 				<AttributeFilter Name="TargetState" Mode="string" Value="Created"/>

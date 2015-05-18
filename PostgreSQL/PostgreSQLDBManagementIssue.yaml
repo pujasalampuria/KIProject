@@ -5,7 +5,7 @@ Issue:
   POSTGRESQLDB:
     TargetApp: PostgreSQL  
     Database: TempDP    
-    TargetMachine: zeeshan
+    TargetMachine: Zeeshan
     NewDBUserName: zeeshan31
     NewDBPassword: zeeshan31
     DBUserName: zeeshan

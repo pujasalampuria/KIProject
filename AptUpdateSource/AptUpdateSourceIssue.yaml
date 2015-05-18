@@ -1,10 +1,10 @@
 Issue:
   NodeID: OpexSoftware:UseCase:Application:MongoDB
   xmlns: http://www.arago.de/IssueSchema
-  IssueSubject: 'Installing MongoDB cluster'
+  IssueSubject: 'Update apt source for MongoDB cluster'
   APTUPDATESOURCE:
     TargetApp: MongoDB  
-    TargetMachine: zeeshan
+    TargetMachine: Zeeshan
     TargetState: Created
     AptKey: 7F0CEB10
     AptRepoUrl: http://repo.mongodb.org/apt/ubuntu  

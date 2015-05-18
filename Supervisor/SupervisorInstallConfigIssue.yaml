@@ -4,7 +4,7 @@ Issue:
   IssueSubject: 'Manage the state of a program or group of programs running via supervisord'
   SupervisorInstallConfig:
     TargetApp: Supervisor   
-    TargetMachine: puja 
+    TargetMachine: Puja 
     TargetState: Created
     FilePath: /etc/supervisor/conf.d
     ProgramFile: /usr/local/bin/long.sh 

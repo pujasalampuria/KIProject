@@ -4,7 +4,7 @@ Issue:
   IssueSubject: 'Deploying Sharded MongoDB cluster'
   DEPLOYSHARDEDMONGODBCLUSTER:
     TargetApp: MongoDB  
-    TargetMachine: zeeshan
+    TargetMachine: Zeeshan
     TargetState: Created
     Path: /data/configdb
     ConfigServerHostnames: localhost 

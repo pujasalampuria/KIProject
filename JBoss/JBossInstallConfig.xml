@@ -19,7 +19,7 @@
 
 		<IssueCondition>
 			<Description>Searches for an Issue with DataBlock JBossInstallConfig
-				and the necessary information for sucessful completion of workflow
+				and the necessary information for successful completion of workflow
 			</Description>
 			<SubItem Name="JBossInstallConfig" Alias="JIC">
 				<AttributeFilter Name="TargetApp" Mode="string"

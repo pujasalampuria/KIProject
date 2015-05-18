@@ -11,7 +11,7 @@
 	<CreateTrigger>
 		<IssueCondition>
 			<Description>Searches for an Issue with DataBlock GITPULLREPO and
-				triggers the workflow for sucessful completion</Description>
+				triggers the workflow for successful completion</Description>
 			<SubItem Name="GITPULLREPO" Alias="GPR">
 				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}" />
 				<AttributeFilter Name="TargetPath" Mode="exists" />

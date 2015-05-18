@@ -1,10 +1,10 @@
 Issue:
-  NodeID: OpexSoftware:UseCase:Machine:shree
+  NodeID: OpexSoftware:UseCase:Machine:Shree
   xmlns: http://www.arago.de/IssueSchema
   IssueSubject: 'Clone the given Repository'
   GITCLONEREPO:
     GitRepoUrl: 'https://github.com/gkhakare/CoreKIs.git'
-    TargetMachine: shree
+    TargetMachine: Shree
     TargetState: Created
     TargetPath: /home/shreyas/Downloads
     GitUser: Techy

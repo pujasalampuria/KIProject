@@ -1,12 +1,17 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <Linux xmlns="http://mars-o-matic.com"
 	ID="OpexSoftware:UseCase:Machine:Ashish"
+	HasAgentType_WatchMe="False" 
+	MachineArchitecture="x86_64"
 	NodeType="Machine"
 	NodeName="Ashish"
 	MachineClass="Linux">
-     <Dependencies>
-     </Dependencies>	 	
-     <CustomerInformation ID="opex.com" Name="opex"/>
+    <Dependencies>
+    </Dependencies>	 	
+    <CustomerInformation ID="opex.com" Name="opex"/>
+    <Extensions>
+      <ssh User="ashish"/>
+      <PasswordPolicy MinLength="8" MaxLength="14" CharSet="alnum"/>
+    </Extensions>
     <OSInformation Name="Ubuntu" MajorVersion="14" Vendor="Ubuntu"/>
         <NetworkInformation>
                 <InterfaceInformation>

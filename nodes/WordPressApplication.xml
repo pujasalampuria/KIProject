@@ -4,10 +4,9 @@
 	NodeType="Application"
 	NodeName="WordPress"
 	ApplicationClass="Enterprise"
-	ApplicationSubClass="EnterpriseInfrastructure"
-	>
+	ApplicationSubClass="EnterpriseInfrastructure">
      <Dependencies>
      	<Node ID="OpexSoftware:UseCase:Machine:Ashish" />
      </Dependencies>	 	
-     <CustomerInformation ID="opex.com" Name="opex"/>
+     <CustomerInformation ID="opex.com" Name="OpexSoftware"/>
 </EnterpriseInfrastructure>

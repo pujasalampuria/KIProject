@@ -1,12 +1,15 @@
 <Linux xmlns="http://mars-o-matic.com"
-	ID="OpexSoftware:UseCase:Machine:zeeshan"
-	HasAgentType_WatchMe="False" MachineArchitecture="x86_64"
-	NodeType="Machine" MachineClass="Linux" NodeName="zeeshan" >
+	ID="OpexSoftware:UseCase:Machine:Zeeshan"
+	HasAgentType_WatchMe="False" 
+	MachineArchitecture="x86_64"
+	NodeType="Machine" 
+	MachineClass="Linux" 
+	NodeName="Zeeshan" >
     <Dependencies>
        <Node  ID="OpexSoftware:UseCase:Application:PostgreSQl" />
        <Node  ID="OpexSoftware:UseCase:Application:MongoDB" />
     </Dependencies>
-    <CustomerInformation ID="opex" Name="OpexSoftware"/>
+    <CustomerInformation ID="opex.com" Name="OpexSoftware"/>
     <Extensions>
       <ssh User="zeeshan"/>
       <PasswordPolicy MinLength="8" MaxLength="14" CharSet="alnum"/>

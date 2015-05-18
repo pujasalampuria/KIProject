@@ -1,0 +1,12 @@
+<WebDevelopment xmlns="http://mars-o-matic.com"
+	ID="OpexSoftware:UseCase:Application:JBoss"
+	NodeType="Application" 
+	ApplicationClass="Development" 
+	ApplicationSubClass="WebDevelopment" 
+	NodeName="JBoss">
+        <Dependencies>
+        	<Node ID="OpexSoftware:UseCase:Machine:Puja" />
+        </Dependencies>
+        <CustomerInformation ID="opex.com" Name="OpexSoftware" />
+</WebDevelopment>
+
