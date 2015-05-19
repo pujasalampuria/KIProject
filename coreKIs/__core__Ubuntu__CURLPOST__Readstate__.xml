@@ -4,7 +4,7 @@
 
 	<BindAttributes>
 		<AttributeFilter Name="NodeType" Mode="string" Value="Machine" />
-		<AttributeFilter Name="MachineClass" Mode="string" Value="Ubuntu" />
+		<AttributeFilter Name="MachineClass" Mode="string" Value="Linux" />
 		<SubItem Name="Extensions" Alias="EXT">
 			<SubItem Name="Tasks" Alias="TASK">
 				<AttributeFilter Name="TargetState" Mode="exists" />

@@ -1,10 +1,10 @@
 <KnowledgeItem ID="OpexSoftware:Ubuntu:RUNCOMMAND:__core__Ubuntu__RUNCOMMAND__Created__" xmlns="http://www.arago.de/KiSchema">
 	<Title>__core__Ubuntu__RUNCOMMAND__Created__</Title>
-	<Description> This KI searches for the DataBlock called __core__Ubuntu__RUNCOMMAND__Created__ and rus the command on the specified Target Machine and writes the current status back to the node. </Description>
+	<Description> This KI searches for the DataBlock called __core__Ubuntu__RUNCOMMAND__Created__ and runs the command on the specified Target Machine and writes the current status back to the node. </Description>
 
 	<BindAttributes>
 		<AttributeFilter Name="NodeType" Mode="string" Value="Machine"/>
-		<AttributeFilter Name="MachineClass" Mode="string" Value="Ubuntu"/>
+		<AttributeFilter Name="MachineClass" Mode="string" Value="Linux"/>
 		<SubItem Name="Extensions" Alias="EXT">
 			<SubItem Name="Tasks" Alias="TASKS">
 				<AttributeFilter Name="TargetMachine" Mode="exists"/>
