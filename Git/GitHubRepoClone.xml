@@ -11,7 +11,7 @@
 	<CreateTrigger>
 		<IssueCondition>
 			<Description>Searches for an Issue with DataBlock GITCLONEREPO and
-				triggers the workflow for successful completion</Description>
+				triggers the workflow for sucessful completion</Description>
 			<SubItem Name="GITCLONEREPO" Alias="GCR">
 				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}" />
 				<AttributeFilter Name="GitRepoUrl" Mode="exists" />
@@ -42,7 +42,6 @@
 				TargetState=Created
 				User=${GCR:User}
 				Lib=PKG
-				OSSpecific=Y
 				PKG=git
 				Host=${GCR:Host}
 				CurrentState=ReadState
