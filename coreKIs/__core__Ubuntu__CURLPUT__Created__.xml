@@ -1,20 +1,21 @@
-<KnowledgeItem ID="OpexSoftware:Linux:CURLPOST:__core__Linux__CURLPOST__Created__" xmlns="http://www.arago.de/KiSchema">
-	<Title>__core__Linux__CURLPOST__Created__</Title>
-	<Description> This KI searches for the DataBlock called __core__Linux__CURLPOST___Created__ and runs the specified RESTAPI </Description>
+<KnowledgeItem ID="OpexSoftware:Ubuntu:CURLPUT:__core__Ubuntu__CURLPUT__Created__" xmlns="http://www.arago.de/KiSchema">
+	<Title>__core__Ubuntu__CURLPUT__Created__</Title>
+	<Description> This KI searches for the DataBlock called __core__Ubuntu__CURLPUT___Created__ and runs the specified RestAPI.
+	</Description>
 
 	<BindAttributes>
 		<AttributeFilter Name="NodeType" Mode="string" Value="Machine" />
-		<AttributeFilter Name="MachineClass" Mode="string"
-			Value="Linux" />
+		<AttributeFilter Name="MachineClass" Mode="string" Value="Ubuntu" />
 		<SubItem Name="Extensions" Alias="EXT">
 			<SubItem Name="Tasks" Alias="TASK">
 				<AttributeFilter Name="TargetState" Mode="exists" />
 				<AttributeFilter Name="TargetMachine" Mode="exists" />
 				<AttributeFilter Name="ToolUrl" Mode="exists" />
-				<AttributeFilter Name="PostData" Mode="exists" />
+				<AttributeFilter Name="PutData" Mode="exists" />
 				<AttributeFilter Name="ToolUser" Mode="exists" />
 				<AttributeFilter Name="ToolPasswd" Mode="exists" />
-			        <AttributeFilter Name="ContentType" Mode="exists" />
+				<AttributeFilter Name="Key" Mode="exists" />
+				<AttributeFilter Name="ContentType" Mode="exists" />
 			</SubItem>
 		</SubItem>
 	</BindAttributes>
@@ -22,8 +23,8 @@
 
 	<CreateTrigger>
 		<IssueCondition>
-			<Description> Checks Issue for DataBlock __core__Linux__CURLPOST___Created__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
-			<SubItem Name="__core__Linux__CURLPOST__Created__" Alias="CHECK">
+			<Description> Checks Issue for DataBlock __core__Ubuntu__CURLPUT___Created__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
+			<SubItem Name="__core__Ubuntu__CURLPUT__Created__" Alias="CHECK">
 				<AttributeFilter Name="ExtUID" Mode="string" Value="${TASK:UID}" />
 				<AttributeFilter Name="Status" Mode="notexists" />
 			</SubItem>
@@ -32,7 +33,7 @@
 		<Activate>
 			<Action Capability="ExecuteLocalCommand" Error="ERROR" Output="OUTPUT"
 				Result="RESULT" SystemRC="SYSTEMRC" Timeout="300">
-				<Parameter Name="Command">curl -D- -u ${TASK:ToolUser}:${TASK:ToolPasswd} -X POST -d '${TASK:PostData}' -H "${TASK:ContentType}" "${TASK:ToolUrl}"
+				<Parameter Name="Command">curl -D- -u ${TASK:ToolUser}:${TASK:ToolPasswd} -X PUT -d '${TASK:PutData}' -H "${TASK:ContentType}" "${TASK:ToolUrl}${TASK:Key}"
 				</Parameter>
 			</Action>
 			<If>
@@ -41,7 +42,7 @@
 					<Action Capability="ExecuteLocalCommand" Error="ERROR"
 						Output="CREATEDOUTPUT" Result="RESULT" SystemRC="SYSTEMRC"
 						Timeout="300">
-						<Parameter Name="Command"><![CDATA[echo "${OUTPUT}" | grep -i "201 Created" && touch /tmp/${TASK:UID} ]]></Parameter>
+						<Parameter Name="Command"><![CDATA[echo "${OUTPUT}" | grep -i "204 No Content" && touch /tmp/${TASK:UID} ]]></Parameter>
 					</Action>
 					<If>
 						<VarCondition VarString="${SYSTEMRC}" Mode="eq"
