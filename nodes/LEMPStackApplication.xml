@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EnterpriseInfrastructure xmlns="http://mars-o-matic.com"
+	ID="OpexSoftware:UseCase:Application:LEMPStack"
+	NodeType="Application"
+	NodeName="LEMPStack"
+	ApplicationClass="Enterprise"
+	ApplicationSubClass="EnterpriseInfrastructure">
+     <Dependencies>
+     	<Node ID="OpexSoftware:UseCase:Machine:Ashish" />
+     </Dependencies>	 	
+     <CustomerInformation ID="opex.com" Name="opex"/>
+</EnterpriseInfrastructure>

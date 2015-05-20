@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<KnowledgeItem xmlns="http://www.arago.de/KiSchema" ID="OpexSoftware:Linux:Validation:ResolveWorkflow">
+  <Title>ResolveWorkflow</Title>
+  <Description>Checks if all tasks contained within a given WorkFlow Issue have been processed. Resolves that Issue if this is true.</Description>
+	
+  <BindAttributes>
+    <Description>Bind to all machine Nodes with Tasks block in Extensions.</Description>
+    <AttributeFilter Name="NodeType" Mode="exists"/>
+    <SubItem Name="Extensions"  Alias="EXTS"> 
+      <SubItem Name="Tasks" Alias="TASKS">
+        <TrueFilter/>
+      </SubItem> 
+    </SubItem> 		
+  </BindAttributes>
+	
+  <Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+	
+  <CreateTrigger>	
+    <IssueCondition>
+      <Description>Triggers when  Resolve and ProcessingTasks data blocks exists in an Issue and attributes NumberProcessed and NumberTotal in Processing tasks data block are equal.</Description>		 
+      <SubItem Name="Resolve"  Alias="RES"> 
+        <TrueFilter/>		
+      </SubItem> 
+      <SubItem Name="ProcessingTasks"  Alias="PROTASKS" > 
+        <AttributeFilter Name="NumberProcessed" Mode="eq" Value="${SELF:NumberTotal}"/>
+      </SubItem> 
+    </IssueCondition> 
+			
+    <Activate>
+
+      <Resolve>Workflow completed, corresponding Issue is resolved</Resolve>
+
+    </Activate>
+  </CreateTrigger>
+</KnowledgeItem>

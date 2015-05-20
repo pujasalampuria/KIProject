@@ -1,0 +1,249 @@
+<KnowledgeItem ID="OpexSoftware:WorkflowUserStory:WordPressInstall" xmlns="http://www.arago.de/KiSchema">
+	<Title>WordPressWorkflowHandlePackage</Title>
+	<Description>Initiates the workflow for handling WordPress install related packages by writing into the MARS model and creating new corresponding data blocks in the Issue</Description>
+
+	<BindAttributes>
+		<AttributeFilter Name="NodeType" Mode="string" Value="Machine"/>
+		<RelatedNode Mode="predecessor" Alias="PRE">
+			<AttributeFilter Name="NodeType" Mode="string" Value="Application"/>
+		</RelatedNode>
+	</BindAttributes>
+
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+
+	<CreateTrigger>
+		<IssueCondition>
+			<Description>Searches for an Issue with DataBlock WordPressHandlePKG and the necessary information for successful completion of workflow</Description>
+			<SubItem Name="WordPressHandlePKG" Alias="WPHP">
+				<AttributeFilter Name="TargetApp" Mode="string" Value="${PRE:NodeName}"/>
+				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}"/>
+				<AttributeFilter Name="TargetState" Mode="string" Value="Created"/>
+				<AttributeFilter Name="MySQLRootPass" Mode="exists" />
+				<AttributeFilter Name="Status" Mode="notexists"/>
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<SetAttribute Name="WPHP:Status" Value="WorkflowStarted" /> 
+			<GenerateData Alias="PROTASKS"> 
+				<DataType>ProcessingTasks</DataType> 
+				<CurrentTask>1</CurrentTask>
+			</GenerateData>
+			
+			<!-- TASK1 -->
+			<IncAttribute Name="PROTASKS:NumberTotal" />
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
+				PKG=nginx
+				TargetMachine=${WPHP:TargetMachine}
+				TargetState=Created
+				User=${WPHP:User}
+				Host=${WPHP:Host}
+				Lib=PKG
+				CurrentState=ReadState
+				TaskNumber=${PROTASKS:NumberTotal}
+				/> </NewBlock>]]>
+			</XMLExtract>
+
+			<GenerateData Alias="VAL">
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
+			
+			<!-- TASK2 -->
+			<IncAttribute Name="PROTASKS:NumberTotal" />
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
+				PKG=debconf-utils
+				TargetMachine=${WPHP:TargetMachine}
+				TargetState=Created
+				User=${WPHP:User}
+				Host=${WPHP:Host}
+				Lib=PKG
+				CurrentState=ReadState
+				TaskNumber=${PROTASKS:NumberTotal}
+				/> </NewBlock>]]>
+			</XMLExtract>
+
+			<GenerateData Alias="VAL">
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
+			
+			<!-- TASK3 -->
+			<IncAttribute Name="PROTASKS:NumberTotal" />
+			
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
+				TargetMachine=${WPHP:TargetMachine}      
+				TargetState=Created
+				Host=${WPHP:Host}
+				User=${WPHP:User}
+				Lib=RUNCOMMAND
+				Command='sudo debconf-set-selections <<< &apos;mysql-server mysql-server/root_password password ${WPHP:MySQLRootPass}&apos;'
+				TaskNumber=${PROTASKS:NumberTotal}
+				CurrentState=ReadState/> 
+				</NewBlock>]]>
+			</XMLExtract> 
+			
+			<GenerateData Alias="VAL">
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
+			
+			<!-- TASK4 -->
+			<IncAttribute Name="PROTASKS:NumberTotal" />
+			
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
+				TargetMachine=${WPHP:TargetMachine}            
+				TargetState=Created
+				Host=${WPHP:Host}
+				User=${WPHP:User}
+				Lib=RUNCOMMAND
+				Command='sudo debconf-set-selections <<< &apos;mysql-server mysql-server/root_password_again password ${WPHP:MySQLRootPass}&apos;'
+				TaskNumber=${PROTASKS:NumberTotal}
+				CurrentState=ReadState/> 
+				</NewBlock>]]>
+			</XMLExtract> 
+			
+			<GenerateData Alias="VAL">
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
+			
+			<!-- TASK5 -->
+			<IncAttribute Name="PROTASKS:NumberTotal" />
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
+				PKG=mysql-server
+				TargetMachine=${WPHP:TargetMachine}      
+				TargetState=Created
+				User=${WPHP:User}
+				Host=${WPHP:Host}
+				Lib=PKG 
+				CurrentState=ReadState
+				TaskNumber=${PROTASKS:NumberTotal}
+				/> </NewBlock>]]>
+			</XMLExtract>
+
+			<GenerateData Alias="VAL">
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
+			
+			<!-- TASK6 -->
+			<IncAttribute Name="PROTASKS:NumberTotal" />
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
+				TargetMachine=${WPHP:TargetMachine}            
+				TargetState=Created
+				Host=${WPHP:Host}
+				User=${WPHP:User}
+				Lib=RUNCOMMAND
+				Command='sudo mysql_install_db'
+				TaskNumber=${PROTASKS:NumberTotal}
+				CurrentState=ReadState/> 
+				</NewBlock>]]>
+			</XMLExtract>
+
+			<GenerateData Alias="VAL">
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
+			
+			<!-- TASK7 -->
+			<IncAttribute Name="PROTASKS:NumberTotal" />
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
+				PKG=php5-fpm
+				TargetMachine=${WPHP:TargetMachine}      
+				TargetState=Created
+				User=${WPHP:User}
+				Host=${WPHP:Host}
+				Lib=PKG
+				CurrentState=ReadState
+				TaskNumber=${PROTASKS:NumberTotal}
+				/> </NewBlock>]]>
+			</XMLExtract>
+
+			<GenerateData Alias="VAL">
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
+
+			<!-- TASK8 -->
+			<IncAttribute Name="PROTASKS:NumberTotal" />
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
+				PKG=php5-mysql
+				TargetMachine=${WPHP:TargetMachine}      
+				TargetState=Created
+				User=${WPHP:User}
+				Host=${WPHP:Host}
+				Lib=PKG
+				CurrentState=ReadState
+				TaskNumber=${PROTASKS:NumberTotal}
+				/> </NewBlock>]]>
+			</XMLExtract>
+
+			<GenerateData Alias="VAL">
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
+			
+			<!-- TASK9 -->
+            <IncAttribute Name="PROTASKS:NumberTotal"/>
+
+            <XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
+                      PKG=WordPressWGET
+                      DownloadUrl='${WPHP:DownloadUrl}'
+                      TargetMachine=${WPHP:TargetMachine}
+                      TargetTarFileName=${WPHP:TargetTarFileName}
+                      UntarFolder=${WPHP:UntarFolder}      
+                      TargetPath='${WPHP:TargetPath}'
+                      TargetState=Created
+                      User=${WPHP:User}
+                      Host=${WPHP:Host}
+   					  Lib=WGET
+                      CurrentState=ReadState
+                      TaskNumber=${PROTASKS:NumberTotal}
+                      /> </NewBlock>]]>
+                      </XMLExtract>
+
+	        <GenerateData Alias="VAL">
+	             <DataType>Validate</DataType>
+	             <ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+	        </GenerateData> 
+	
+		    <!-- TASK10-->
+	        <IncAttribute Name="PROTASKS:NumberTotal"/>
+	
+	        <XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
+	                 PKG=WordPressUnTar
+	                 DownloadUrl='${WPHP:DownloadUrl}'
+	                 TargetMachine=${WPHP:TargetMachine}
+	                 TargetTarFileName=${WPHP:TargetTarFileName}
+	                 UntarFolder=${WPHP:UntarFolder}      
+	                 TargetPath='${WPHP:TargetPath}'
+	                 TargetState=Created
+	                 User=${WPHP:User}
+	                 Host=${WPHP:Host}
+	                 Lib=TAREXTRACT 
+	                 CurrentState=ReadState
+	                 TaskNumber=${PROTASKS:NumberTotal}
+	                 /> </NewBlock>]]>
+	        </XMLExtract>
+	
+	        <GenerateData Alias="VAL">
+	            <DataType>Validate</DataType>
+	            <ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+	        </GenerateData> 
+      
+			<!-- <Resolve>Resolved initial Issue with ID ${IID}</Resolve> - use if ChildIssues are created-->
+			<GenerateData> 
+				<DataType>Resolve</DataType>
+				<Status>checkForResolve</Status>
+			</GenerateData>	
+			
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

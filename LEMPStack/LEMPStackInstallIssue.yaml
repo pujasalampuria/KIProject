@@ -1,0 +1,12 @@
+Issue:
+  NodeID: OpexSoftware:UseCase:Application:LEMPStack
+  xmlns: http://www.arago.de/IssueSchema
+  IssueSubject: 'Run Workflow for Installation of a LEMP Stack Package'
+  LEMPStackHandlePKG:
+    TargetApp: LEMPStack
+    TargetMachine: Ashish
+    TargetState: Created
+    User: ashish
+    Host: 192.168.1.57
+    MySQLRootPass: root123
+    

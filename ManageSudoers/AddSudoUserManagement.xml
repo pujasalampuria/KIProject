@@ -1,6 +1,6 @@
-<KnowledgeItem ID="OpexSoftware:WorkFlowUserStory:GitHubRepoClone" xmlns="http://www.arago.de/KiSchema">
-	<Title>GitHubRepoClone</Title>
-	<Description>Initiates the workflow for cloning a Git Repository
+<KnowledgeItem ID="OpexSoftware:WorkFlowUserStory:AddSudoUser" xmlns="http://www.arago.de/KiSchema">
+	<Title>AddSudoUser</Title>
+	<Description>Initiates the workflow for adding a user to sudoers list.
 	</Description>
 	<BindAttributes>
 		<AttributeFilter Name="NodeType" Mode="string" Value="Machine" />
@@ -10,40 +10,33 @@
 
 	<CreateTrigger>
 		<IssueCondition>
-			<Description>Searches for an Issue with DataBlock GITCLONEREPO and
-				triggers the workflow for sucessful completion</Description>
-			<SubItem Name="GITCLONEREPO" Alias="GCR">
+			<Description>Searches for an Issue with DataBlock ADDSUDOUSER and triggers the workflow for successful completion</Description>
+			<SubItem Name="ADDSUDOUSER" Alias="ASU">
 				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}" />
-				<AttributeFilter Name="GitRepoUrl" Mode="exists" />
-				<AttributeFilter Name="TargetPath" Mode="exists" />
-				<AttributeFilter Name="GitUser" Mode="exists" />
-				<AttributeFilter Name="GitPassword" Mode="exists" />
 				<AttributeFilter Name="TargetState" Mode="string" Value="Created" />
 				<AttributeFilter Name="Status" Mode="notexists" />
-				<AttributeFilter Name="GitRepoName" Mode="exists" />
-				<AttributeFilter Name="GitBranch" Mode="exists" />
-				<AttributeFilter Name="GitOrigin" Mode="exists" />
+				<AttributeFilter Name="LinuxUser" Mode="exists" />
 			</SubItem>
 		</IssueCondition>
 
 		<Activate>
-			<SetAttribute Name="GCR:Status" Value="WorkflowStarted" />
+			<SetAttribute Name="ASU:Status" Value="WorkflowStarted" />
 			<GenerateData Alias="PROTASKS">
 				<DataType>ProcessingTasks</DataType>
 				<CurrentTask>1</CurrentTask>
 			</GenerateData>
 
-			<!--Task1 Check if GIT package is there -->
+			<!--Task1 Check if Sudo package is there -->
 
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
-				TargetMachine=${GCR:TargetMachine}      
+				TargetMachine=${ASU:TargetMachine}      
 				TargetState=Created
-				User=${GCR:User}
+				User=${ASU:User}
 				Lib=PKG
-				PKG=git
-				Host=${GCR:Host}
+				PKG=sudo
+				Host=${ASU:Host}
 				CurrentState=ReadState
 				TaskNumber=${PROTASKS:NumberTotal}
 				/> </NewBlock>]]>
@@ -51,7 +44,7 @@
 
 
 			<GenerateData Alias="VAL">
-				<!-- Independent="true" can be applied, if multiple Issues should be 
+				<!--Independent="true" can be applied, if multiple Issues should be 
 					generated. In this case pass on the parent IssueID to the resulting Issue 
 					<ParentIID>${IID}</ParentIID>, don't forget to include ParentIID=${IID} into 
 					the Tasks DataBlock on the Node -->
@@ -60,23 +53,20 @@
 			</GenerateData>
 
 
-			<!--Task2 Do the GIT Clone -->
+			<!--Task2 Add user to sudoers list. -->
 
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
-				TargetPath='${GCR:TargetPath}'
-				TargetMachine=${GCR:TargetMachine}
+				TargetPath='${ASU:TargetPath}'
+				TargetMachine=${ASU:TargetMachine}
 				TargetState=Created
-				GitRepoURL='${GCR:GitRepoUrl}'
-				GitRepoName=${GCR:GitRepoName}
-				User=${GCR:User}
-				Host=${GCR:Host}
-				Lib=GITCLONE
+				User=${ASU:User}
+				Host=${ASU:Host}
+				Lib=RUNCOMMAND
+				Command='sudo adduser ${ASU:LinuxUser} sudo'
 				CurrentState=ReadState
                 TaskNumber=${PROTASKS:NumberTotal}
-                GitBranch=${GCR:GitBranch}
-                GitOrigin=${GCR:GitOrigin}
 				/></NewBlock>]]>
 			</XMLExtract>
 

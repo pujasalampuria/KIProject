@@ -39,7 +39,6 @@
 			   PKG=zookeeper
 			   Host=${IZK:Host}
 			   CurrentState=ReadState
-			   OSSpecific=Y
 			   TaskNumber=${PROTASKS:NumberTotal}
 			 /> </NewBlock>]]>
 		</XMLExtract>
