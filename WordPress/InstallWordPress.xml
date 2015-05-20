@@ -41,7 +41,7 @@
                                   TargetState=Created
                                   User=${WPHP:User}
                                   Host=${WPHP:Host}
-				  Lib=WGET
+				  			      Lib=WGET
                                   CurrentState=ReadState
                                   TaskNumber=${PROTASKS:NumberTotal}
                                   /> </NewBlock>]]>

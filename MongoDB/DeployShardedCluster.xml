@@ -46,9 +46,8 @@
 				TargetState=Created
 				Host=${DSM:Host}
 				User=${DSM:User}
-				Path='${DSM:Path}'
 				Lib=RUNCOMMAND
-				Command='sudo mkdir -p ${DSM:Path} &amp;&amp; sudo mongod --fork --syslog --configsvr --dbpath ${DSM:Path} --port 27019'
+				Command='sudo mkdir -p ${DSM:Path} &amp;&amp; sudo mongod --fork --syslog --configsvr --dbpath ${DSM:Path} --port ${DSM:ConfigServerPort}'
 				TaskNumber=${PROTASKS:NumberTotal}
 				CurrentState=ReadState/> 
 				</NewBlock>]]>
@@ -70,9 +69,8 @@
 				ConfigServerHostnames=${DSM:ConfigServerHostnames}
 				Host=${DSM:Host}
 				User=${DSM:User}
-				ConfigServerPort=${DSM:ConfigServerPort}
 				Lib=RUNCOMMAND
-				Command='sudo mongos --fork --syslog --configdb ${DSM:ConfigServerHostnames}:27019'
+				Command='sudo mongos --fork --syslog --configdb ${DSM:ConfigServerHostnames}:${DSM:ConfigServerPort}'
 				TaskNumber=${PROTASKS:NumberTotal}
 				CurrentState=ReadState/> 
 				</NewBlock>]]>
