@@ -1,4 +1,4 @@
-<KnowledgeItem ID="OpexSoftware:WorkFlowUserStory:LAMPStackWorkflowHandlePackage" xmlns="http://www.arago.de/KiSchema">
+<KnowledgeItem ID="OpexSoftware:WorkFlowUserStory:LAMPStackInstall" xmlns="http://www.arago.de/KiSchema">
 	<Title>LAMPStackWorkflowHandlePackage</Title>
 	<Description>Initiates the workflow for handling LAMP Stack install related packages by writing into the MARS model and creating new corresponding data blocks in the Issue</Description>
 

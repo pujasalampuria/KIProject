@@ -11,4 +11,5 @@ Issue:
     TargetState: Created
     UntarFolder: wordpress
     User: ashish
-    Host: 192.168.1.61
+    Host: 192.168.1.57
+    MySQLRootPass: root123
