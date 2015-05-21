@@ -12,37 +12,39 @@
 	<CreateTrigger>
 	     <IssueCondition>
 		 <Description>Searches for an Issue with DataBlock INSTALLMONGODB and triggers the workflow for successful completion</Description>
-			<SubItem Name="INSTALLMONGODB" Alias="IMD">
+			<SubItem Name="InstallMongoDb" Alias="INSTALLMONGODB">
 				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}"/>
 				<AttributeFilter Name="TargetState" Mode="string" Value="Created"/>
 				<AttributeFilter Name="Status" Mode="notexists"/>
+				<AttributeFilter Name="User" Mode="exists"/>
+				<AttributeFilter Name="Host" Mode="exists"/>
 				<AttributeFilter Name="TargetApp" Mode="string" Value="${PRE:NodeName}"/>
 			</SubItem>
 		</IssueCondition>
 
 	     <Activate>
-			<SetAttribute Name="IMD:Status" Value="WorkflowStarted" /> 
+			<SetAttribute Name="INSTALLMONGODB:Status" Value="WorkflowStarted" /> 
 			<GenerateData Alias="PROTASKS">
                             <DataType>ProcessingTasks</DataType>
                             <CurrentTask>1</CurrentTask>
 			</GenerateData>
 
-			<!--Task1 Check if MongoDB package is there -->
+			<!--Task1 Updating the apt Source File -->
 			
 			<IncAttribute Name="PROTASKS:NumberTotal"/>
 			
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
-				TargetMachine=${IMD:TargetMachine}      
+				TargetMachine=${INSTALLMONGODB:TargetMachine}      
 				TargetState=Created
-				User=${IMD:User}
+				User=${INSTALLMONGODB:User}
 				Lib=APTSOURCEMODIFICATION
 				PKG=mongodb-org
-				Host=${IMD:Host}
-				AptRepoUrl='${IMD:AptRepoUrl}'
-				AptArchiveType=${IMD:AptArchiveType}
-				AptDistribution='${IMD:AptDistribution}'
-				AptComponents=${IMD:AptComponents}
-				AptKey=${IMD:AptKey}
+				Host=${INSTALLMONGODB:Host}
+				AptRepoUrl='${INSTALLMONGODB:AptRepoUrl}'
+				AptArchiveType=${INSTALLMONGODB:AptArchiveType}
+				AptDistribution='${INSTALLMONGODB:AptDistribution}'
+				AptComponents=${INSTALLMONGODB:AptComponents}
+				AptKey=${INSTALLMONGODB:AptKey}
 				CurrentState=ReadState
 				TaskNumber=${PROTASKS:NumberTotal}
 				/> </NewBlock>]]>
@@ -55,17 +57,17 @@
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>	
 
-			<!--Task2 Check if MongoDB package is there -->	
+			<!--Task2 Installing the mongoDB -->	
   
             <IncAttribute Name="PROTASKS:NumberTotal"/>
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
-				TargetMachine=${IMD:TargetMachine}      
+				TargetMachine=${INSTALLMONGODB:TargetMachine}      
 				TargetState=Created
-				User=${IMD:User}
+				User=${INSTALLMONGODB:User}
 				Lib=PKG
 				PKG=mongodb-org
-				Host=${IMD:Host}
+				Host=${INSTALLMONGODB:Host}
 				CurrentState=ReadState
 				TaskNumber=${PROTASKS:NumberTotal}
 				/> </NewBlock>]]>
