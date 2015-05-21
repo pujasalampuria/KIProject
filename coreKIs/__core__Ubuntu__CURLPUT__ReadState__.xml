@@ -10,8 +10,6 @@
 	        <SubItem Name="Tasks" Alias="TASK">
 		  	   <AttributeFilter Name="TargetState" Mode="exists"/>
 			   <AttributeFilter Name="TargetMachine" Mode="exists"/>
-			   <AttributeFilter Name="User" Mode="exists"/>
-		       <AttributeFilter Name="Host" Mode="exists"/>
 		   </SubItem>
 	     </SubItem>
      </BindAttributes>

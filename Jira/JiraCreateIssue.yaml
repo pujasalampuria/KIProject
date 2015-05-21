@@ -12,7 +12,5 @@ Issue:
     IssueType: Task
     JiraUser: admin
     JiraPassword: admin
-    User: shreyas
-    Host: 192.168.1.57
 
 

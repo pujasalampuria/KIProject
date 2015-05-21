@@ -11,7 +11,5 @@ Issue:
     JiraPassword: admin
     Summary: Access Denied
     Description: Cannot login to welcome page
-    User: shreyas
-    Host: 192.168.1.57
 
 

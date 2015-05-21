@@ -31,10 +31,8 @@
 		<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
 		       TargetMachine=${JMI:TargetMachine}      
 			   TargetState=Created
-			   User=${JMI:User}
 			   Lib=CURLPOST
 			   ToolUrl='${JMI:JiraUrl}'
-			   Host=${JMI:Host}
 			   CurrentState=ReadState
 			   ToolUser=${JMI:JiraUser}
 			   ToolPasswd=${JMI:JiraPassword}
