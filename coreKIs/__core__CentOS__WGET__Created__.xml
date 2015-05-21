@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <KnowledgeItem ID="OpexSoftware:CentOS:WGET:__core__CentOS__WGET__Created__" xmlns="http://www.arago.de/KiSchema">
 	<Title>__core__CentOS__WGET__Created__</Title>
-	<Description> This KI searches for the DataBlock called __core__CentOS__WGET__Created__  and WGET on specified Target Machine and writes the current status back to the node.
+	<Description> This KI searches for the DataBlock called __core__CentOS__WGET__Created__  
+		and WGET on specified Target Machine and writes the current status back to the node.
 	</Description>
 
 	<BindAttributes>
@@ -24,7 +25,8 @@
 
 	<CreateTrigger>
 		<IssueCondition>
-			<Description> Checks Issue for DataBlock __core__CentOS__WGET__Created__  and attribute ExtUID being the same as in the Node the KI binds to.
+			<Description> Checks Issue for DataBlock __core__CentOS__WGET__Created__ 
+				and attribute ExtUID being the same as in the Node the KI binds to.
 			</Description>
 			<SubItem Name="__core__CentOS__WGET__Created__" Alias="ADDED">
 				<AttributeFilter Name="ExtUID" Mode="string" Value="${TASKS:UID}" />
@@ -36,9 +38,7 @@
 			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="600">
 				<Parameter Name="User">${TASKS:User}</Parameter>
 				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
-				<Parameter Name="Command">
-                    <![CDATA["mkdir -p ${TASKS:TargetPath} && cd ${TASKS:TargetPath} && sudo wget -N ${TASKS:DownloadUrl}"]]>
-				</Parameter>
+				<Parameter Name="Command"><![CDATA["mkdir -p ${TASKS:TargetPath} && cd ${TASKS:TargetPath} && sudo wget -N ${TASKS:DownloadUrl}"]]></Parameter>
 			</Action>
 
 			<If>

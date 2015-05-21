@@ -37,13 +37,10 @@
 		</IssueCondition>
 
 		<Activate>
-			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT"
-				Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
 				<Parameter Name="User">${TASK:User}</Parameter>
 				<Parameter Name="Hostname">${TASK:Host}</Parameter>
-				<Parameter Name="Command">
-					<![CDATA["cd ${TASK:TargetPath}${TASK:GitRepoName} && git pull && touch /tmp/${TASK:UID}"]]>
-				</Parameter>
+				<Parameter Name="Command"><![CDATA["cd ${TASK:TargetPath}${TASK:GitRepoName} && git pull && touch /tmp/${TASK:UID}"]]></Parameter>
 			</Action>
 
 			<If>

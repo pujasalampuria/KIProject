@@ -39,17 +39,13 @@
 
 		<Activate>
 			<Action Capability="ExecuteLocalCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="300">
-				<Parameter Name="Command">
-					curl -D- -u ${TASK:ToolUser}:${TASK:ToolPasswd} -X POST -d '${TASK:PostData}' -H "${TASK:ContentType}" "${TASK:ToolUrl}"
-				</Parameter>
+				<Parameter Name="Command">curl -D- -u ${TASK:ToolUser}:${TASK:ToolPasswd} -X POST -d '${TASK:PostData}' -H "${TASK:ContentType}" "${TASK:ToolUrl}"</Parameter>
 			</Action>
 			<If>
 				<VarCondition VarString="${SYSTEMRC}" Mode="eq" Value="0" />
 				<Then>
 					<Action Capability="ExecuteLocalCommand" Error="ERROR" Output="CREATEDOUTPUT" Result="RESULT" SystemRC="CURLPOSTOUTPUT" Timeout="300">
-						<Parameter Name="Command">
-							<![CDATA[echo "${OUTPUT}" | grep -i "201 Created" && touch /tmp/${TASK:UID}]]>
-						</Parameter>
+						<Parameter Name="Command"><![CDATA[echo "${OUTPUT}" | grep -i "201 Created" && touch /tmp/${TASK:UID}]]></Parameter>
 					</Action>
 					<If>
 						<VarCondition VarString="${CURLPOSTOUTPUT}" Mode="eq" Value="0" />
@@ -58,9 +54,7 @@
 						</Then>
 						<Else>
 							<Action Capability="ExecuteLocalCommand" Error="ERROR" Output="OKOUTPUT" Result="RESULT" SystemRC="CURLPOSTOUTPUT" Timeout="300">
-								<Parameter Name="Command">
-									<![CDATA[echo "${OUTPUT}" | grep -i "200 OK" && touch /tmp/${TASK:UID}]]>
-								</Parameter>
+								<Parameter Name="Command"><![CDATA[echo "${OUTPUT}" | grep -i "200 OK" && touch /tmp/${TASK:UID}]]></Parameter>
 							</Action>
 							<If>
 								<VarCondition VarString="${CURLPOSTOUTPUT}" Mode="eq" Value="0" />

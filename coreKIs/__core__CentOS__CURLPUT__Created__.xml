@@ -39,17 +39,13 @@
 
 		<Activate>
 			<Action Capability="ExecuteLocalCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="300">
-				<Parameter Name="Command">
-					curl -D- -u ${TASK:ToolUser}:${TASK:ToolPasswd} -X PUT -d '${TASK:PutData}' -H "${TASK:ContentType}" "${TASK:ToolUrl}${TASK:Key}"
-				</Parameter>
+				<Parameter Name="Command">curl -D- -u ${TASK:ToolUser}:${TASK:ToolPasswd} -X PUT -d '${TASK:PutData}' -H "${TASK:ContentType}" "${TASK:ToolUrl}${TASK:Key}"</Parameter>
 			</Action>
 			<If>
 				<VarCondition VarString="${SYSTEMRC}" Mode="eq" Value="0" />
 				<Then>
 					<Action Capability="ExecuteLocalCommand" Error="ERROR" Output="CREATEDOUTPUT" Result="RESULT" SystemRC="CURLPUTOUTPUT" Timeout="300">
-						<Parameter Name="Command">
-							<![CDATA[echo "${OUTPUT}" | grep -i "204 No Content" && touch /tmp/${TASK:UID} ]]>
-						</Parameter>
+						<Parameter Name="Command"><![CDATA[echo "${OUTPUT}" | grep -i "204 No Content" && touch /tmp/${TASK:UID} ]]></Parameter>
 					</Action>
 					<If>
 						<VarCondition VarString="${CURLPUTOUTPUT}" Mode="eq" Value="0" />
@@ -58,9 +54,7 @@
 						</Then>
 						<Else>
 							<Action Capability="ExecuteLocalCommand" Error="ERROR" Output="OKOUTPUT" Result="RESULT" SystemRC="CURLPUTOUTPUT" Timeout="300">
-								<Parameter Name="Command">
-									<![CDATA[echo "${OUTPUT}" | grep -i "200 OK" && touch /tmp/${TASK:UID}]]>
-								</Parameter>
+								<Parameter Name="Command"><![CDATA[echo "${OUTPUT}" | grep -i "200 OK" && touch /tmp/${TASK:UID}]]></Parameter>
 							</Action>
 							<If>
 								<VarCondition VarString="${CURLPUTOUTPUT}" Mode="eq" Value="0" />
