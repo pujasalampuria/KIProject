@@ -2,7 +2,7 @@ Issue:
   NodeID: OpexSoftware:UseCase:Application:PostgreSQL
   xmlns: http://www.arago.de/IssueSchema
   IssueSubject: 'Creation of PostgreSQL database and Users'
-  PostgreSqlUser:
+  PostgreSQLUserManagementWorkflow:
     TargetApp: PostgreSQL  
     Database: TempDB
     TargetMachine: Zeeshan
