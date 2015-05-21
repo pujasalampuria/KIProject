@@ -11,7 +11,7 @@
 	<CreateTrigger>
 		<IssueCondition>
 			<Description>Searches for an Issue with DataBlock ADDSUDOUSER and triggers the workflow for successful completion</Description>
-			<SubItem Name="ADDSUDOUSER" Alias="ASU">
+			<SubItem Name="AddSudoUser" Alias="ADDSUDOUSER">
 				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}" />
 				<AttributeFilter Name="TargetState" Mode="string" Value="Created" />
 				<AttributeFilter Name="Status" Mode="notexists" />
@@ -20,7 +20,7 @@
 		</IssueCondition>
 
 		<Activate>
-			<SetAttribute Name="ASU:Status" Value="WorkflowStarted" />
+			<SetAttribute Name="ADDSUDOUSER:Status" Value="WorkflowStarted" />
 			<GenerateData Alias="PROTASKS">
 				<DataType>ProcessingTasks</DataType>
 				<CurrentTask>1</CurrentTask>
@@ -31,12 +31,12 @@
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
-				TargetMachine=${ASU:TargetMachine}      
+				TargetMachine=${ADDSUDOUSER:TargetMachine}      
 				TargetState=Created
-				User=${ASU:User}
+				User=${ADDSUDOUSER:User}
 				Lib=PKG
 				PKG=sudo
-				Host=${ASU:Host}
+				Host=${ADDSUDOUSER:Host}
 				CurrentState=ReadState
 				TaskNumber=${PROTASKS:NumberTotal}
 				/> </NewBlock>]]>
@@ -58,13 +58,13 @@
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
-				TargetPath='${ASU:TargetPath}'
-				TargetMachine=${ASU:TargetMachine}
+				TargetPath='${ADDSUDOUSER:TargetPath}'
+				TargetMachine=${ADDSUDOUSER:TargetMachine}
 				TargetState=Created
-				User=${ASU:User}
-				Host=${ASU:Host}
+				User=${ADDSUDOUSER:User}
+				Host=${ADDSUDOUSER:Host}
 				Lib=RUNCOMMAND
-				Command='sudo adduser ${ASU:LinuxUser} sudo'
+				Command='sudo adduser ${ADDSUDOUSER:LinuxUser} sudo'
 				CurrentState=ReadState
                 TaskNumber=${PROTASKS:NumberTotal}
 				/></NewBlock>]]>

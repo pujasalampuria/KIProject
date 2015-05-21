@@ -2,7 +2,7 @@ Issue:
   NodeID: OpexSoftware:UseCase:Machine:Shree
   xmlns: http://www.arago.de/IssueSchema
   IssueSubject: 'Add User to Sudoers list'
-  ADDSUDOUSER:
+  AddSudoUser:
     TargetMachine: shree
     TargetState: Created
     LinuxUser: opex

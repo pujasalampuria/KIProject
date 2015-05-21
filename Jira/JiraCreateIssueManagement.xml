@@ -10,7 +10,7 @@
 	<CreateTrigger>
            <IssueCondition>
               <Description>Searches for an Issue with DataBlock JIRACREATEISSUE and triggers the workflow for successful completion</Description>
-		 <SubItem Name="JIRACREATEISSUE" Alias="JMI">
+		 <SubItem Name="JiraCreateIssue" Alias="JIRACREATEISSUE">
 		    <AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}"/>
 		    <AttributeFilter Name="TargetState" Mode="string" Value="Created"/>
 		    <AttributeFilter Name="Status" Mode="notexists"/>
@@ -18,7 +18,7 @@
 	  </IssueCondition>
 
 	     <Activate>
-	     	<SetAttribute Name="JMI:Status" Value="WorkflowStarted" /> 
+	     	<SetAttribute Name="JIRACREATEISSUE:Status" Value="WorkflowStarted" /> 
 	     	   <GenerateData Alias="PROTASKS">
 	     	      <DataType>ProcessingTasks</DataType>
 	     	      <CurrentTask>1</CurrentTask>
@@ -29,14 +29,14 @@
             <IncAttribute Name="PROTASKS:NumberTotal"/>
 
 		<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
-		       TargetMachine=${JMI:TargetMachine}      
+		       TargetMachine=${JIRACREATEISSUE:TargetMachine}      
 			   TargetState=Created
 			   Lib=CURLPOST
-			   ToolUrl='${JMI:JiraUrl}'
+			   ToolUrl='${JIRACREATEISSUE:JiraUrl}'
 			   CurrentState=ReadState
-			   ToolUser=${JMI:JiraUser}
-			   ToolPasswd=${JMI:JiraPassword}
-			   PostData='{"fields":{"project":{"key":"${JMI:ProjectKey}"},"summary":"${JMI:Summary}" ,"description":"${JMI:Description}","issuetype":{"name":"${JMI:IssueType}"}}}'
+			   ToolUser=${JIRACREATEISSUE:JiraUser}
+			   ToolPasswd=${JIRACREATEISSUE:JiraPassword}
+			   PostData='{"fields":{"project":{"key":"${JIRACREATEISSUE:ProjectKey}"},"summary":"${JIRACREATEISSUE:Summary}" ,"description":"${JIRACREATEISSUE:Description}","issuetype":{"name":"${JIRACREATEISSUE:IssueType}"}}}'
 			   TaskNumber=${PROTASKS:NumberTotal}
 			   ContentType='Content-Type:application/json'
 			 /> </NewBlock>]]>

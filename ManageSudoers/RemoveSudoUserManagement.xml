@@ -11,7 +11,7 @@
 	<CreateTrigger>
 		<IssueCondition>
 			<Description>Searches for an Issue with DataBlock REMOVESUDOUSER and triggers the workflow for successful completion</Description>
-			<SubItem Name="REMOVESUDOUSER" Alias="RSU">
+			<SubItem Name="RemoveSudoUser" Alias="REMOVESUDOUSER">
 				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}" />
 				<AttributeFilter Name="TargetState" Mode="string" Value="Created" />
 				<AttributeFilter Name="Status" Mode="notexists" />
@@ -20,7 +20,7 @@
 		</IssueCondition>
 
 		<Activate>
-			<SetAttribute Name="RSU:Status" Value="WorkflowStarted" />
+			<SetAttribute Name="REMOVESUDOUSER:Status" Value="WorkflowStarted" />
 			<GenerateData Alias="PROTASKS">
 				<DataType>ProcessingTasks</DataType>
 				<CurrentTask>1</CurrentTask>
@@ -31,14 +31,14 @@
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
-				TargetPath='${RSU:TargetPath}'
-				TargetMachine=${RSU:TargetMachine}
+				TargetPath='${REMOVESUDOUSER:TargetPath}'
+				TargetMachine=${REMOVESUDOUSER:TargetMachine}
 				TargetState=Created
-				User=${RSU:User}
-				Host=${RSU:Host}
-				LinuxUser=${RSU:LinuxUser}
+				User=${REMOVESUDOUSER:User}
+				Host=${REMOVESUDOUSER:Host}
+				LinuxUser=${REMOVESUDOUSER:LinuxUser}
 				Lib=RUNCOMMAND
-				Command='sudo deluser ${RSU:LinuxUser} sudo'
+				Command='sudo deluser ${REMOVESUDOUSER:LinuxUser} sudo'
 				CurrentState=ReadState
                 TaskNumber=${PROTASKS:NumberTotal}
 				/></NewBlock>]]>

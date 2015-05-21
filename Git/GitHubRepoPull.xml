@@ -12,7 +12,7 @@
 		<IssueCondition>
 			<Description>Searches for an Issue with DataBlock GITPULLREPO and
 				triggers the workflow for successful completion</Description>
-			<SubItem Name="GITPULLREPO" Alias="GPR">
+			<SubItem Name="GitPullRepo" Alias="GITPULLREPO">
 				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}" />
 				<AttributeFilter Name="TargetPath" Mode="exists" />
 				<AttributeFilter Name="GitUser" Mode="exists" />
@@ -24,7 +24,7 @@
 		</IssueCondition>
 
 		<Activate>
-			<SetAttribute Name="GPR:Status" Value="WorkflowStarted" />
+			<SetAttribute Name="GITPULLREPO:Status" Value="WorkflowStarted" />
 			<GenerateData Alias="PROTASKS">
 				<DataType>ProcessingTasks</DataType>
 				<CurrentTask>1</CurrentTask>
@@ -36,12 +36,12 @@
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
-				TargetPath='${GPR:TargetPath}'
-				TargetMachine=${GPR:TargetMachine}
+				TargetPath='${GITPULLREPO:TargetPath}'
+				TargetMachine=${GITPULLREPO:TargetMachine}
 				TargetState=Created
-				GitRepoName=${GPR:GitRepoName}
-				User=${GPR:User}
-				Host=${GPR:Host}
+				GitRepoName=${GITPULLREPO:GitRepoName}
+				User=${GITPULLREPO:User}
+				Host=${GITPULLREPO:Host}
 				Lib=GITPULL
 				CurrentState=ReadState
                 TaskNumber=${PROTASKS:NumberTotal}

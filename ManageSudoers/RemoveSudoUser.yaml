@@ -2,7 +2,7 @@ Issue:
   NodeID: OpexSoftware:UseCase:Machine:Shree
   xmlns: http://www.arago.de/IssueSchema
   IssueSubject: 'Remove User from Sudoers list'
-  REMOVESUDOUSER:
+  RemoveSudoUser:
     TargetMachine: shree
     TargetState: Created
     LinuxUser: opex

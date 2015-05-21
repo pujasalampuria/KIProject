@@ -12,7 +12,7 @@
 		<IssueCondition>
 			<Description>Searches for an Issue with DataBlock GITCLONEREPO and
 				triggers the workflow for sucessful completion</Description>
-			<SubItem Name="GITCLONEREPO" Alias="GCR">
+			<SubItem Name="GitCloneRepo" Alias="GITCLONEREPO">
 				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}" />
 				<AttributeFilter Name="GitRepoUrl" Mode="exists" />
 				<AttributeFilter Name="TargetPath" Mode="exists" />
@@ -27,7 +27,7 @@
 		</IssueCondition>
 
 		<Activate>
-			<SetAttribute Name="GCR:Status" Value="WorkflowStarted" />
+			<SetAttribute Name="GITCLONEREPO:Status" Value="WorkflowStarted" />
 			<GenerateData Alias="PROTASKS">
 				<DataType>ProcessingTasks</DataType>
 				<CurrentTask>1</CurrentTask>
@@ -38,12 +38,12 @@
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
-				TargetMachine=${GCR:TargetMachine}      
+				TargetMachine=${GITCLONEREPO:TargetMachine}      
 				TargetState=Created
-				User=${GCR:User}
+				User=${GITCLONEREPO:User}
 				Lib=PKG
 				PKG=git
-				Host=${GCR:Host}
+				Host=${GITCLONEREPO:Host}
 				CurrentState=ReadState
 				TaskNumber=${PROTASKS:NumberTotal}
 				/> </NewBlock>]]>
@@ -65,18 +65,18 @@
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
-				TargetPath='${GCR:TargetPath}'
-				TargetMachine=${GCR:TargetMachine}
+				TargetPath='${GITCLONEREPO:TargetPath}'
+				TargetMachine=${GITCLONEREPO:TargetMachine}
 				TargetState=Created
-				GitRepoURL='${GCR:GitRepoUrl}'
-				GitRepoName=${GCR:GitRepoName}
-				User=${GCR:User}
-				Host=${GCR:Host}
+				GitRepoURL='${GITCLONEREPO:GitRepoUrl}'
+				GitRepoName=${GITCLONEREPO:GitRepoName}
+				User=${GITCLONEREPO:User}
+				Host=${GITCLONEREPO:Host}
 				Lib=GITCLONE
 				CurrentState=ReadState
                 TaskNumber=${PROTASKS:NumberTotal}
-                GitBranch=${GCR:GitBranch}
-                GitOrigin=${GCR:GitOrigin}
+                GitBranch=${GITCLONEREPO:GitBranch}
+                GitOrigin=${GITCLONEREPO:GitOrigin}
 				/></NewBlock>]]>
 			</XMLExtract>
 

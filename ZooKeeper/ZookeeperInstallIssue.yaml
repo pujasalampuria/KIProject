@@ -2,7 +2,7 @@ Issue:
   NodeID: OpexSoftware:UseCase:Application:ZooKeeper
   xmlns: http://www.arago.de/IssueSchema
   IssueSubject: 'Install and start ZooKeeper'
-  INSTALLZOOKEEPER:
+  InstallZooKeeper:
     TargetApp: ZooKeeper
     TargetMachine: shree
     TargetState: Created

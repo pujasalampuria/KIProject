@@ -2,7 +2,7 @@ Issue:
   NodeID: OpexSoftware:UseCase:Machine:Shree
   xmlns: http://www.arago.de/IssueSchema
   IssueSubject: 'Do a Git pull on the given Repository'
-  GITPULLREPO:
+  GitPullRepo:
     TargetMachine: Shree
     TargetState: Created
     TargetPath: /home/shreyas/

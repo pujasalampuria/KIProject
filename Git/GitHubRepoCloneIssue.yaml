@@ -2,7 +2,7 @@ Issue:
   NodeID: OpexSoftware:UseCase:Machine:Shree
   xmlns: http://www.arago.de/IssueSchema
   IssueSubject: 'Clone the given Repository'
-  GITCLONEREPO:
+  GitCloneRepo:
     GitRepoUrl: 'https://github.com/gkhakare/CoreKIs.git'
     TargetMachine: Shree
     TargetState: Created

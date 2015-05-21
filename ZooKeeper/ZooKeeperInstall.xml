@@ -12,7 +12,7 @@
 	<CreateTrigger>
       <IssueCondition>
       <Description>Searches for an Issue with DataBlock INSTALLZOOKEEPER and triggers the workflow for sucessful completion</Description>
-		 <SubItem Name="INSTALLZOOKEEPER" Alias="IZK">
+		 <SubItem Name="InstallZooKeeper" Alias="INSTALLZOOKEEPER">
 		    <AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}"/>
 		    <AttributeFilter Name="TargetState" Mode="string" Value="Created"/>
 		    <AttributeFilter Name="Status" Mode="notexists"/>
@@ -21,7 +21,7 @@
 	  </IssueCondition>
 
 	     <Activate>
-	     	<SetAttribute Name="IZK:Status" Value="WorkflowStarted" /> 
+	     	<SetAttribute Name="INSTALLZOOKEEPER:Status" Value="WorkflowStarted" /> 
 	     	   <GenerateData Alias="PROTASKS">
 	     	      <DataType>ProcessingTasks</DataType>
 	     	      <CurrentTask>1</CurrentTask>
@@ -32,12 +32,12 @@
         <IncAttribute Name="PROTASKS:NumberTotal"/>
 
 		<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
-		       TargetMachine=${IZK:TargetMachine}      
+		       TargetMachine=${INSTALLZOOKEEPER:TargetMachine}      
 			   TargetState=Created
-			   User=${IZK:User}
+			   User=${INSTALLZOOKEEPER:User}
 			   Lib=PKG
 			   PKG=zookeeper
-			   Host=${IZK:Host}
+			   Host=${INSTALLZOOKEEPER:Host}
 			   CurrentState=ReadState
 			   TaskNumber=${PROTASKS:NumberTotal}
 			 /> </NewBlock>]]>
@@ -54,11 +54,11 @@
         <IncAttribute Name="PROTASKS:NumberTotal"/>
 
 		<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
-		       TargetMachine=${IZK:TargetMachine}      
+		       TargetMachine=${INSTALLZOOKEEPER:TargetMachine}      
 			   TargetState=Created
-			   User=${IZK:User}
+			   User=${INSTALLZOOKEEPER:User}
 			   Lib=RUNCOMMAND
-			   Host=${IZK:Host}
+			   Host=${INSTALLZOOKEEPER:Host}
 			   CurrentState=ReadState
 			   Command='sudo /usr/share/zookeeper/bin/zkServer.sh start'
 			   TaskNumber=${PROTASKS:NumberTotal}
