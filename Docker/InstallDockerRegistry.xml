@@ -1,0 +1,295 @@
+<KnowledgeItem ID="OpexSoftware:INSTALLDOCKER:InstallDockerRegistry" xmlns="http://www.arago.de/KiSchema">
+	<Title>InstallDockerRegistry</Title>
+	<Description>Initiates the workflow for installing Docker-Registry</Description>
+	<BindAttributes>
+       <RelatedNode Mode="predecessor" Alias="PRE">
+			<AttributeFilter Name="NodeType" Mode="string" Value="Application"/>
+	   </RelatedNode> 	
+	</BindAttributes>
+
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+
+	<CreateTrigger>
+	     <IssueCondition>
+		 <Description>Searches for an Issue with DataBlock InstallDocker and triggers the workflow for successful completion</Description>
+			<SubItem Name="InstallDockerRegistry" Alias="INSTALLDOCKERREGISTRY">
+				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}"/>
+				<AttributeFilter Name="TargetState" Mode="string" Value="Created"/>
+				<AttributeFilter Name="Status" Mode="notexists"/>
+				<AttributeFilter Name="User" Mode="exists"/>
+				<AttributeFilter Name="Host" Mode="exists"/>
+				<AttributeFilter Name="TargetApp" Mode="string" Value="${PRE:NodeName}"/>
+			</SubItem>
+		</IssueCondition>
+
+	     <Activate>
+			<SetAttribute Name="INSTALLDOCKERREGISTRY:Status" Value="WorkflowStarted" /> 
+			<GenerateData Alias="PROTASKS">
+                            <DataType>ProcessingTasks</DataType>
+                            <CurrentTask>1</CurrentTask>
+			</GenerateData>
+
+			<!--Task1 Install preequisites package python-dev -->
+			
+			<IncAttribute Name="PROTASKS:NumberTotal"/>
+			
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+				TargetMachine=${INSTALLDOCKERREGISTRY:TargetMachine}      
+				TargetState=Created
+				User=${INSTALLDOCKERREGISTRY:User}
+				Lib=PKG
+				Host=${INSTALLDOCKERREGISTRY:Host}
+				PKG='build-essential python-dev'
+				CurrentState=ReadState
+				TaskNumber=${PROTASKS:NumberTotal}
+				/> </NewBlock>]]>
+			</XMLExtract>
+			
+      
+			<GenerateData Alias="VAL"> 
+				<!-- Independent="true" can be applied, if multiple Issues should be generated. In this case pass on the parent IssueID to the resulting Issue <ParentIID>${IID}</ParentIID>, don't forget to include ParentIID=${IID} into the Tasks DataBlock on the Node -->
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>	
+			
+			<!--Task2 Install preequisites package libevent-dev -->
+			
+			<IncAttribute Name="PROTASKS:NumberTotal"/>
+			
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+				TargetMachine=${INSTALLDOCKERREGISTRY:TargetMachine}      
+				TargetState=Created
+				User=${INSTALLDOCKERREGISTRY:User}	
+				Lib=PKG
+				Host=${INSTALLDOCKERREGISTRY:Host}
+				PKG='build-essential libevent-dev'
+				CurrentState=ReadState
+				TaskNumber=${PROTASKS:NumberTotal}
+				/> </NewBlock>]]>
+			</XMLExtract>
+			
+      
+			<GenerateData Alias="VAL"> 
+				<!-- Independent="true" can be applied, if multiple Issues should be generated. In this case pass on the parent IssueID to the resulting Issue <ParentIID>${IID}</ParentIID>, don't forget to include ParentIID=${IID} into the Tasks DataBlock on the Node -->
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>	
+			
+			<!--Task3 Install preequisites package python-pip -->
+			
+			<IncAttribute Name="PROTASKS:NumberTotal"/>
+			
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+				TargetMachine=${INSTALLDOCKERREGISTRY:TargetMachine}      
+				TargetState=Created
+				User=${INSTALLDOCKERREGISTRY:User}
+				Lib=PKG
+				Host=${INSTALLDOCKERREGISTRY:Host}
+				PKG='build-essential python-pip'
+				CurrentState=ReadState
+				TaskNumber=${PROTASKS:NumberTotal}
+				/> </NewBlock>]]>
+			</XMLExtract>
+			
+      
+			<GenerateData Alias="VAL"> 
+				<!-- Independent="true" can be applied, if multiple Issues should be generated. In this case pass on the parent IssueID to the resulting Issue <ParentIID>${IID}</ParentIID>, don't forget to include ParentIID=${IID} into the Tasks DataBlock on the Node -->
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>	
+			
+			<!--Task4 Install preequisites package liblzma-dev -->
+			
+			<IncAttribute Name="PROTASKS:NumberTotal"/>
+			
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+				TargetMachine=${INSTALLDOCKERREGISTRY:TargetMachine}      
+				TargetState=Created
+				User=${INSTALLDOCKERREGISTRY:User}
+				Lib=PKG
+				Host=${INSTALLDOCKERREGISTRY:Host}
+				PKG='build-essential liblzma-dev'
+				CurrentState=ReadState
+				TaskNumber=${PROTASKS:NumberTotal}
+				/> </NewBlock>]]>
+			</XMLExtract>
+			
+      
+			<GenerateData Alias="VAL"> 
+				<!-- Independent="true" can be applied, if multiple Issues should be generated. In this case pass on the parent IssueID to the resulting Issue <ParentIID>${IID}</ParentIID>, don't forget to include ParentIID=${IID} into the Tasks DataBlock on the Node -->
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
+
+			<!--Task5 Install prerequisites package swig -->
+			
+			<IncAttribute Name="PROTASKS:NumberTotal"/>
+			
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+				TargetMachine=${INSTALLDOCKERREGISTRY:TargetMachine}      
+				TargetState=Created
+				User=${INSTALLDOCKERREGISTRY:User}
+				Lib=PKG
+				Host=${INSTALLDOCKERREGISTRY:Host}
+				PKG=swig
+				CurrentState=ReadState
+				TaskNumber=${PROTASKS:NumberTotal}
+				/> </NewBlock>]]>
+			</XMLExtract>
+			
+      
+			<GenerateData Alias="VAL"> 
+				<!-- Independent="true" can be applied, if multiple Issues should be generated. In this case pass on the parent IssueID to the resulting Issue <ParentIID>${IID}</ParentIID>, don't forget to include ParentIID=${IID} into the Tasks DataBlock on the Node -->
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
+
+			<!--Task6 Install docker-registry -->	
+  
+             <IncAttribute Name="PROTASKS:NumberTotal"/>
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+				TargetMachine=${INSTALLDOCKERREGISTRY:TargetMachine}      
+				TargetState=Created
+				User=${INSTALLDOCKERREGISTRY:User}
+				Host=${INSTALLDOCKERREGISTRY:Host}
+				Lib=RUNCOMMAND
+				Command='sudo pip install docker-registry'
+				CurrentState=ReadState
+				TaskNumber=${PROTASKS:NumberTotal}
+				/> </NewBlock>]]>
+			</XMLExtract>
+			
+      
+			<GenerateData Alias="VAL"> 
+				<!-- Independent="true" can be applied, if multiple Issues should be generated. In this case pass on the parent IssueID to the resulting Issue <ParentIID>${IID}</ParentIID>, don't forget to include ParentIID=${IID} into the Tasks DataBlock on the Node-->
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>	
+			
+			<!--Task7 Create config.yml file and a directory in var named docker-registry -->	
+  
+             <IncAttribute Name="PROTASKS:NumberTotal"/>
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+				TargetMachine=${INSTALLDOCKERREGISTRY:TargetMachine}      
+				TargetState=Created
+				User=${INSTALLDOCKERREGISTRY:User}
+				Host=${INSTALLDOCKERREGISTRY:Host}
+				Lib=RUNCOMMAND
+				Command='cd /usr/local/lib/python2.7/dist-packages/docker_registry/lib/../../config/ &amp;&amp; sudo cp config_sample.yml config.yml &amp;&amp; sudo mkdir /var/docker-registry'
+				CurrentState=ReadState
+				TaskNumber=${PROTASKS:NumberTotal}
+				/> </NewBlock>]]>
+			</XMLExtract>
+			
+      
+			<GenerateData Alias="VAL"> 
+				<!-- Independent="true" can be applied, if multiple Issues should be generated. In this case pass on the parent IssueID to the resulting Issue <ParentIID>${IID}</ParentIID>, don't forget to include ParentIID=${IID} into the Tasks DataBlock on the Node-->
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>	
+			
+			<!--Task8 Replace the /tmp to /var in config.yml-->	
+  
+             <IncAttribute Name="PROTASKS:NumberTotal"/>
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+				TargetMachine=${INSTALLDOCKERREGISTRY:TargetMachine}      
+				TargetState=Created
+				User=${INSTALLDOCKERREGISTRY:User}
+				Host=${INSTALLDOCKERREGISTRY:Host}
+				Lib=RUNCOMMAND
+				Command='sudo sed -i &apos;s/\/var/\/tmp/&apos; /usr/local/lib/python2.7/dist-packages/docker_registry/lib/../../config/config.yml'
+				CurrentState=ReadState
+				TaskNumber=${PROTASKS:NumberTotal}
+				/> </NewBlock>]]>
+			</XMLExtract>
+			
+      
+			<GenerateData Alias="VAL"> 
+				<!-- Independent="true" can be applied, if multiple Issues should be generated. In this case pass on the parent IssueID to the resulting Issue <ParentIID>${IID}</ParentIID>, don't forget to include ParentIID=${IID} into the Tasks DataBlock on the Node-->
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>	
+			
+    	    <!--Task9 Create a directory named docker-registry -->	
+  
+             <IncAttribute Name="PROTASKS:NumberTotal"/>
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+				TargetMachine=${INSTALLDOCKERREGISTRY:TargetMachine}      
+				TargetState=Created
+				User=${INSTALLDOCKERREGISTRY:User}
+				Host=${INSTALLDOCKERREGISTRY:Host}
+				Lib=RUNCOMMAND
+				Command='sudo mkdir -p /var/log/docker-registry'
+				CurrentState=ReadState
+				TaskNumber=${PROTASKS:NumberTotal}
+				/> </NewBlock>]]>
+			</XMLExtract>
+			
+      
+			<GenerateData Alias="VAL"> 
+				<!-- Independent="true" can be applied, if multiple Issues should be generated. In this case pass on the parent IssueID to the resulting Issue <ParentIID>${IID}</ParentIID>, don't forget to include ParentIID=${IID} into the Tasks DataBlock on the Node-->
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>	
+			
+			<!--Task10 Write a file to execute the command -->	
+  
+             <IncAttribute Name="PROTASKS:NumberTotal"/>
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+				TargetMachine=${INSTALLDOCKERREGISTRY:TargetMachine}      
+				TargetState=Created
+				User=${INSTALLDOCKERREGISTRY:User}
+				Lib=FILECREATE
+				FilePath='/etc/init'
+				FileName=docker-registry.conf
+				FileContent='description &apos;Docker Registry&apos; \nstart on runlevel [2345] \nstop on runlevel [016] \nrespawn \nrespawn limit 10 5 \nscript \nexec gunicorn --access-logfile /var/log/docker-registry/access.log --error-logfile /var/log/docker-registry/server.log -k gevent --max-requests 100 --graceful-timeout 3600 -t 3600 -b localhost:5000 -w 8 docker_registry.wsgi:application \nend script'
+				Host=${INSTALLDOCKERREGISTRY:Host}
+				CurrentState=ReadState
+				TaskNumber=${PROTASKS:NumberTotal}/> 
+				/> </NewBlock>]]>
+			</XMLExtract>
+			
+      
+			<GenerateData Alias="VAL"> 
+				<!-- Independent="true" can be applied, if multiple Issues should be generated. In this case pass on the parent IssueID to the resulting Issue <ParentIID>${IID}</ParentIID>, don't forget to include ParentIID=${IID} into the Tasks DataBlock on the Node-->
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>	
+    	  
+    	  	 <!--Task11 Start the docker-registry service-->	
+  
+             <IncAttribute Name="PROTASKS:NumberTotal"/>
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+				TargetMachine=${INSTALLDOCKERREGISTRY:TargetMachine}      
+				TargetState=Created
+				User=${INSTALLDOCKERREGISTRY:User}
+				Host=${INSTALLDOCKERREGISTRY:Host}
+				Lib=RUNCOMMAND
+				Command='sudo service docker-registry start'
+				CurrentState=ReadState
+				TaskNumber=${PROTASKS:NumberTotal}
+				/> </NewBlock>]]>
+			</XMLExtract>
+			
+      
+			<GenerateData Alias="VAL"> 
+				<!-- Independent="true" can be applied, if multiple Issues should be generated. In this case pass on the parent IssueID to the resulting Issue <ParentIID>${IID}</ParentIID>, don't forget to include ParentIID=${IID} into the Tasks DataBlock on the Node-->
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>	
+    	  
+			<!--<Resolve>Resolved initial Issue with ID ${IID}</Resolve> - use if ChildIssues are created-->
+			
+			<GenerateData> 
+				<DataType>Resolve</DataType>
+				<Status>checkForResolve</Status>
+			</GenerateData>	
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>
