@@ -20,7 +20,7 @@
 		
 	<CreateTrigger>
 		<IssueCondition>
-			<Description> Checks Issue for DataBlock __core__${NODE:MachineClass}__TAREXTRACT__ReadState__ and attribute ExtUID being the same as the machine KI binds to. </Description>
+			<Description> Checks Issue for DataBlock __core__Ubuntu__TAREXTRACT__ReadState__ and attribute ExtUID being the same as the machine KI binds to. </Description>
 			<SubItem Name="__core__Ubuntu__TAREXTRACT__ReadState__" Alias="CHECK">
 				<AttributeFilter Name="ExtUID" Mode="string" Value="${TASKS:UID}"/>	
 				<AttributeFilter Name="Status" Mode="notexists"/>	

@@ -1,6 +1,6 @@
 <KnowledgeItem ID="OpexSoftware:Ubuntu:TARCOMPRESS:__core__Ubuntu__TARCOMPRESS__Created__" xmlns="http://www.arago.de/KiSchema">
 	<Title>__core__Ubuntu__TARCOMPRESS__Created__</Title>
-	<Description> This KI searches for the DataBlock called __core__Ubuntu__TARCOMPRESS__Created__ and Untar on specified Target Machine and writes the current status back to the node. </Description>
+	<Description> This KI searches for the DataBlock called __core__Ubuntu__TARCOMPRESS__Created__ and Tar on specified Target Machine and writes the current status back to the node. </Description>
 
 	<BindAttributes>
 		<AttributeFilter Name="NodeType" Mode="string" Value="Machine"/>
@@ -19,7 +19,7 @@
 		
 	<CreateTrigger>
 		<IssueCondition>
-			<Description> Checks Issue for DataBlock __core__${NODE:MachineClass}__TARCOMPRESS__Created__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
+			<Description> Checks Issue for DataBlock __core__Ubuntu__TARCOMPRESS__Created__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
 			<SubItem Name="__core__Ubuntu__TARCOMPRESS__Created__" Alias="ADDED">
 				<AttributeFilter Name="ExtUID" Mode="string" Value="${TASKS:UID}" />
 				<AttributeFilter Name="Status" Mode="notexists"/>	
