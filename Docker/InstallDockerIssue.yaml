@@ -1,0 +1,11 @@
+Issue:
+  NodeID: OpexSoftware:UseCase:Application:Docker
+  xmlns: http://www.arago.de/IssueSchema
+  IssueSubject: 'Installing Docker Registry'
+  INSTALLDOCKER:
+    TargetApp: Docker  
+    TargetMachine: Zeeshan
+    TargetState: Created
+    AppToInstall: docker-registry 
+    User: zeeshan
+    Host: 192.168.1.90
