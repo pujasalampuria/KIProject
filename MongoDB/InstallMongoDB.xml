@@ -37,7 +37,6 @@
 				User=${IMD:User}
 				Lib=APTSOURCEMODIFICATION
 				PKG=mongodb-org
-				OSSpecific=Y
 				Host=${IMD:Host}
 				AptRepoUrl='${IMD:AptRepoUrl}'
 				AptArchiveType=${IMD:AptArchiveType}
@@ -65,7 +64,6 @@
 				TargetState=Created
 				User=${IMD:User}
 				Lib=PKG
-				OSSpecific=Y
 				PKG=mongodb-org
 				Host=${IMD:Host}
 				CurrentState=ReadState
