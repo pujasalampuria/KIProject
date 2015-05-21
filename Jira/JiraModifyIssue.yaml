@@ -1,11 +1,11 @@
 Issue:
-  NodeID: OpexSoftware:UseCase:Machine:shree
+  NodeID: OpexSoftware:UseCase:Machine:Shree
   xmlns: http://www.arago.de/IssueSchema
   IssueSubject: 'Update Issue in Jira'
   JiraModifyIssue:
     TargetMachine: Shree
     TargetState: Created
-    JiraUrl: http://192.168.1.57:9999/rest/api/2/issue/
+    JiraUrl: http://192.168.1.69:9999/rest/api/2/issue/
     IssueKey: KIP-10
     JiraUser: admin
     JiraPassword: admin
