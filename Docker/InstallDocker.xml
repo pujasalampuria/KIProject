@@ -1,4 +1,4 @@
-<KnowledgeItem ID="OpexSoftware:INSTALLDOCKER:InstallDocker" xmlns="http://www.arago.de/KiSchema">
+<KnowledgeItem ID="OpexSoftware:INSTALLDOCKER:InstallDockerRegistry" xmlns="http://www.arago.de/KiSchema">
 	<Title>InstallDocker-Registry</Title>
 	<Description>Initiates the workflow for installing Docker-Registry</Description>
 	<BindAttributes>
@@ -11,17 +11,19 @@
 
 	<CreateTrigger>
 	     <IssueCondition>
-		 <Description>Searches for an Issue with DataBlock INSTALLDOCKER and triggers the workflow for successful completion</Description>
-			<SubItem Name="INSTALLDOCKER" Alias="IMD">
+		 <Description>Searches for an Issue with DataBlock InstallDocker and triggers the workflow for successful completion</Description>
+			<SubItem Name="InstallDocker" Alias="INSTALLDOCKER">
 				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}"/>
 				<AttributeFilter Name="TargetState" Mode="string" Value="Created"/>
 				<AttributeFilter Name="Status" Mode="notexists"/>
+				<AttributeFilter Name="User" Mode="exists"/>
+				<AttributeFilter Name="Host" Mode="exists"/>
 				<AttributeFilter Name="TargetApp" Mode="string" Value="${PRE:NodeName}"/>
 			</SubItem>
 		</IssueCondition>
 
 	     <Activate>
-			<SetAttribute Name="IMD:Status" Value="WorkflowStarted" /> 
+			<SetAttribute Name="INSTALLDOCKER:Status" Value="WorkflowStarted" /> 
 			<GenerateData Alias="PROTASKS">
                             <DataType>ProcessingTasks</DataType>
                             <CurrentTask>1</CurrentTask>
@@ -32,11 +34,11 @@
 			<IncAttribute Name="PROTASKS:NumberTotal"/>
 			
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
-				TargetMachine=${IMD:TargetMachine}      
+				TargetMachine=${INSTALLDOCKER:TargetMachine}      
 				TargetState=Created
-				User=${IMD:User}
+				User=${INSTALLDOCKER:User}
 				Lib=PKG
-				Host=${IMD:Host}
+				Host=${INSTALLDOCKER:Host}
 				PKG='build-essential python-dev'
 				CurrentState=ReadState
 				TaskNumber=${PROTASKS:NumberTotal}
@@ -55,11 +57,11 @@
 			<IncAttribute Name="PROTASKS:NumberTotal"/>
 			
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
-				TargetMachine=${IMD:TargetMachine}      
+				TargetMachine=${INSTALLDOCKER:TargetMachine}      
 				TargetState=Created
-				User=${IMD:User}	
+				User=${INSTALLDOCKER:User}	
 				Lib=PKG
-				Host=${IMD:Host}
+				Host=${INSTALLDOCKER:Host}
 				PKG='build-essential libevent-dev'
 				CurrentState=ReadState
 				TaskNumber=${PROTASKS:NumberTotal}
@@ -78,11 +80,11 @@
 			<IncAttribute Name="PROTASKS:NumberTotal"/>
 			
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
-				TargetMachine=${IMD:TargetMachine}      
+				TargetMachine=${INSTALLDOCKER:TargetMachine}      
 				TargetState=Created
-				User=${IMD:User}
+				User=${INSTALLDOCKER:User}
 				Lib=PKG
-				Host=${IMD:Host}
+				Host=${INSTALLDOCKER:Host}
 				PKG='build-essential python-pip'
 				CurrentState=ReadState
 				TaskNumber=${PROTASKS:NumberTotal}
@@ -101,11 +103,11 @@
 			<IncAttribute Name="PROTASKS:NumberTotal"/>
 			
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
-				TargetMachine=${IMD:TargetMachine}      
+				TargetMachine=${INSTALLDOCKER:TargetMachine}      
 				TargetState=Created
-				User=${IMD:User}
+				User=${INSTALLDOCKER:User}
 				Lib=PKG
-				Host=${IMD:Host}
+				Host=${INSTALLDOCKER:Host}
 				PKG='build-essential liblzma-dev'
 				CurrentState=ReadState
 				TaskNumber=${PROTASKS:NumberTotal}
@@ -124,11 +126,11 @@
 			<IncAttribute Name="PROTASKS:NumberTotal"/>
 			
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
-				TargetMachine=${IMD:TargetMachine}      
+				TargetMachine=${INSTALLDOCKER:TargetMachine}      
 				TargetState=Created
-				User=${IMD:User}
+				User=${INSTALLDOCKER:User}
 				Lib=PKG
-				Host=${IMD:Host}
+				Host=${INSTALLDOCKER:Host}
 				PKG=swig
 				CurrentState=ReadState
 				TaskNumber=${PROTASKS:NumberTotal}
@@ -147,10 +149,10 @@
              <IncAttribute Name="PROTASKS:NumberTotal"/>
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
-				TargetMachine=${IMD:TargetMachine}      
+				TargetMachine=${INSTALLDOCKER:TargetMachine}      
 				TargetState=Created
-				User=${IMD:User}
-				Host=${IMD:Host}
+				User=${INSTALLDOCKER:User}
+				Host=${INSTALLDOCKER:Host}
 				Lib=RUNCOMMAND
 				Command='sudo pip install docker-registry'
 				CurrentState=ReadState
@@ -170,10 +172,10 @@
              <IncAttribute Name="PROTASKS:NumberTotal"/>
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
-				TargetMachine=${IMD:TargetMachine}      
+				TargetMachine=${INSTALLDOCKER:TargetMachine}      
 				TargetState=Created
-				User=${IMD:User}
-				Host=${IMD:Host}
+				User=${INSTALLDOCKER:User}
+				Host=${INSTALLDOCKER:Host}
 				Lib=RUNCOMMAND
 				Command='cd /usr/local/lib/python2.7/dist-packages/docker_registry/lib/../../config/ &amp;&amp; sudo cp config_sample.yml config.yml &amp;&amp; sudo mkdir /var/docker-registry'
 				CurrentState=ReadState
@@ -193,10 +195,10 @@
              <IncAttribute Name="PROTASKS:NumberTotal"/>
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
-				TargetMachine=${IMD:TargetMachine}      
+				TargetMachine=${INSTALLDOCKER:TargetMachine}      
 				TargetState=Created
-				User=${IMD:User}
-				Host=${IMD:Host}
+				User=${INSTALLDOCKER:User}
+				Host=${INSTALLDOCKER:Host}
 				Lib=RUNCOMMAND
 				Command='sudo sed -i &apos;s/\/var/\/tmp/&apos; /usr/local/lib/python2.7/dist-packages/docker_registry/lib/../../config/config.yml'
 				CurrentState=ReadState
@@ -216,10 +218,10 @@
              <IncAttribute Name="PROTASKS:NumberTotal"/>
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
-				TargetMachine=${IMD:TargetMachine}      
+				TargetMachine=${INSTALLDOCKER:TargetMachine}      
 				TargetState=Created
-				User=${IMD:User}
-				Host=${IMD:Host}
+				User=${INSTALLDOCKER:User}
+				Host=${INSTALLDOCKER:Host}
 				Lib=RUNCOMMAND
 				Command='sudo mkdir -p /var/log/docker-registry'
 				CurrentState=ReadState
@@ -239,14 +241,14 @@
              <IncAttribute Name="PROTASKS:NumberTotal"/>
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
-				TargetMachine=${IMD:TargetMachine}      
+				TargetMachine=${INSTALLDOCKER:TargetMachine}      
 				TargetState=Created
-				User=${IMD:User}
+				User=${INSTALLDOCKER:User}
 				Lib=FILECREATE
 				FilePath='/etc/init'
 				FileName=docker-registry.conf
 				FileContent='description &apos;Docker Registry&apos; \nstart on runlevel [2345] \nstop on runlevel [016] \nrespawn \nrespawn limit 10 5 \nscript \nexec gunicorn --access-logfile /var/log/docker-registry/access.log --error-logfile /var/log/docker-registry/server.log -k gevent --max-requests 100 --graceful-timeout 3600 -t 3600 -b localhost:5000 -w 8 docker_registry.wsgi:application \nend script'
-				Host=${IMD:Host}
+				Host=${INSTALLDOCKER:Host}
 				CurrentState=ReadState
 				TaskNumber=${PROTASKS:NumberTotal}/> 
 				/> </NewBlock>]]>
@@ -264,10 +266,10 @@
              <IncAttribute Name="PROTASKS:NumberTotal"/>
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
-				TargetMachine=${IMD:TargetMachine}      
+				TargetMachine=${INSTALLDOCKER:TargetMachine}      
 				TargetState=Created
-				User=${IMD:User}
-				Host=${IMD:Host}
+				User=${INSTALLDOCKER:User}
+				Host=${INSTALLDOCKER:Host}
 				Lib=RUNCOMMAND
 				Command='sudo service docker-registry start'
 				CurrentState=ReadState
