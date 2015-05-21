@@ -15,11 +15,13 @@
 
 		<IssueCondition>
 			<Description>Searches for an Issue with DataBlock POSTGRESQLUSER and the necessary information for successful completion of workflow</Description>
-			<SubItem Name="POSTGRESQLUSER" Alias="PSU">
+			<SubItem Name="PostgreSqlUser" Alias="POSTGRESQLUSER">
 				<AttributeFilter Name="TargetApp" Mode="string" Value="${PRE:NodeName}"/>
 				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}"/>
 				<AttributeFilter Name="NewDBUserName" Mode="exists"/>
 				<AttributeFilter Name="NewDBPassword" Mode="exists"/>
+				<AttributeFilter Name="User" Mode="exists"/>
+				<AttributeFilter Name="Host" Mode="exists"/>
 				<AttributeFilter Name="TargetState" Mode="string" Value="Created"/>
 				<AttributeFilter Name="Status" Mode="notexists"/>
 				
@@ -28,7 +30,7 @@
 
 		<Activate>
 			
-			<SetAttribute Name="PSU:Status" Value="WorkflowStarted" /> 
+			<SetAttribute Name="POSTGRESQLUSER:Status" Value="WorkflowStarted" /> 
 			
 			<GenerateData Alias="PROTASKS"> 
 				<DataType>ProcessingTasks</DataType>
@@ -38,15 +40,15 @@
 			<IncAttribute Name="PROTASKS:NumberTotal"/>
 			
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 			
-				TargetMachine=${PSU:TargetMachine}      
+				TargetMachine=${POSTGRESQLUSER:TargetMachine}      
 				TargetState=Created
-				NewDBUserName=${PSU:NewDBUserName}
-				NewDBPassword=${PSU:NewDBPassword}
-				Host=${PSU:Host}
-				User=${PSU:User}
+				NewDBUserName=${POSTGRESQLUSER:NewDBUserName}
+				NewDBPassword=${POSTGRESQLUSER:NewDBPassword}
+				Host=${POSTGRESQLUSER:Host}
+				User=${POSTGRESQLUSER:User}
 				TaskNumber=${PROTASKS:NumberTotal}
-				Command1='psql -c \"CREATE USER ${PSU:NewDBUserName} WITH PASSWORD'
-				Command2='${PSU:NewDBPassword}' 
+				Command1='psql -c \"CREATE USER ${POSTGRESQLUSER:NewDBUserName} WITH PASSWORD'
+				Command2='${POSTGRESQLUSER:NewDBPassword}' 
 				Command3='\"'
 				Lib=RUNCOMMAND
 				CurrentState=ReadState/> 
@@ -60,11 +62,7 @@
 				<DataType>Validate</DataType>
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>	
-      
-            
 			 	
-			
-      
 			<!--		<Resolve>Resolved initial Issue with ID ${IID}</Resolve> - use if ChildIssues are created-->
 			
 			<GenerateData> 

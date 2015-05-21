@@ -15,10 +15,12 @@
 
 		<IssueCondition>
 			<Description>Searches for an Issue with DataBlock POSTGRESQLDB and the necessary information for successful completion of workflow</Description>
-			<SubItem Name="POSTGRESQLDB" Alias="PSD">
+			<SubItem Name="PostgreSqlDb" Alias="POSTGRESQLDB">
 				<AttributeFilter Name="TargetApp" Mode="string" Value="${PRE:NodeName}"/>
 				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}"/>
 				<AttributeFilter Name="Database" Mode="exists"/>
+				<AttributeFilter Name="User" Mode="exists"/>
+				<AttributeFilter Name="Host" Mode="exists"/>
 				<AttributeFilter Name="TargetState" Mode="string" Value="Created"/>
 				<AttributeFilter Name="Status" Mode="notexists"/>
 			</SubItem>
@@ -26,7 +28,7 @@
 
 		<Activate>
 			
-			<SetAttribute Name="PSD:Status" Value="WorkflowStarted" /> 
+			<SetAttribute Name="POSTGRESQLDB:Status" Value="WorkflowStarted" /> 
 
 			<GenerateData Alias="PROTASKS"> 
 				<DataType>ProcessingTasks</DataType>
@@ -36,14 +38,14 @@
 			<IncAttribute Name="PROTASKS:NumberTotal"/>
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				Database=${PSD:Database}
-				TargetMachine=${PSD:TargetMachine}      
+				Database=${POSTGRESQLDB:Database}
+				TargetMachine=${POSTGRESQLDB:TargetMachine}      
 				TargetState=Created				
-				Host=${PSD:Host}
-				User=${PSD:User}
+				Host=${POSTGRESQLDB:Host}
+				User=${POSTGRESQLDB:User}
 				TaskNumber=${PROTASKS:NumberTotal}
 				Lib=RUNCOMMAND
-				Command='psql -c \"CREATE DATABASE ${PSD:Database};\"'
+				Command='psql -c \"CREATE DATABASE ${POSTGRESQLDB:Database};\"'
 				CurrentState=ReadState
 				/> </NewBlock>]]>
 			</XMLExtract> 
