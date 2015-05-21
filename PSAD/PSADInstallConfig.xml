@@ -18,7 +18,7 @@
 		<IssueCondition>
 			<Description>Searches for an Issue with DataBlock PSADInstallConfig and the necessary information for successful completion of workflow
 			</Description>
-			<SubItem Name="PSADInstallConfig" Alias="PIC">
+			<SubItem Name="PSADInstallConfig" Alias="PSADINSTALLCONFIG">
 				<AttributeFilter Name="TargetApp" Mode="string"
 					Value="${PRE:NodeName}" />
 				<AttributeFilter Name="TargetMachine" Mode="string"
@@ -29,6 +29,8 @@
 				<AttributeFilter Name="TargetPath" Mode="exists" />
 				<AttributeFilter Name="DownloadUrl" Mode="exists" />
 				<AttributeFilter Name="UntarFolder" Mode="exists" />
+				<AttributeFilter Name="User" Mode="exists" />
+				<AttributeFilter Name="Host" Mode="exists" />
 				<AttributeFilter Name="TargetState" Mode="string"
 					Value="Created" />
 				<AttributeFilter Name="Status" Mode="notexists" />
@@ -38,52 +40,25 @@
 
 		<Activate>
 
-			<SetAttribute Name="PIC:Status" Value="WorkflowStarted" />
+			<SetAttribute Name="PSADINSTALLCONFIG:Status" Value="WorkflowStarted" />
 
 			<GenerateData Alias="PROTASKS">
 				<DataType>ProcessingTasks</DataType>
 				<CurrentTask>1</CurrentTask>
 			</GenerateData>
 
-			<!-- TASK1 -->
+			<!--TASK1 -->
 
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetMachine=${PIC:TargetMachine}            
+				TargetTarFileName=${PSADINSTALLCONFIG:TargetTarFileName}
+				TargetMachine=${PSADINSTALLCONFIG:TargetMachine}            
 				TargetState=Created
-				Host=${PIC:Host}
-				User=${PIC:User}
-				Command='mkdir -p ${PIC:TargetPath}'
-				Lib=RUNCOMMAND
-				TaskNumber=${PROTASKS:NumberTotal}
-				CurrentState=ReadState/> 
-				</NewBlock>]]>
-			</XMLExtract>
-
-
-
-			<GenerateData Alias="VAL">
-				<!-- Independent="true" can be applied, if multiple Issues should be 
-					generated. In this case pass on the parent IssueID to the resulting Issue 
-					<ParentIID>${IID}</ParentIID>, don't forget to include ParentIID=${IID} into 
-					the Tasks DataBlock on the Node -->
-				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
-			</GenerateData>
-
-			<!--TASK2 -->
-
-			<IncAttribute Name="PROTASKS:NumberTotal" />
-
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetTarFileName=${PIC:TargetTarFileName}
-				TargetMachine=${PIC:TargetMachine}            
-				TargetState=Created
-				TargetPath='${PIC:TargetPath}'
-				DownloadUrl='${PIC:DownloadUrl}'
-				Host=${PIC:Host}
-				User=${PIC:User}
+				TargetPath='${PSADINSTALLCONFIG:TargetPath}'
+				DownloadUrl='${PSADINSTALLCONFIG:DownloadUrl}'
+				Host=${PSADINSTALLCONFIG:Host}
+				User=${PSADINSTALLCONFIG:User}
 				Lib=WGET
 				TaskNumber=${PROTASKS:NumberTotal}
 				CurrentState=ReadState/> 
@@ -99,18 +74,18 @@
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
 
-			<!--TASK3 -->
+			<!--TASK2 -->
 
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetTarFileName=${PIC:TargetTarFileName}
-				TargetMachine=${PIC:TargetMachine}      
+				TargetTarFileName=${PSADINSTALLCONFIG:TargetTarFileName}
+				TargetMachine=${PSADINSTALLCONFIG:TargetMachine}      
 				TargetState=Created
-				UntarFolder=${PIC:UntarFolder}      
-				TargetPath='${PIC:TargetPath}'
-				Host=${PIC:Host}
-				User=${PIC:User}
+				UntarFolder=${PSADINSTALLCONFIG:UntarFolder}      
+				TargetPath='${PSADINSTALLCONFIG:TargetPath}'
+				Host=${PSADINSTALLCONFIG:Host}
+				User=${PSADINSTALLCONFIG:User}
 				Lib=TAREXTRACT
 				TaskNumber=${PROTASKS:NumberTotal}
 				CurrentState=ReadState/> 
@@ -126,15 +101,15 @@
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
 
-			<!-- TASK4 -->
+			<!-- TASK3 -->
 
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetMachine=${PIC:TargetMachine}            
+				TargetMachine=${PSADINSTALLCONFIG:TargetMachine}            
 				TargetState=Created
-				Host=${PIC:Host}
-				User=${PIC:User}
+				Host=${PSADINSTALLCONFIG:Host}
+				User=${PSADINSTALLCONFIG:User}
 				Command='cd /tmp/.psad/psad-2.2 &amp;&amp; sudo mv install.answers.example install.answers'
 				Lib=RUNCOMMAND
 				TaskNumber=${PROTASKS:NumberTotal}
@@ -153,15 +128,15 @@
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
 
-			<!-- TASK5 -->
+			<!-- TASK4 -->
 
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetMachine=${PIC:TargetMachine}            
+				TargetMachine=${PSADINSTALLCONFIG:TargetMachine}            
 				TargetState=Created
-				Host=${PIC:Host}
-				User=${PIC:User}
+				Host=${PSADINSTALLCONFIG:Host}
+				User=${PSADINSTALLCONFIG:User}
 				Command='cd /tmp/.psad/psad-2.2 &amp;&amp; sudo ./install.pl --Use-answers'
 				Lib=RUNCOMMAND
 				TaskNumber=${PROTASKS:NumberTotal}
@@ -182,17 +157,42 @@
 
 
 
+			<!-- TASK5 -->
+
+			<IncAttribute Name="PROTASKS:NumberTotal" />
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
+				TargetMachine=${PSADINSTALLCONFIG:TargetMachine}      
+				TargetState=Created
+				User=${PSADINSTALLCONFIG:User}
+				Command='sudo iptables -A INPUT -j LOG'
+				Lib=RUNCOMMAND
+				Host=${PSADINSTALLCONFIG:Host}
+				CurrentState=ReadState
+				TaskNumber=${PROTASKS:NumberTotal}/> 
+				</NewBlock>]]>
+			</XMLExtract>
+
+			<GenerateData Alias="VAL">
+				<!-- Independent="true" can be applied, if multiple Issues should be 
+					generated. In this case pass on the parent IssueID to the resulting Issue 
+					<ParentIID>${IID}</ParentIID>, don't forget to include ParentIID=${IID} into 
+					the Tasks DataBlock on the Node -->
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
+
 			<!-- TASK6 -->
 
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetMachine=${PIC:TargetMachine}      
+				TargetMachine=${PSADINSTALLCONFIG:TargetMachine}      
 				TargetState=Created
-				User=${PIC:User}
-				Command='sudo iptables -A INPUT -j LOG'
+				User=${PSADINSTALLCONFIG:User}
+				Command='sudo iptables -A FORWARD -j LOG'
 				Lib=RUNCOMMAND
-				Host=${PIC:Host}
+				Host=${PSADINSTALLCONFIG:Host}
 				CurrentState=ReadState
 				TaskNumber=${PROTASKS:NumberTotal}/> 
 				</NewBlock>]]>
@@ -212,12 +212,12 @@
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetMachine=${PIC:TargetMachine}      
+				TargetMachine=${PSADINSTALLCONFIG:TargetMachine}      
 				TargetState=Created
-				User=${PIC:User}
-				Command='sudo iptables -A FORWARD -j LOG'
+				User=${PSADINSTALLCONFIG:User}
+				Command='sudo sed -i &apos;s/\/var\/log\/messages/\/var\/log\/syslog/g&apos; /etc/psad/psad.conf'
 				Lib=RUNCOMMAND
-				Host=${PIC:Host}
+				Host=${PSADINSTALLCONFIG:Host}
 				CurrentState=ReadState
 				TaskNumber=${PROTASKS:NumberTotal}/> 
 				</NewBlock>]]>
@@ -237,12 +237,12 @@
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetMachine=${PIC:TargetMachine}      
+				TargetMachine=${PSADINSTALLCONFIG:TargetMachine}      
 				TargetState=Created
-				User=${PIC:User}
-				Command='sudo sed -i &apos;s/\/var\/log\/messages/\/var\/log\/syslog/g&apos; /etc/psad/psad.conf'
+				User=${PSADINSTALLCONFIG:User}
+				Command='sudo sed -i &apos;s/root@localhost/${PSADINSTALLCONFIG:EmailID}/&apos; /etc/psad/psad.conf'
 				Lib=RUNCOMMAND
-				Host=${PIC:Host}
+				Host=${PSADINSTALLCONFIG:Host}
 				CurrentState=ReadState
 				TaskNumber=${PROTASKS:NumberTotal}/> 
 				</NewBlock>]]>
@@ -262,12 +262,12 @@
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetMachine=${PIC:TargetMachine}      
+				TargetMachine=${PSADINSTALLCONFIG:TargetMachine}      
 				TargetState=Created
-				User=${PIC:User}
-				Command='sudo sed -i &apos;s/root@localhost/${PIC:EmailID}/&apos; /etc/psad/psad.conf'
+				User=${PSADINSTALLCONFIG:User}
+				Command='sudo sed -i &apos;s/_CHANGEME_/${PSADINSTALLCONFIG:HostName}/&apos; /etc/psad/psad.conf'
 				Lib=RUNCOMMAND
-				Host=${PIC:Host}
+				Host=${PSADINSTALLCONFIG:Host}
 				CurrentState=ReadState
 				TaskNumber=${PROTASKS:NumberTotal}/> 
 				</NewBlock>]]>
@@ -287,37 +287,12 @@
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetMachine=${PIC:TargetMachine}      
+				TargetMachine=${PSADINSTALLCONFIG:TargetMachine}      
 				TargetState=Created
-				User=${PIC:User}
-				Command='sudo sed -i &apos;s/_CHANGEME_/${PIC:HostName}/&apos; /etc/psad/psad.conf'
-				Lib=RUNCOMMAND
-				Host=${PIC:Host}
-				CurrentState=ReadState
-				TaskNumber=${PROTASKS:NumberTotal}/> 
-				</NewBlock>]]>
-			</XMLExtract>
-
-			<GenerateData Alias="VAL">
-				<!-- Independent="true" can be applied, if multiple Issues should be 
-					generated. In this case pass on the parent IssueID to the resulting Issue 
-					<ParentIID>${IID}</ParentIID>, don't forget to include ParentIID=${IID} into 
-					the Tasks DataBlock on the Node -->
-				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
-			</GenerateData>
-
-			<!-- TASK11 -->
-
-			<IncAttribute Name="PROTASKS:NumberTotal" />
-
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetMachine=${PIC:TargetMachine}      
-				TargetState=Created
-				User=${PIC:User}
+				User=${PSADINSTALLCONFIG:User}
 				Command='sudo sed -i &apos;s/IGNORE_PORTS                NONE;/IGNORE_PORTS                ports_or_range_to_ignore;/&apos; /etc/psad/psad.conf'
 				Lib=RUNCOMMAND
-				Host=${PIC:Host}
+				Host=${PSADINSTALLCONFIG:Host}
 				CurrentState=ReadState
 				TaskNumber=${PROTASKS:NumberTotal}/> 
 				</NewBlock>]]>
@@ -332,7 +307,7 @@
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
 
-             <!--<Resolve>Resolved initial Issue with ID ${IID}</Resolve> - use if 
+			<!--<Resolve>Resolved initial Issue with ID ${IID}</Resolve> - use if 
 				ChildIssues are created -->
 
 			<GenerateData>

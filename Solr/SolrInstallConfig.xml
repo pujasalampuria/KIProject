@@ -1,8 +1,6 @@
-<KnowledgeItem ID="OpexSoftware:SolrInstallConfig:SolrInstallConfigKI"
-	xmlns="http://www.arago.de/KiSchema">
+<KnowledgeItem ID="OpexSoftware:WorkFlowUserStory:SolrInstallConfig" xmlns="http://www.arago.de/KiSchema">
 	<Title>SolrInstallConfig</Title>
-	<Description>Initiates the workflow for Installing Solr by writing into
-		the MARS model and creating new corresponding data blocks in the Issue
+	<Description>Initiates the workflow for Installing Solr by writing into the MARS model and creating new corresponding data blocks in the Issue
 	</Description>
 
 	<BindAttributes>
@@ -17,16 +15,17 @@
 	<CreateTrigger>
 
 		<IssueCondition>
-			<Description>Searches for an Issue with DataBlock SolrInstallConfig
-				and the necessary information for successful completion of workflow
+			<Description>Searches for an Issue with DataBlock SolrInstallConfig and the necessary information for successful completion of workflow
 			</Description>
-			<SubItem Name="SolrInstallConfig" Alias="SIC">
+			<SubItem Name="SolrInstallConfig" Alias="SOLRINSTALLCONFIG">
 				<AttributeFilter Name="TargetApp" Mode="string"
 					Value="${PRE:NodeName}" />
 				<AttributeFilter Name="TargetMachine" Mode="string"
 					Value="${NODE:NodeName}" />
 				<AttributeFilter Name="TargetState" Mode="string"
 					Value="Created" />
+				<AttributeFilter Name="User" Mode="exists" />
+				<AttributeFilter Name="Host" Mode="exists" />
 				<AttributeFilter Name="Status" Mode="notexists" />
 
 			</SubItem>
@@ -34,7 +33,7 @@
 
 		<Activate>
 
-			<SetAttribute Name="SIC:Status" Value="WorkflowStarted" />
+			<SetAttribute Name="SOLRINSTALLCONFIG:Status" Value="WorkflowStarted" />
 
 			<GenerateData Alias="PROTASKS">
 				<DataType>ProcessingTasks</DataType>
@@ -47,20 +46,17 @@
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
 				PKG=openjdk-7-jdk
-				TargetMachine=${SIC:TargetMachine}      
+				TargetMachine=${SOLRINSTALLCONFIG:TargetMachine}      
 				TargetState=Created
-				User=${SIC:User}
+				User=${SOLRINSTALLCONFIG:User}
 				Lib=PKG
-				OSSpecific=Y
-				Host=${SIC:Host}
+				Host=${SOLRINSTALLCONFIG:Host}
 				CurrentState=ReadState
 				TaskNumber=${PROTASKS:NumberTotal}/> 
 				</NewBlock>]]>
 			</XMLExtract>
 
-
-
-			<GenerateData Alias="VAL">
+            <GenerateData Alias="VAL">
 				<!-- Independent="true" can be applied, if multiple Issues should be 
 					generated. In this case pass on the parent IssueID to the resulting Issue 
 					<ParentIID>${IID}</ParentIID>, don't forget to include ParentIID=${IID} into 
@@ -75,20 +71,17 @@
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks       
 				PKG=tomcat6
-				TargetMachine=${SIC:TargetMachine}      
+				TargetMachine=${SOLRINSTALLCONFIG:TargetMachine}      
 				TargetState=Created
-				User=${SIC:User}
+				User=${SOLRINSTALLCONFIG:User}
 				Lib=PKG
-				OSSpecific=Y
-				Host=${SIC:Host}
+				Host=${SOLRINSTALLCONFIG:Host}
 				CurrentState=ReadState
 				TaskNumber=${PROTASKS:NumberTotal}/> 
 				</NewBlock>]]>
 			</XMLExtract>
 
-
-
-			<GenerateData Alias="VAL">
+            <GenerateData Alias="VAL">
 				<!-- Independent="true" can be applied, if multiple Issues should be 
 					generated. In this case pass on the parent IssueID to the resulting Issue 
 					<ParentIID>${IID}</ParentIID>, don't forget to include ParentIID=${IID} into 
@@ -103,20 +96,17 @@
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks       
 				PKG=tomcat6-common
-				TargetMachine=${SIC:TargetMachine}      
+				TargetMachine=${SOLRINSTALLCONFIG:TargetMachine}      
 				TargetState=Created
-				User=${SIC:User}
+				User=${SOLRINSTALLCONFIG:User}
 				Lib=PKG
-				OSSpecific=Y
-				Host=${SIC:Host}
+				Host=${SOLRINSTALLCONFIG:Host}
 				CurrentState=ReadState
 				TaskNumber=${PROTASKS:NumberTotal}/> 
 				</NewBlock>]]>
 			</XMLExtract>
 
-
-
-			<GenerateData Alias="VAL">
+            <GenerateData Alias="VAL">
 				<!-- Independent="true" can be applied, if multiple Issues should be 
 					generated. In this case pass on the parent IssueID to the resulting Issue 
 					<ParentIID>${IID}</ParentIID>, don't forget to include ParentIID=${IID} into 
@@ -130,20 +120,17 @@
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks       
 				PKG=libtomcat6-java
-				TargetMachine=${SIC:TargetMachine}      
+				TargetMachine=${SOLRINSTALLCONFIG:TargetMachine}      
 				TargetState=Created
-				User=${SIC:User}
+				User=${SOLRINSTALLCONFIG:User}
 				Lib=PKG
-				OSSpecific=Y
-				Host=${SIC:Host}
+				Host=${SOLRINSTALLCONFIG:Host}
 				CurrentState=ReadState
 				TaskNumber=${PROTASKS:NumberTotal}/> 
 				</NewBlock>]]>
 			</XMLExtract>
 
-
-
-			<GenerateData Alias="VAL">
+            <GenerateData Alias="VAL">
 				<!-- Independent="true" can be applied, if multiple Issues should be 
 					generated. In this case pass on the parent IssueID to the resulting Issue 
 					<ParentIID>${IID}</ParentIID>, don't forget to include ParentIID=${IID} into 
@@ -158,20 +145,17 @@
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks       
 				PKG=solr-tomcat
-				TargetMachine=${SIC:TargetMachine}      
+				TargetMachine=${SOLRINSTALLCONFIG:TargetMachine}      
 				TargetState=Created
-				User=${SIC:User}
+				User=${SOLRINSTALLCONFIG:User}
 				Lib=PKG
-				OSSpecific=Y
-				Host=${SIC:Host}
+				Host=${SOLRINSTALLCONFIG:Host}
 				CurrentState=ReadState
 				TaskNumber=${PROTASKS:NumberTotal}/> 
 				</NewBlock>]]>
 			</XMLExtract>
 
-
-
-			<GenerateData Alias="VAL">
+            <GenerateData Alias="VAL">
 				<!-- Independent="true" can be applied, if multiple Issues should be 
 					generated. In this case pass on the parent IssueID to the resulting Issue 
 					<ParentIID>${IID}</ParentIID>, don't forget to include ParentIID=${IID} into 

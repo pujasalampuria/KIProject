@@ -1,10 +1,8 @@
-<KnowledgeItem
-	ID="OpexSoftware:SupervisorInstallConfig:SupervisorInstallConfigKI"
-	xmlns="http://www.arago.de/KiSchema">
+<KnowledgeItem ID="OpexSoftware:WorkFlowUserStory:SupervisorInstallConfig" xmlns="http://www.arago.de/KiSchema">
 	<Title>SupervisorInstallConfig</Title>
-	<Description>Initiates the workflow for Installing Supervisor by
-		writing into the MARS model and creating new corresponding data blocks
-		in the Issue</Description>
+	<Description>Initiates the workflow for Installing Supervisor by writing into the MARS model and creating new corresponding data blocks
+		in the Issue
+	</Description>
 
 	<BindAttributes>
 		<AttributeFilter Name="NodeType" Mode="string" Value="Machine" />
@@ -18,10 +16,9 @@
 	<CreateTrigger>
 
 		<IssueCondition>
-			<Description>Searches for an Issue with DataBlock
-				SupervisorInstallConfig and the necessary information for successful
-				completion of workflow</Description>
-			<SubItem Name="SupervisorInstallConfig" Alias="SIC">
+			<Description>Searches for an Issue with DataBlock SupervisorInstallConfig and the necessary information for successful completion of workflow
+			</Description>
+			<SubItem Name="SupervisorInstallConfig" Alias="SUPERVISORINSTALLCONFIG">
 				<AttributeFilter Name="TargetApp" Mode="string"
 					Value="${PRE:NodeName}" />
 				<AttributeFilter Name="TargetMachine" Mode="string"
@@ -32,14 +29,15 @@
 				<AttributeFilter Name="ProgramFile" Mode="exists" />
 				<AttributeFilter Name="FilePath" Mode="exists" />
 				<AttributeFilter Name="FileName" Mode="exists" />
+				<AttributeFilter Name="User" Mode="exists" />
+				<AttributeFilter Name="Host" Mode="exists" />
 				<AttributeFilter Name="Status" Mode="notexists" />
-
 			</SubItem>
 		</IssueCondition>
 
 		<Activate>
 
-			<SetAttribute Name="SIC:Status" Value="WorkflowStarted" />
+			<SetAttribute Name="SUPERVISORINSTALLCONFIG:Status" Value="WorkflowStarted" />
 
 			<GenerateData Alias="PROTASKS">
 				<DataType>ProcessingTasks</DataType>
@@ -52,12 +50,12 @@
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
 				PKG=supervisor
-				TargetMachine=${SIC:TargetMachine}      
+				TargetMachine=${SUPERVISORINSTALLCONFIG:TargetMachine}      
 				TargetState=Created
-				User=${SIC:User}
+				User=${SUPERVISORINSTALLCONFIG:User}
 				Lib=PKG
 				OSSpecific=Y
-				Host=${SIC:Host}
+				Host=${SUPERVISORINSTALLCONFIG:Host}
 				CurrentState=ReadState
 				TaskNumber=${PROTASKS:NumberTotal}/> 
 				</NewBlock>]]>
@@ -77,19 +75,19 @@
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetMachine=${SIC:TargetMachine}      
+				TargetMachine=${SUPERVISORINSTALLCONFIG:TargetMachine}      
 				TargetState=Created
-				User=${SIC:User}
+				User=${SUPERVISORINSTALLCONFIG:User}
 				Lib=FILECREATE
-				FilePath='${SIC:FilePath}'
-				FileName=${SIC:FileName}
-				FileContent='[program:${SIC:Program}] \ncommand=${SIC:ProgramFile} \nautostart=true \nautorestart=true \nstderr_logfile=/var/log/long.err.log \nstdout_logfile=/var/log/long.out.log'
-				Host=${SIC:Host}
+				FilePath='${SUPERVISORINSTALLCONFIG:FilePath}'
+				FileName=${SUPERVISORINSTALLCONFIG:FileName}
+				FileContent='[program:${SUPERVISORINSTALLCONFIG:Program}] \ncommand=${SUPERVISORINSTALLCONFIG:ProgramFile} \nautostart=true \nautorestart=true \nstderr_logfile=/var/log/long.err.log \nstdout_logfile=/var/log/long.out.log'
+				Host=${SUPERVISORINSTALLCONFIG:Host}
 				CurrentState=ReadState
 				TaskNumber=${PROTASKS:NumberTotal}/> 
 				</NewBlock>]]>
 			</XMLExtract>
-            
+
 			<GenerateData Alias="VAL">
 				<!-- Independent="true" can be applied, if multiple Issues should be 
 					generated. In this case pass on the parent IssueID to the resulting Issue 
@@ -104,12 +102,12 @@
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetMachine=${SIC:TargetMachine}      
+				TargetMachine=${SUPERVISORINSTALLCONFIG:TargetMachine}      
 				TargetState=Created
-				User=${SIC:User}
+				User=${SUPERVISORINSTALLCONFIG:User}
 				Command='cd /etc/supervisor/conf.d &amp;&amp; sudo supervisorctl reread'
 				Lib=RUNCOMMAND
-				Host=${SIC:Host}
+				Host=${SUPERVISORINSTALLCONFIG:Host}
 				CurrentState=ReadState
 				TaskNumber=${PROTASKS:NumberTotal}/> 
 				</NewBlock>]]>
@@ -129,12 +127,12 @@
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetMachine=${SIC:TargetMachine}      
+				TargetMachine=${SUPERVISORINSTALLCONFIG:TargetMachine}      
 				TargetState=Created
-				User=${SIC:User}
+				User=${SUPERVISORINSTALLCONFIG:User}
 				Command='cd /etc/supervisor/conf.d &amp;&amp; sudo supervisorctl update'
 				Lib=RUNCOMMAND
-				Host=${SIC:Host}
+				Host=${SUPERVISORINSTALLCONFIG:Host}
 				CurrentState=ReadState
 				TaskNumber=${PROTASKS:NumberTotal}/> 
 				</NewBlock>]]>
