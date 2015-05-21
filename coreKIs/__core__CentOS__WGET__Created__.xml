@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <KnowledgeItem ID="OpexSoftware:CentOS:WGET:__core__CentOS__WGET__Created__" xmlns="http://www.arago.de/KiSchema">
 	<Title>__core__CentOS__WGET__Created__</Title>
-	<Description> This KI searches for the DataBlock called __core__CentOS__WGET__Created__ 
-		and WGET on specified Target Machine and writes the current status back to the node.
+	<Description> This KI searches for the DataBlock called __core__CentOS__WGET__Created__  and WGET on specified Target Machine and writes the current status back to the node.
 	</Description>
 
 	<BindAttributes>
@@ -25,8 +24,7 @@
 
 	<CreateTrigger>
 		<IssueCondition>
-			<Description> Checks Issue for DataBlock __core__${NODE:MachineClass}__WGET__Created__ 
-				and attribute ExtUID being the same as in the Node the KI binds to.
+			<Description> Checks Issue for DataBlock __core__CentOS__WGET__Created__  and attribute ExtUID being the same as in the Node the KI binds to.
 			</Description>
 			<SubItem Name="__core__CentOS__WGET__Created__" Alias="ADDED">
 				<AttributeFilter Name="ExtUID" Mode="string" Value="${TASKS:UID}" />
