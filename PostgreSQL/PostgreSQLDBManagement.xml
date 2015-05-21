@@ -1,5 +1,5 @@
-<KnowledgeItem ID="OpexSofware:POSTGRESQLDB:PostGreDBManagement" xmlns="http://www.arago.de/KiSchema">
-	<Title>PostGreDBManagement</Title>
+<KnowledgeItem ID="OpexSofware:POSTGRESQLDB:PostgreSQLDBManagement" xmlns="http://www.arago.de/KiSchema">
+	<Title>PostgreSQLDBManagement</Title>
 	<Description>Initiates the workflow for creating DataBase on Postgre</Description>
 
 	<BindAttributes>
@@ -56,7 +56,7 @@
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>	
       
-			<!--		<Resolve>Resolved initial Issue with ID ${IID}</Resolve> - use if ChildIssues are created-->
+			<!--<Resolve>Resolved initial Issue with ID ${IID}</Resolve> - use if ChildIssues are created-->
 			
 			<GenerateData> 
 				<DataType>Resolve</DataType>

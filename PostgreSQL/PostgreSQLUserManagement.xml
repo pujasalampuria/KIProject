@@ -1,5 +1,5 @@
-<KnowledgeItem ID="OpexSoftware:POSTGRESQLUSER:PostGreUserManagement" xmlns="http://www.arago.de/KiSchema">
-	<Title>PostGreUserManagement</Title>
+<KnowledgeItem ID="OpexSoftware:POSTGRESQLUSER:PostgreSQLUserManagement" xmlns="http://www.arago.de/KiSchema">
+	<Title>PostgreSQLUserManagement</Title>
 	<Description>Initiates the workflow for handling packages by writing into the MARS model and creating new corresponding data blocks in the Issue</Description>
 
 	<BindAttributes>
