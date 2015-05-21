@@ -1,31 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <KnowledgeItem ID="OpexSoftware:CentOS:PKG:__core__CentOS__PKG__Deleted__" xmlns="http://www.arago.de/KiSchema">
 	<Title>__core__CentOS__PKG__Deleted__</Title>
-	<Description> This KI searches for the DataBlock called __core__CentOS__PKG__Deleted__ and removes the package on the specified Target Machine and writes the status back to the node. </Description>
+	<Description> This KI searches for the DataBlock called __core__CentOS__PKG__Deleted__ 
+		and removes the package on the specified Target Machine and writes the status back to the node.
+	</Description>
 
 	<BindAttributes>
-		<AttributeFilter Name="NodeType" Mode="string" Value="Machine"/>
-		<AttributeFilter Name="MachineClass" Mode="string" Value="Linux"/>
+		<AttributeFilter Name="NodeType" Mode="string" Value="Machine" />
+		<AttributeFilter Name="MachineClass" Mode="string" Value="Linux" />
 		<SubItem Name="OSInformation" Alias="OSINFO">
-			<AttributeFilter Name="Name" Mode="string" Value="CentOS"/>
+			<AttributeFilter Name="Name" Mode="string" Value="CentOS" />
 		</SubItem>
 		<SubItem Name="Extensions" Alias="EXT">
 			<SubItem Name="Tasks" Alias="TASKS">
-				<AttributeFilter Name="PKG" Mode="exists"/>
-				<AttributeFilter Name="TargetMachine" Mode="exists"/>
-				<AttributeFilter Name="User" Mode="exists"/>
-				<AttributeFilter Name="Host" Mode="exists"/>
+				<AttributeFilter Name="PKG" Mode="exists" />
+				<AttributeFilter Name="TargetMachine" Mode="exists" />
+				<AttributeFilter Name="User" Mode="exists" />
+				<AttributeFilter Name="Host" Mode="exists" />
 			</SubItem>
 		</SubItem>
 	</BindAttributes>
-	
+
 	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
-		
+
 	<CreateTrigger>
 		<IssueCondition>
-			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__PKG__Deleted__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__PKG__Deleted__ 
+				and attribute ExtUID being the same as in the Node the KI binds to.
+			</Description>
 			<SubItem Name="__core__CentOS__PKG__Deleted__" Alias="UNINSTALL">
-				<AttributeFilter Name="ExtUID" Mode="string" Value="${TASKS:UID}"/>
-				<AttributeFilter Name="Status" Mode="notexists"/>	
+				<AttributeFilter Name="ExtUID" Mode="string" Value="${TASKS:UID}" />
+				<AttributeFilter Name="Status" Mode="notexists" />
 			</SubItem>
 		</IssueCondition>
 
@@ -33,23 +38,19 @@
 			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
 				<Parameter Name="User">${TASKS:User}</Parameter>
 				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
-				<Parameter Name="Command">sudo yum -y remove ${TASKS:PKG}</Parameter> 
+				<Parameter Name="Command">sudo yum -y remove ${TASKS:PKG}</Parameter>
 			</Action>
-			
+
 			<If>
-				<VarCondition VarString="${SYSTEMRC}" Mode="eq" Value="0"/>
+				<VarCondition VarString="${SYSTEMRC}" Mode="eq" Value="0" />
 				<Then>
-					<SetAttribute Name="TASKS:CurrentState" Value="ReadState"/>
+					<SetAttribute Name="TASKS:CurrentState" Value="ReadState" />
 				</Then>
 				<Else>
 					<Eject>__Failed to uninstall package ${TASKS:PKG}__</Eject>
 				</Else>
 			</If>
-			<SetAttribute Name="UNINSTALL:Status" Value="uninstalled" /> 
-
+			<SetAttribute Name="UNINSTALL:Status" Value="uninstalled" />
 		</Activate>
 	</CreateTrigger>
 </KnowledgeItem>
-
-
-
