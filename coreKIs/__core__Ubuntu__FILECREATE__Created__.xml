@@ -1,8 +1,6 @@
-<KnowledgeItem
-	ID="OpexSoftware:Ubuntu:FILECREATE:__core__Ubuntu__FILECREATE__Created__"
-	xmlns="http://www.arago.de/KiSchema">
+<KnowledgeItem ID="OpexSoftware:Ubuntu:FILECREATE:__core__Ubuntu__FILECREATE__Created__" xmlns="http://www.arago.de/KiSchema">
 	<Title>__core__Ubuntu__FILECREATE__Created__</Title>
-	<Description> This KI searches for the DataBlock called __core__Ubuntu__FILECREATE__Created__ and rus the command on the specified Target Machine and writes the current status back to the node. </Description>
+	<Description> This KI searches for the DataBlock called __core__Ubuntu__FILECREATE__Created__ and run the command on the specified Target Machine and writes the current status back to the node. </Description>
 
 	<BindAttributes>
 		<AttributeFilter Name="NodeType" Mode="string" Value="Machine" />
@@ -24,7 +22,7 @@
 
 	<CreateTrigger>
 		<IssueCondition>
-			<Description> Checks Issue for DataBlock __core__${NODE:MachineClass}__FILECREATE__Created__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
+			<Description> Checks Issue for DataBlock __core__Ubuntu__FILECREATE__Created__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
 			<SubItem Name="__core__Ubuntu__FILECREATE__Created__" Alias="ADDED">
 				<AttributeFilter Name="ExtUID" Mode="string" Value="${TASKS:UID}" />
 				<AttributeFilter Name="Status" Mode="notexists" />
@@ -49,8 +47,7 @@
 					<SetAttribute Name="TASKS:CurrentState" Value="ReadState" />
 				</Then>
 				<Else>
-					<Eject>__Failed to create file
-						${TASKS:FilePath}/${TASKS:FileName}__</Eject>
+					<Eject>__Failed to create file ${TASKS:FilePath}/${TASKS:FileName}__</Eject>
 				</Else>
 			</If>
 
