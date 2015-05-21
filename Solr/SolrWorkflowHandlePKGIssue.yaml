@@ -1,0 +1,10 @@
+Issue:
+  NodeID: OpexSoftware:UseCase:Application:Solr 
+  xmlns: http://www.arago.de/IssueSchema
+  IssueSubject: 'Please Install,configure and maintain Solr'
+  SolrWorkflowHandlePKG:
+    TargetApp: Solr   
+    TargetMachine: puja 
+    TargetState: Created
+    User: puja
+    Host: 192.168.1.86

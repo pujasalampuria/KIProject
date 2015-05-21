@@ -1,0 +1,15 @@
+Issue:
+  NodeID: OpexSoftware:UseCase:Application:Supervisor
+  xmlns: http://www.arago.de/IssueSchema
+  IssueSubject: 'Please Install and Configure Supervisor'
+  SupervisorWorkflowHandlePKG:
+    TargetApp: Supervisor   
+    TargetMachine: puja 
+    TargetState: Created
+    FilePath: /etc/supervisor/conf.d
+    ProgramFile: /usr/local/bin/long.sh 
+    FileName: long.conf
+    Program: long
+    User: puja
+    Host: 192.168.1.86
+   
