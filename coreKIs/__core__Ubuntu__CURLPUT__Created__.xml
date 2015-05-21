@@ -1,11 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <KnowledgeItem ID="OpexSoftware:Ubuntu:CURLPUT:__core__Ubuntu__CURLPUT__Created__" xmlns="http://www.arago.de/KiSchema">
 	<Title>__core__Ubuntu__CURLPUT__Created__</Title>
-	<Description> This KI searches for the DataBlock called __core__Ubuntu__CURLPUT___Created__ and runs the specified RestAPI.
+	<Description> This KI searches for the DataBlock called __core__Ubuntu__CURLPUT___Created__ 
+		and runs the specified RestAPI.
 	</Description>
 
 	<BindAttributes>
 		<AttributeFilter Name="NodeType" Mode="string" Value="Machine" />
 		<AttributeFilter Name="MachineClass" Mode="string" Value="Linux" />
+		<SubItem Name="OSInformation" Alias="OSINFO">
+			<AttributeFilter Name="Name" Mode="string" Value="Ubuntu" />
+		</SubItem>
 		<SubItem Name="Extensions" Alias="EXT">
 			<SubItem Name="Tasks" Alias="TASK">
 				<AttributeFilter Name="TargetState" Mode="exists" />
@@ -23,7 +28,9 @@
 
 	<CreateTrigger>
 		<IssueCondition>
-			<Description> Checks Issue for DataBlock __core__Ubuntu__CURLPUT___Created__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
+			<Description> Checks Issue for DataBlock __core__Ubuntu__CURLPUT___Created__ 
+				and attribute ExtUID being the same as in the Node the KI binds to.
+			</Description>
 			<SubItem Name="__core__Ubuntu__CURLPUT__Created__" Alias="CHECK">
 				<AttributeFilter Name="ExtUID" Mode="string" Value="${TASK:UID}" />
 				<AttributeFilter Name="Status" Mode="notexists" />
@@ -31,33 +38,26 @@
 		</IssueCondition>
 
 		<Activate>
-			<Action Capability="ExecuteLocalCommand" Error="ERROR" Output="OUTPUT"
-				Result="RESULT" SystemRC="SYSTEMRC" Timeout="300">
-				<Parameter Name="Command">curl -D- -u ${TASK:ToolUser}:${TASK:ToolPasswd} -X PUT -d '${TASK:PutData}' -H "${TASK:ContentType}" "${TASK:ToolUrl}${TASK:Key}"
-				</Parameter>
+			<Action Capability="ExecuteLocalCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="300">
+				<Parameter Name="Command">curl -D- -u ${TASK:ToolUser}:${TASK:ToolPasswd} -X PUT -d '${TASK:PutData}' -H "${TASK:ContentType}" "${TASK:ToolUrl}${TASK:Key}"</Parameter>
 			</Action>
 			<If>
 				<VarCondition VarString="${SYSTEMRC}" Mode="eq" Value="0" />
 				<Then>
-					<Action Capability="ExecuteLocalCommand" Error="ERROR"
-						Output="CREATEDOUTPUT" Result="RESULT" SystemRC="CURLPUTOUTPUT"
-						Timeout="300">
+					<Action Capability="ExecuteLocalCommand" Error="ERROR" Output="CREATEDOUTPUT" Result="RESULT" SystemRC="CURLPUTOUTPUT" Timeout="300">
 						<Parameter Name="Command"><![CDATA[echo "${OUTPUT}" | grep -i "204 No Content" && touch /tmp/${TASK:UID} ]]></Parameter>
 					</Action>
 					<If>
-						<VarCondition VarString="${CURLPUTOUTPUT}" Mode="eq"
-							Value="0" />
+						<VarCondition VarString="${CURLPUTOUTPUT}" Mode="eq" Value="0" />
 						<Then>
 							<SetAttribute Name="TASK:CurrentState" Value="ReadState" />
 						</Then>
 						<Else>
-							<Action Capability="ExecuteLocalCommand" Error="ERROR"
-								Output="OKOUTPUT" Result="RESULT" SystemRC="CURLPUTOUTPUT" Timeout="300">
+							<Action Capability="ExecuteLocalCommand" Error="ERROR" Output="OKOUTPUT" Result="RESULT" SystemRC="CURLPUTOUTPUT" Timeout="300">
 								<Parameter Name="Command"><![CDATA[echo "${OUTPUT}" | grep -i "200 OK" && touch /tmp/${TASK:UID}]]></Parameter>
 							</Action>
 							<If>
-								<VarCondition VarString="${CURLPUTOUTPUT}" Mode="eq"
-									Value="0" />
+								<VarCondition VarString="${CURLPUTOUTPUT}" Mode="eq" Value="0" />
 								<Then>
 									<SetAttribute Name="TASK:CurrentState" Value="ReadState" />
 								</Then>

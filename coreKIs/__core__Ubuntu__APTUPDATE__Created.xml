@@ -1,13 +1,13 @@
-<KnowledgeItem ID="OpexSoftware:Ubuntu:APTUPDATE:__core__Ubuntu__APTUPDATE__Created__"
-	xmlns="http://www.arago.de/KiSchema">
+<?xml version="1.0" encoding="UTF-8"?>
+<KnowledgeItem ID="OpexSoftware:Ubuntu:APTUPDATE:__core__Ubuntu__APTUPDATE__Created__" xmlns="http://www.arago.de/KiSchema">
 	<Title>__core__Ubuntu__APTUPDATE__Created__</Title>
-	<Description> This KI searches for the DataBlock called __core__Ubuntu__APTUPDATE__Created__ and update  the specified Target Machine and writes the current status back to the
-		node. </Description>
+	<Description> This KI searches for the DataBlock called __core__Ubuntu__APTUPDATE__Created__ 
+		and update the specified Target Machine and writes the current status back to the node.
+	</Description>
 
 	<BindAttributes>
 		<AttributeFilter Name="NodeType" Mode="string" Value="Machine" />
-		<AttributeFilter Name="MachineClass" Mode="string"
-			Value="Linux" />
+		<AttributeFilter Name="MachineClass" Mode="string" Value="Linux" />
 		<SubItem Name="OSInformation" Alias="OSINFO">
 			<AttributeFilter Name="Name" Mode="string" Value="Ubuntu" />
 		</SubItem>
@@ -24,7 +24,9 @@
 
 	<CreateTrigger>
 		<IssueCondition>
-			<Description> Checks Issue for DataBlock__core__${NODE:OSInfo}__APTUPDATE__Created__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
+			<Description> Checks Issue for DataBlock__core__${NODE:OSInfo}__APTUPDATE__Created__ 
+				and attribute ExtUID being the same as in the Node the KI binds to.
+			</Description>
 			<SubItem Name="__core__Ubuntu__APTUPDATE__Created__" Alias="INSTALL">
 				<AttributeFilter Name="ExtUID" Mode="string" Value="${TASKS:UID}" />
 				<AttributeFilter Name="Status" Mode="notexists" />
@@ -32,12 +34,10 @@
 		</IssueCondition>
 
 		<Activate>
-			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT"
-				Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
 				<Parameter Name="User">${TASKS:User}</Parameter>
 				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
-				<Parameter Name="Command">"sudo apt-get update"
-				</Parameter>
+				<Parameter Name="Command">"sudo apt-get update"</Parameter>
 			</Action>
 
 			<If>
@@ -49,10 +49,7 @@
 					<Eject>__Failed to update__</Eject>
 				</Else>
 			</If>
-
 			<SetAttribute Name="INSTALL:Status" Value="created" />
 		</Activate>
 	</CreateTrigger>
 </KnowledgeItem>
-
-
