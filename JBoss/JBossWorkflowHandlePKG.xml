@@ -62,10 +62,6 @@
 			</XMLExtract>
 
             <GenerateData Alias="VAL">
-				<!-- Independent="true" can be applied, if multiple Issues should be 
-					generated. In this case pass on the parent IssueID to the resulting Issue 
-					<ParentIID>${IID}</ParentIID>, don't forget to include ParentIID=${IID} into 
-					the Tasks DataBlock on the Node -->
 				<DataType>Validate</DataType>
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
@@ -89,10 +85,6 @@
 			</XMLExtract>
 
             <GenerateData Alias="VAL">
-				<!-- Independent="true" can be applied, if multiple Issues should be 
-					generated. In this case pass on the parent IssueID to the resulting Issue 
-					<ParentIID>${IID}</ParentIID>, don't forget to include ParentIID=${IID} into 
-					the Tasks DataBlock on the Node -->
 				<DataType>Validate</DataType>
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
