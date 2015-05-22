@@ -28,7 +28,7 @@
 			<Description> Checks Issue for DataBlock __core__Ubuntu__RUNSCRIPT__Created__ 
 				and attribute ExtUID being the same as in the Node the KI binds to.
 			</Description>
-			<SubItem Name="__core__Ubuntu__RUNSCRIPT__Created__" Alias="RUNSCRIPT">
+			<SubItem Name="__core__Ubuntu__RUNSCRIPT__Created__" Alias="CHECK">
 				<AttributeFilter Name="ExtUID" Mode="string" Value="${TASKS:UID}" />
 				<AttributeFilter Name="Status" Mode="notexists" />
 			</SubItem>
@@ -63,7 +63,7 @@
 					<Eject>__Failed to execute Script ${TASKS:Script}__</Eject>
 				</Else>
 			</If>
-			<SetAttribute Name="RUNSCRIPT:Status" Value="created" />
+			<SetAttribute Name="CHECK:Status" Value="created" />
 		</Activate>
 	</CreateTrigger>
 </KnowledgeItem>
