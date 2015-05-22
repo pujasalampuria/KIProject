@@ -1,0 +1,93 @@
+<KnowledgeItem ID="OpexSoftware:Git:GitCloneWorkflow" xmlns="http://www.arago.de/KiSchema">
+	<Title>GitCloneWorkflow</Title>
+	<Description>Initiates the workflow for cloning a Git Repository
+	</Description>
+	<BindAttributes>
+		<AttributeFilter Name="NodeType" Mode="string" Value="Machine" />
+	</BindAttributes>
+
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+
+	<CreateTrigger>
+		<IssueCondition>
+			<Description>Searches for an Issue with DataBlock GitCloneWorkflow and
+				triggers the workflow for sucessful completion</Description>
+			<SubItem Name="GitCloneWorkflow" Alias="GCW">
+				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}" />
+				<AttributeFilter Name="GitRepoUrl" Mode="exists" />
+				<AttributeFilter Name="TargetPath" Mode="exists" />
+				<AttributeFilter Name="GitUser" Mode="exists" />
+				<AttributeFilter Name="GitPassword" Mode="exists" />
+				<AttributeFilter Name="TargetState" Mode="string" Value="Created" />
+				<AttributeFilter Name="Status" Mode="notexists" />
+				<AttributeFilter Name="GitRepoName" Mode="exists" />
+				<AttributeFilter Name="GitBranch" Mode="exists" />
+				<AttributeFilter Name="GitOrigin" Mode="exists" />
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<SetAttribute Name="GCW:Status" Value="WorkflowStarted" />
+			<GenerateData Alias="PROTASKS">
+				<DataType>ProcessingTasks</DataType>
+				<CurrentTask>1</CurrentTask>
+			</GenerateData>
+
+			<!--Task1 Check if GIT package is there -->
+
+			<IncAttribute Name="PROTASKS:NumberTotal" />
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+				TargetMachine=${GCW:TargetMachine}      
+				TargetState=Created
+				User=${GCW:User}
+				Lib=PKG
+				PKG=git
+				Host=${GCW:Host}
+				CurrentState=ReadState
+				TaskNumber=${PROTASKS:NumberTotal}
+				/> </NewBlock>]]>
+			</XMLExtract>
+
+
+			<GenerateData Alias="VAL">
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
+
+
+			<!--Task2 Do the GIT Clone -->
+
+			<IncAttribute Name="PROTASKS:NumberTotal" />
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+				TargetPath='${GCW:TargetPath}'
+				TargetMachine=${GCW:TargetMachine}
+				TargetState=Created
+				GitRepoURL='${GCW:GitRepoUrl}'
+				GitRepoName=${GCW:GitRepoName}
+				User=${GCW:User}
+				Host=${GCW:Host}
+				Lib=GITCLONE
+				CurrentState=ReadState
+                TaskNumber=${PROTASKS:NumberTotal}
+                GitBranch=${GCW:GitBranch}
+                GitOrigin=${GCW:GitOrigin}
+				/></NewBlock>]]>
+			</XMLExtract>
+
+			<GenerateData Alias="VAL">
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
+
+			<!--<Resolve>Resolved initial Issue with ID ${IID}</Resolve> - use if 
+				ChildIssues are created -->
+
+			<GenerateData>
+				<DataType>Resolve</DataType>
+				<Status>checkForResolve</Status>
+			</GenerateData>
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

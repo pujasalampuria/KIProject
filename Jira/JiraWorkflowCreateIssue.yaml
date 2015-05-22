@@ -1,0 +1,16 @@
+Issue:
+  NodeID: OpexSoftware:UseCase:Machine:Shree
+  xmlns: http://www.arago.de/IssueSchema
+  IssueSubject: 'Create an Issue in Jira'
+  JiraWorkflowCreateIssue:
+    TargetMachine: Shree
+    TargetState: Created
+    JiraUrl: http://192.168.1.69:9999/rest/api/2/issue/
+    ProjectKey: KIP
+    Summary: Refresh not working
+    Description: When I try to refresh the frame the screen freezes   
+    IssueType: Task
+    JiraUser: admin
+    JiraPassword: admin
+
+

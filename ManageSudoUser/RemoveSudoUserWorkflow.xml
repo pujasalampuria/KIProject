@@ -1,0 +1,61 @@
+<KnowledgeItem ID="OpexSoftware:ManageSudoUser:RemoveSudoUserWorkflow" xmlns="http://www.arago.de/KiSchema">
+	<Title>RemoveSudoUserWorkflow</Title>
+	<Description>Initiates the workflow for removing a user from sudoers list.
+	</Description>
+	<BindAttributes>
+		<AttributeFilter Name="NodeType" Mode="string" Value="Machine" />
+	</BindAttributes>
+
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+
+	<CreateTrigger>
+		<IssueCondition>
+			<Description>Searches for an Issue with DataBlock RemoveSudoUserWorkflow and triggers the workflow for successful completion</Description>
+			<SubItem Name="RemoveSudoUserWorkflow" Alias="RSUW">
+				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}" />
+				<AttributeFilter Name="TargetState" Mode="string" Value="Created" />
+				<AttributeFilter Name="Status" Mode="notexists" />
+			    <AttributeFilter Name="LinuxUser" Mode="exists" />
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<SetAttribute Name="RSUW:Status" Value="WorkflowStarted" />
+			<GenerateData Alias="PROTASKS">
+				<DataType>ProcessingTasks</DataType>
+				<CurrentTask>1</CurrentTask>
+			</GenerateData>
+
+			<!--Task Remove user from sudoers list. -->
+
+			<IncAttribute Name="PROTASKS:NumberTotal" />
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+				TargetPath='${RSUW:TargetPath}'
+				TargetMachine=${RSUW:TargetMachine}
+				TargetState=Created
+				User=${RSUW:User}
+				Host=${RSUW:Host}
+				LinuxUser=${RSUW:LinuxUser}
+				Lib=RUNCOMMAND
+				Command='sudo deluser ${RSUW:LinuxUser} sudo'
+				CurrentState=ReadState
+                TaskNumber=${PROTASKS:NumberTotal}
+				/></NewBlock>]]>
+			</XMLExtract>
+
+			<GenerateData Alias="VAL">
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
+
+			<!--<Resolve>Resolved initial Issue with ID ${IID}</Resolve> - use if 
+				ChildIssues are created -->
+
+			<GenerateData>
+				<DataType>Resolve</DataType>
+				<Status>checkForResolve</Status>
+			</GenerateData>
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

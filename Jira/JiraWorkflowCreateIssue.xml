@@ -1,0 +1,58 @@
+<KnowledgeItem ID="OpexSoftware:WorkFlowUserStory:JiraWorkflowCreateIssue" xmlns="http://www.arago.de/KiSchema">
+	<Title>JiraWorkflowCreateIssue</Title>
+          <Description>Initiates the workflow for creating an issue in Jira</Description>
+	    <BindAttributes>
+	      <AttributeFilter Name="NodeType" Mode="string" Value="Machine"/>
+	    </BindAttributes>
+
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+
+	<CreateTrigger>
+           <IssueCondition>
+              <Description>Searches for an Issue with DataBlock JWCI and triggers the workflow for successful completion</Description>
+		 <SubItem Name="JiraWorkflowCreateIssue" Alias="JWCI">
+		    <AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}"/>
+		    <AttributeFilter Name="TargetState" Mode="string" Value="Created"/>
+		    <AttributeFilter Name="Status" Mode="notexists"/>
+		 </SubItem>
+	  </IssueCondition>
+
+	     <Activate>
+	     	<SetAttribute Name="JWCI:Status" Value="WorkflowStarted" /> 
+	     	   <GenerateData Alias="PROTASKS">
+	     	      <DataType>ProcessingTasks</DataType>
+	     	      <CurrentTask>1</CurrentTask>
+	     	   </GenerateData>
+
+	     <!--Task Create an issue in Jira-->	
+  
+            <IncAttribute Name="PROTASKS:NumberTotal"/>
+
+		<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+		       TargetMachine=${JWCI:TargetMachine}      
+			   TargetState=Created
+			   Lib=CURLPOST
+			   ToolUrl='${JWCI:JiraUrl}'
+			   CurrentState=ReadState
+			   ToolUser=${JWCI:JiraUser}
+			   ToolPasswd=${JWCI:JiraPassword}
+			   PostData='{"fields":{"project":{"key":"${JWCI:ProjectKey}"},"summary":"${JWCI:Summary}" ,"description":"${JWCI:Description}","issuetype":{"name":"${JWCI:IssueType}"}}}'
+			   TaskNumber=${PROTASKS:NumberTotal}
+			   ContentType='Content-Type:application/json'
+			 /> </NewBlock>]]>
+		</XMLExtract>
+		
+        <GenerateData Alias="VAL"> 
+		   <DataType>Validate</DataType>
+		   <ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+	    </GenerateData>	
+
+		<!--<Resolve>Resolved initial Issue with ID ${IID}</Resolve> - use if ChildIssues are created-->
+	    <GenerateData> 
+	       <DataType>Resolve</DataType>
+		   <Status>checkForResolve</Status>
+	    </GenerateData>	
+	</Activate>
+    </CreateTrigger>
+</KnowledgeItem>
+																	

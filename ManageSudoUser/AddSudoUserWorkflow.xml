@@ -1,0 +1,83 @@
+<KnowledgeItem ID="OpexSoftware:ManageSudoUser:AddSudoUserWorkflow" xmlns="http://www.arago.de/KiSchema">
+	<Title>AddSudoUserWorkflow</Title>
+	<Description>Initiates the workflow for adding a user to sudoers list.
+	</Description>
+	<BindAttributes>
+		<AttributeFilter Name="NodeType" Mode="string" Value="Machine" />
+	</BindAttributes>
+
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+
+	<CreateTrigger>
+		<IssueCondition>
+			<Description>Searches for an Issue with DataBlock ADDSUDOUSER and triggers the workflow for successful completion</Description>
+			<SubItem Name="AddSudoUserWorkflow" Alias="ASUW">
+				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}" />
+				<AttributeFilter Name="TargetState" Mode="string" Value="Created" />
+				<AttributeFilter Name="Status" Mode="notexists" />
+				<AttributeFilter Name="LinuxUser" Mode="exists" />
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<SetAttribute Name="ASUW:Status" Value="WorkflowStarted" />
+			<GenerateData Alias="PROTASKS">
+				<DataType>ProcessingTasks</DataType>
+				<CurrentTask>1</CurrentTask>
+			</GenerateData>
+
+			<!--Task1 Check if Sudo package is there -->
+
+			<IncAttribute Name="PROTASKS:NumberTotal" />
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+				TargetMachine=${ASUW:TargetMachine}      
+				TargetState=Created
+				User=${ASUW:User}
+				Lib=PKG
+				PKG=sudo
+				Host=${ASUW:Host}
+				CurrentState=ReadState
+				TaskNumber=${PROTASKS:NumberTotal}
+				/> </NewBlock>]]>
+			</XMLExtract>
+
+
+			<GenerateData Alias="VAL">
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
+
+
+			<!--Task2 Add user to sudoers list. -->
+
+			<IncAttribute Name="PROTASKS:NumberTotal" />
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+				TargetPath='${ASUW:TargetPath}'
+				TargetMachine=${ASUW:TargetMachine}
+				TargetState=Created
+				User=${ASUW:User}
+				Host=${ASUW:Host}
+				Lib=RUNCOMMAND
+				Command='sudo adduser ${ASUW:LinuxUser} sudo'
+				CurrentState=ReadState
+                TaskNumber=${PROTASKS:NumberTotal}
+				/></NewBlock>]]>
+			</XMLExtract>
+
+			<GenerateData Alias="VAL">
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
+
+			<!--<Resolve>Resolved initial Issue with ID ${IID}</Resolve> - use if 
+				ChildIssues are created -->
+
+			<GenerateData>
+				<DataType>Resolve</DataType>
+				<Status>checkForResolve</Status>
+			</GenerateData>
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

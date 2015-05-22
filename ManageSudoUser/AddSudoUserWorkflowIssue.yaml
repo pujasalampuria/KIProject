@@ -1,0 +1,12 @@
+Issue:
+  NodeID: OpexSoftware:UseCase:Machine:Shree
+  xmlns: http://www.arago.de/IssueSchema
+  IssueSubject: 'Add User to Sudoers list'
+  AddSudoUserWorkflow:
+    TargetMachine: Shree
+    TargetState: Created
+    LinuxUser: opex
+    User: shreyas
+    Host: 192.168.1.59
+    
+
