@@ -3,8 +3,8 @@ Issue:
   xmlns: http://www.arago.de/IssueSchema
   IssueSubject: 'Remove User from Sudoers list'
   RemoveSudoUserWorkflow:
-    TargetMachine: shree
+    TargetMachine: Shree
     TargetState: Created
     LinuxUser: opex
     User: shreyas
-    Host: 192.168.1.59
+    Host: 192.168.1.69
