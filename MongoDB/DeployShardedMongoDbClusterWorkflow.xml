@@ -34,6 +34,7 @@
 
 		<Activate>
 			<SetAttribute Name="DSMDCW:Status" Value="WorkflowStarted" /> 
+
 			<GenerateData Alias="PROTASKS"> 
 				<DataType>ProcessingTasks</DataType>
 				<CurrentTask>1</CurrentTask> 

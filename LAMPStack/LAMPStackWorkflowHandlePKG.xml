@@ -31,6 +31,7 @@
 
 		<Activate>
 			<SetAttribute Name="LSWHP:Status" Value="WorkflowStarted" />
+			
 			<GenerateData Alias="PROTASKS">
 				<DataType>ProcessingTasks</DataType>
 				<CurrentTask>1</CurrentTask>
@@ -221,7 +222,6 @@
 				<DataType>Resolve</DataType>
 				<Status>checkForResolve</Status>
 			</GenerateData>
-
 		</Activate>
 	</CreateTrigger>
 </KnowledgeItem>

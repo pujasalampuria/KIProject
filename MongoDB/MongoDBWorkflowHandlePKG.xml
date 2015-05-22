@@ -28,6 +28,7 @@
 
 		<Activate>
 			<SetAttribute Name="MDWHP:Status" Value="WorkflowStarted" />
+			
 			<GenerateData Alias="PROTASKS">
 				<DataType>ProcessingTasks</DataType>
 				<CurrentTask>1</CurrentTask>

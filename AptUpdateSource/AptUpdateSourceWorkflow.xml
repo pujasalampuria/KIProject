@@ -14,10 +14,8 @@
 			<Description>Searches for an Issue with DataBlock AptUpdateSourceWorkflow and
 				triggers the workflow for successful completion</Description>
 			<SubItem Name="AptUpdateSourceWorkflow" Alias="AUSW">
-				<AttributeFilter Name="TargetMachine" Mode="string"
-					Value="${NODE:NodeName}" />
-				<AttributeFilter Name="TargetState" Mode="string"
-					Value="Created" />
+				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}" />
+				<AttributeFilter Name="TargetState" Mode="string" Value="Created" />
 				<AttributeFilter Name="Status" Mode="notexists" />
 				<AttributeFilter Name="TargetApp" Mode="exists" />
 			</SubItem>
@@ -25,6 +23,7 @@
 
 		<Activate>
 			<SetAttribute Name="AUSW:Status" Value="WorkflowStarted" />
+			
 			<GenerateData Alias="PROTASKS">
 				<DataType>ProcessingTasks</DataType>
 				<CurrentTask>1</CurrentTask>
@@ -49,7 +48,6 @@
 				TaskNumber=${PROTASKS:NumberTotal}
 				/> </NewBlock>]]>
 			</XMLExtract>
-
 
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
