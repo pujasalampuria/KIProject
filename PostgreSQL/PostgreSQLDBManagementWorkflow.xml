@@ -14,7 +14,6 @@
 	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
 
 	<CreateTrigger>
-
 		<IssueCondition>
 			<Description>Searches for an Issue with DataBlock PostgreSQLDBManagementWorkflow 
 				and the necessary information for successful completion of workflow.
@@ -31,7 +30,6 @@
 		</IssueCondition>
 
 		<Activate>
-			
 			<SetAttribute Name="PSDMW:Status" Value="WorkflowStarted" /> 
 
 			<GenerateData Alias="PROTASKS"> 

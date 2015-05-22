@@ -2,7 +2,7 @@ Issue:
   NodeID: OpexSoftware:UseCase:Application:MongoDB
   xmlns: http://www.arago.de/IssueSchema
   IssueSubject: 'Update apt source for MongoDB cluster'
-  AptUpdateSource: 
+  AptUpdateSourceWorkflow: 
     TargetApp: MongoDB  
     TargetMachine: Zeeshan
     TargetState: Created

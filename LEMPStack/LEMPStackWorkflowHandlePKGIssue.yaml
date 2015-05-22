@@ -2,7 +2,7 @@ Issue:
   NodeID: OpexSoftware:UseCase:Application:LEMPStack
   xmlns: http://www.arago.de/IssueSchema
   IssueSubject: 'Run Workflow for Installation of a LEMP Stack Package'
-  LEMPStackHandlePKG:
+  LEMPStackWorkflowHandlePKG:
     TargetApp: LEMPStack
     TargetMachine: Ashish
     TargetState: Created

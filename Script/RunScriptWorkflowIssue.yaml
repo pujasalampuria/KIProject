@@ -2,7 +2,7 @@ Issue:
   NodeID: OpexSoftware:UseCase:Machine:Ashish 
   xmlns: http://www.arago.de/IssueSchema
   IssueSubject: 'Run Workflow to test RunScript'
-  RunScript:
+  RunScriptWorkflow:
     TargetMachine: Ashish
     TargetState: Created
     User: ashish

@@ -1,4 +1,4 @@
-<KnowledgeItem ID="OpexSoftware:LEMPStack:LEMPStackInstall" xmlns="http://www.arago.de/KiSchema">
+<KnowledgeItem ID="OpexSoftware:LEMPStack:LEMPStackWorkflowHandlePKG" xmlns="http://www.arago.de/KiSchema">
 	<Title>LEMPStackWorkflowHandlePKG</Title>
 	<Description>Initiates the workflow for handling LEMP Stack install related packages by 
 		writing into the MARS model and creating new corresponding data blocks in the Issue.
@@ -15,39 +15,36 @@
 
 	<CreateTrigger>
 		<IssueCondition>
-			<Description>Searches for an Issue with DataBlock LEMPStackHandlePKG
+			<Description>Searches for an Issue with DataBlock LEMPStackWorkflowHandlePKG
 				and the necessary information for successful completion of workflow
 			</Description>
-			<SubItem Name="LEMPStackWorkflowHandlePKG" Alias="LPHP">
-				<AttributeFilter Name="TargetApp" Mode="string"
-					Value="${PRE:NodeName}" />
-				<AttributeFilter Name="TargetMachine" Mode="string"
-					Value="${NODE:NodeName}" />
+			<SubItem Name="LEMPStackWorkflowHandlePKG" Alias="LSWHP">
+				<AttributeFilter Name="TargetApp" Mode="string" Value="${PRE:NodeName}" />
+				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}" />
 				<AttributeFilter Name="User" Mode="exists" />
 				<AttributeFilter Name="Host" Mode="exists" />
 				<AttributeFilter Name="MySQLRootPass" Mode="exists" />
-				<AttributeFilter Name="TargetState" Mode="string"
-					Value="Created" />
+				<AttributeFilter Name="TargetState" Mode="string" Value="Created" />
 				<AttributeFilter Name="Status" Mode="notexists" />
 			</SubItem>
 		</IssueCondition>
 
 		<Activate>
-			<SetAttribute Name="LPHP:Status" Value="WorkflowStarted" />
+			<SetAttribute Name="LSWHP:Status" Value="WorkflowStarted" />
 			<GenerateData Alias="PROTASKS">
 				<DataType>ProcessingTasks</DataType>
 				<CurrentTask>1</CurrentTask>
 			</GenerateData>
 
-			<!-- TASK1 -->
+			<!-- TASK1 install nginx -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
 				PKG=nginx
-				TargetMachine=${LPHP:TargetMachine}
+				TargetMachine=${LSWHP:TargetMachine}
 				TargetState=Created
-				User=${LPHP:User}
-				Host=${LPHP:Host}
+				User=${LSWHP:User}
+				Host=${LSWHP:Host}
 				Lib=PKG
 				CurrentState=ReadState
 				TaskNumber=${PROTASKS:NumberTotal}
@@ -59,15 +56,15 @@
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
 
-			<!-- TASK2 -->
+			<!-- TASK2 install debconf-utils -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
 				PKG=debconf-utils
-				TargetMachine=${LPHP:TargetMachine}
+				TargetMachine=${LSWHP:TargetMachine}
 				TargetState=Created
-				User=${LPHP:User}
-				Host=${LPHP:Host}
+				User=${LSWHP:User}
+				Host=${LSWHP:Host}
 				Lib=PKG
 				CurrentState=ReadState
 				TaskNumber=${PROTASKS:NumberTotal}
@@ -79,16 +76,16 @@
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
 
-			<!-- TASK3 -->
+			<!-- TASK3 update debconf-set-selections with mysql-server/root_password for mysql silent install -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetMachine=${LPHP:TargetMachine}      
+				TargetMachine=${LSWHP:TargetMachine}      
 				TargetState=Created
-				Host=${LPHP:Host}
-				User=${LPHP:User}
+				Host=${LSWHP:Host}
+				User=${LSWHP:User}
 				Lib=RUNCOMMAND
-				Command='sudo debconf-set-selections <<< &apos;mysql-server mysql-server/root_password password ${LPHP:MySQLRootPass}&apos;'
+				Command='sudo debconf-set-selections <<< &apos;mysql-server mysql-server/root_password password ${LSWHP:MySQLRootPass}&apos;'
 				TaskNumber=${PROTASKS:NumberTotal}
 				CurrentState=ReadState/> 
 				</NewBlock>]]>
@@ -99,16 +96,16 @@
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
 
-			<!-- TASK4 -->
+			<!-- TASK3 update debconf-set-selections with mysql-server/root_password_again for mysql silent install -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetMachine=${LPHP:TargetMachine}            
+				TargetMachine=${LSWHP:TargetMachine}            
 				TargetState=Created
-				Host=${LPHP:Host}
-				User=${LPHP:User}
+				Host=${LSWHP:Host}
+				User=${LSWHP:User}
 				Lib=RUNCOMMAND
-				Command='sudo debconf-set-selections <<< &apos;mysql-server mysql-server/root_password_again password ${LPHP:MySQLRootPass}&apos;'
+				Command='sudo debconf-set-selections <<< &apos;mysql-server mysql-server/root_password_again password ${LSWHP:MySQLRootPass}&apos;'
 				TaskNumber=${PROTASKS:NumberTotal}
 				CurrentState=ReadState/> 
 				</NewBlock>]]>
@@ -119,15 +116,15 @@
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
 
-			<!-- TASK5 -->
+			<!-- TASK5 install mysql-server -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
 				PKG=mysql-server
-				TargetMachine=${LPHP:TargetMachine}      
+				TargetMachine=${LSWHP:TargetMachine}      
 				TargetState=Created
-				User=${LPHP:User}
-				Host=${LPHP:Host}
+				User=${LSWHP:User}
+				Host=${LSWHP:Host}
 				Lib=PKG 
 				CurrentState=ReadState
 				TaskNumber=${PROTASKS:NumberTotal}
@@ -139,14 +136,14 @@
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
 
-			<!-- TASK6 -->
+			<!-- TASK6 run command to install mqsql DB -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetMachine=${LPHP:TargetMachine}            
+				TargetMachine=${LSWHP:TargetMachine}            
 				TargetState=Created
-				Host=${LPHP:Host}
-				User=${LPHP:User}
+				Host=${LSWHP:Host}
+				User=${LSWHP:User}
 				Lib=RUNCOMMAND
 				Command='sudo mysql_install_db'
 				TaskNumber=${PROTASKS:NumberTotal}
@@ -159,15 +156,15 @@
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
 
-			<!-- TASK7 -->
+			<!-- TASK7 install php5-fpm -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
 				PKG=php5-fpm
-				TargetMachine=${LPHP:TargetMachine}      
+				TargetMachine=${LSWHP:TargetMachine}      
 				TargetState=Created
-				User=${LPHP:User}
-				Host=${LPHP:Host}
+				User=${LSWHP:User}
+				Host=${LSWHP:Host}
 				Lib=PKG
 				CurrentState=ReadState
 				TaskNumber=${PROTASKS:NumberTotal}
@@ -179,15 +176,15 @@
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
 
-			<!-- TASK8 -->
+			<!-- TASK8 install php5-mysql -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
 				PKG=php5-mysql
-				TargetMachine=${LPHP:TargetMachine}      
+				TargetMachine=${LSWHP:TargetMachine}      
 				TargetState=Created
-				User=${LPHP:User}
-				Host=${LPHP:Host}
+				User=${LSWHP:User}
+				Host=${LSWHP:Host}
 				Lib=PKG
 				CurrentState=ReadState
 				TaskNumber=${PROTASKS:NumberTotal}
@@ -199,13 +196,11 @@
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
 
-			<!-- <Resolve>Resolved initial Issue with ID ${IID}</Resolve> - use if 
-				ChildIssues are created -->
+			<!-- <Resolve>Resolved initial Issue with ID ${IID}</Resolve> - use if ChildIssues are created -->
 			<GenerateData>
 				<DataType>Resolve</DataType>
 				<Status>checkForResolve</Status>
 			</GenerateData>
-
 		</Activate>
 	</CreateTrigger>
 </KnowledgeItem>

@@ -14,7 +14,6 @@
 	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
 
 	<CreateTrigger>
-
 		<IssueCondition>
 			<Description>Searches for an Issue with DataBlock PostgreSQLUserManagementWorkflow 
 				and the necessary information for successful completion of workflow.

@@ -14,7 +14,6 @@
 	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
 
 	<CreateTrigger>
-
 		<IssueCondition>
 			<Description>Searches for an Issue with DataBlock PSADWorkflowHandlePKG and the 
 				necessary information for successful completion of workflow.
@@ -32,7 +31,6 @@
 				<AttributeFilter Name="Host" Mode="exists" />
 				<AttributeFilter Name="TargetState" Mode="string" Value="Created" />
 				<AttributeFilter Name="Status" Mode="notexists" />
-
 			</SubItem>
 		</IssueCondition>
 

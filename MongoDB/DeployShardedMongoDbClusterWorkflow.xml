@@ -85,7 +85,6 @@
 				<DataType>Resolve</DataType>
 				<Status>checkForResolve</Status>
 			</GenerateData>	
-
 		</Activate>
 	</CreateTrigger>
 </KnowledgeItem>
