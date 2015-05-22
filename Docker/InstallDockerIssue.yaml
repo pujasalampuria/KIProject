@@ -2,7 +2,7 @@ Issue:
   NodeID: OpexSoftware:UseCase:Application:Docker
   xmlns: http://www.arago.de/IssueSchema
   IssueSubject: 'Installing Docker Registry'
-  InstallDockerRegistry:
+  DockerRegistryWorkflowHandlePKG:
     TargetApp: Docker  
     TargetMachine: Zeeshan
     TargetState: Created

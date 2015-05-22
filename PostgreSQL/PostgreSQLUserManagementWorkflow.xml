@@ -1,4 +1,4 @@
-<KnowledgeItem ID="OpexSoftware:POSTGRESQLUSER:PostgreSQLUserManagementWorkflow" xmlns="http://www.arago.de/KiSchema">
+<KnowledgeItem ID="OpexSoftware:PostgreSQL:PostgreSQLUserManagementWorkflow" xmlns="http://www.arago.de/KiSchema">
 	<Title>PostgreSQLUserManagementWorkflow</Title>
 	<Description>Initiates the workflow for handling packages by writing into the MARS model and creating new corresponding data blocks in the Issue</Description>
 
@@ -37,6 +37,8 @@
 				<CurrentTask>1</CurrentTask> 
 			</GenerateData>
 			
+			<!-- TASK1 CREATE A USERROLE IN DATABASE IN POSTGRESDB-->
+			
 			<IncAttribute Name="PROTASKS:NumberTotal"/>
 			
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 			
@@ -56,7 +58,6 @@
  
       
 			<GenerateData Alias="VAL"> 
-				<!-- Independent="true" can be applied, if multiple Issues should be generated. In this case pass on the parent IssueID to the resulting Issue <ParentIID>${IID}</ParentIID>, don't forget to include ParentIID=${IID} into the Tasks DataBlock on the Node -->
 				<DataType>Validate</DataType>
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>	
