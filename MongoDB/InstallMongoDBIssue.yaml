@@ -2,7 +2,7 @@ Issue:
   NodeID: OpexSoftware:UseCase:Application:MongoDB
   xmlns: http://www.arago.de/IssueSchema
   IssueSubject: 'Installing MongoDB cluster'
-  InstallMongoDb: 
+  MongoDBWorkflowHandlePKG: 
     TargetApp: MongoDB  
     TargetMachine: Zeeshan
     TargetState: Created

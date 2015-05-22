@@ -2,7 +2,7 @@ Issue:
   NodeID: OpexSoftware:UseCase:Application:MongoDB
   xmlns: http://www.arago.de/IssueSchema
   IssueSubject: 'Deploying Sharded MongoDB cluster'
-  DeployShardedMongoDbCluster: 
+  DeployShardedMongoDbClusterWorkflow: 
     TargetApp: MongoDB  
     TargetMachine: Zeeshan
     TargetState: Created

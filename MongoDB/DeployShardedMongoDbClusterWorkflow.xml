@@ -1,0 +1,91 @@
+<KnowledgeItem ID="OpexSoftware:MongoDB:DeployShardedMongoDbClusterWorkflow" xmlns="http://www.arago.de/KiSchema">
+	<Title>DeployShardedMongoDbClusterWorkflow</Title>
+	<Description>Initiates the workflow for Configure Sharded MongoDB Cluster by writing
+		into the MARS model and creating new corresponding data blocks in the Issue.
+	</Description>
+	<BindAttributes>
+		<AttributeFilter Name="NodeType" Mode="string" Value="Machine"/>
+		<RelatedNode Mode="predecessor" Alias="PRE">
+			<AttributeFilter Name="NodeType" Mode="string" Value="Application"/>
+		</RelatedNode> 
+	</BindAttributes>
+
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+
+	<CreateTrigger>
+		<IssueCondition>
+			<Description>Searches for an Issue with DataBlock DeployShardedMongoDbClusterWorkflow 
+				and the necessary information for successful completion of workflow.
+			</Description>
+			<SubItem Name="DeployShardedMongoDbClusterWorkflow" Alias="DSMDCW">
+				<AttributeFilter Name="TargetApp" Mode="exists"/> 
+				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}"/>
+				<AttributeFilter Name="Database" Mode="exists"/>
+				<AttributeFilter Name="ConfigServerHostnames" Mode="exists"/>
+        	   	<AttributeFilter Name="MachineRunningMongos" Mode="exists"/>
+        		<AttributeFilter Name="ConfigServerPort" Mode="exists"/>
+        		<AttributeFilter Name="MongosPort" Mode="exists"/>
+        		<AttributeFilter Name="User" Mode="exists"/>
+        		<AttributeFilter Name="Host" Mode="exists"/>
+				<AttributeFilter Name="TargetState" Mode="string" Value="Created"/>
+				<AttributeFilter Name="Status" Mode="notexists"/>
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<SetAttribute Name="DSMDCW:Status" Value="WorkflowStarted" /> 
+			<GenerateData Alias="PROTASKS"> 
+				<DataType>ProcessingTasks</DataType>
+				<CurrentTask>1</CurrentTask> 
+			</GenerateData>
+			
+           <!-- TASK1 Start congif server Database Instance-->
+			<IncAttribute Name="PROTASKS:NumberTotal"/>
+			
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
+				TargetMachine=${DSMDCW:TargetMachine}            
+				TargetState=Created
+				Host=${DSMDCW:Host}
+				User=${DSMDCW:User}
+				Lib=RUNCOMMAND
+				Command='sudo mkdir -p ${DSMDCW:Path} &amp;&amp; sudo mongod --fork --syslog --configsvr --dbpath ${DSMDCW:Path} --port ${DSMDCW:ConfigServerPort}'
+				TaskNumber=${PROTASKS:NumberTotal}
+				CurrentState=ReadState/> 
+				</NewBlock>]]>
+			</XMLExtract> 
+      
+			<GenerateData Alias="VAL"> 
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
+      
+      		<!-- TASK2  START THE MONGOS INSTANCE-->
+			<IncAttribute Name="PROTASKS:NumberTotal"/>
+			
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
+				TargetMachine=${DSMDCW:TargetMachine}      
+				TargetState=Created      
+				ConfigServerHostnames=${DSMDCW:ConfigServerHostnames}
+				Host=${DSMDCW:Host}
+				User=${DSMDCW:User}
+				Lib=RUNCOMMAND
+				Command='sudo mongos --fork --syslog --configdb ${DSMDCW:ConfigServerHostnames}:${DSMDCW:ConfigServerPort}'
+				TaskNumber=${PROTASKS:NumberTotal}
+				CurrentState=ReadState/> 
+				</NewBlock>]]>
+			</XMLExtract> 
+      
+			<GenerateData Alias="VAL"> 
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
+			
+			<!--Resolved initial Issue with ID ${IID} - use if ChildIssues are created-->
+			<GenerateData> 
+				<DataType>Resolve</DataType>
+				<Status>checkForResolve</Status>
+			</GenerateData>	
+
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

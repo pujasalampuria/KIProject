@@ -1,0 +1,87 @@
+<KnowledgeItem ID="OpexSoftware:MongoDB:MongoDBWorkflowHandlePKG" xmlns="http://www.arago.de/KiSchema">
+	<Title>MongoDBWorkflowHandlePKG</Title>
+	<Description>Initiates the workflow for handling packages related to the installation of MongoDB 
+		by writing into the MARS model and creating new corresponding DataBlocks in the Issue.
+	</Description>
+	<BindAttributes>
+       <RelatedNode Mode="predecessor" Alias="PRE">
+			<AttributeFilter Name="NodeType" Mode="string" Value="Application"/>
+	   </RelatedNode> 	
+	</BindAttributes>
+
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+
+	<CreateTrigger>
+	     <IssueCondition>
+		 <Description>Searches for an Issue with DataBlock MongoDBWorkflowHandlePKG and triggers the workflow for successful completion.
+		 </Description>
+			<SubItem Name="MongoDBWorkflowHandlePKG" Alias="MDWHP">
+				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}"/>
+				<AttributeFilter Name="TargetState" Mode="string" Value="Created"/>
+				<AttributeFilter Name="Status" Mode="notexists"/>
+				<AttributeFilter Name="User" Mode="exists"/>
+				<AttributeFilter Name="Host" Mode="exists"/>
+				<AttributeFilter Name="TargetApp" Mode="string" Value="${PRE:NodeName}"/>
+			</SubItem>
+		</IssueCondition>
+
+	     <Activate>
+			<SetAttribute Name="MDWHP:Status" Value="WorkflowStarted" /> 
+			<GenerateData Alias="PROTASKS">
+                            <DataType>ProcessingTasks</DataType>
+                            <CurrentTask>1</CurrentTask>
+			</GenerateData>
+
+			<!--Task1 Updating the apt Source File -->
+			<IncAttribute Name="PROTASKS:NumberTotal"/>
+			
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+				TargetMachine=${MDWHP:TargetMachine}      
+				TargetState=Created
+				User=${MDWHP:User}
+				Lib=APTSOURCEMODIFICATION
+				PKG=mongodb-org
+				Host=${MDWHP:Host}
+				AptRepoUrl='${MDWHP:AptRepoUrl}'
+				AptArchiveType=${MDWHP:AptArchiveType}
+				AptDistribution='${MDWHP:AptDistribution}'
+				AptComponents=${MDWHP:AptComponents}
+				AptKey=${MDWHP:AptKey}
+				CurrentState=ReadState
+				TaskNumber=${PROTASKS:NumberTotal}
+				/> </NewBlock>]]>
+			</XMLExtract>
+      
+			<GenerateData Alias="VAL"> 
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>	
+
+			<!--Task2 Installing the mongoDB -->	
+            <IncAttribute Name="PROTASKS:NumberTotal"/>
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+				TargetMachine=${MDWHP:TargetMachine}      
+				TargetState=Created
+				User=${MDWHP:User}
+				Lib=PKG
+				PKG=mongodb-org
+				Host=${MDWHP:Host}
+				CurrentState=ReadState
+				TaskNumber=${PROTASKS:NumberTotal}
+				/> </NewBlock>]]>
+			</XMLExtract>
+      
+			<GenerateData Alias="VAL"> 
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>	
+      
+			<!--Resolved initial Issue with ID ${IID} - use if ChildIssues are created-->
+			<GenerateData> 
+				<DataType>Resolve</DataType>
+				<Status>checkForResolve</Status>
+			</GenerateData>	
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>
