@@ -1,0 +1,259 @@
+<KnowledgeItem ID="OpexSoftware:WordPress:WordPressWorkflowHandlePKG" xmlns="http://www.arago.de/KiSchema">
+	<Title>WordPressWorkflowHandlePKG</Title>
+	<Description>Initiates the workflow for handling WordPress install related packages by writing 
+		into the MARS model and creating new corresponding data blocks in the Issue.
+	</Description>
+
+	<BindAttributes>
+		<AttributeFilter Name="NodeType" Mode="string" Value="Machine" />
+		<RelatedNode Mode="predecessor" Alias="PRE">
+			<AttributeFilter Name="NodeType" Mode="string" Value="Application" />
+		</RelatedNode>
+	</BindAttributes>
+
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+
+	<CreateTrigger>
+		<IssueCondition>
+			<Description>Searches for an Issue with DataBlock WordPressWorkflowHandlePKG and the necessary 
+				information for successful completion of workflow.
+			</Description>
+			<SubItem Name="WordPressWorkflowHandlePKG" Alias="WPWHP">
+				<AttributeFilter Name="TargetApp" Mode="string" Value="${PRE:NodeName}" />
+				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}" />
+				<AttributeFilter Name="TargetState" Mode="string" Value="Created" />
+				<AttributeFilter Name="TargetTarFileName" Mode="exists" />
+				<AttributeFilter Name="TargetPath" Mode="exists" />
+				<AttributeFilter Name="DownloadUrl" Mode="exists" />
+				<AttributeFilter Name="UntarFolder" Mode="exists" />
+				<AttributeFilter Name="User" Mode="exists" />
+				<AttributeFilter Name="Host" Mode="exists" />
+				<AttributeFilter Name="MySQLRootPass" Mode="exists" />
+				<AttributeFilter Name="Status" Mode="notexists" />
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<SetAttribute Name="WPWHP:Status" Value="WorkflowStarted" />
+			<GenerateData Alias="PROTASKS">
+				<DataType>ProcessingTasks</DataType>
+				<CurrentTask>1</CurrentTask>
+			</GenerateData>
+
+			<!-- TASK1 install nginx -->
+			<IncAttribute Name="PROTASKS:NumberTotal" />
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
+				PKG=nginx
+				TargetMachine=${WPWHP:TargetMachine}
+				TargetState=Created
+				User=${WPWHP:User}
+				Host=${WPWHP:Host}
+				Lib=PKG
+				CurrentState=ReadState
+				TaskNumber=${PROTASKS:NumberTotal}
+				/> </NewBlock>]]>
+			</XMLExtract>
+
+			<GenerateData Alias="VAL">
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
+
+			<!-- TASK2 install debconf-utils -->
+			<IncAttribute Name="PROTASKS:NumberTotal" />
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
+				PKG=debconf-utils
+				TargetMachine=${WPWHP:TargetMachine}
+				TargetState=Created
+				User=${WPWHP:User}
+				Host=${WPWHP:Host}
+				Lib=PKG
+				CurrentState=ReadState
+				TaskNumber=${PROTASKS:NumberTotal}
+				/> </NewBlock>]]>
+			</XMLExtract>
+
+			<GenerateData Alias="VAL">
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
+
+			<!-- TASK3 run the command to update debconf-set-selections with mysql-server/root_password password for mysql silent install -->
+			<IncAttribute Name="PROTASKS:NumberTotal" />
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
+				TargetMachine=${WPWHP:TargetMachine}      
+				TargetState=Created
+				Host=${WPWHP:Host}
+				User=${WPWHP:User}
+				Lib=RUNCOMMAND
+				Command='sudo debconf-set-selections <<< &apos;mysql-server mysql-server/root_password password ${WPWHP:MySQLRootPass}&apos;'
+				TaskNumber=${PROTASKS:NumberTotal}
+				CurrentState=ReadState/> 
+				</NewBlock>]]>
+			</XMLExtract>
+
+			<GenerateData Alias="VAL">
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
+
+			<!-- TASK4 run the command to update debconf-set-selections with mysql-server/root_password_again password for mysql silent install -->
+			<IncAttribute Name="PROTASKS:NumberTotal" />
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
+				TargetMachine=${WPWHP:TargetMachine}            
+				TargetState=Created
+				Host=${WPWHP:Host}
+				User=${WPWHP:User}
+				Lib=RUNCOMMAND
+				Command='sudo debconf-set-selections <<< &apos;mysql-server mysql-server/root_password_again password ${WPWHP:MySQLRootPass}&apos;'
+				TaskNumber=${PROTASKS:NumberTotal}
+				CurrentState=ReadState/> 
+				</NewBlock>]]>
+			</XMLExtract>
+
+			<GenerateData Alias="VAL">
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
+
+			<!-- TASK5 install mysql-server -->
+			<IncAttribute Name="PROTASKS:NumberTotal" />
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
+				PKG=mysql-server
+				TargetMachine=${WPWHP:TargetMachine}      
+				TargetState=Created
+				User=${WPWHP:User}
+				Host=${WPWHP:Host}
+				Lib=PKG 
+				CurrentState=ReadState
+				TaskNumber=${PROTASKS:NumberTotal}
+				/> </NewBlock>]]>
+			</XMLExtract>
+
+			<GenerateData Alias="VAL">
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
+
+			<!-- TASK6 install mysql-server data base -->
+			<IncAttribute Name="PROTASKS:NumberTotal" />
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
+				TargetMachine=${WPWHP:TargetMachine}            
+				TargetState=Created
+				Host=${WPWHP:Host}
+				User=${WPWHP:User}
+				Lib=RUNCOMMAND
+				Command='sudo mysql_install_db'
+				TaskNumber=${PROTASKS:NumberTotal}
+				CurrentState=ReadState/> 
+				</NewBlock>]]>
+			</XMLExtract>
+
+			<GenerateData Alias="VAL">
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
+
+			<!-- TASK7 install php5-fpm -->
+			<IncAttribute Name="PROTASKS:NumberTotal" />
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
+				PKG=php5-fpm
+				TargetMachine=${WPWHP:TargetMachine}      
+				TargetState=Created
+				User=${WPWHP:User}
+				Host=${WPWHP:Host}
+				Lib=PKG
+				CurrentState=ReadState
+				TaskNumber=${PROTASKS:NumberTotal}
+				/> </NewBlock>]]>
+			</XMLExtract>
+
+			<GenerateData Alias="VAL">
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
+
+			<!-- TASK8 install php5-mysql -->
+			<IncAttribute Name="PROTASKS:NumberTotal" />
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
+				PKG=php5-mysql
+				TargetMachine=${WPWHP:TargetMachine}      
+				TargetState=Created
+				User=${WPWHP:User}
+				Host=${WPWHP:Host}
+				Lib=PKG
+				CurrentState=ReadState
+				TaskNumber=${PROTASKS:NumberTotal}
+				/> </NewBlock>]]>
+			</XMLExtract>
+
+			<GenerateData Alias="VAL">
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
+
+			<!-- TASK9 download WordPress tar ball -->
+			<IncAttribute Name="PROTASKS:NumberTotal" />
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
+                PKG=WordPressWGET
+                DownloadUrl='${WPWHP:DownloadUrl}'
+                TargetMachine=${WPWHP:TargetMachine}
+                TargetTarFileName=${WPWHP:TargetTarFileName}
+                UntarFolder=${WPWHP:UntarFolder}      
+                TargetPath='${WPWHP:TargetPath}'
+                TargetState=Created
+                User=${WPWHP:User}
+                Host=${WPWHP:Host}
+		  	 	Lib=WGET
+                CurrentState=ReadState
+                TaskNumber=${PROTASKS:NumberTotal}
+                /> </NewBlock>]]>
+			</XMLExtract>
+
+			<GenerateData Alias="VAL">
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
+
+			<!-- TASK10 extract WordPress tar ball -->
+			<IncAttribute Name="PROTASKS:NumberTotal" />
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
+                PKG=WordPressUnTar
+                DownloadUrl='${WPWHP:DownloadUrl}'
+                TargetMachine=${WPWHP:TargetMachine}
+                TargetTarFileName=${WPWHP:TargetTarFileName}
+                UntarFolder=${WPWHP:UntarFolder}      
+                TargetPath='${WPWHP:TargetPath}'
+                TargetState=Created
+                User=${WPWHP:User}
+                Host=${WPWHP:Host}
+                Lib=TAREXTRACT 
+                CurrentState=ReadState
+                TaskNumber=${PROTASKS:NumberTotal}
+                /> </NewBlock>]]>
+			</XMLExtract>
+
+			<GenerateData Alias="VAL">
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
+
+			<!-- <Resolve>Resolved initial Issue with ID ${IID}</Resolve> - use if ChildIssues are created -->
+			<GenerateData>
+				<DataType>Resolve</DataType>
+				<Status>checkForResolve</Status>
+			</GenerateData>
+
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

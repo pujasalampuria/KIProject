@@ -2,7 +2,7 @@ Issue:
   NodeID: OpexSoftware:UseCase:Application:WordPress 
   xmlns: http://www.arago.de/IssueSchema
   IssueSubject: 'Run Workflow for Installation of a WordPress Package'
-  WordPressHandlePKG:
+  WordPressWorkflowHandlePKG:
     TargetApp: WordPress
     TargetMachine: Ashish
     TargetTarFileName: latest.tar.gz
@@ -11,5 +11,5 @@ Issue:
     TargetState: Created
     UntarFolder: wordpress
     User: ashish
-    Host: 192.168.1.57
+    Host: 192.168.1.59
     MySQLRootPass: root123
