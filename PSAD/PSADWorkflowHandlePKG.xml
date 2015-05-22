@@ -37,7 +37,6 @@
 		</IssueCondition>
 
 		<Activate>
-
 			<SetAttribute Name="PWHP:Status" Value="WorkflowStarted" />
 
 			<GenerateData Alias="PROTASKS">

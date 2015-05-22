@@ -29,8 +29,7 @@
 				<CurrentTask>1</CurrentTask>
 			</GenerateData>
 
-			<!--Task1 Check if Sudo package is there -->
-
+			<!--Task1 Check if sudo package is already installed -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
@@ -45,12 +44,10 @@
 				/> </NewBlock>]]>
 			</XMLExtract>
 
-
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
-
 
 			<!--Task2 Add user to sudoers list. -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
