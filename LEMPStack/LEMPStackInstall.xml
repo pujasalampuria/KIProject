@@ -1,7 +1,8 @@
-<KnowledgeItem
-	ID="OpexSoftware:WorkFlowUserStory:LEMPStackInstall" xmlns="http://www.arago.de/KiSchema">
-	<Title>LEMPStackWorkflowHandlePackage</Title>
-	<Description>Initiates the workflow for handling LEMP Stack install	related packages by writing into the MARS model and creating new corresponding data blocks in the Issue</Description>
+<KnowledgeItem ID="OpexSoftware:LEMPStack:LEMPStackInstall" xmlns="http://www.arago.de/KiSchema">
+	<Title>LEMPStackWorkflowHandlePKG</Title>
+	<Description>Initiates the workflow for handling LEMP Stack install related packages by 
+		writing into the MARS model and creating new corresponding data blocks in the Issue.
+	</Description>
 
 	<BindAttributes>
 		<AttributeFilter Name="NodeType" Mode="string" Value="Machine" />
@@ -14,15 +15,19 @@
 
 	<CreateTrigger>
 		<IssueCondition>
-			<Description>Searches for an Issue with DataBlock LEMPStackHandlePKG and the necessary information for successful completion of workflow
+			<Description>Searches for an Issue with DataBlock LEMPStackHandlePKG
+				and the necessary information for successful completion of workflow
 			</Description>
-			<SubItem Name="LEMPStackHandlePKG" Alias="LPHP">
-				<AttributeFilter Name="TargetApp" Mode="string" Value="${PRE:NodeName}" />
-				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}" />
+			<SubItem Name="LEMPStackWorkflowHandlePKG" Alias="LPHP">
+				<AttributeFilter Name="TargetApp" Mode="string"
+					Value="${PRE:NodeName}" />
+				<AttributeFilter Name="TargetMachine" Mode="string"
+					Value="${NODE:NodeName}" />
 				<AttributeFilter Name="User" Mode="exists" />
 				<AttributeFilter Name="Host" Mode="exists" />
 				<AttributeFilter Name="MySQLRootPass" Mode="exists" />
-				<AttributeFilter Name="TargetState" Mode="string" Value="Created" />
+				<AttributeFilter Name="TargetState" Mode="string"
+					Value="Created" />
 				<AttributeFilter Name="Status" Mode="notexists" />
 			</SubItem>
 		</IssueCondition>
@@ -53,7 +58,7 @@
 				<DataType>Validate</DataType>
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
-			
+
 			<!-- TASK2 -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
@@ -73,10 +78,10 @@
 				<DataType>Validate</DataType>
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
-			
+
 			<!-- TASK3 -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
-			
+
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
 				TargetMachine=${LPHP:TargetMachine}      
 				TargetState=Created
@@ -87,16 +92,16 @@
 				TaskNumber=${PROTASKS:NumberTotal}
 				CurrentState=ReadState/> 
 				</NewBlock>]]>
-			</XMLExtract> 
-			
+			</XMLExtract>
+
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
-			
+
 			<!-- TASK4 -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
-			
+
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
 				TargetMachine=${LPHP:TargetMachine}            
 				TargetState=Created
@@ -107,13 +112,13 @@
 				TaskNumber=${PROTASKS:NumberTotal}
 				CurrentState=ReadState/> 
 				</NewBlock>]]>
-			</XMLExtract> 
-			
+			</XMLExtract>
+
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
-			
+
 			<!-- TASK5 -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
@@ -133,7 +138,7 @@
 				<DataType>Validate</DataType>
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
-			
+
 			<!-- TASK6 -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
@@ -153,7 +158,7 @@
 				<DataType>Validate</DataType>
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
-			
+
 			<!-- TASK7 -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
@@ -193,7 +198,7 @@
 				<DataType>Validate</DataType>
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
-			
+
 			<!-- <Resolve>Resolved initial Issue with ID ${IID}</Resolve> - use if 
 				ChildIssues are created -->
 			<GenerateData>

@@ -1,37 +1,39 @@
 <KnowledgeItem ID="OpexSoftware:Jira:JiraWorkflowModifyIssue" xmlns="http://www.arago.de/KiSchema">
 	<Title>JiraWorkflowModifyIssue</Title>
-	<Description>Initiates the workflow for updating issue in Jira</Description>
+	<Description>Initiates the workflow for updating issue in Jira.</Description>
 	<BindAttributes>
-		<AttributeFilter Name="NodeType" Mode="string" Value="Machine"/>
+		<AttributeFilter Name="NodeType" Mode="string" Value="Machine" />
 	</BindAttributes>
 
 	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
 
 	<CreateTrigger>
-	     <IssueCondition>
-		 <Description>Searches for an Issue with DataBlock JWMI and triggers the workflow for successful completion</Description>
+		<IssueCondition>
+			<Description>Searches for an Issue with DataBlock JiraWorkflowModifyIssue 
+				and triggers the workflow for successful completion.
+			</Description>
 			<SubItem Name="JiraWorkflowModifyIssue" Alias="JWMI">
-				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}"/>
-				<AttributeFilter Name="TargetState" Mode="string" Value="Created"/>
-	            <AttributeFilter Name="JiraUrl" Mode="exists" />
-	            <AttributeFilter Name="IssueKey" Mode="exists" />
-	            <AttributeFilter Name="JiraUser" Mode="exists" />
-	            <AttributeFilter Name="JiraPassword" Mode="exists" />
-	            <AttributeFilter Name="Summary" Mode="exists" />
-	            <AttributeFilter Name="Description" Mode="exists" />
-				<AttributeFilter Name="Status" Mode="notexists"/>
+				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}" />
+				<AttributeFilter Name="TargetState" Mode="string" Value="Created" />
+				<AttributeFilter Name="JiraUrl" Mode="exists" />
+				<AttributeFilter Name="IssueKey" Mode="exists" />
+				<AttributeFilter Name="JiraUser" Mode="exists" />
+				<AttributeFilter Name="JiraPassword" Mode="exists" />
+				<AttributeFilter Name="Summary" Mode="exists" />
+				<AttributeFilter Name="Description" Mode="exists" />
+				<AttributeFilter Name="Status" Mode="notexists" />
 			</SubItem>
 		</IssueCondition>
 
-	     <Activate>
-			<SetAttribute Name="JWMI:Status" Value="WorkflowStarted" /> 
+		<Activate>
+			<SetAttribute Name="JWMI:Status" Value="WorkflowStarted" />
 			<GenerateData Alias="PROTASKS">
-                <DataType>ProcessingTasks</DataType>
-                <CurrentTask>1</CurrentTask>
+				<DataType>ProcessingTasks</DataType>
+				<CurrentTask>1</CurrentTask>
 			</GenerateData>
 
-			<!--Task Modify an issue in Jira-->	
-			<IncAttribute Name="PROTASKS:NumberTotal"/>
+			<!--Task Modify an issue in Jira -->
+			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
 			   TargetMachine=${JWMI:TargetMachine}      
@@ -44,21 +46,20 @@
 			   ToolPasswd=${JWMI:JiraPassword}
 			   PutData='{"fields":{"summary":"${JWMI:Summary}","description":"${JWMI:Description}"}}'
 			   TaskNumber=${PROTASKS:NumberTotal}
-			   ContentType='Content-Type:application/json'
+			   ContentType='Content-Type:application/json'/>
 			   </NewBlock>]]>
 			</XMLExtract>
-			
-			<GenerateData Alias="VAL"> 
+
+			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
-			</GenerateData>	
-      
-			<!--<Resolve>Resolved initial Issue with ID ${IID}</Resolve> - use if ChildIssues are created-->
-			
-			<GenerateData> 
+			</GenerateData>
+
+			<!--<Resolve>Resolved initial Issue with ID ${IID}</Resolve> - use if ChildIssues are created -->
+			<GenerateData>
 				<DataType>Resolve</DataType>
 				<Status>checkForResolve</Status>
-			</GenerateData>	
+			</GenerateData>
 		</Activate>
 	</CreateTrigger>
 </KnowledgeItem>
