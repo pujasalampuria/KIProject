@@ -47,14 +47,12 @@
 				Host=${PSUMW:Host}
 				User=${PSUMW:User}
 				TaskNumber=${PROTASKS:NumberTotal}
-				Command1='psql -c \"CREATE USER ${PSUMW:NewDBUserName} WITH PASSWORD'
-				Command2='${PSUMW:NewDBPassword}' 
-				Command3='\"'
+				Command='psql -c \"CREATE USER ${PSUMW:NewDBUserName} WITH PASSWORD &apos;${PSUMW:NewDBPassword}&apos;\"'
 				Lib=RUNCOMMAND
 				CurrentState=ReadState/> 
 				</NewBlock>]]>
 			</XMLExtract> 
-			<SetAttribute Name="NODE:Extensions/Tasks/Command" Value="${NODE:Extensions/Tasks/Command1} '${NODE:Extensions/Tasks/Command2}';${NODE:Extensions/Tasks/Command3}"/>
+			<!-- <SetAttribute Name="NODE:Extensions/Tasks/Command" Value="${NODE:Extensions/Tasks/Command1} '${NODE:Extensions/Tasks/Command2}';${NODE:Extensions/Tasks/Command3}"/> -->
  
       
 			<GenerateData Alias="VAL"> 
