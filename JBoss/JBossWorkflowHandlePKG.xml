@@ -43,7 +43,7 @@
 				<CurrentTask>1</CurrentTask>
 			</GenerateData>
 
-			<!-- TASK1 -->
+			<!-- TASK1 Download  JBoss tar file -->
 
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
@@ -66,7 +66,7 @@
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
 
-			<!-- TASK2 -->
+			<!-- TASK2 Extract JBoss tar file -->
 
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 

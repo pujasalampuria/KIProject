@@ -46,7 +46,7 @@
 				<CurrentTask>1</CurrentTask>
 			</GenerateData>
 
-			<!--TASK1 -->
+			<!--TASK1 Download psad tar file -->
 
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
@@ -69,7 +69,7 @@
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
 
-			<!--TASK2 -->
+			<!--TASK2 Extract psad tar file -->
 
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
@@ -92,7 +92,7 @@
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
 
-			<!-- TASK3 -->
+			<!-- TASK3  Run Command to rename install.answers.example file -->
 
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
@@ -115,7 +115,7 @@
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
 
-			<!-- TASK4 -->
+			<!-- TASK4 Run Command to install psad -->
 
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
@@ -140,7 +140,7 @@
 
 
 
-			<!-- TASK5 -->
+			<!-- TASK5 Run Command to Configure iptables -->
 
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
@@ -161,7 +161,7 @@
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
 
-			<!-- TASK6 -->
+			<!-- TASK6 Run Command to Configure iptables -->
 
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
@@ -182,7 +182,7 @@
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
 
-			<!-- TASK7 -->
+			<!-- TASK7 Run Command to Configure psad -->
 
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
@@ -203,7 +203,7 @@
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
 
-			<!-- TASK8 -->
+			<!-- TASK8 Run Command to Configure psad -->
 
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
@@ -224,7 +224,7 @@
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
 
-			<!-- TASK9 -->
+			<!-- TASK9 Run Command to Configure psad -->
 
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
@@ -245,7 +245,7 @@
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
 
-			<!-- TASK10 -->
+			<!-- TASK10 Run Command to Configure psad -->
 
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 

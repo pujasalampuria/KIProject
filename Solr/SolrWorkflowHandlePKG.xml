@@ -40,7 +40,7 @@
 				<CurrentTask>1</CurrentTask>
 			</GenerateData>
 
-			<!-- TASK1 -->
+			<!-- TASK1 Install openjdk-7-jdk package -->
 
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
@@ -61,7 +61,7 @@
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
 
-			<!-- TASK2 -->
+			<!-- TASK2 Install tomcat6 package-->
 
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
@@ -82,7 +82,7 @@
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
 
-			<!-- TASK3 -->
+			<!-- TASK3 Install tomcat6-common package -->
 
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
@@ -102,7 +102,8 @@
 				<DataType>Validate</DataType>
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
-			<!-- TASK4 -->
+			
+			<!-- TASK4 Install libtomcat6-java package -->
 
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
@@ -123,7 +124,7 @@
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
 
-			<!-- TASK5 -->
+			<!-- TASK5 Install solr-tomcat package -->
 
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
