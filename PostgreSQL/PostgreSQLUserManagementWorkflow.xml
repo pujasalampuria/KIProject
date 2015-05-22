@@ -1,6 +1,7 @@
 <KnowledgeItem ID="OpexSoftware:PostgreSQL:PostgreSQLUserManagementWorkflow" xmlns="http://www.arago.de/KiSchema">
 	<Title>PostgreSQLUserManagementWorkflow</Title>
-	<Description>Initiates the workflow for handling packages by writing into the MARS model and creating new corresponding data blocks in the Issue</Description>
+	<Description>Initiates the workflow for creating User Roles on Postgres.
+	</Description>
 
 	<BindAttributes>
 		<AttributeFilter Name="NodeType" Mode="string" Value="Machine"/>
@@ -14,7 +15,9 @@
 	<CreateTrigger>
 
 		<IssueCondition>
-			<Description>Searches for an Issue with DataBlock POSTGRESQLUSER and the necessary information for successful completion of workflow</Description>
+			<Description>Searches for an Issue with DataBlock PostgreSQLUserManagementWorkflow 
+				and the necessary information for successful completion of workflow.
+			</Description>
 			<SubItem Name="PostgreSQLUserManagementWorkflow" Alias="PSUMW">
 				<AttributeFilter Name="TargetApp" Mode="string" Value="${PRE:NodeName}"/>
 				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}"/>
@@ -24,12 +27,10 @@
 				<AttributeFilter Name="Host" Mode="exists"/>
 				<AttributeFilter Name="TargetState" Mode="string" Value="Created"/>
 				<AttributeFilter Name="Status" Mode="notexists"/>
-				
 			</SubItem>
 		</IssueCondition>
 
 		<Activate>
-			
 			<SetAttribute Name="PSUMW:Status" Value="WorkflowStarted" /> 
 			
 			<GenerateData Alias="PROTASKS"> 
@@ -37,8 +38,7 @@
 				<CurrentTask>1</CurrentTask> 
 			</GenerateData>
 			
-			<!-- TASK1 CREATE A USERROLE IN DATABASE IN POSTGRESDB-->
-			
+			<!-- TASK1 Create User Role in Postgres-->
 			<IncAttribute Name="PROTASKS:NumberTotal"/>
 			
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 			
@@ -54,21 +54,17 @@
 				CurrentState=ReadState/> 
 				</NewBlock>]]>
 			</XMLExtract> 
-			<!-- <SetAttribute Name="NODE:Extensions/Tasks/Command" Value="${NODE:Extensions/Tasks/Command1} '${NODE:Extensions/Tasks/Command2}';${NODE:Extensions/Tasks/Command3}"/> -->
- 
       
 			<GenerateData Alias="VAL"> 
 				<DataType>Validate</DataType>
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>	
-			 	
-			<!--		<Resolve>Resolved initial Issue with ID ${IID}</Resolve> - use if ChildIssues are created-->
-			
+
+			<!-- Resolved initial Issue with ID ${IID} use if ChildIssues are created-->
 			<GenerateData> 
 				<DataType>Resolve</DataType>
 				<Status>checkForResolve</Status>
 			</GenerateData>	
-			
 		</Activate>
 	</CreateTrigger>
 </KnowledgeItem>

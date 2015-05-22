@@ -1,6 +1,7 @@
 <KnowledgeItem ID="OpexSofware:PostgreSQL:PostgreSQLDBManagementWorkflow" xmlns="http://www.arago.de/KiSchema">
 	<Title>PostgreSQLDBManagementWorkflow</Title>
-	<Description>Initiates the workflow for creating DataBase on Postgre</Description>
+	<Description>Initiates the workflow for creating DataBase on Postgre.
+	</Description>
 
 	<BindAttributes>
 		<AttributeFilter Name="NodeType" Mode="string" Value="Machine"/>
@@ -14,7 +15,9 @@
 	<CreateTrigger>
 
 		<IssueCondition>
-			<Description>Searches for an Issue with DataBlock POSTGRESQLDB and the necessary information for successful completion of workflow</Description>
+			<Description>Searches for an Issue with DataBlock PostgreSQLDBManagementWorkflow 
+				and the necessary information for successful completion of workflow.
+			</Description>
 			<SubItem Name="PostgreSQLDBManagementWorkflow" Alias="PSDMW">
 				<AttributeFilter Name="TargetApp" Mode="string" Value="${PRE:NodeName}"/>
 				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}"/>
@@ -35,8 +38,7 @@
 				<CurrentTask>1</CurrentTask> 
 			</GenerateData>
 
-			 <!-- TASK1 CREATE A DATABASE IN POSTGRESDB-->
-			
+			 <!-- TASK1 Create DB in PostgresSQL -->
 			<IncAttribute Name="PROTASKS:NumberTotal"/>
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
@@ -57,13 +59,11 @@
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>	
       
-			<!--<Resolve>Resolved initial Issue with ID ${IID}</Resolve> - use if ChildIssues are created-->
-			
+			<!-- Resolved initial Issue with ID ${IID} use if ChildIssues are created-->
 			<GenerateData> 
 				<DataType>Resolve</DataType>
 				<Status>checkForResolve</Status>
 			</GenerateData>	
-			
 		</Activate>
 	</CreateTrigger>
 </KnowledgeItem>

@@ -3,9 +3,8 @@ Issue:
   xmlns: http://www.arago.de/IssueSchema
   IssueSubject: 'Installing Docker Registry'
   DockerRegistryWorkflowHandlePKG:
-    TargetApp: Docker  
+    TargetApp: Docker
     TargetMachine: Zeeshan
     TargetState: Created
-    AppToInstall: docker-registry 
     User: zeeshan
     Host: 192.168.1.90
