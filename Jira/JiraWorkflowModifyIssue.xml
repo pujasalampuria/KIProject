@@ -13,6 +13,12 @@
 			<SubItem Name="JiraWorkflowModifyIssue" Alias="JWMI">
 				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}"/>
 				<AttributeFilter Name="TargetState" Mode="string" Value="Created"/>
+	            <AttributeFilter Name="JiraUrl" Mode="exists" />
+	            <AttributeFilter Name="IssueKey" Mode="exists" />
+	            <AttributeFilter Name="JiraUser" Mode="exists" />
+	            <AttributeFilter Name="JiraPassword" Mode="exists" />
+	            <AttributeFilter Name="Summary" Mode="exists" />
+	            <AttributeFilter Name="Description" Mode="exists" />
 				<AttributeFilter Name="Status" Mode="notexists"/>
 			</SubItem>
 		</IssueCondition>
