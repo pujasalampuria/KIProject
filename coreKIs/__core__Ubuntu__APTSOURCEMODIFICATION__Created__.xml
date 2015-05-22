@@ -29,7 +29,7 @@
 
 	<CreateTrigger>
 		<IssueCondition>
-			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__APTSOURCEMODIFICATION__Created__ 
+			<Description> Checks Issue for DataBlock __core__Ubuntu__APTSOURCEMODIFICATION__Created__ 
 				and attribute ExtUID being the same as in the Node the KI binds to.
 			</Description>
 			<SubItem Name="__core__Ubuntu__APTSOURCEMODIFICATION__Created__" Alias="INSTALL">

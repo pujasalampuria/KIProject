@@ -27,7 +27,7 @@
 
 	<CreateTrigger>
 		<IssueCondition>
-			<Description> Checks Issue for DataBlock __core__${NODE:MachineClass}__GITCLONE__ReadState__ 
+			<Description> Checks Issue for DataBlock __core__CentOS__GITCLONE__ReadState__ 
 				and attribute ExtUID being the same as the machine KI binds to. 
 			</Description>
 			<SubItem Name="__core__CentOS__GITCLONE__ReadState__" Alias="CHECK">

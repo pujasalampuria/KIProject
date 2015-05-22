@@ -25,7 +25,7 @@
 
 	<CreateTrigger>
 		<IssueCondition>
-			<Description> Checks Issue for DataBlock __core__${NODE:MachineClass}__RESTARTSERVICE__ReadState__ 
+			<Description> Checks Issue for DataBlock __core__Ubuntu__RESTARTSERVICE__ReadState__ 
 				and attribute ExtUID being the same as the machine KI binds to.
 			</Description>
 			<SubItem Name="__core__Ubuntu__RESTARTSERVICE__ReadState__" Alias="RESTARTSERVICE">

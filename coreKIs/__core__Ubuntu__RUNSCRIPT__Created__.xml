@@ -25,7 +25,7 @@
 
 	<CreateTrigger>
 		<IssueCondition>
-			<Description> Checks Issue for DataBlock __core__${NODE:MachineClass}__RUNSCRIPT__Created__ 
+			<Description> Checks Issue for DataBlock __core__Ubuntu__RUNSCRIPT__Created__ 
 				and attribute ExtUID being the same as in the Node the KI binds to.
 			</Description>
 			<SubItem Name="__core__Ubuntu__RUNSCRIPT__Created__" Alias="RUNSCRIPT">

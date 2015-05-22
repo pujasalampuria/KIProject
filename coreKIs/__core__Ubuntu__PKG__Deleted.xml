@@ -25,7 +25,7 @@
 
 	<CreateTrigger>
 		<IssueCondition>
-			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__PKG__Deleted__ 
+			<Description> Checks Issue for DataBlock __core__Ubuntu__PKG__Deleted__ 
 				and attribute ExtUID being the same as in the Node the KI binds to.
 			</Description>
 			<SubItem Name="__core__Ubuntu__PKG__Deleted__" Alias="UNINSTALL">

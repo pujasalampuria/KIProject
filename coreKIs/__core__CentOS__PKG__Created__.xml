@@ -25,7 +25,7 @@
 
 	<CreateTrigger>
 		<IssueCondition>
-			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__PKG__Created__ 
+			<Description> Checks Issue for DataBlock __core__CentOS__PKG__Created__ 
 				and attribute ExtUID being the same as in the Node the KI binds to.
 			</Description>
 			<SubItem Name="__core__CentOS__PKG__Created__" Alias="INSTALL">
