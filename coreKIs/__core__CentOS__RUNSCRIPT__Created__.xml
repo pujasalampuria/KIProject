@@ -28,20 +28,20 @@
 			<Description> Checks Issue for DataBlock __core__CentOS__RUNSCRIPT__Created__ 
 				and attribute ExtUID being the same as in the Node the KI binds to.
 			</Description>
-			<SubItem Name="__core__CentOS__RUNSCRIPT__Created__" Alias="ADDED">
+			<SubItem Name="__core__CentOS__RUNSCRIPT__Created__" Alias="CHECK">
 				<AttributeFilter Name="ExtUID" Mode="string" Value="${TASKS:UID}" />
 				<AttributeFilter Name="Status" Mode="notexists" />
 			</SubItem>
 		</IssueCondition>
 
 		<Activate>
-			<Action Capability="RunScript" Timeout="60" Result="ScriptOutput" Output="OUTPUT" Error="ERROR" SystemRC="SYSTEMRC">
+			<Action Capability="RunScript" Timeout="60" Result="SCRIPTRESULT" Output="SCRIPTOUTPUT" Error="SCRIPTERROR" SystemRC="SCRIPTSYSTEMRC">
 				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
 				<Parameter Name="User">${TASKS:User}</Parameter>
 				<Parameter Name="Command"><![CDATA[${TASKS:Script}]]></Parameter>
 			</Action>
 			<If>
-				<VarCondition VarString="${SYSTEMRC}" Mode="eq" Value="0" />
+				<VarCondition VarString="${SCRIPTSYSTEMRC}" Mode="eq" Value="0" />
 				<Then>
 					<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
 						<Parameter Name="User">${TASKS:User}</Parameter>
@@ -63,7 +63,7 @@
 					<Eject>__Failed to execute Script ${TASKS:Script}__</Eject>
 				</Else>
 			</If>
-			<SetAttribute Name="ADDED:Status" Value="created" />
+			<SetAttribute Name="CHECK:Status" Value="created" />
 		</Activate>
 	</CreateTrigger>
 </KnowledgeItem>

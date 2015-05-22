@@ -30,7 +30,7 @@
 			<Description> Checks Issue for DataBlock __core__Ubuntu__FILECREATE__Created__ 
 				and attribute ExtUID being the same as in the Node the KI binds to. 
 			</Description>
-			<SubItem Name="__core__Ubuntu__FILECREATE__Created__" Alias="ADDED">
+			<SubItem Name="__core__Ubuntu__FILECREATE__Created__" Alias="CHECK">
 				<AttributeFilter Name="ExtUID" Mode="string" Value="${TASKS:UID}" />
 				<AttributeFilter Name="Status" Mode="notexists" />
 			</SubItem>
@@ -51,7 +51,7 @@
 					<Eject>__Failed to create file ${TASKS:FilePath}/${TASKS:FileName}__</Eject>
 				</Else>
 			</If>
-			<SetAttribute Name="ADDED:Status" Value="created" />
+			<SetAttribute Name="CHECK:Status" Value="created" />
 		</Activate>
 	</CreateTrigger>
 </KnowledgeItem>

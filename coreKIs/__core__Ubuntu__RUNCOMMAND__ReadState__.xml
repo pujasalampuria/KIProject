@@ -26,7 +26,7 @@
 			<Description> Checks Issue for DataBlock __core__Ubuntu__RUNCOMMAND__ReadState__ 
 				and attribute ExtUID being the same as the machine KI binds to.
 			</Description>
-			<SubItem Name="__core__Ubuntu__RUNCOMMAND__ReadState__" Alias="RUNCOMMAND">
+			<SubItem Name="__core__Ubuntu__RUNCOMMAND__ReadState__" Alias="CHECK">
 				<AttributeFilter Name="ExtUID" Mode="string" Value="${TASKS:UID}" />
 				<AttributeFilter Name="Status" Mode="notexists" />
 			</SubItem>
@@ -48,7 +48,7 @@
 					<SetAttribute Name="TASKS:CurrentState" Value="NotRUN" />
 				</Else>
 			</If>
-			<SetAttribute Name="RUNCOMMAND:Status" Value="CurrentStateRead" />
+			<SetAttribute Name="CHECK:Status" Value="CurrentStateRead" />
 		</Activate>
 	</CreateTrigger>
 </KnowledgeItem>

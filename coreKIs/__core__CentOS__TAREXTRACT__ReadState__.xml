@@ -52,7 +52,6 @@
 				</Else>
 			</If>
 			<SetAttribute Name="CHECK:Status" Value="CurrentStateRead" />
-
 		</Activate>
 	</CreateTrigger>
 </KnowledgeItem>

@@ -28,7 +28,7 @@
 			<Description> Checks Issue for DataBlock __core__CentOS__PKG__Deleted__ 
 				and attribute ExtUID being the same as in the Node the KI binds to.
 			</Description>
-			<SubItem Name="__core__CentOS__PKG__Deleted__" Alias="UNINSTALL">
+			<SubItem Name="__core__CentOS__PKG__Deleted__" Alias="CHECK">
 				<AttributeFilter Name="ExtUID" Mode="string" Value="${TASKS:UID}" />
 				<AttributeFilter Name="Status" Mode="notexists" />
 			</SubItem>
@@ -50,7 +50,7 @@
 					<Eject>__Failed to uninstall package ${TASKS:PKG}__</Eject>
 				</Else>
 			</If>
-			<SetAttribute Name="UNINSTALL:Status" Value="uninstalled" />
+			<SetAttribute Name="CHECK:Status" Value="uninstalled" />
 		</Activate>
 	</CreateTrigger>
 </KnowledgeItem>
