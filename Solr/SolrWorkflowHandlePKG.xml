@@ -1,6 +1,7 @@
 <KnowledgeItem ID="OpexSoftware:Solr:SolrWorkflowHandlePKG" xmlns="http://www.arago.de/KiSchema">
 	<Title>SolrWorkflowHandlePKG</Title>
-	<Description>Initiates the workflow for handling packages related to the installation of Solr by writing into the MARS model and creating new corresponding DataBlocks in the Issue
+	<Description>Initiates the workflow for handling packages related to the installation of Solr 
+		by writing into the MARS model and creating new corresponding DataBlocks in the Issue.
 	</Description>
 
 	<BindAttributes>
@@ -15,24 +16,20 @@
 	<CreateTrigger>
 
 		<IssueCondition>
-			<Description>Searches for an Issue with DataBlock SolrWorkflowHandlePKG and the necessary information for successful completion of workflow
+			<Description>Searches for an Issue with DataBlock SolrWorkflowHandlePKG 
+				and the necessary information for successful completion of workflow.
 			</Description>
 			<SubItem Name="SolrWorkflowHandlePKG" Alias="SWHP">
-				<AttributeFilter Name="TargetApp" Mode="string"
-					Value="${PRE:NodeName}" />
-				<AttributeFilter Name="TargetMachine" Mode="string"
-					Value="${NODE:NodeName}" />
-				<AttributeFilter Name="TargetState" Mode="string"
-					Value="Created" />
+				<AttributeFilter Name="TargetApp" Mode="string" Value="${PRE:NodeName}" />
+				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}" />
+				<AttributeFilter Name="TargetState" Mode="string" Value="Created" />
 				<AttributeFilter Name="User" Mode="exists" />
 				<AttributeFilter Name="Host" Mode="exists" />
 				<AttributeFilter Name="Status" Mode="notexists" />
-
 			</SubItem>
 		</IssueCondition>
 
 		<Activate>
-
 			<SetAttribute Name="SWHP:Status" Value="WorkflowStarted" />
 
 			<GenerateData Alias="PROTASKS">
@@ -41,7 +38,6 @@
 			</GenerateData>
 
 			<!-- TASK1 Install openjdk-7-jdk package -->
-
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
@@ -56,13 +52,12 @@
 				</NewBlock>]]>
 			</XMLExtract>
 
-            <GenerateData Alias="VAL">
+			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
 
-			<!-- TASK2 Install tomcat6 package-->
-
+			<!-- TASK2 Install tomcat6 package -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks       
@@ -77,13 +72,12 @@
 				</NewBlock>]]>
 			</XMLExtract>
 
-            <GenerateData Alias="VAL">
+			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
 
 			<!-- TASK3 Install tomcat6-common package -->
-
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks       
@@ -98,13 +92,12 @@
 				</NewBlock>]]>
 			</XMLExtract>
 
-            <GenerateData Alias="VAL">
+			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
-			
-			<!-- TASK4 Install libtomcat6-java package -->
 
+			<!-- TASK4 Install libtomcat6-java package -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks       
@@ -119,13 +112,12 @@
 				</NewBlock>]]>
 			</XMLExtract>
 
-            <GenerateData Alias="VAL">
+			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
 
 			<!-- TASK5 Install solr-tomcat package -->
-
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks       
@@ -140,20 +132,17 @@
 				</NewBlock>]]>
 			</XMLExtract>
 
-            <GenerateData Alias="VAL">
+			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
 
-
 			<!-- <Resolve>Resolved initial Issue with ID ${IID}</Resolve> - use if 
 				ChildIssues are created -->
-
 			<GenerateData>
 				<DataType>Resolve</DataType>
 				<Status>checkForResolve</Status>
 			</GenerateData>
-
 		</Activate>
 	</CreateTrigger>
 </KnowledgeItem>
