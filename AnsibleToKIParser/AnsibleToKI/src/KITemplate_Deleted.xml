@@ -1,0 +1,51 @@
+<KnowledgeItem ID="" xmlns="http://www.arago.de/KiSchema">
+	<Title></Title>
+	<Description></Description>
+
+	<BindAttributes>
+		<AttributeFilter Name="NodeType" Mode="string" Value="Machine"/>
+		<AttributeFilter Name="MachineClass" Mode="string" Value="Linux"/>
+		<SubItem Name="OSInformation" Alias="OSINFO">
+			<AttributeFilter Name="Name" Mode="string" Value="Ubuntu"/>
+		</SubItem>
+		<SubItem Name="Extensions" Alias="EXT">
+			<SubItem Name="Tasks" Alias="TASKS">
+				<AttributeFilter Name="TargetMachine" Mode="exists"/>
+				<AttributeFilter Name="User" Mode="exists"/>
+				<AttributeFilter Name="Host" Mode="exists"/>
+			</SubItem>
+		</SubItem>
+	</BindAttributes>
+	
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+		
+	<CreateTrigger>
+		<IssueCondition>
+			<Description> Checks Issue for DataBlock __core__${NODE:OSInfo}__PKG__Deleted__ and attribute ExtUID being the same as in the Node the KI binds to. </Description>
+			<SubItem Name="__core__Ubuntu__PKG__Deleted__" Alias="UNINSTALL">
+				<AttributeFilter Name="ExtUID" Mode="string" Value="${TASKS:UID}"/>
+				<AttributeFilter Name="Status" Mode="notexists"/>	
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
+				<Parameter Name="User">${TASKS:User}</Parameter>
+				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
+				<Parameter Name="Command"></Parameter> 
+			</Action>
+			
+			<If>
+				<VarCondition VarString="${SYSTEMRC}" Mode="eq" Value="0"/>
+				<Then>
+					<SetAttribute Name="TASKS:CurrentState" Value="ReadState"/>
+				</Then>
+				<Else>
+					<Eject></Eject>
+				</Else>
+			</If>
+			<SetAttribute Name="UNINSTALL:Status" Value="uninstalled" /> 
+
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>
