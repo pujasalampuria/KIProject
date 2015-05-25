@@ -1,0 +1,12 @@
+<WebDevelopment xmlns="http://mars-o-matic.com"
+	ID="OpexSoftware:UseCase:Application:IptableFirewall"
+	NodeType="Application" 
+	ApplicationClass="Development" 
+	ApplicationSubClass="WebDevelopment" 
+	NodeName="IptableFirewall">
+    <Dependencies>
+    	<Node ID="OpexSoftware:UseCase:Machine:Zeeshan" />
+    </Dependencies>
+    <CustomerInformation ID="opex.com" Name="OpexSoftware" />
+</WebDevelopment>
+
