@@ -40,7 +40,7 @@
 				<CurrentTask>1</CurrentTask>
 			</GenerateData>
 
-			<!-- TASK1 -->
+			<!-- TASK1 Install supervisor -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
@@ -60,7 +60,7 @@
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
 
-			<!-- TASK2 -->
+			<!-- TASK2 Create file for ${SWHP:Program} program -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
@@ -82,7 +82,7 @@
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
 
-			<!-- TASK3 -->
+			<!-- TASK3 Run supervisorctl reread command to inform Supervisor of our new program -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
@@ -102,7 +102,7 @@
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
 
-			<!-- TASK4 -->
+			<!-- TASK4 Run supervisorctl update Command -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
