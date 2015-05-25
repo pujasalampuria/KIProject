@@ -1,13 +1,14 @@
-<Linux xmlns="http://mars-o-matic.com" 
+<Linux xmlns="http://mars-o-matic.com"
 	ID="OpexSoftware:UseCase:Machine:Puja"
-	HasAgentType_WatchMe="False" 
-	MachineArchitecture="x86_64"
-	NodeType="Machine" 
-	MachineClass="Linux" 
-	NodeName="Puja" >
+	HasAgentType_WatchMe="False" MachineArchitecture="x86_64"
+	NodeType="Machine" MachineClass="Linux" NodeName="puja" >
     <Dependencies>
+       <Node  ID="OpexSoftware:UseCase:Application:JBoss" />
+       <Node  ID="OpexSoftware:UseCase:Application:Solr" />
+       <Node  ID="OpexSoftware:UseCase:Application:Supervisor" />
+       <Node  ID="OpexSoftware:UseCase:Application:PSAD" />
     </Dependencies>
-    <CustomerInformation ID="opex.com" Name="OpexSoftware"/>
+    <CustomerInformation ID="opex" Name="OpexSoftware"/>
     <Extensions>
       <ssh User="puja"/>
       <PasswordPolicy MinLength="8" MaxLength="14" CharSet="alnum"/>
