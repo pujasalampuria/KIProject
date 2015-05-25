@@ -122,7 +122,6 @@
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
 
-			<!-- <Resolve>Resolved initial Issue with ID ${IID}</Resolve> - use if ChildIssues are created -->
 			<GenerateData>
 				<DataType>Resolve</DataType>
 				<Status>checkForResolve</Status>
