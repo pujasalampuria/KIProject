@@ -4,9 +4,11 @@
 		writing into the MARS model and creating new corresponding DataBlocks in the Issue.
 	</Description>
 
-	<BindAttributes>
-		<AttributeFilter Name="NodeType" Mode="string" Value="Machine" />
-	</BindAttributes>
+	  <BindAttributes>
+		<RelatedNode Mode="predecessor" Alias="PRE">
+			<AttributeFilter Name="NodeType" Mode="string" Value="Application" />
+		</RelatedNode>
+      </BindAttributes>
 
 	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
 
@@ -18,6 +20,7 @@
 			<SubItem Name="NewRelicWorkflowHandlePKG" Alias="NRWHP">
 				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}" />
 				<AttributeFilter Name="TargetState" Mode="string" Value="Created" />
+			    <AttributeFilter Name="TargetApp" Mode="string" Value="${PRE:NodeName}" />
 				<AttributeFilter Name="LicenseKey" Mode="exists" />
 				<AttributeFilter Name="User" Mode="exists" />
 				<AttributeFilter Name="Host" Mode="exists" />
