@@ -1,6 +1,6 @@
 <KnowledgeItem ID="OpexSofware:IpTable:ConfigureIptableBasedFirewallDropWorkflow" xmlns="http://www.arago.de/KiSchema">
 	<Title>ConfigureIptableBasedFirewallDropWorkflow</Title>
-	<Description>Initiates the workflow for configuring Iptable-based Firewall by writing into the 
+	<Description>Initiates the workflow for configuring Iptable-based Firewall for droping connection on particular port by writing into the 
 		MARS model and creating new corresponding DataBlocks in the Issue.
 	</Description>
 
