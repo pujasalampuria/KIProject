@@ -1,12 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<EnterpriseInfrastructure xmlns="http://mars-o-matic.com"
-	ID="OpexSoftware:UseCase:Application:ZooKeeper"
-	NodeType="Application"
-	NodeName="ZooKeeper"
-	ApplicationClass="Enterprise"
-	ApplicationSubClass="EnterpriseInfrastructure">
-     <Dependencies>
-     	<Node ID="OpexSoftware:UseCase:Machine:Shree" />
-     </Dependencies>	 	
-     <CustomerInformation ID="opex.com" Name="OpexSoftware"/>
+<EnterpriseInfrastructure xmlns="http://mars-o-matic.com" ID="OpexSoftware:UseCase:Application:ZooKeeper" 
+	NodeType="Application" NodeName="ZooKeeper" 
+	ApplicationClass="Enterprise" ApplicationSubClass="EnterpriseInfrastructure">
+	<Dependencies>
+		<Node ID="OpexSoftware:UseCase:Machine:Shree" />
+	</Dependencies>
+	<CustomerInformation ID="opex.com" Name="OpexSoftware" />
 </EnterpriseInfrastructure>

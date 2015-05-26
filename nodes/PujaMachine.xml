@@ -1,22 +1,15 @@
-<Linux xmlns="http://mars-o-matic.com" 
-	ID="OpexSoftware:UseCase:Machine:Puja"
-	HasAgentType_WatchMe="False" 
-	MachineArchitecture="x86_64"
-	NodeType="Machine" 
-	MachineClass="Linux" 
-	NodeName="Puja" >
-    <Dependencies>
-    </Dependencies>
-    <CustomerInformation ID="opex.com" Name="OpexSoftware"/>
-    <Extensions>
-      <ssh User="puja"/>
-      <PasswordPolicy MinLength="8" MaxLength="14" CharSet="alnum"/>
-    </Extensions>
-    <OSInformation Name="Ubuntu" MajorVersion="12" Vendor="Ubuntu"/>
+<Linux xmlns="http://mars-o-matic.com" ID="OpexSoftware:UseCase:Machine:Puja"
+	HasAgentType_WatchMe="False" MachineArchitecture="x86_64" 
+	NodeType="Machine" MachineClass="Linux" NodeName="Puja">
+	<CustomerInformation ID="opex.com" Name="OpexSoftware" />
+	<Extensions>
+		<ssh User="puja" />
+		<PasswordPolicy MinLength="8" MaxLength="14" CharSet="alnum" />
+	</Extensions>
+	<OSInformation Name="Ubuntu" MajorVersion="12" Vendor="Ubuntu" />
 	<NetworkInformation>
 		<InterfaceInformation>
-			<Interface Name="eth1" IP="192.168.1.86"/>
+			<Interface Name="eth1" IP="192.168.1.86" />
 		</InterfaceInformation>
 	</NetworkInformation>
 </Linux>
-

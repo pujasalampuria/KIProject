@@ -1,9 +1,8 @@
-<WebDevelopment xmlns="http://mars-o-matic.com"
-	ID="OpexSoftware:UseCase:Application:Solr"
-	NodeType="Application" ApplicationClass="Development" ApplicationSubClass="WebDevelopment" NodeName="Solr">
-        <Dependencies>
-                <Node ID="OpexSoftware:UseCase:Machine:Puja" />
-        </Dependencies>
-        <CustomerInformation ID="opex_demo" Name="OpexSoftware" />
+<WebDevelopment xmlns="http://mars-o-matic.com" ID="OpexSoftware:UseCase:Application:Solr" 
+	NodeType="Application" ApplicationClass="Development" 
+	ApplicationSubClass="WebDevelopment" NodeName="Solr">
+	<Dependencies>
+		<Node ID="OpexSoftware:UseCase:Machine:Puja" />
+	</Dependencies>
+	<CustomerInformation ID="opex_demo" Name="OpexSoftware" />
 </WebDevelopment>
-
