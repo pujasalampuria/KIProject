@@ -41,7 +41,6 @@
 			<IncAttribute Name="PROTASKS:NumberTotal"/>
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				Database=${PSDMW:Database}
 				TargetMachine=${PSDMW:TargetMachine}      
 				TargetState=Created				
 				Host=${PSDMW:Host}
@@ -56,8 +55,8 @@
 			<GenerateData Alias="VAL"> 
 				<DataType>Validate</DataType>
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
-			</GenerateData>	
-      
+			</GenerateData>
+			
 			<GenerateData> 
 				<DataType>Resolve</DataType>
 				<Status>checkForResolve</Status>

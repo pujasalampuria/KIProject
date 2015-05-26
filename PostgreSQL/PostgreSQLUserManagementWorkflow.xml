@@ -44,8 +44,6 @@
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 			
 				TargetMachine=${PSUMW:TargetMachine}      
 				TargetState=Created
-				NewDBUserName=${PSUMW:NewDBUserName}
-				NewDBPassword=${PSUMW:NewDBPassword}
 				Host=${PSUMW:Host}
 				User=${PSUMW:User}
 				TaskNumber=${PROTASKS:NumberTotal}

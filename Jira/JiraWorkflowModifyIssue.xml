@@ -29,7 +29,6 @@
 
 		<Activate>
 			<SetAttribute Name="JWMI:Status" Value="WorkflowStarted" />
-			
 			<GenerateData Alias="PROTASKS">
 				<DataType>ProcessingTasks</DataType>
 				<CurrentTask>1</CurrentTask>
