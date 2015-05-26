@@ -17,12 +17,12 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 
 import com.opex.ansibletoki.parser.identifyba.IdentifyBindingAttributes;
 import com.opex.ansibletoki.utils.FileWalkHandler;
 import com.opex.ansibletoki.utils.FileWalker;
-
 
 public class IdentifyModule {
 	private static final String PY_EXT = ".py";
@@ -30,7 +30,6 @@ public class IdentifyModule {
 	String outputDirectory;
 	
 	FileWalkHandler handler = new  FileWalkHandler(){
-
 		@Override
 		public void handle(File file) {
 			if(file.isFile() && file.toString().endsWith(PY_EXT)){
@@ -45,7 +44,6 @@ public class IdentifyModule {
 				}
 			}
 		}
-		
 	};
 	
 	public IdentifyModule(String sourceDirectory, String outputDirectory) {
@@ -54,12 +52,9 @@ public class IdentifyModule {
 		this.outputDirectory = outputDirectory;
 	}
 	
-
 	public void identifyModules(){
 		FileWalker fileWalker = new FileWalker();
 		fileWalker.walk(sourceDirectory, handler);
-		
-	
 	}
 	
 	public void convertTOKIModule(File inputFile){
@@ -89,10 +84,11 @@ public class IdentifyModule {
 			    	}
 			    }
 			    if(!found){
-			    	if(module != null)
+			    	if(module != null) {
 			    		createKI(module, inputFile, description, "ReadState");
 			    		createKI(module, inputFile, description, "Created");
 			    		createKI(module, inputFile, description, "Deleted");
+			    	}
 			    }
 			}
 			
@@ -101,7 +97,6 @@ public class IdentifyModule {
 			System.out.println(inputFile);
 			e.printStackTrace();
 		}
-		
 	}
 	
 	private void createKI(String method, File inputFile, String description, String type) {
@@ -115,16 +110,13 @@ public class IdentifyModule {
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		
-		
 	}
-
 
 	private void writeToFile(String method, File inputFile, Document dom, String type) throws Exception {
 		String path = createOutputDirectory(inputFile);
-		int lastIndexOf = path.lastIndexOf("/");
+		int lastIndexOf = path.lastIndexOf(File.separator);
 		path = path.substring(0, lastIndexOf);
-		path += "/__core__Ubuntu__"+method.toUpperCase().replace("_", "")+"__"+type+"__.xml";
+		path += File.separator+"__core__Ubuntu__"+method.toUpperCase().replace("_", "")+"__"+type+"__.xml";
 		//path += ".xml";
 		File file = new File(path);
 		if(!file.exists()){
@@ -138,7 +130,6 @@ public class IdentifyModule {
 			}catch(Exception e){
 				e.printStackTrace();
 			}
-			
 		}
 		
 		TransformerFactory transformerFactory = TransformerFactory.newInstance();
@@ -157,10 +148,7 @@ public class IdentifyModule {
 		bwr.write(output.toString());
 		bwr.flush();
 		bwr.close();
-	
-		
 	}
-
 
 	private String createOutputDirectory(File inputFile) {
 		String path = inputFile.toString();
@@ -168,7 +156,6 @@ public class IdentifyModule {
 		path = outputDirectory +  path;
 		return path;
 	}
-
 
 	private Document createXMLDom(String method, File inputFile, String description, String type) throws Exception{
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -181,17 +168,37 @@ public class IdentifyModule {
 		method = method.toUpperCase();
 		String id = "OpexSoftware:"+name+":__core__Ubuntu__"+method+"__"+type+"__" ;
 		knowledgeItem.setAttribute("ID", id);
+		String title = "__core__Ubuntu__"+method+"__"+type+"__";
 		if(description != null){
 			NodeList nodeList = knowledgeItem.getElementsByTagName("Title");
 			Element e = (Element) nodeList.item(0);
-			String title = "__core__Ubuntu__"+method+"__"+type+"__";
 			e.setTextContent(title);
-			
-			String desc = "This KI searches for the DataBlock called "+title+" and "+  description + " and writes the current status back to the node.";
-			
+			String desc = "This KI searches for the DataBlock called "+title+" and "+  description.toLowerCase() + " and writes the current status back to the node.";
 			nodeList =  knowledgeItem.getElementsByTagName("Description");
 			e = (Element) nodeList.item(0);
 			e.setTextContent(desc);
+		}
+		
+		//update create trigger description
+		NodeList createTriggerNodeList = knowledgeItem.getElementsByTagName("CreateTrigger");
+		if(createTriggerNodeList != null) {
+			Element createTriggerElement = (Element)createTriggerNodeList.item(0);
+			if(createTriggerElement != null) {
+				NodeList issueConditionNodeList = createTriggerElement.getElementsByTagName("IssueCondition");
+				if(issueConditionNodeList != null) {
+					Element issueConditionElement = (Element) issueConditionNodeList.item(0);
+					if(issueConditionElement != null) {
+						NodeList descriptionNodeList = issueConditionElement.getElementsByTagName("Description");
+						String desc1 = "Checks Issue for DataBlock " + title + " and attribute ExtUID being the same as in the Node the KI binds to.";
+						Element e = (Element) descriptionNodeList.item(0);
+						e.setTextContent(desc1);
+						
+						NodeList subItemNodeList = issueConditionElement.getElementsByTagName("SubItem");
+						Element sube = (Element) subItemNodeList.item(0);
+						sube.setAttribute("Name", title);
+					}
+				}
+			}
 		}
 		
 		//document.getElementsByTagName("Log").item(0).setTextContent(id + ":\t${NODE:id}");
@@ -205,12 +212,23 @@ public class IdentifyModule {
 		return method.trim();
 	}
 	
-	
-	
 	public static void main(String[] args) {
-		IdentifyModule identifyModule = new IdentifyModule("/home/ganesh/work/ansible/ansible/lib/ansible/modules/core", "/home/ganesh/eclipse/TestNowSas1/AnsibleToKI/output");
-		identifyModule.identifyModules();
+		if(args != null && args.length == 2) {
+			System.out.println("ANSIBLE_CORE_MODULE_DIRECTORY : "+args[0]);
+			System.out.println("CORE_KI_OUTPUT_DIRECTORY : "+args[1]);
+			IdentifyModule identifyModule = new IdentifyModule(args[0], args[1]);
+			identifyModule.identifyModules();
+		} else {
+			System.out.println("Invalid arguments specified.\n");
+			printUsage();
+		}
+	}
+	
+	private static void printUsage() {
+		System.out.println("============================================= Usage ================================================");
+		System.out.println("java -jar ansibleCoreModulesToCoreKIs.jar <ANSIBLE_CORE_MODULE_DIRECTORY> <CORE_KI_OUTPUT_DIRECTORY>");
+		System.out.println("For example : ");
+		System.out.println("	java -jar ansibleCoreModulesToCoreKIs.jar /tmp/ansible_core_module /tmp/core_ki_output");
+		System.out.println("====================================================================================================");
 	}
 }
-
-

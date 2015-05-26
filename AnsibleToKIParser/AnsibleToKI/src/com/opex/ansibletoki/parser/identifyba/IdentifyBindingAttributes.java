@@ -138,8 +138,12 @@ public class IdentifyBindingAttributes {
 
 	private String readLine(BufferedReader br) throws IOException {
 		String line = br.readLine();
-		if(!line.startsWith("author"))
-			completeDescription.append(line).append("\n");
+		try {
+			if(!line.startsWith("author"))
+				completeDescription.append(line).append("\n");
+		} catch (NullPointerException e) {
+			//System.out.println(e.getMessage());
+		}
 		return line;
 	}
 
@@ -148,45 +152,42 @@ public class IdentifyBindingAttributes {
 		readLine(br);
 		while(true){
 			String line = readLine(br);
-			
-			if(line.startsWith("module")){
-				String moduleLine = line;
-				String moduleName = moduleLine.split(":")[1];
-				moduleName = moduleName.trim();
-				ansibleDocumentation.setModuleName(moduleName);
-			}
-			else if(line.startsWith("version")){			
-				String versionLine = line;
-				String version = versionLine.split(":")[1].trim();
-				version = version.replace("\"", "");
-				ansibleDocumentation.setVersion(version);
-			}
-			else if(line.startsWith("short_description")){		
-				String shortDescription = line;
-				shortDescription = shortDescription.replace("short_description", "").replace(":", "").trim();
-				ansibleDocumentation.setShortDescription(shortDescription);
-			}
-			else if(line.startsWith("description")){	
-			
-				String description = line;
-				description = description.replace("description", "").replace(":", "").trim();
-				ansibleDocumentation.setDescription(description);
-			}
-			else if(line.startsWith("description")){	
+			if(line != null) {
+				if(line.startsWith("module")){
+					String moduleLine = line;
+					String moduleName = moduleLine.split(":")[1];
+					moduleName = moduleName.trim();
+					ansibleDocumentation.setModuleName(moduleName);
+				}
+				else if(line.startsWith("version")){			
+					String versionLine = line;
+					String version = versionLine.split(":")[1].trim();
+					version = version.replace("\"", "");
+					ansibleDocumentation.setVersion(version);
+				}
+				else if(line.startsWith("short_description")){		
+					String shortDescription = line;
+					shortDescription = shortDescription.replace("short_description", "").replace(":", "").trim();
+					ansibleDocumentation.setShortDescription(shortDescription);
+				}
+				else if(line.startsWith("description")){	
 				
-				String description = line;
-				description = description.replace("description", "").replace(":", "").trim();
-				ansibleDocumentation.setDescription(description);
-			}
-			else if(line.startsWith("options:")){
+					String description = line;
+					description = description.replace("description", "").replace(":", "").trim();
+					ansibleDocumentation.setDescription(description);
+				}
+				else if(line.startsWith("description")){	
+					
+					String description = line;
+					description = description.replace("description", "").replace(":", "").trim();
+					ansibleDocumentation.setDescription(description);
+				}
+				else if(line.startsWith("options:")){
+					break;
+				}
+			} else {
 				break;
 			}
-			
 		}
-		
-		
-		
-		
 	}
-	
 }

@@ -6,7 +6,7 @@
 		<AttributeFilter Name="NodeType" Mode="string" Value="Machine"/>
 		<AttributeFilter Name="MachineClass" Mode="string" Value="Linux"/>
 		<SubItem Name="OSInformation" Alias="OSINFO">
-			<AttributeFilter Name="Name" Mode="string" Value="CentOS"/>
+			<AttributeFilter Name="Name" Mode="string" Value="Ubuntu"/>
 		</SubItem>
 		<SubItem Name="Extensions" Alias="EXT">
 			<SubItem Name="Tasks" Alias="TASKS">
