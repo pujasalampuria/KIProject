@@ -40,7 +40,7 @@
 				<CurrentTask>1</CurrentTask> 
 			</GenerateData>
 			
-           <!-- TASK1 Start congif server Database Instance-->
+           <!-- TASK1 Start config server Database Instance-->
 			<IncAttribute Name="PROTASKS:NumberTotal"/>
 			
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 

@@ -11,8 +11,9 @@
 
 	<CreateTrigger>
 		<IssueCondition>
-			<Description>Searches for an Issue with DataBlock AptUpdateSourceWorkflow and
-				triggers the workflow for successful completion</Description>
+			<Description>Searches for an Issue with DataBlock AptUpdateSourceWorkflow and triggers 
+				the workflow for successful completion.
+			</Description>
 			<SubItem Name="AptUpdateSourceWorkflow" Alias="AUSW">
 				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}" />
 				<AttributeFilter Name="TargetState" Mode="string" Value="Created" />
