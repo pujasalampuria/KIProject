@@ -1,0 +1,10 @@
+Issue:
+  NodeID: OpexSoftware:UseCase:Machine:Shree
+  xmlns: http://www.arago.de/IssueSchema
+  IssueSubject: 'Install NewRelic'
+  NewRelicWorkflowHandlePKG:
+    TargetMachine: Shree
+    TargetState: Created
+    LicenseKey: a3668e0c9106f05e31a95dde7dc687fea708051b
+    User: shreyas
+    Host: 192.168.1.69

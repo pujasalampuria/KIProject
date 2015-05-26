@@ -1,0 +1,165 @@
+<KnowledgeItem ID="OpexSoftware:NewRelic:NewRelicWorkflowHandlePKG" xmlns="http://www.arago.de/KiSchema">
+	<Title>NewRelicWorkflowHandlePKG</Title>
+       <Description>Initiates the workflow for installing and starting the NewRelic Monitoring server</Description>
+	   
+	   <BindAttributes>
+		<AttributeFilter Name="NodeType" Mode="string" Value="Machine" />
+	   </BindAttributes>
+
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+
+	<CreateTrigger>
+      <IssueCondition>
+      <Description>Searches for an Issue with DataBlock NewRelicWorkflowHandlePKG and triggers the workflow for sucessful completion</Description>
+		 <SubItem Name="NewRelicWorkflowHandlePKG" Alias="NRWHP">
+		    <AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}"/>
+		    <AttributeFilter Name="TargetState" Mode="string" Value="Created"/>
+		    <AttributeFilter Name="LicenseKey" Mode="exists"/>
+		    <AttributeFilter Name="User" Mode="exists"/>
+		    <AttributeFilter Name="Host" Mode="exists"/>
+		    <AttributeFilter Name="Status" Mode="notexists"/>
+		 </SubItem>
+	  </IssueCondition>
+
+	     <Activate>
+	     	<SetAttribute Name="NRWHP:Status" Value="WorkflowStarted" /> 
+	     	   <GenerateData Alias="PROTASKS">
+	     	      <DataType>ProcessingTasks</DataType>
+	     	      <CurrentTask>1</CurrentTask>
+	     	   </GenerateData>
+
+	     <!--Task1 Update the apt Source File-->	
+  
+        <IncAttribute Name="PROTASKS:NumberTotal"/>
+
+		<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+		       TargetMachine=${NRWHP:TargetMachine}      
+			   TargetState=Created
+			   Lib=RUNCOMMAND
+			   Command='sudo sh -c &apos;echo deb http://apt.newrelic.com/debian/ newrelic non-free > /etc/apt/sources.list.d/newrelic.list&apos;'
+			   User=${NRWHP:User}
+			   Host=${NRWHP:Host}
+			   CurrentState=ReadState
+			   TaskNumber=${PROTASKS:NumberTotal}
+			 /> </NewBlock>]]>
+		</XMLExtract>
+		
+        <GenerateData Alias="VAL"> 
+		  <DataType>Validate</DataType>
+		  <ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+	    </GenerateData>	
+			
+	   <!--Task2 Trust the New Relic GPG key.-->	
+  
+        <IncAttribute Name="PROTASKS:NumberTotal"/>
+
+		<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+		       TargetMachine=${NRWHP:TargetMachine}      
+			   TargetState=Created
+			   Lib=RUNCOMMAND
+			   Command='wget -O- https://download.newrelic.com/548C16BF.gpg | sudo apt-key add -'
+			   User=${NRWHP:User}
+			   Host=${NRWHP:Host}
+			   CurrentState=ReadState
+			   TaskNumber=${PROTASKS:NumberTotal}
+			 /> </NewBlock>]]>
+		</XMLExtract>
+		
+        <GenerateData Alias="VAL"> 
+		  <DataType>Validate</DataType>
+		  <ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+	    </GenerateData>	
+			
+			
+	    <!--Task3 Update the local package list.-->	
+  
+        <IncAttribute Name="PROTASKS:NumberTotal"/>
+
+		<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+		       TargetMachine=${NRWHP:TargetMachine}      
+			   TargetState=Created
+			   Lib=APTUPDATE
+			   User=${NRWHP:User}
+			   Host=${NRWHP:Host}
+			   CurrentState=ReadState
+			   TaskNumber=${PROTASKS:NumberTotal}
+			 /> </NewBlock>]]>
+		</XMLExtract>
+		
+        <GenerateData Alias="VAL"> 
+		  <DataType>Validate</DataType>
+		  <ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+	    </GenerateData>	
+			
+			
+		<!--Task4 Install Servers-->	
+  
+        <IncAttribute Name="PROTASKS:NumberTotal"/>
+
+		<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+		       TargetMachine=${NRWHP:TargetMachine}      
+			   TargetState=Created
+			   Lib=PKG
+			   PKG=newrelic-sysmond
+			   User=${NRWHP:User}
+			   Host=${NRWHP:Host}
+			   CurrentState=ReadState
+			   TaskNumber=${PROTASKS:NumberTotal}
+			 /> </NewBlock>]]>
+		</XMLExtract>
+		
+        <GenerateData Alias="VAL"> 
+		  <DataType>Validate</DataType>
+		  <ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+	    </GenerateData>	
+			
+		<!--Task5 Configure New Relic license key.-->	
+  
+        <IncAttribute Name="PROTASKS:NumberTotal"/>
+
+		<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+		       TargetMachine=${NRWHP:TargetMachine}      
+			   TargetState=Created
+			   Lib=RUNCOMMAND
+		       Command='sudo nrsysmond-config --set license_key=${NRWHP:LicenseKey}'
+			   User=${NRWHP:User}
+			   Host=${NRWHP:Host}
+			   CurrentState=ReadState
+			   TaskNumber=${PROTASKS:NumberTotal}
+			 /> </NewBlock>]]>
+		</XMLExtract>
+		
+        <GenerateData Alias="VAL"> 
+		  <DataType>Validate</DataType>
+		  <ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+	    </GenerateData>	
+			
+	    <!--Task6 Start nrsysmond.-->	
+  
+        <IncAttribute Name="PROTASKS:NumberTotal"/>
+
+		<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+		       TargetMachine=${NRWHP:TargetMachine}      
+			   TargetState=Created
+			   Lib=RUNCOMMAND
+	           Command='sudo /etc/init.d/newrelic-sysmond start'
+			   User=${NRWHP:User}
+			   Host=${NRWHP:Host}
+			   CurrentState=ReadState
+			   TaskNumber=${PROTASKS:NumberTotal}
+			 /> </NewBlock>]]>
+		</XMLExtract>
+		
+        <GenerateData Alias="VAL"> 
+		  <DataType>Validate</DataType>
+		  <ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+	    </GenerateData>	
+			
+        <GenerateData> 
+	       <DataType>Resolve</DataType>
+		   <Status>checkForResolve</Status>
+	    </GenerateData>	
+	</Activate>
+    </CreateTrigger>
+</KnowledgeItem>
+																	
