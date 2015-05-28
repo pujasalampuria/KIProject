@@ -246,10 +246,12 @@
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
 
+            <!-- To Complete the workflow please run 1.psad -R to restart the service 2. psad --sig-update to  update psad's signature definitions 3. psad -H -->
+
 			<GenerateData>
 				<DataType>Resolve</DataType>
 				<Status>checkForResolve</Status>
 			</GenerateData>
 		</Activate>
-	</CreateTrigger>
+	</CreateTrigger> 
 </KnowledgeItem>
