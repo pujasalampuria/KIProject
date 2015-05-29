@@ -155,8 +155,28 @@
 				<DataType>Validate</DataType>
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
+			
+			<!-- TASK7 run command to install mqsql DB -->
+			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<!-- TASK7 install php5 -->
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
+				TargetMachine=${LSWHP:TargetMachine}            
+				TargetState=Created
+				Host=${LSWHP:Host}
+				User=${LSWHP:User}
+				Lib=RUNCOMMAND
+				Command='sudo mysql_install_db'
+				TaskNumber=${PROTASKS:NumberTotal}
+				CurrentState=ReadState/> 
+				</NewBlock>]]>
+			</XMLExtract>
+
+			<GenerateData Alias="VAL">
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
+
+			<!-- TASK8 install php5 -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
@@ -176,7 +196,7 @@
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
 
-			<!-- TASK8 install libapache2-mod-php5 -->
+			<!-- TASK9 install libapache2-mod-php5 -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
@@ -196,7 +216,7 @@
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
 
-			<!-- TASK9 install php5-mcrypt -->
+			<!-- TASK10 install php5-mcrypt -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
@@ -215,12 +235,15 @@
 				<DataType>Validate</DataType>
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
+			
+			<!--
+				To enhance the functionality of PHP, we can optionally install some additional modules. 
+			 -->
 
 			<GenerateData>
 				<DataType>Resolve</DataType>
 				<Status>checkForResolve</Status>
 			</GenerateData>
-
 		</Activate>
 	</CreateTrigger>
 </KnowledgeItem>

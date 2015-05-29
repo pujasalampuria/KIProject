@@ -200,6 +200,13 @@
 				<DataType>Validate</DataType>
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
+			
+			<!--
+				This will install the LEMP Stack on your target machine.
+				We now have our PHP components installed, but we need to make a slight configuration change to make our setup more secure.
+				You may follow steps as described at link below, to complete the setup.
+				https://www.digitalocean.com/community/tutorials/how-to-install-linux-nginx-mysql-php-lemp-stack-on-ubuntu-14-04 
+			 -->
 
 			<!-- TASK9 download WordPress tar ball -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
@@ -248,8 +255,12 @@
 				<DataType>Validate</DataType>
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
+			
+			<!--
+				To create a MySQL Database and User for WordPress and to configure WordPress, please follow steps mentioned at 
+				https://www.digitalocean.com/community/tutorials/how-to-install-wordpress-with-nginx-on-ubuntu-14-04
+			 -->
 
-			<!-- <Resolve>Resolved initial Issue with ID ${IID}</Resolve> - use if ChildIssues are created -->
 			<GenerateData>
 				<DataType>Resolve</DataType>
 				<Status>checkForResolve</Status>
