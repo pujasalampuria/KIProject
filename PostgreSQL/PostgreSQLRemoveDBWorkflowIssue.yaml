@@ -1,0 +1,11 @@
+Issue:
+  NodeID: OpexSoftware:UseCase:Application:PostgreSQL
+  xmlns: http://www.arago.de/IssueSchema
+  IssueSubject: 'Remove of PostgreSQL database'
+  PostgreSQLRemoveDBWorkflow: 
+    TargetApp: PostgreSQL  
+    Database: TempDB
+    TargetMachine: Zeeshan
+    TargetState: Created 
+    User: postgres
+    Host: 192.168.1.90
