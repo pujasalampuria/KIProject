@@ -60,7 +60,7 @@
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
       
-      		<!-- TASK2  START THE MONGOS INSTANCE-->
+      		<!-- TASK2 Start the Mongos instance -->
 			<IncAttribute Name="PROTASKS:NumberTotal"/>
 			
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
