@@ -39,8 +39,28 @@
 				<DataType>ProcessingTasks</DataType>
 				<CurrentTask>1</CurrentTask>
 			</GenerateData>
+			
+			<!-- TASK1 Install openjdk-7-jdk package -->
+			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<!-- TASK1 Download JBoss tar file -->
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
+				PKG=openjdk-7-jdk
+				TargetMachine=${JWHP:TargetMachine}      
+				TargetState=Created
+				User=${JWHP:User}
+				Lib=PKG
+				Host=${JWHP:Host}
+				CurrentState=ReadState
+				TaskNumber=${PROTASKS:NumberTotal}/> 
+				</NewBlock>]]>
+			</XMLExtract>
+
+			<GenerateData Alias="VAL">
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
+
+			<!-- TASK2 Download JBoss tar file -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
@@ -62,7 +82,7 @@
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
 
-			<!-- TASK2 Extract JBoss tar file -->
+			<!-- TASK3 Extract JBoss tar file -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
@@ -83,6 +103,9 @@
 				<DataType>Validate</DataType>
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
+			
+			<!-- To Complete the workflow and to start JBoss Server please run ./standalone.sh -Djboss.bind.address=yourserverip -Djboss.bind.address.management=yourserverip& Command from bin directory -->
+			
 
 			<GenerateData>
 				<DataType>Resolve</DataType>
