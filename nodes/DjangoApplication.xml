@@ -1,0 +1,11 @@
+<WebDevelopment xmlns="http://mars-o-matic.com"
+	ID="OpexSoftware:UseCase:Application:Django"
+	NodeType="Application" 
+	ApplicationClass="Development" 
+	ApplicationSubClass="WebDevelopment" 
+	NodeName="Django">
+    <Dependencies>
+            <Node ID="OpexSoftware:UseCase:Machine:Puja" />
+    </Dependencies>
+    <CustomerInformation ID="opex.com" Name="OpexSoftware" />
+</WebDevelopment>

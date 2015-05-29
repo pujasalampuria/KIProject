@@ -1,0 +1,11 @@
+Issue:
+  NodeID: OpexSoftware:UseCase:Application:Django
+  xmlns: http://www.arago.de/IssueSchema
+  IssueSubject: 'Please Manage a Django application using the manage.py application'
+  DjangoWorkflowHandle:
+    TargetApp: Django 
+    TargetMachine: puja 
+    TargetState: Created 
+    Path: /home/puja/myproject
+    User: puja
+    Host: 192.168.1.86
