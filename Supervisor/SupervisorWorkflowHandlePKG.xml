@@ -1,7 +1,7 @@
 <KnowledgeItem ID="OpexSoftware:Supervisor:SupervisorWorkflowHandlePKG" xmlns="http://www.arago.de/KiSchema">
 	<Title>SupervisorWorkflowHandlePKG</Title>
-	<Description>Initiates the workflow for handling packages related to the installation of Supervisor 
-		by writing into the MARS model and creating new corresponding DataBlocks in the Issue.
+	<Description>Initiates the workflow for handling packages related to the installation of Supervisor and 
+		adding a program by writing into the MARS model and creating new corresponding DataBlocks in the Issue.
 	</Description>
 
 	<BindAttributes>
