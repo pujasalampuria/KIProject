@@ -35,7 +35,9 @@
 		</IssueCondition>
 
 		<Activate>
-		  <Log>The user should be a root user for making changes in the sysctl.conf file</Log>
+		  
+		  <!-- The command should be run as root user for making changes in the sysctl.conf file -->
+		  
 			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
 				<Parameter Name="User">${TASKS:User}</Parameter>
 				<Parameter Name="Hostname">${TASKS:Host}</Parameter>

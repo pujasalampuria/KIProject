@@ -38,7 +38,7 @@
 			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
 				<Parameter Name="User">${TASKS:User}</Parameter>
 				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
-				<Parameter Name="Command">"cat /etc/sysctl.conf | grep ^[^#] | grep '${TASKS:Setting}'"</Parameter>
+				<Parameter Name="Command">"sudo cat /etc/sysctl.conf | grep ^[^#] | grep '${TASKS:Setting}'"</Parameter>
 			</Action>
 
 			<If>
