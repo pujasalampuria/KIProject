@@ -1,7 +1,6 @@
 <KnowledgeItem ID="OpexSoftware:AIDE:AIDEWorkflowHandlePKG" xmlns="http://www.arago.de/KiSchema">
 	<Title>AIDEWorkflowHandlePKG</Title>
-	<Description>Initiates the workflow for handling packages related to the installation of AIDE 
-		by writing into the MARS model and creating new corresponding DataBlocks in the Issue.
+	<Description>Initiates the workflow for handling packages related to the installation of AIDE by writing into the MARS model and creating new corresponding DataBlocks in the Issue.
 	</Description>
 
 	<BindAttributes>
@@ -15,8 +14,7 @@
 
 	<CreateTrigger>
 		<IssueCondition>
-			<Description>Searches for an Issue with DataBlock AIDEWorkflowHandlePKG and the 
-				necessary information for successful completion of workflow.
+			<Description>Searches for an Issue with DataBlock AIDEWorkflowHandlePKG and the necessary information for successful completion of workflow.
 			</Description>
 			<SubItem Name="AIDEWorkflowHandlePKG" Alias="AWHP">
 				<AttributeFilter Name="TargetApp" Mode="string" Value="${PRE:NodeName}" />
@@ -57,8 +55,7 @@
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
 
-			<!-- TASK2 run the command to update debconf-set-selections with mailname string ${AWHP:EmailID} 
-						for AIDE silent install -->
+			<!-- TASK2 run the command to update debconf-set-selections with mailname string ${AWHP:EmailID} for AIDE silent install -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
@@ -78,8 +75,7 @@
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
 
-			<!-- TASK3 run the command to update debconf-set-selections with main_mailer_type 
-						string Internet Site for AIDE silent install -->
+			<!-- TASK3 Run command to update debconf-set-selections with main_mailer_type string Internet Site for AIDE silent install -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
@@ -139,7 +135,7 @@
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
 
-			<!-- TASK6 command to update configuration file -->
+			<!-- TASK6 Run command to update configuration file -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
