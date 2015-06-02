@@ -13,7 +13,8 @@
 		</SubItem>
 		<SubItem Name="Extensions" Alias="EXT">
 			<SubItem Name="Tasks" Alias="TASKS">
-				<AttributeFilter Name="HostName" Mode="exists" />
+				<AttributeFilter Name="NewHostName" Mode="exists" />
+				<AttributeFilter Name="PresentHostName" Mode="exists" />
 				<AttributeFilter Name="TargetMachine" Mode="exists" />
 				<AttributeFilter Name="User" Mode="exists" />
 				<AttributeFilter Name="Host" Mode="exists" />
@@ -39,7 +40,7 @@
 				<Parameter Name="User">${TASKS:User}</Parameter>
 				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
 				<!-- To execute this command we need to ssh using root user. -->
-				<Parameter Name="Command">"sudo hostname ${TASKS:HostName} &amp;&amp; sudo sh -c hostname > /etc/hostname &amp;&amp; sudo sed &apos;s/zeeshan-Inspiron-3542/${TASKS:HostName}/g&apos; /etc/hosts"</Parameter>
+				<Parameter Name="Command">"sudo hostname ${TASKS:NewHostName} &amp;&amp; sudo sh -c hostname > /etc/hostname &amp;&amp; sudo sed &apos;s/${TASKS:PresentHostName}/${TASKS:NewHostName}/g&apos; /etc/hosts"</Parameter>
 			</Action>
 
 			<If>

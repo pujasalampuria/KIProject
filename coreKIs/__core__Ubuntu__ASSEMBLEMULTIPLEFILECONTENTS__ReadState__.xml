@@ -14,6 +14,8 @@
 		<SubItem Name="Extensions" Alias="EXT">
 			<SubItem Name="Tasks" Alias="TASKS">
 				<AttributeFilter Name="TargetMachine" Mode="exists" />
+				<AttributeFilter Name="FilePathToAssemble" Mode="exists" />
+				<AttributeFilter Name="TargetFileName" Mode="exists" />
 				<AttributeFilter Name="User" Mode="exists" />
 				<AttributeFilter Name="Host" Mode="exists" />
 			</SubItem>
