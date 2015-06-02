@@ -1,6 +1,7 @@
 <KnowledgeItem ID="OpexSoftware:AIDE:AIDEWorkflowHandlePKG" xmlns="http://www.arago.de/KiSchema">
 	<Title>AIDEWorkflowHandlePKG</Title>
-	<Description>Initiates the workflow for handling packages related to the installation of AIDE by writing into the MARS model and creating new corresponding DataBlocks in the Issue.
+	<Description>Initiates the workflow for handling packages related to the installation of AIDE 
+		by writing into the MARS model and creating new corresponding DataBlocks in the Issue.
 	</Description>
 
 	<BindAttributes>
@@ -14,7 +15,8 @@
 
 	<CreateTrigger>
 		<IssueCondition>
-			<Description>Searches for an Issue with DataBlock AIDEWorkflowHandlePKG and the necessary information for successful completion of workflow.
+			<Description>Searches for an Issue with DataBlock AIDEWorkflowHandlePKG and the 
+				necessary information for successful completion of workflow.
 			</Description>
 			<SubItem Name="AIDEWorkflowHandlePKG" Alias="AWHP">
 				<AttributeFilter Name="TargetApp" Mode="string" Value="${PRE:NodeName}" />
