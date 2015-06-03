@@ -82,7 +82,7 @@
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
 		       TargetMachine=${NRWHP:TargetMachine}      
 			   TargetState=Created
-			   Lib=APTUPDATE
+			   Lib=PKGUPDATE
 			   User=${NRWHP:User}
 			   Host=${NRWHP:Host}
 			   CurrentState=ReadState
