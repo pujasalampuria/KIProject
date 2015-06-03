@@ -20,6 +20,7 @@
 				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}" />
 				<AttributeFilter Name="User" Mode="exists" />
 				<AttributeFilter Name="Host" Mode="exists" />  
+				<AttributeFilter Name="Port" Mode="exists" /> 
 				<AttributeFilter Name="TargetState" Mode="string" Value="Created" />
 				<AttributeFilter Name="Status" Mode="notexists" />
 			</SubItem>
@@ -184,7 +185,7 @@
 				User=${CWHP:User}
 				Host=${CWHP:Host}
 				Lib=RUNCOMMAND
-				Command='sudo docker run -it -d --name webserver -h webserver  pujasalampuria/consul:webserver'
+				Command='sudo docker run -it -d --name webserver -h webserver -p ${CWHP:Port}:8500 pujasalampuria/consul:webserver'
 				CurrentState=ReadState
 				TaskNumber=${PROTASKS:NumberTotal}
 				/> </NewBlock>]]>
@@ -195,75 +196,33 @@
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
 			
-			<!-- TASK9 Run command to get the IP of webserver container -->
+			<!-- TASK9 Command to get IP of webserver and bserver container and to run consul agent -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
-				TargetMachine=${CWHP:TargetMachine}      
-				TargetState=Created
-				User=${CWHP:User}
-				Host=${CWHP:Host}
-				Lib=RUNCOMMANDANDGETOUTPUT
-				AttributeToSet=WebServerIP
-				Command='sudo docker inspect --format &apos;{{.NetworkSettings.IPAddress}}&apos; webserver'
-				CurrentState=ReadState
-				TaskNumber=${PROTASKS:NumberTotal}
-				/> </NewBlock>]]>
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
+                PKG=ScriptTest
+                TargetMachine=${CWHP:TargetMachine}
+                TargetState=Created
+                User=${CWHP:User}
+                Host=${CWHP:Host}
+                Script='WebServerIP=$(sudo docker inspect --format &apos;{{.NetworkSettings.IPAddress}}&apos; webserver)
+                BootStrapServerIP=$(sudo docker inspect --format &apos;{{.NetworkSettings.IPAddress}}&apos; bserver)
+                sudo docker exec -it -d webserver consul agent  -data-dir /tmp/consul -client $WebServerIP -ui-dir /webconsul -join $BootStrapServerIP'
+				Lib=RUNSCRIPT
+                CurrentState=ReadState
+                TaskNumber=${PROTASKS:NumberTotal}
+                /> </NewBlock>]]>
 			</XMLExtract>
 
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
+		     
+		    <!-- Use the below task to change the Bootstrap server to simple server  -->
 			
-			
-			
-			<!-- TASK10 Run command to get the IP of bserver container -->
-			<IncAttribute Name="PROTASKS:NumberTotal" />
-
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
-				TargetMachine=${CWHP:TargetMachine}      
-				TargetState=Created
-				User=${CWHP:User}
-				Host=${CWHP:Host}
-				Lib=RUNCOMMANDANDGETOUTPUT
-				AttributeToSet=BootStrapServerIP
-				Command='sudo docker inspect --format &apos;{{.NetworkSettings.IPAddress}}&apos; bserver'
-				CurrentState=ReadState
-				TaskNumber=${PROTASKS:NumberTotal}
-				/> </NewBlock>]]>
-			</XMLExtract>
-
-			<GenerateData Alias="VAL">
-				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
-			</GenerateData>
-			 
-              <!-- TASK11 Run Consul agent in webserver container -->
-			<IncAttribute Name="PROTASKS:NumberTotal" />
-
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
-				TargetMachine=${CWHP:TargetMachine}      
-				TargetState=Created
-				User=${CWHP:User}
-				Host=${CWHP:Host}
-				Lib=RUNCOMMAND
-				Command='sudo docker exec -it -d webserver consul agent  -data-dir /tmp/consul -client ${NODE:Extensions:WebServerIP} -ui-dir /webconsul -join ${NODE:Extensions:BootStrapServerIP}'
-				CurrentState=ReadState
-				TaskNumber=${PROTASKS:NumberTotal}
-				/> </NewBlock>]]>
-			</XMLExtract>
-
-			<GenerateData Alias="VAL">
-				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
-			</GenerateData> 
-			
-			<!-- Use the below task to change the Bootstrap server to simple server  -->
-			
-			   
 			<!--  <IncAttribute Name="PROTASKS:NumberTotal" />
-
+			
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
 				TargetMachine=${CWHP:TargetMachine}      
 				TargetState=Created
@@ -275,14 +234,14 @@
 				TaskNumber=${PROTASKS:NumberTotal}
 				/> </NewBlock>]]>
 			</XMLExtract>
-
+			
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData> 
 			
 			<IncAttribute Name="PROTASKS:NumberTotal" />
-
+			
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
 				TargetMachine=${CWHP:TargetMachine}      
 				TargetState=Created
@@ -294,12 +253,12 @@
 				TaskNumber=${PROTASKS:NumberTotal}
 				/> </NewBlock>]]>
 			</XMLExtract>
-
+			
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData> -->
-
+		     	
             <GenerateData>
 				<DataType>Resolve</DataType>
 				<Status>checkForResolve</Status>
