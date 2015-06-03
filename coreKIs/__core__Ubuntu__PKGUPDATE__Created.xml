@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<KnowledgeItem ID="OpexSoftware:Ubuntu:APTUPDATE:__core__Ubuntu__APTUPDATE__ReadState__"
-	xmlns="http://www.arago.de/KiSchema">
-	<Title>__core__Ubuntu__APTUPDATE__ReadState__</Title>
-	<Description> This KI searches for the DataBlock called __core__Ubuntu__APTUPDATE__ReadState__
-		and verifies the CurrentState of the update command on the specified Target Machine and writes it back to the node.
+<KnowledgeItem ID="OpexSoftware:Ubuntu:PKGUPDATE:__core__Ubuntu__PKGUPDATE__Created__" xmlns="http://www.arago.de/KiSchema">
+	<Title>__core__Ubuntu__PKGUPDATE__Created__</Title>
+	<Description> This KI searches for the DataBlock called __core__Ubuntu__PKGUPDATE__Created__ 
+		and update the specified Target Machine and writes the current status back to the node.
 	</Description>
 
 	<BindAttributes>
@@ -25,10 +24,10 @@
 
 	<CreateTrigger>
 		<IssueCondition>
-			<Description> Checks Issue for DataBlock __core__Ubuntu__APTUPDATE__ReadState__ 
-				and attribute ExtUID being the same as the machine KI binds to. 
+			<Description> Checks Issue for DataBlock__core__Ubuntu__PKGUPDATE__Created__ 
+				and attribute ExtUID being the same as in the Node the KI binds to.
 			</Description>
-			<SubItem Name="__core__Ubuntu__APTUPDATE__ReadState__" Alias="CHECK">
+			<SubItem Name="__core__Ubuntu__PKGUPDATE__Created__" Alias="CHECK">
 				<AttributeFilter Name="ExtUID" Mode="string" Value="${TASKS:UID}" />
 				<AttributeFilter Name="Status" Mode="notexists" />
 			</SubItem>
@@ -38,19 +37,19 @@
 			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
 				<Parameter Name="User">${TASKS:User}</Parameter>
 				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
-				<Parameter Name="Command">"ls /tmp/${TASKS:UID}"</Parameter>
+				<Parameter Name="Command"><![CDATA["sudo apt-get update && touch /tmp/${TASKS:UID}"]]></Parameter>
 			</Action>
 
 			<If>
 				<VarCondition VarString="${SYSTEMRC}" Mode="eq" Value="0" />
 				<Then>
-					<SetAttribute Name="TASKS:CurrentState" Value="Created" />
+					<SetAttribute Name="TASKS:CurrentState" Value="ReadState" />
 				</Then>
 				<Else>
-					<SetAttribute Name="TASKS:CurrentState" Value="NotUpdated" />
+					<Eject>__Failed to update__</Eject>
 				</Else>
 			</If>
-			<SetAttribute Name="CHECK:Status" Value="CurrentStateRead" />
+			<SetAttribute Name="CHECK:Status" Value="created" />
 		</Activate>
 	</CreateTrigger>
 </KnowledgeItem>
