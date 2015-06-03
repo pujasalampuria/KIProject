@@ -1,0 +1,10 @@
+Issue:
+  NodeID: OpexSoftware:UseCase:Application:Consul
+  xmlns: http://www.arago.de/IssueSchema
+  IssueSubject: 'Please Install Consul server using Docker containers'
+  ConsulWorkflowHandlePKG:
+    TargetApp: Consul
+    TargetMachine: Puja 
+    TargetState: Created 
+    User: puja
+    Host: 192.168.1.86

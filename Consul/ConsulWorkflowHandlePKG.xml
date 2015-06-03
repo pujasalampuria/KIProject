@@ -1,0 +1,309 @@
+<KnowledgeItem ID="OpexSoftware:Consul:ConsulWorkflowHandlePKG" xmlns="http://www.arago.de/KiSchema">
+	<Title>ConsulWorkflowHandlePKG</Title>
+	<Description>Initiates the workflow for handling packages related to the installation of Consul by writing into the MARS model and creating new corresponding DataBlocks in the Issue.
+	</Description>
+
+	<BindAttributes>
+		<AttributeFilter Name="NodeType" Mode="string" Value="Machine" />
+		<RelatedNode Mode="predecessor" Alias="PRE">
+			<AttributeFilter Name="NodeType" Mode="string" Value="Application" />
+		</RelatedNode>
+	</BindAttributes>
+
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+
+	<CreateTrigger>
+		<IssueCondition>
+			<Description>Searches for an Issue with DataBlock ConsulWorkflowHandlePKG and the necessary information for successful completion of workflow.</Description>
+			<SubItem Name="ConsulWorkflowHandlePKG" Alias="CWHP">
+				<AttributeFilter Name="TargetApp" Mode="string" Value="${PRE:NodeName}" />
+				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}" />
+				<AttributeFilter Name="User" Mode="exists" />
+				<AttributeFilter Name="Host" Mode="exists" />  
+				<AttributeFilter Name="TargetState" Mode="string" Value="Created" />
+				<AttributeFilter Name="Status" Mode="notexists" />
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<SetAttribute Name="CWHP:Status" Value="WorkflowStarted" />
+
+			<GenerateData Alias="PROTASKS">
+				<DataType>ProcessingTasks</DataType>
+				<CurrentTask>1</CurrentTask>
+			</GenerateData>
+			
+			<!-- TASK1  -->
+			<IncAttribute Name="PROTASKS:NumberTotal" />
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+				TargetMachine=${CWHP:TargetMachine}      
+				TargetState=Created
+				User=${CWHP:User}
+				Host=${CWHP:Host}
+				Lib=RUNCOMMAND
+				Command='sudo apt install linux-image-extra-\`uname -r\`'
+				CurrentState=ReadState
+				TaskNumber=${PROTASKS:NumberTotal}
+				/> </NewBlock>]]>
+			</XMLExtract>
+
+			<GenerateData Alias="VAL">
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
+
+			<!-- TASK2  -->
+			<IncAttribute Name="PROTASKS:NumberTotal" />
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+				TargetMachine=${CWHP:TargetMachine}      
+				TargetState=Created
+				User=${CWHP:User}
+				Host=${CWHP:Host}
+				Lib=RUNCOMMAND
+				Command='sudo sh -c &apos;wget -qO- https://get.docker.io/gpg | apt-key add -&apos;'
+				CurrentState=ReadState
+				TaskNumber=${PROTASKS:NumberTotal}
+				/> </NewBlock>]]>
+			</XMLExtract>
+
+			<GenerateData Alias="VAL">
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
+
+			<!-- TASK3 -->
+			<IncAttribute Name="PROTASKS:NumberTotal" />
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+				TargetMachine=${CWHP:TargetMachine}      
+				TargetState=Created
+				User=${CWHP:User}
+				Host=${CWHP:Host}
+				Lib=RUNCOMMAND
+				Command='sudo sh -c &quot;echo deb http://get.docker.io/ubuntu docker main\
+                 /etc/apt/sources.list.d/docker.list&quot;'
+				CurrentState=ReadState
+				TaskNumber=${PROTASKS:NumberTotal}
+				/> </NewBlock>]]>
+			</XMLExtract>
+
+			<GenerateData Alias="VAL">
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
+             
+             <!-- TASK4 -->
+			<IncAttribute Name="PROTASKS:NumberTotal" />
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+				TargetMachine=${CWHP:TargetMachine}      
+				TargetState=Created
+				User=${CWHP:User}
+				Host=${CWHP:Host}
+				Lib=RUNCOMMAND
+				Command='sudo apt update'
+				CurrentState=ReadState
+				TaskNumber=${PROTASKS:NumberTotal}
+				/> </NewBlock>]]>
+			</XMLExtract>
+
+			<GenerateData Alias="VAL">
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
+
+			<!-- TASK5 Run Command to install lxc-docker -->
+			<IncAttribute Name="PROTASKS:NumberTotal" />
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+				TargetMachine=${CWHP:TargetMachine}      
+				TargetState=Created
+				User=${CWHP:User}
+				Host=${CWHP:Host}
+				Lib=RUNCOMMAND
+				Command='sudo apt install lxc-docker'
+				CurrentState=ReadState
+				TaskNumber=${PROTASKS:NumberTotal}
+				/> </NewBlock>]]>
+			</XMLExtract>
+
+			<GenerateData Alias="VAL">
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
+
+			<!-- TASK6 Run command to create sever container -->
+			<IncAttribute Name="PROTASKS:NumberTotal" />
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+				TargetMachine=${CWHP:TargetMachine}      
+				TargetState=Created
+				User=${CWHP:User}
+				Host=${CWHP:Host}
+				Lib=RUNCOMMAND
+				Command='sudo docker run -it -d --name server -h server pujasalampuria/consul:server'
+				CurrentState=ReadState
+				TaskNumber=${PROTASKS:NumberTotal}
+				/> </NewBlock>]]>
+			</XMLExtract>
+
+			<GenerateData Alias="VAL">
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
+
+			<!-- TASK7  Run command to create bserver container -->
+			<IncAttribute Name="PROTASKS:NumberTotal" />
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+				TargetMachine=${CWHP:TargetMachine}      
+				TargetState=Created
+				User=${CWHP:User}
+				Host=${CWHP:Host}
+				Lib=RUNCOMMAND
+				Command='sudo docker run -it -d --link server:server --name bserver -h bserver pujasalampuria/consul:bootstrapserver'
+				CurrentState=ReadState
+				TaskNumber=${PROTASKS:NumberTotal}
+				/> </NewBlock>]]>
+			</XMLExtract>
+
+			<GenerateData Alias="VAL">
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
+
+
+			<!-- TASK8 Run command to create webserver container -->
+			<IncAttribute Name="PROTASKS:NumberTotal" />
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+				TargetMachine=${CWHP:TargetMachine}      
+				TargetState=Created
+				User=${CWHP:User}
+				Host=${CWHP:Host}
+				Lib=RUNCOMMAND
+				Command='sudo docker run -it -d --name webserver -h webserver  pujasalampuria/consul:webserver'
+				CurrentState=ReadState
+				TaskNumber=${PROTASKS:NumberTotal}
+				/> </NewBlock>]]>
+			</XMLExtract>
+
+			<GenerateData Alias="VAL">
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
+			
+			<!-- TASK9 Run command to get the IP of webserver container -->
+			<IncAttribute Name="PROTASKS:NumberTotal" />
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+				TargetMachine=${CWHP:TargetMachine}      
+				TargetState=Created
+				User=${CWHP:User}
+				Host=${CWHP:Host}
+				Lib=RUNCOMMANDANDGETOUTPUT
+				AttributeToSet=WebServerIP
+				Command='sudo docker inspect --format &apos;{{.NetworkSettings.IPAddress}}&apos; webserver'
+				CurrentState=ReadState
+				TaskNumber=${PROTASKS:NumberTotal}
+				/> </NewBlock>]]>
+			</XMLExtract>
+
+			<GenerateData Alias="VAL">
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
+			
+			
+			
+			<!-- TASK10 Run command to get the IP of bserver container -->
+			<IncAttribute Name="PROTASKS:NumberTotal" />
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+				TargetMachine=${CWHP:TargetMachine}      
+				TargetState=Created
+				User=${CWHP:User}
+				Host=${CWHP:Host}
+				Lib=RUNCOMMANDANDGETOUTPUT
+				AttributeToSet=BootStrapServerIP
+				Command='sudo docker inspect --format &apos;{{.NetworkSettings.IPAddress}}&apos; bserver'
+				CurrentState=ReadState
+				TaskNumber=${PROTASKS:NumberTotal}
+				/> </NewBlock>]]>
+			</XMLExtract>
+
+			<GenerateData Alias="VAL">
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
+			 
+              <!-- TASK11 Run Consul agent in webserver container -->
+			<IncAttribute Name="PROTASKS:NumberTotal" />
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+				TargetMachine=${CWHP:TargetMachine}      
+				TargetState=Created
+				User=${CWHP:User}
+				Host=${CWHP:Host}
+				Lib=RUNCOMMAND
+				Command='sudo docker exec -it -d webserver consul agent  -data-dir /tmp/consul -client ${NODE:Extensions:WebServerIP} -ui-dir /webconsul -join ${NODE:Extensions:BootStrapServerIP}'
+				CurrentState=ReadState
+				TaskNumber=${PROTASKS:NumberTotal}
+				/> </NewBlock>]]>
+			</XMLExtract>
+
+			<GenerateData Alias="VAL">
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData> 
+			
+			<!-- Use the below task to change the Bootstrap server to simple server  -->
+			
+			   
+			<!--  <IncAttribute Name="PROTASKS:NumberTotal" />
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+				TargetMachine=${CWHP:TargetMachine}      
+				TargetState=Created
+				User=${CWHP:User}
+				Host=${CWHP:Host}
+				Lib=RUNCOMMAND
+				Command='sudo docker exec -it -d bserver mv /consul/serverStart.sh /consul/start.sh'
+				CurrentState=ReadState
+				TaskNumber=${PROTASKS:NumberTotal}
+				/> </NewBlock>]]>
+			</XMLExtract>
+
+			<GenerateData Alias="VAL">
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData> 
+			
+			<IncAttribute Name="PROTASKS:NumberTotal" />
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+				TargetMachine=${CWHP:TargetMachine}      
+				TargetState=Created
+				User=${CWHP:User}
+				Host=${CWHP:Host}
+				Lib=RUNCOMMAND
+				Command='sudo docker stop bserver && sudo docker start bserver'
+				CurrentState=ReadState
+				TaskNumber=${PROTASKS:NumberTotal}
+				/> </NewBlock>]]>
+			</XMLExtract>
+
+			<GenerateData Alias="VAL">
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData> -->
+
+            <GenerateData>
+				<DataType>Resolve</DataType>
+				<Status>checkForResolve</Status>
+			</GenerateData>
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>
