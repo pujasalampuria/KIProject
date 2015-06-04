@@ -83,8 +83,7 @@
 				User=${CWHP:User}
 				Host=${CWHP:Host}
 				Lib=RUNCOMMAND
-				Command='sudo sh -c &quot;echo deb http://get.docker.io/ubuntu docker main\
-                 /etc/apt/sources.list.d/docker.list&quot;'
+				Command='sudo sh -c \&quot;echo deb https://get.docker.com/ubuntu docker main > /etc/apt/sources.list.d/docker.list\&quot;'
 				CurrentState=ReadState
 				TaskNumber=${PROTASKS:NumberTotal}
 				/> </NewBlock>]]>
@@ -94,8 +93,9 @@
 				<DataType>Validate</DataType>
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
+			
              
-             <!-- TASK4 -->
+            <!-- TASK4 --> 
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
@@ -113,7 +113,7 @@
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
-			</GenerateData>
+			</GenerateData> 
 
 			<!-- TASK5 Run Command to install lxc-docker -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
@@ -123,8 +123,8 @@
 				TargetState=Created
 				User=${CWHP:User}
 				Host=${CWHP:Host}
-				Lib=RUNCOMMAND
-				Command='sudo apt install lxc-docker'
+				Lib=PKG
+				PKG=lxc-docker
 				CurrentState=ReadState
 				TaskNumber=${PROTASKS:NumberTotal}
 				/> </NewBlock>]]>

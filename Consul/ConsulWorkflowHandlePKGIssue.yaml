@@ -6,6 +6,6 @@ Issue:
     TargetApp: Consul
     TargetMachine: Puja 
     TargetState: Created 
-    Port: 8901
+    Port: 8902
     User: puja
     Host: 192.168.1.86
