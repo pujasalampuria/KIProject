@@ -1,10 +1,6 @@
-<Linux xmlns="http://mars-o-matic.com"
-	ID="OpexSoftware:UseCase:Machine:HAProxy"
+<Linux xmlns="http://mars-o-matic.com" ID="OpexSoftware:UseCase:Machine:HAProxy"
 	HasAgentType_WatchMe="False" MachineArchitecture="x86_64"
-	NodeType="Machine" MachineClass="Linux" NodeName="HAProxy_Machine" >
-    <Dependencies>
-       <Node  ID="OpexSoftware:UseCase:Application:HAProxy" />
-    </Dependencies>
+	NodeType="Machine" MachineClass="Linux" NodeName="HAProxy" >
     <CustomerInformation ID="opex" Name="OpexSoftware"/>
     <Extensions>
       <ssh User="ganesh"/>
@@ -17,4 +13,3 @@
 		</InterfaceInformation>
 	</NetworkInformation>
 </Linux>
-
