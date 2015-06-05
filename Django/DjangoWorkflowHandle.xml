@@ -38,7 +38,6 @@
 			</GenerateData>
 
 			<!-- TASK1 Install python-pip,apache2,libapache2-mod-wsgi packages  -->
-
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
@@ -79,7 +78,6 @@
 			</GenerateData>
                  
             <!-- TASK3 Execute command to create a Python virtual environment-->
-            
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
@@ -100,7 +98,6 @@
 			</GenerateData>
 			
 			<!-- TASK4 Run Command to activate the virtual environment-->
-            
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
@@ -121,7 +118,6 @@
 			</GenerateData>
 			
 			<!-- TASK5 Install django -->
-            
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
@@ -141,8 +137,7 @@
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
 			
-			<!-- TASK6 -->
-            
+			<!-- TASK6 Start DJango project -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
@@ -163,7 +158,6 @@
 			</GenerateData>
 			
 			<!-- TASK7 Run Command to adjust the Project settings -->
-            
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
@@ -184,7 +178,6 @@
 			</GenerateData>
 			
 			<!-- TASK8 Run Command to migrate the initial database schema to our SQLite database using the management script -->
-            
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
@@ -204,9 +197,7 @@
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
 			
-		
 			<!-- TASK9 Run Command to collect all of the static content into the directory location -->
-            
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
@@ -226,7 +217,10 @@
 				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
 			</GenerateData>
 			
-			<!-- To complete the workflow Create an administrative user for the project by typing ./manage.py createsuperuser.Finally, run ./manage.py runserver IPAddress:8000 to test the starting up of Django development server -->
+			<!-- To complete the workflow Create an administrative user for the project by typing 
+			./manage.py createsuperuser.Finally, 
+			run ./manage.py runserver IPAddress:8000 to test the starting up of Django development server 
+			-->
 
 			<GenerateData>
 				<DataType>Resolve</DataType>

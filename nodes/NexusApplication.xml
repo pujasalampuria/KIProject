@@ -1,0 +1,8 @@
+<WebDevelopment xmlns="http://mars-o-matic.com" ID="OpexSoftware:UseCase:Application:Nexus" 
+	NodeType="Application" ApplicationClass="Development" 
+	ApplicationSubClass="WebDevelopment" NodeName="Nexus">
+	<Dependencies>
+		<Node ID="OpexSoftware:UseCase:Machine:Zeeshan" />
+	</Dependencies>
+	<CustomerInformation ID="opex.com" Name="OpexSoftware" />
+</WebDevelopment>

@@ -2,14 +2,14 @@ Issue:
   NodeID: OpexSoftware:UseCase:Application:HAProxy
   xmlns: http://www.arago.de/IssueSchema
   IssueSubject: 'Please install HAProxy and Deploy war'
-  HAProxyInstallAndDeployWar:
-    TargetApp: HAProxy_App
-    TargetMachine: HAProxy_Machine
+  HAProxyWorkflowHandlePKG:
+    TargetApp: HAProxy
+    TargetMachine: HAProxy
     WARUrl: http://104.236.227.163:8080/CitrusTestKit.war
     ProxyEnableUrl: http://104.236.227.163:8080/haproxy
     ProxyConfigURL: http://104.236.227.163:8080/haproxy.cfg
     TargetTar_FileName: CitrusTestKit.war
     TargetState: Created
-    User: ganesh
-    Host: 192.168.1.80
-
+    User: ashish
+    Host: 192.168.1.53
+    

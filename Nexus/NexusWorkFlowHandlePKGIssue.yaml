@@ -1,0 +1,15 @@
+Issue:
+  NodeID: OpexSoftware:UseCase:Application:Nexus
+  xmlns: http://www.arago.de/IssueSchema
+  IssueSubject: 'Please Install Nexus Application Server'
+  NexusWorkflowHandlePKG:
+    TargetApp: Nexus  
+    TargetMachine: Zeeshan 
+    TargetTarFileName: nexus-2.1.2-bundle.tar.gz 
+    TargetPath: /tmp
+    DownloadUrl: www.sonatype.org/downloads/nexus-2.1.2-bundle.tar.gz
+    TargetState: Created
+    UntarFolder: nexus-2.1.2/
+    NexusUser: nexus 
+    User: zeeshan
+    Host: 192.168.1.90
