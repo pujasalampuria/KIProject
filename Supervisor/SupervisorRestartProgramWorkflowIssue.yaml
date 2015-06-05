@@ -1,0 +1,12 @@
+Issue:
+  NodeID: OpexSoftware:UseCase:Application:Supervisor
+  xmlns: http://www.arago.de/IssueSchema
+  IssueSubject: 'Please restart the program running via supervisor'
+  SupervisorRestartProgramWorkflow:
+    TargetApp: Supervisor   
+    TargetMachine: Puja 
+    TargetState: Created 
+    Program: long
+    User: puja
+    Host: 192.168.1.86
+   
