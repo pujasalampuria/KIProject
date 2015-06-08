@@ -7,9 +7,9 @@ Issue:
     TargetMachine: BD
     TargetState: Created 
     User: bhagyashree
-    TomcatUser: tomcat
     Host: 192.168.1.89
-    Password: tomcat
-    Port: 8080
+    TomcatUser: tomcat
+    TomcatPassword: tomcat
+    TomcatPort: 8080
     WarPath: /home/bhagyashree/test-now.war
     ContextPath: test-now.war

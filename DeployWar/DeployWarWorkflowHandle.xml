@@ -15,16 +15,17 @@
 
 	<CreateTrigger>
 		<IssueCondition>
-			<Description>Searches for an Issue with DataBlock DeployWarWorkflow and the necessary information for successful completion of workflow.
+			<Description>Searches for an Issue with DataBlock DeployWarWorkflow and the necessary 
+				information for successful completion of workflow.
 			</Description>
 			<SubItem Name="DeployWarWorkflow" Alias="DWW">
 				<AttributeFilter Name="TargetApp" Mode="string" Value="${PRE:NodeName}"/>
 				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}"/>
 				<AttributeFilter Name="User" Mode="exists"/>
-				<AttributeFilter Name="TomcatUser" Mode="exists"/>
-				<AttributeFilter Name="Password" Mode="exists"/>
 				<AttributeFilter Name="Host" Mode="exists"/>
-				<AttributeFilter Name="Port" Mode="exists"/>
+				<AttributeFilter Name="TomcatUser" Mode="exists"/>
+				<AttributeFilter Name="TomcatPassword" Mode="exists"/>
+				<AttributeFilter Name="TomcatPort" Mode="exists"/>
 				<AttributeFilter Name="ContextPath" Mode="exists"/>
 				<AttributeFilter Name="WarPath" Mode="exists"/>
 				<AttributeFilter Name="TargetState" Mode="string" Value="Created"/>
@@ -49,8 +50,8 @@
 				Host=${DWW:Host}
 				User=${DWW:User}
 				TomcatUser=${DWW:TomcatUser}
-				Password=${DWW:Password}
-				Port=${DWW:Port}
+				TomcatPassword=${DWW:TomcatPassword}
+				TomcatPort=${DWW:TomcatPort}
 				WarPath='${DWW:WarPath}'
 				ContextPath='${DWW:ContextPath}'
 				TaskNumber=${PROTASKS:NumberTotal}

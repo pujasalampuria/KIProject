@@ -1,7 +1,7 @@
 <KnowledgeItem ID="OpexSoftware:Supervisor:SupervisorStartProgramWorkflow" xmlns="http://www.arago.de/KiSchema">
 	<Title>SupervisorStartProgramWorkflow</Title>
-	<Description>Initiates the workflow for handling packages related to Start a Program running via supervisor and adding a program by 
-	writing into the MARS model and creating new corresponding DataBlocks in the Issue.
+	<Description>Initiates the workflow for handling packages related to Start a Program running via supervisor 
+		and adding a program by writing into the MARS model and creating new corresponding DataBlocks in the Issue.
 	</Description>
 
 	<BindAttributes>
@@ -15,7 +15,8 @@
 
 	<CreateTrigger>
 		<IssueCondition>
-			<Description>Searches for an Issue with DataBlock SupervisorStartProgramWorkflow and the necessary information for successful completion of workflow.
+			<Description>Searches for an Issue with DataBlock SupervisorStartProgramWorkflow and the 
+				necessary information for successful completion of workflow.
 			</Description>
 			<SubItem Name="SupervisorStartProgramWorkflow" Alias="SSPW">
 				<AttributeFilter Name="TargetApp" Mode="string" Value="${PRE:NodeName}" />

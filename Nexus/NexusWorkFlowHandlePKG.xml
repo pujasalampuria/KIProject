@@ -246,7 +246,6 @@
 			
 			<!-- To Complete the workflow and to start JBoss Server please run ./standalone.sh -Djboss.bind.address=yourserverip -Djboss.bind.address.management=yourserverip& Command from bin directory -->
 			
-
 			<GenerateData>
 				<DataType>Resolve</DataType>
 				<Status>checkForResolve</Status>
