@@ -56,7 +56,7 @@
 				ContextPath='${DWW:ContextPath}'
 				TaskNumber=${PROTASKS:NumberTotal}
 				Lib=RUNLOCALCOMMAND
-				Command='sudo curl -T &quot;${DWW:WarPath}&quot; &quot;http://${DWW:Host}:${DWW:Port}/manager/text/deploy?path=/${DWW:ContextPath}&quot; --user ${DWW:TomcatUser}:${DWW:Password}'
+				Command='sudo curl -T &quot;${DWW:WarPath}&quot; &quot;http://${DWW:Host}:${DWW:TomcatPort}/manager/text/deploy?path=/${DWW:ContextPath}&quot; --user ${DWW:TomcatUser}:${DWW:TomcatPassword}'
 				CurrentState=ReadState
 				/> </NewBlock>]]>
 			</XMLExtract> 
