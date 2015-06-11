@@ -1,0 +1,19 @@
+Issue:
+  NodeID: OpexSoftware:UseCase:Application:Collectd
+  xmlns: http://www.arago.de/IssueSchema
+  IssueSubject: 'Install & Configure Collectd with Graphite & Postgre DB'
+  CollectdWorkflowHandlePKG:
+    TargetApp: Collectd
+    TargetMachine: Shree
+    TargetState: Created
+    DBUsername: graphite
+    DBPassword: graphite
+    Database: graphite
+    GraphiteSecretKey: secret_key
+    CollectdConffilePath: /home/shreeyash/collectd.conf
+    ApacheVirtualHostFilePath: /home/shreeyash/apache2-graphite.conf
+    ConfFileHostUser: shreeyash
+    ConfFileHost: 192.168.1.19
+    PostgresUser: postgres
+    User: puja
+    Host: 192.168.1.86

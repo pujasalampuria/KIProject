@@ -1,0 +1,750 @@
+<KnowledgeItem ID="OpexSoftware:Collectd:CollectdWorkflowHandlePKG" xmlns="http://www.arago.de/KiSchema">
+	<Title>CollectdWorkflowHandlePKG</Title>
+	<Description>Initiates the workflow for installing and configuring Collectd to get the system metrics for graphite by 
+		writing into the MARS model and creating new corresponding DataBlocks in the Issue.
+	</Description>
+
+	  <BindAttributes>
+		<RelatedNode Mode="predecessor" Alias="PRE">
+			<AttributeFilter Name="NodeType" Mode="string" Value="Application" />
+		</RelatedNode>
+      </BindAttributes>
+
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+
+	<CreateTrigger>
+		<IssueCondition>
+			<Description>Searches for an Issue with DataBlock CollectdWorkflowHandlePKG 
+				and triggers the workflow for successful completion.
+			</Description>
+			<SubItem Name="CollectdWorkflowHandlePKG" Alias="CWHP">
+				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}" />
+				<AttributeFilter Name="TargetState" Mode="string" Value="Created" />
+			    <AttributeFilter Name="TargetApp" Mode="string" Value="${PRE:NodeName}" />
+				<AttributeFilter Name="User" Mode="exists" />
+				<AttributeFilter Name="Host" Mode="exists" />
+				<AttributeFilter Name="DBUsername" Mode="exists" />
+				<AttributeFilter Name="DBPassword" Mode="exists" />
+				<AttributeFilter Name="Database" Mode="exists" />
+				<AttributeFilter Name="GraphiteSecretKey" Mode="exists" />
+				<AttributeFilter Name="ConfFileHostUser" Mode="exists" />
+				<AttributeFilter Name="ConfFileHost" Mode="exists" />
+				<AttributeFilter Name="PostgresUser" Mode="exists" />
+				<AttributeFilter Name="CollectdConffilePath" Mode="exists" />
+				<AttributeFilter Name="ApacheVirtualHostFilePath" Mode="exists" />
+				<AttributeFilter Name="Status" Mode="notexists" />
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<SetAttribute Name="CWHP:Status" Value="WorkflowStarted" />
+			
+			<GenerateData Alias="PROTASKS">
+				<DataType>ProcessingTasks</DataType>
+				<CurrentTask>1</CurrentTask>
+			</GenerateData>
+
+
+        <!--Tasks to install and configure Graphite  -->
+        
+			<!--Task1 Update the apt Source File -->
+		    <IncAttribute Name="PROTASKS:NumberTotal" />
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+		       TargetMachine=${CWHP:TargetMachine}      
+			   TargetState=Created
+			   Lib=PKGUPDATE
+			   User=${CWHP:User}
+			   Host=${CWHP:Host}
+			   CurrentState=ReadState
+			   TaskNumber=${PROTASKS:NumberTotal}
+			 /> </NewBlock>]]>
+			</XMLExtract>
+
+			<GenerateData Alias="VAL">
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData> 
+
+			<!--Task2 Install graphite-web. -->
+			<IncAttribute Name="PROTASKS:NumberTotal" />
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+		       TargetMachine=${CWHP:TargetMachine}      
+			   TargetState=Created
+			   Lib=PKG
+			   PKG='graphite-web '
+			   User=${CWHP:User}
+			   Host=${CWHP:Host}
+			   CurrentState=ReadState
+			   TaskNumber=${PROTASKS:NumberTotal}
+			 /> </NewBlock>]]>
+			</XMLExtract>
+
+			<GenerateData Alias="VAL">
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData> 
+
+            <!--Task3 Install graphite-carbon. -->
+			<IncAttribute Name="PROTASKS:NumberTotal" />
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+		       TargetMachine=${CWHP:TargetMachine}      
+			   TargetState=Created
+			   Lib=PKG
+			   PKG='graphite-carbon'
+			   User=${CWHP:User}
+			   Host=${CWHP:Host}
+			   CurrentState=ReadState
+			   TaskNumber=${PROTASKS:NumberTotal}
+			 /> </NewBlock>]]>
+			</XMLExtract>
+
+			<GenerateData Alias="VAL">
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData> 
+
+
+            <!--Task4 Install PostgreSql. -->
+			<IncAttribute Name="PROTASKS:NumberTotal" />
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+		       TargetMachine=${CWHP:TargetMachine}      
+			   TargetState=Created
+			   Lib=PKG
+			   PKG='postgresql'
+			   User=${CWHP:User}
+			   Host=${CWHP:Host}
+			   CurrentState=ReadState
+			   TaskNumber=${PROTASKS:NumberTotal}
+			 /> </NewBlock>]]>
+			</XMLExtract>
+
+			<GenerateData Alias="VAL">
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData> 
+			
+			 <!--Task5 Install libpq-dev. -->
+			<IncAttribute Name="PROTASKS:NumberTotal" />
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+		       TargetMachine=${CWHP:TargetMachine}      
+			   TargetState=Created
+			   Lib=PKG
+			   PKG='libpq-dev'
+			   User=${CWHP:User}
+			   Host=${CWHP:Host}
+			   CurrentState=ReadState
+			   TaskNumber=${PROTASKS:NumberTotal}
+			 /> </NewBlock>]]>
+			</XMLExtract>
+
+			<GenerateData Alias="VAL">
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData> 
+			
+			 <!--Task6 Install python-psycopg2. -->
+			<IncAttribute Name="PROTASKS:NumberTotal" />
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+		       TargetMachine=${CWHP:TargetMachine}      
+			   TargetState=Created
+			   Lib=PKG
+			   PKG='python-psycopg2'
+			   User=${CWHP:User}
+			   Host=${CWHP:Host}
+			   CurrentState=ReadState
+			   TaskNumber=${PROTASKS:NumberTotal}
+			 /> </NewBlock>]]>
+			</XMLExtract>
+
+			<GenerateData Alias="VAL">
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData> 
+			
+			<!-- TASK7 Create User in Postgres-->
+		    <IncAttribute Name="PROTASKS:NumberTotal"/>
+			
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 			
+				TargetMachine=${CWHP:TargetMachine}      
+				TargetState=Created
+				CurrentState=ReadState
+				Host=${CWHP:Host}
+				User=${CWHP:PostgresUser}
+				TaskNumber=${PROTASKS:NumberTotal}
+				Command='psql -c \"CREATE USER ${CWHP:DBUsername} WITH PASSWORD &apos;${CWHP:DBPassword}&apos;\"'
+				Lib=RUNCOMMAND
+				TaskNumber=${PROTASKS:NumberTotal}
+				/></NewBlock>]]>
+			</XMLExtract> 
+      
+			<GenerateData Alias="VAL"> 
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>	 
+			
+			<!-- TASK8 Create Database in Postgres-->
+		    <IncAttribute Name="PROTASKS:NumberTotal"/>
+			
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 			
+				TargetMachine=${CWHP:TargetMachine}      
+				TargetState=Created
+				Host=${CWHP:Host}
+				User=${CWHP:PostgresUser}
+				TaskNumber=${PROTASKS:NumberTotal}
+				Command='psql -c \"CREATE DATABASE ${CWHP:Database} WITH OWNER &apos;${CWHP:DBUsername}&apos;\"'
+				Lib=RUNCOMMAND
+				TaskNumber=${PROTASKS:NumberTotal}
+				CurrentState=ReadState
+				/></NewBlock>]]>
+			</XMLExtract> 
+      
+			<GenerateData Alias="VAL"> 
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>	
+			
+			
+			<!-- TASK9 Configure Graphite web app secret key-->
+		    <IncAttribute Name="PROTASKS:NumberTotal"/>
+			
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 			
+				TargetMachine=${CWHP:TargetMachine}      
+				TargetState=Created
+				Host=${CWHP:Host}
+				User=${CWHP:User}
+				Command='sudo sed -i \"s/^#SECRET_KEY.*/SECRET_KEY = &apos;${CWHP:GraphiteSecretKey}&apos;/\" /etc/graphite/local_settings.py'
+				Lib=RUNCOMMAND
+				TaskNumber=${PROTASKS:NumberTotal}
+				CurrentState=ReadState
+				/></NewBlock>]]>
+			</XMLExtract> 
+      
+			<GenerateData Alias="VAL"> 
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>	 
+			
+			
+			<!-- TASK10 Reflect Postgres in DATABASES definition schema-->
+			<IncAttribute Name="PROTASKS:NumberTotal"/>
+			
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 			
+				TargetMachine=${CWHP:TargetMachine}      
+				TargetState=Created
+				Host=${CWHP:Host}
+				User=${CWHP:User}
+				Command='sudo sed -i \"s/&apos;USER&apos;: &apos;&apos;,/&apos;USER&apos;: &apos;${CWHP:DBUsername}&apos;,/g\" /etc/graphite/local_settings.py'
+				Lib=RUNCOMMAND
+				TaskNumber=${PROTASKS:NumberTotal}
+				CurrentState=ReadState
+				/></NewBlock>]]>
+			</XMLExtract> 
+      
+			<GenerateData Alias="VAL"> 
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>	 
+		
+			<!-- TASK11-->
+			<IncAttribute Name="PROTASKS:NumberTotal"/>
+			
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 			
+				TargetMachine=${CWHP:TargetMachine}      
+				TargetState=Created
+				Host=${CWHP:Host}
+				User=${CWHP:User}
+				Command='sudo sed -i \"s/&apos;PASSWORD&apos;: &apos;&apos;,/ &apos;PASSWORD&apos;: &apos;${CWHP:DBPassword}&apos;,/g\" /etc/graphite/local_settings.py'
+				Lib=RUNCOMMAND
+				TaskNumber=${PROTASKS:NumberTotal}
+				CurrentState=ReadState
+				/></NewBlock>]]>
+			</XMLExtract> 
+      
+			<GenerateData Alias="VAL"> 
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>	 
+			
+			
+			<!-- TASK12-->
+			<IncAttribute Name="PROTASKS:NumberTotal"/>
+			
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 			
+				TargetMachine=${CWHP:TargetMachine}      
+				TargetState=Created
+				Host=${CWHP:Host}
+				User=${CWHP:User}
+				Command='sudo sed -i \"s/&apos;HOST&apos;: &apos;&apos;,/ &apos;HOST&apos;: &apos;127.0.0.1&apos;,/g\" /etc/graphite/local_settings.py'
+				Lib=RUNCOMMAND
+				TaskNumber=${PROTASKS:NumberTotal}
+				CurrentState=ReadState
+				/></NewBlock>]]>
+			</XMLExtract> 
+      
+			<GenerateData Alias="VAL"> 
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>	 
+			
+			
+			<!-- TASK13-->
+			<IncAttribute Name="PROTASKS:NumberTotal"/>
+			
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 			
+				TargetMachine=${CWHP:TargetMachine}      
+				TargetState=Created
+				Host=${CWHP:Host}
+				User=${CWHP:User}
+				Command='sudo sed -i \"s/&apos;NAME&apos;: &apos;\/var\/lib\/graphite\/graphite.db&apos;,/ &apos;NAME&apos;: &apos;graphite&apos;,/g\" /etc/graphite/local_settings.py'
+				Lib=RUNCOMMAND
+				TaskNumber=${PROTASKS:NumberTotal}
+				CurrentState=ReadState
+				/></NewBlock>]]>
+			</XMLExtract> 
+      
+			<GenerateData Alias="VAL"> 
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>	 
+			
+			<!-- TASK14-->
+			<IncAttribute Name="PROTASKS:NumberTotal"/>
+			
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 			
+				TargetMachine=${CWHP:TargetMachine}      
+				TargetState=Created
+				Host=${CWHP:Host}
+				User=${CWHP:User}
+				Command='sudo sed -i \"s/&apos;ENGINE&apos;: &apos;django.db.backends.sqlite3&apos;,/&apos;ENGINE&apos;: &apos;django.db.backends.postgresql_psycopg2&apos;,/g\" /etc/graphite/local_settings.py'
+				Lib=RUNCOMMAND
+				TaskNumber=${PROTASKS:NumberTotal}
+				CurrentState=ReadState
+				/></NewBlock>]]>
+			</XMLExtract> 
+      
+			<GenerateData Alias="VAL"> 
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>	 
+			
+			
+			<!-- TASK15 Synchronize the database-->
+			<IncAttribute Name="PROTASKS:NumberTotal"/>
+			
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 			
+				TargetMachine=${CWHP:TargetMachine}      
+				TargetState=Created
+				Host=${CWHP:Host}
+				User=${CWHP:User}
+				Command='sudo graphite-manage syncdb'
+				Lib=RUNCOMMAND
+				TaskNumber=${PROTASKS:NumberTotal}
+				CurrentState=ReadState
+				/></NewBlock>]]>
+			</XMLExtract> 
+      
+			<GenerateData Alias="VAL"> 
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>	
+		
+			
+			<!-- TASK16 Enable carbon-cache-->
+			<IncAttribute Name="PROTASKS:NumberTotal"/>
+			
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 			
+				TargetMachine=${CWHP:TargetMachine}      
+				TargetState=Created
+				Host=${CWHP:Host}
+				User=${CWHP:User}
+				Command='sudo sed -i \"s/CARBON_CACHE_ENABLED=false/CARBON_CACHE_ENABLED=true/g\" /etc/default/graphite-carbon '
+				Lib=RUNCOMMAND
+				TaskNumber=${PROTASKS:NumberTotal}
+				CurrentState=ReadState
+				/></NewBlock>]]>
+			</XMLExtract> 
+      
+			<GenerateData Alias="VAL"> 
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>	 
+			
+			
+			<!-- TASK17 Enable log-rotation-->
+		    <IncAttribute Name="PROTASKS:NumberTotal"/>
+			
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 			
+				TargetMachine=${CWHP:TargetMachine}      
+				TargetState=Created
+				Host=${CWHP:Host}
+				User=${CWHP:User}
+				Command='sudo sed -i \"s/ENABLE_LOGROTATION = False/ENABLE_LOGROTATION = True/g\" /etc/carbon/carbon.conf '
+				Lib=RUNCOMMAND
+				TaskNumber=${PROTASKS:NumberTotal}
+				CurrentState=ReadState
+				/></NewBlock>]]>
+			</XMLExtract> 
+      
+			<GenerateData Alias="VAL"> 
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>	 
+			
+			<!-- TASK18 -->
+		    <IncAttribute Name="PROTASKS:NumberTotal"/>
+			
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 			
+				TargetMachine=${CWHP:TargetMachine}      
+				TargetState=Created
+				Host=${CWHP:Host}
+				User=${CWHP:User}
+				Command='sudo cp /usr/share/doc/graphite-carbon/examples/storage-aggregation.conf.example /etc/carbon/storage-aggregation.conf'
+				Lib=RUNCOMMAND
+				TaskNumber=${PROTASKS:NumberTotal}
+				CurrentState=ReadState
+				/></NewBlock>]]>
+			</XMLExtract> 
+      
+			<GenerateData Alias="VAL"> 
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>	 
+			
+			<!-- TASK19 Start carbon-cache -->
+			<IncAttribute Name="PROTASKS:NumberTotal"/>
+			
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 			
+				TargetMachine=${CWHP:TargetMachine}      
+				TargetState=Created
+				Host=${CWHP:Host}
+				User=${CWHP:User}
+				ServiceName='carbon-cache'
+				Lib=STARTSERVICE
+				TaskNumber=${PROTASKS:NumberTotal}
+				CurrentState=ReadState
+				/></NewBlock>]]>
+			</XMLExtract> 
+      
+			<GenerateData Alias="VAL"> 
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>	 
+			
+			
+			<!-- TASK20 Install Apache2 -->
+	 		<IncAttribute Name="PROTASKS:NumberTotal"/>
+			
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 			
+				TargetMachine=${CWHP:TargetMachine}      
+				TargetState=Created
+				Host=${CWHP:Host}
+				User=${CWHP:User}
+				Lib=PKG
+				PKG='apache2 libapache2-mod-wsgi'
+				TaskNumber=${PROTASKS:NumberTotal}
+				CurrentState=ReadState
+				/></NewBlock>]]>
+			</XMLExtract> 
+      
+			<GenerateData Alias="VAL"> 
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>	
+			
+			<!-- TASK21  disable the default virtual host file-->
+			<IncAttribute Name="PROTASKS:NumberTotal"/>
+			
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 			
+				TargetMachine=${CWHP:TargetMachine}      
+				TargetState=Created
+				Host=${CWHP:Host}
+				User=${CWHP:User}
+				Lib=RUNCOMMAND
+				Command='sudo a2dissite 000-default'
+				TaskNumber=${PROTASKS:NumberTotal}
+				CurrentState=ReadState
+				/></NewBlock>]]>
+			</XMLExtract> 
+      
+			<GenerateData Alias="VAL"> 
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>	
+		 	
+			<!-- TASK22 copy the Graphite Apache virtual host file into the available sites directory:-->
+			<IncAttribute Name="PROTASKS:NumberTotal"/>
+			
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 			
+				TargetMachine=${CWHP:TargetMachine}      
+				TargetState=Created
+				Host=${CWHP:Host}
+				User=${CWHP:User}
+				Lib=RUNCOMMAND
+				Command='sudo cp /usr/share/graphite-web/apache2-graphite.conf /etc/apache2/sites-available'
+				TaskNumber=${PROTASKS:NumberTotal}
+				CurrentState=ReadState
+				/></NewBlock>]]>
+			</XMLExtract> 
+      
+			<GenerateData Alias="VAL"> 
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>	
+		 	
+			<!-- TASK23 :-->
+			<IncAttribute Name="PROTASKS:NumberTotal"/>
+			
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 			
+				TargetMachine=${CWHP:TargetMachine}      
+				TargetState=Created
+				Host=${CWHP:Host}
+				User=${CWHP:User}
+				Lib=RUNCOMMAND
+				Command='sudo a2ensite apache2-graphite'
+				TaskNumber=${PROTASKS:NumberTotal}
+				CurrentState=ReadState
+				/></NewBlock>]]>
+			</XMLExtract> 
+      
+			<GenerateData Alias="VAL"> 
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>	
+		 	
+			<!-- TASK24  Enable the module. -->
+			<IncAttribute Name="PROTASKS:NumberTotal"/>
+			
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 			
+				TargetMachine=${CWHP:TargetMachine}      
+				TargetState=Created
+				Host=${CWHP:Host}
+				User=${CWHP:User}
+				Lib=RUNCOMMAND
+				Command='sudo a2enmod wsgi'
+				TaskNumber=${PROTASKS:NumberTotal}
+				CurrentState=ReadState
+				/></NewBlock>]]>
+			</XMLExtract> 
+      
+			<GenerateData Alias="VAL"> 
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>	
+		 	
+			<!-- TASK25 Reload apache2 :-->
+			<IncAttribute Name="PROTASKS:NumberTotal"/>
+			
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 			
+				TargetMachine=${CWHP:TargetMachine}      
+				TargetState=Created
+				Host=${CWHP:Host}
+				User=${CWHP:User}
+				Lib=RUNCOMMAND
+				Command='sudo service apache2 reload'
+				TaskNumber=${PROTASKS:NumberTotal}
+				CurrentState=ReadState
+				/></NewBlock>]]>
+			</XMLExtract> 
+      
+			<GenerateData Alias="VAL"> 
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>	
+			
+	 
+	<!--Tasks to install and configure Collectd  -->	
+			
+			<!--Task26 Update the apt Source File -->
+		    <IncAttribute Name="PROTASKS:NumberTotal" />
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+		       TargetMachine=${CWHP:TargetMachine}      
+			   TargetState=Created
+			   Lib=PKGUPDATE
+			   User=${CWHP:User}
+			   Host=${CWHP:Host}
+			   CurrentState=ReadState
+			   TaskNumber=${PROTASKS:NumberTotal}
+			   /> </NewBlock>]]>
+			</XMLExtract>
+
+			<GenerateData Alias="VAL">
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
+ 
+			<!--Task27 Install collectd. -->
+			<IncAttribute Name="PROTASKS:NumberTotal" />
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+		       TargetMachine=${CWHP:TargetMachine}      
+			   TargetState=Created
+			   Lib=PKG
+			   PKG='collectd collectd-utils'
+			   User=${CWHP:User}
+			   Host=${CWHP:Host}
+			   CurrentState=ReadState
+			   TaskNumber=${PROTASKS:NumberTotal}
+			   /></NewBlock>]]>
+			</XMLExtract>
+
+			<GenerateData Alias="VAL">
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData> 
+			
+			
+			<!--Task28 Configure Collectd . -->
+			<IncAttribute Name="PROTASKS:NumberTotal" />
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+		       TargetMachine=${CWHP:TargetMachine}      
+			   TargetState=Created
+			   Lib=RUNCOMMAND
+			   Command='scp ${CWHP:ConfFileHostUser}@${CWHP:ConfFileHost}:${CWHP:CollectdConffilePath} /etc/collectd/'  
+			   User=${CWHP:User}
+			   Host=${CWHP:Host}
+			   CurrentState=ReadState
+			   TaskNumber=${PROTASKS:NumberTotal}
+			   /></NewBlock>]]>
+			</XMLExtract>
+
+			<GenerateData Alias="VAL">
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
+			
+			<!--Task29 Apache to Report Stats . -->
+			<IncAttribute Name="PROTASKS:NumberTotal" />
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+		       TargetMachine=${CWHP:TargetMachine}      
+			   TargetState=Created
+			   Lib=RUNCOMMAND
+			   Command='scp ${CWHP:ConfFileHostUser}@${CWHP:ConfFileHost}:${CWHP:ApacheVirtualHostFilePath} /etc/apache2/sites-available/'
+			   User=${CWHP:User}
+			   Host=${CWHP:Host}
+			   CurrentState=ReadState
+			   TaskNumber=${PROTASKS:NumberTotal}
+			   /></NewBlock>]]>
+			</XMLExtract>
+
+			<GenerateData Alias="VAL">
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
+			
+			<!-- TASK30 Reload apache2 :-->
+			<IncAttribute Name="PROTASKS:NumberTotal"/>
+			
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 			
+				TargetMachine=${CWHP:TargetMachine}      
+				TargetState=Created
+				Host=${CWHP:Host}
+				User=${CWHP:User}
+				Lib=RUNCOMMAND
+				Command='sudo service apache2 reload'
+				TaskNumber=${PROTASKS:NumberTotal}
+				CurrentState=ReadState
+				/></NewBlock>]]>
+			</XMLExtract> 
+      
+			<GenerateData Alias="VAL"> 
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>	
+			
+			<!--Task31  Stop Carbon-cache. -->
+			<IncAttribute Name="PROTASKS:NumberTotal" />
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+		       TargetMachine=${CWHP:TargetMachine}      
+			   TargetState=Created
+			   Lib=STOPSERVICE
+			   ServiceName='carbon-cache'
+			   User=${CWHP:User}
+			   Host=${CWHP:Host}
+			   CurrentState=ReadState
+			   TaskNumber=${PROTASKS:NumberTotal}
+			 /> </NewBlock>]]>
+			</XMLExtract>
+
+			<GenerateData Alias="VAL">
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
+			
+            <!--Task32 Sleep for few seconds  . -->
+			<IncAttribute Name="PROTASKS:NumberTotal" />
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+		       TargetMachine=${CWHP:TargetMachine}      
+			   TargetState=Created
+			   Lib=RUNCOMMAND
+			   Command=sleep 5
+			   User=${CWHP:User}
+			   Host=${CWHP:Host}
+			   CurrentState=ReadState
+			   TaskNumber=${PROTASKS:NumberTotal}
+			 /> </NewBlock>]]>
+			</XMLExtract>
+
+			<GenerateData Alias="VAL">
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
+			
+            <!--Task33 Start carbon-cache  . -->
+			<IncAttribute Name="PROTASKS:NumberTotal" />
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+		       TargetMachine=${CWHP:TargetMachine}      
+			   TargetState=Created
+			   Lib=STARTSERVICE
+			   ServiceName='carbon-cache'
+			   User=${CWHP:User}
+			   Host=${CWHP:Host}
+			   CurrentState=ReadState
+			   TaskNumber=${PROTASKS:NumberTotal}
+			 /> </NewBlock>]]>
+			</XMLExtract>
+
+			<GenerateData Alias="VAL">
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
+			
+            <!--Task34 Stop Collectd  . -->
+			<IncAttribute Name="PROTASKS:NumberTotal" />
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
+		       TargetMachine=${CWHP:TargetMachine}      
+			   TargetState=Created
+			   Lib=RESTARTSERVICE
+			   ServiceName='collectd'
+			   User=${CWHP:User}
+			   Host=${CWHP:Host}
+			   CurrentState=ReadState
+			   TaskNumber=${PROTASKS:NumberTotal}
+			 /> </NewBlock>]]>
+			</XMLExtract>
+
+			<GenerateData Alias="VAL">
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
+			
+			<GenerateData> 
+				<DataType>Resolve</DataType>
+				<Status>checkForResolve</Status>
+			</GenerateData>	
+
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

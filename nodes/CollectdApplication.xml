@@ -1,0 +1,8 @@
+<EnterpriseInfrastructure xmlns="http://mars-o-matic.com" ID="OpexSoftware:UseCase:Application:Collectd" 
+	NodeType="Application" NodeName="Collectd" 
+	ApplicationClass="Enterprise" ApplicationSubClass="EnterpriseInfrastructure">
+	<Dependencies>
+		<Node ID="OpexSoftware:UseCase:Machine:Shree" />
+	</Dependencies>
+	<CustomerInformation ID="opex.com" Name="OpexSoftware" />
+</EnterpriseInfrastructure>
