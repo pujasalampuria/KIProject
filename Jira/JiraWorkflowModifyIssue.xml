@@ -5,6 +5,9 @@
 	</Description>
 	<BindAttributes>
 		<AttributeFilter Name="NodeType" Mode="string" Value="Machine" />
+		<SubItem Name="Extensions" Alias="EXTS">
+           <TrueFilter/>
+        </SubItem> 
 	</BindAttributes>
 
 	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
@@ -36,25 +39,29 @@
 
 			<!--Task Modify an issue in Jira -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
-
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
-			   TargetMachine=${JWMI:TargetMachine}      
-			   TargetState=Created
-			   Lib=CURLPUT
-			   Key=${JWMI:IssueKey}
-			   ToolUrl='${JWMI:JiraUrl}'
-			   CurrentState=ReadState
-			   ToolUser=${JWMI:JiraUser}
-			   ToolPasswd=${JWMI:JiraPassword}
-			   PutData='{"fields":{"summary":"${JWMI:Summary}","description":"${JWMI:Description}"}}'
-			   TaskNumber=${PROTASKS:NumberTotal}
-			   ContentType='Content-Type:application/json'/>
-			   </NewBlock>]]>
-			</XMLExtract>
-
+         
+            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK1">
+            <KeyAttributes>
+               <UID> </UID>
+            </KeyAttributes>
+            <Attributes>
+                  <ToolUrl>${JWMI:JiraUrl}</ToolUrl>
+                  <ToolUser>${JWMI:JiraUser}</ToolUser>
+                  <ToolPasswd>${JWMI:JiraPassword}</ToolPasswd>
+                  <PutData>{"fields":{"summary":"${JWMI:Summary}","description":"${JWMI:Description}"}}</PutData>
+                  <ContentType>Content-Type:application/json</ContentType>
+                  <Lib>CURLPUT</Lib>
+                  <Key>${JWMI:IssueKey}</Key>
+                  <TargetMachine>${JWMI:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+            </Attributes>
+            </UpdateData>
+            
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<ExtUID>${TASK1:UID}</ExtUID>
 			</GenerateData>
 
 			<GenerateData>

@@ -5,6 +5,9 @@
 	</Description>
 	<BindAttributes>
 		<AttributeFilter Name="NodeType" Mode="string" Value="Machine" />
+		<SubItem Name="Extensions" Alias="EXTS">
+           <TrueFilter/>
+        </SubItem> 
 	</BindAttributes>
 
 	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
@@ -38,23 +41,27 @@
 			<!--Task Create an issue in Jira -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
-		       TargetMachine=${JWCI:TargetMachine}      
-			   TargetState=Created
-			   Lib=CURLPOST
-			   ToolUrl='${JWCI:JiraUrl}'
-			   CurrentState=ReadState
-			   ToolUser=${JWCI:JiraUser}
-			   ToolPasswd=${JWCI:JiraPassword}
-			   PostData='{"fields":{"project":{"key":"${JWCI:ProjectKey}"},"summary":"${JWCI:Summary}" ,"description":"${JWCI:Description}","issuetype":{"name":"${JWCI:IssueType}"}}}'
-			   TaskNumber=${PROTASKS:NumberTotal}
-			   ContentType='Content-Type:application/json'/>
-			   </NewBlock>]]>
-			</XMLExtract>
-
+            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK1">
+            <KeyAttributes>
+               <UID> </UID>
+            </KeyAttributes>
+            <Attributes>
+                  <ToolUrl>${JWCI:JiraUrl}</ToolUrl>
+                  <ToolUser>${JWCI:JiraUser}</ToolUser>
+                  <ToolPasswd>${JWCI:JiraPassword}</ToolPasswd>
+                  <PostData>{"fields":{"project":{"key":"${JWCI:ProjectKey}"},"summary":"${JWCI:Summary}" ,"description":"${JWCI:Description}","issuetype":{"name":"${JWCI:IssueType}"}}}</PostData>
+                  <ContentType>Content-Type:application/json</ContentType>
+                  <Lib>CURLPOST</Lib>
+                  <TargetMachine>${JWCI:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+            </Attributes>
+            </UpdateData>
+            
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<ExtUID>${TASK1:UID}</ExtUID>
 			</GenerateData>
 
 			<GenerateData>
