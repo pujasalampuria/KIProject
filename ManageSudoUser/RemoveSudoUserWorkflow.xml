@@ -5,6 +5,9 @@
 	</Description>
 	<BindAttributes>
 		<AttributeFilter Name="NodeType" Mode="string" Value="Machine" />
+		<SubItem Name="Extensions" Alias="EXTS">
+           <TrueFilter/>
+        </SubItem> 
 	</BindAttributes>
 
 	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
@@ -33,23 +36,27 @@
 			<!--Task Remove user from sudoers list. -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
-				TargetPath='${RSUW:TargetPath}'
-				TargetMachine=${RSUW:TargetMachine}
-				TargetState=Created
-				User=${RSUW:User}
-				Host=${RSUW:Host}
-				LinuxUser=${RSUW:LinuxUser}
-				Lib=RUNCOMMAND
-				Command='sudo deluser ${RSUW:LinuxUser} sudo'
-				CurrentState=ReadState
-                TaskNumber=${PROTASKS:NumberTotal}
-				/></NewBlock>]]>
-			</XMLExtract>
-
+            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK1">
+            <KeyAttributes>
+               <UID></UID>
+            </KeyAttributes>
+            <Attributes>
+                  <TargetPath>'${RSUW:TargetPath}'</TargetPath>
+                  <Lib>RemoveSudoUserCmd</Lib>
+                  <Command>'sudo deluser ${RSUW:LinuxUser} sudo'</Command>
+                  <TargetMachine>${RSUW:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <User>${RSUW:User}</User>
+                  <Host>${RSUW:Host}</Host>
+                  <LinuxUser>${RSUW:LinuxUser}</LinuxUser>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+            </Attributes>
+            </UpdateData>
+        
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<ExtUID>${TASK1:UID}</ExtUID>
 			</GenerateData>
 
 			<GenerateData>

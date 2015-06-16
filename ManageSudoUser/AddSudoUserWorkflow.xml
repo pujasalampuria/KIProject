@@ -5,6 +5,9 @@
 	</Description>
 	<BindAttributes>
 		<AttributeFilter Name="NodeType" Mode="string" Value="Machine" />
+		<SubItem Name="Extensions" Alias="EXTS">
+           <TrueFilter/>
+        </SubItem> 
 	</BindAttributes>
 
 	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
@@ -32,43 +35,51 @@
 
 			<!--Task1 Check if sudo package is already installed -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
-
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
-				TargetMachine=${ASUW:TargetMachine}      
-				TargetState=Created
-				User=${ASUW:User}
-				Lib=PKG
-				PKG=sudo
-				Host=${ASUW:Host}
-				CurrentState=ReadState
-				TaskNumber=${PROTASKS:NumberTotal}
-				/> </NewBlock>]]>
-			</XMLExtract>
-
+            
+            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK1">
+            <KeyAttributes>
+               <UID> </UID>
+            </KeyAttributes>
+            <Attributes>
+                  <PKG>sudo</PKG>
+                  <Lib>PKG</Lib>
+                  <TargetMachine>${ASUW:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <User>${ASUW:User}</User>
+                  <Host>${ASUW:Host}</Host>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+            </Attributes>
+            </UpdateData>
+            
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<ExtUID>${TASK1:UID}</ExtUID>
 			</GenerateData>
 
 			<!--Task2 Add user to sudoers list. -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
-				TargetPath='${ASUW:TargetPath}'
-				TargetMachine=${ASUW:TargetMachine}
-				TargetState=Created
-				User=${ASUW:User}
-				Host=${ASUW:Host}
-				Lib=RUNCOMMAND
-				Command='sudo adduser ${ASUW:LinuxUser} sudo'
-				CurrentState=ReadState
-                TaskNumber=${PROTASKS:NumberTotal}
-				/></NewBlock>]]>
-			</XMLExtract>
+
+            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK2">
+            <KeyAttributes>
+               <UID> </UID>
+            </KeyAttributes>
+            <Attributes>
+                  <Lib>AddSudoUserCmd</Lib>
+                  <LinuxUser>${ASUW:LinuxUser}</LinuxUser>
+                  <TargetMachine>${ASUW:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <User>${ASUW:User}</User>
+                  <Host>${ASUW:Host}</Host>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+            </Attributes>
+            </UpdateData>
 
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<ExtUID>${TASK2:UID}</ExtUID>
 			</GenerateData>
 
 			<GenerateData>
