@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<KnowledgeItem ID="OpexSoftware:Ubuntu:AddSudoUserCmd:__core__Ubuntu__AddSudoUserCmd__Created__" xmlns="http://www.arago.de/KiSchema">
-	<Title>__core__Ubuntu__AddSudoUserCmd__Created__</Title>
-	<Description> This KI searches for the DataBlock called __core__Ubuntu__AddSudoUserCmd__Created__ 
+<KnowledgeItem ID="OpexSoftware:Ubuntu:REMOVESUDOUSER:__core__Ubuntu__REMOVESUDOUSER__ReadState__" xmlns="http://www.arago.de/KiSchema">
+	<Title>__core__Ubuntu__REMOVESUDOUSER__ReadState__</Title>
+	<Description> This KI searches for the DataBlock called __core__Ubuntu__REMOVESUDOUSER__ReadState__ 
 		and verifies the CurrentState of the package on the specified Target Machine and writes it back to the node. </Description>
 
 	<BindAttributes>
@@ -15,7 +15,6 @@
 				<AttributeFilter Name="TargetMachine" Mode="exists" />
 				<AttributeFilter Name="User" Mode="exists" />
 				<AttributeFilter Name="Host" Mode="exists" />
-				<AttributeFilter Name="LinuxUser" Mode="exists" />
 			</SubItem>
 		</SubItem>
 	</BindAttributes>
@@ -24,10 +23,10 @@
 
 	<CreateTrigger>
 		<IssueCondition>
-			<Description> Checks Issue for DataBlock __core__Ubuntu__AddSudoUserCmd__ReadState__ 
+			<Description> Checks Issue for DataBlock __core__Ubuntu__REMOVESUDOUSER__ReadState__ 
 				and attribute ExtUID being the same as the machine KI binds to.
 			</Description>
-			<SubItem Name="__core__Ubuntu__AddSudoUserCmd__Created__" Alias="CHECK">
+			<SubItem Name="__core__Ubuntu__REMOVESUDOUSER__ReadState__" Alias="CHECK">
 				<AttributeFilter Name="ExtUID" Mode="string" Value="${TASKS:UID}" />
 				<AttributeFilter Name="Status" Mode="notexists" />
 			</SubItem>
@@ -37,19 +36,19 @@
 			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
 				<Parameter Name="User">${TASKS:User}</Parameter>
 				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
-				<Parameter Name="Command">"sudo adduser ${TASKS:LinuxUser} sudo"</Parameter>
+				<Parameter Name="Command">"sudo grep '^${TASKS:LinuxUser}' /etc/sudoers"</Parameter>
 			</Action>
 
 			<If>
 				<VarCondition VarString="${SYSTEMRC}" Mode="eq" Value="0" />
 				<Then>
-					<SetAttribute Name="TASKS:CurrentState" Value="ReadState" />
+					<SetAttribute Name="TASKS:CurrentState" Value="Created" />
 				</Then>
 				<Else>
-					<Eject>__Failed to execute command ${TASKS:Command}__</Eject>
+					<SetAttribute Name="TASKS:CurrentState" Value="NotRUN" />
 				</Else>
 			</If>
-			<SetAttribute Name="CHECK:Status" Value="created" />
+			<SetAttribute Name="CHECK:Status" Value="CurrentStateRead" />
 		</Activate>
 	</CreateTrigger>
 </KnowledgeItem>

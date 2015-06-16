@@ -66,7 +66,7 @@
                <UID> </UID>
             </KeyAttributes>
             <Attributes>
-                  <Lib>AddSudoUserCmd</Lib>
+                  <Lib>ADDSUDOUSER</Lib>
                   <LinuxUser>${ASUW:LinuxUser}</LinuxUser>
                   <TargetMachine>${ASUW:TargetMachine}</TargetMachine>      
                   <TargetState>Created</TargetState>
