@@ -5,6 +5,9 @@
 	</Description>
 	<BindAttributes>
 		<AttributeFilter Name="NodeType" Mode="string" Value="Machine" />
+		 <SubItem Name="Extensions" Alias="EXTS">
+            <TrueFilter/>
+         </SubItem>
 	</BindAttributes>
 
 	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
@@ -39,45 +42,53 @@
 			<!--Task1 Check if GIT package is there -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
-				TargetMachine=${GCW:TargetMachine}      
-				TargetState=Created
-				User=${GCW:User}
-				Lib=PKG
-				PKG=git
-				Host=${GCW:Host}
-				CurrentState=ReadState
-				TaskNumber=${PROTASKS:NumberTotal}
-				/> </NewBlock>]]>
-			</XMLExtract>
-
+            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK1">
+            <KeyAttributes>
+               <UID> </UID>
+            </KeyAttributes>
+            <Attributes>
+                  <PKG>git</PKG>
+                  <Lib>PKG</Lib>
+                  <TargetMachine>${GCW:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <User>${GCW:User}</User>
+                  <Host>${GCW:Host}</Host>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+            </Attributes>
+            </UpdateData>
+          
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<ExtUID>${TASK1:UID}</ExtUID>
 			</GenerateData>
 
 			<!--Task2 Do the GIT Clone -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
-				TargetPath='${GCW:TargetPath}'
-				TargetMachine=${GCW:TargetMachine}
-				TargetState=Created
-				GitRepoURL='${GCW:GitRepoUrl}'
-				GitRepoName=${GCW:GitRepoName}
-				User=${GCW:User}
-				Host=${GCW:Host}
-				Lib=GITCLONE
-				CurrentState=ReadState
-                TaskNumber=${PROTASKS:NumberTotal}
-                GitBranch=${GCW:GitBranch}
-                GitOrigin=${GCW:GitOrigin}
-				/></NewBlock>]]>
-			</XMLExtract>
+            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK2">
+            <KeyAttributes>
+               <UID> </UID>
+            </KeyAttributes>
+            <Attributes>
+                  <Lib>GITCLONE</Lib>
+                  <TargetMachine>${GCW:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <User>${GCW:User}</User>
+                  <Host>${GCW:Host}</Host>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+                  <TargetPath>${GCW:TargetPath}</TargetPath>
+                  <GitRepoURL>${GCW:GitRepoUrl}</GitRepoURL>
+                  <GitRepoName>${GCW:GitRepoName}</GitRepoName>
+                  <GitBranch>${GCW:GitBranch}</GitBranch>
+                  <GitOrigin>${GCW:GitOrigin}</GitOrigin>
+            </Attributes>
+            </UpdateData>
 
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<ExtUID>${TASK2:UID}</ExtUID>
 			</GenerateData>
 
 			<GenerateData>

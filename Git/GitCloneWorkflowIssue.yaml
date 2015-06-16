@@ -3,7 +3,7 @@ Issue:
   xmlns: http://www.arago.de/IssueSchema
   IssueSubject: 'Clone the given Repository'
   GitCloneWorkflow:
-    GitRepoUrl: 'https://github.com/gkhakare/CoreKIs.git'
+    GitRepoUrl: https://github.com/gkhakare/CoreKIs.git
     TargetMachine: Shree
     TargetState: Created
     TargetPath: /home/shreyas/Downloads

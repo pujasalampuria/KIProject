@@ -5,6 +5,9 @@
 	</Description>
 	<BindAttributes>
 		<AttributeFilter Name="NodeType" Mode="string" Value="Machine" />
+		<SubItem Name="Extensions" Alias="EXTS">
+           <TrueFilter/>
+        </SubItem> 
 	</BindAttributes>
 
 	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
@@ -35,23 +38,27 @@
 
 			<!--Task Do the GIT Pull -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
-
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
-				TargetPath='${GPW:TargetPath}'
-				TargetMachine=${GPW:TargetMachine}
-				TargetState=Created
-				GitRepoName=${GPW:GitRepoName}
-				User=${GPW:User}
-				Host=${GPW:Host}
-				Lib=GITPULL
-				CurrentState=ReadState
-                TaskNumber=${PROTASKS:NumberTotal}
-				/></NewBlock>]]>
-			</XMLExtract>
-
+            
+            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK1">
+            <KeyAttributes>
+               <UID> </UID>
+            </KeyAttributes>
+            <Attributes>
+                  <Lib>GITPULL</Lib>
+                  <TargetMachine>${GPW:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <TargetPath>${GPW:TargetPath}</TargetPath>
+                  <User>${GPW:User}</User>
+                  <Host>${GPW:Host}</Host>
+                  <GitRepoName>${GPW:GitRepoName}</GitRepoName>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+            </Attributes>
+            </UpdateData>
+            
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<ExtUID>${TASK1:UID}</ExtUID>
 			</GenerateData>
 
 			<GenerateData>
