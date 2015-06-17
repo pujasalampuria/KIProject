@@ -73,7 +73,7 @@
 			
 			<IncAttribute Name="PROTASKS:NumberTotal" />
             
-            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK1">
+            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK2">
 			   <KeyAttributes>
                   <UID> </UID>
                </KeyAttributes>
@@ -91,14 +91,14 @@
 
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${TASK1:UID}</ExtUID>
+				<ExtUID>${TASK2:UID}</ExtUID>
 			</GenerateData>
 
 			<!-- TASK3 Install tomcat6-common package -->
 			
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK1">
+            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK3">
 			   <KeyAttributes>
                   <UID> </UID>
                </KeyAttributes>
@@ -116,14 +116,14 @@
 
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${TASK1:UID}</ExtUID>
+				<ExtUID>${TASK3:UID}</ExtUID>
 			</GenerateData>
 
 			<!-- TASK4 Install libtomcat6-java package -->
 			
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK1">
+            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK4">
 			   <KeyAttributes>
                   <UID> </UID>
                </KeyAttributes>
@@ -141,14 +141,14 @@
 
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${TASK1:UID}</ExtUID>
+				<ExtUID>${TASK4:UID}</ExtUID>
 			</GenerateData>
 
 			<!-- TASK5 Install solr-tomcat package -->
 			
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK1">
+            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK5">
 			   <KeyAttributes>
                   <UID> </UID>
                </KeyAttributes>
@@ -166,7 +166,7 @@
 
 			 <GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${TASK1:UID}</ExtUID>
+				<ExtUID>${TASK5:UID}</ExtUID>
 			 </GenerateData>
               
               <!-- Resolve -->
