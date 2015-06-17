@@ -6,9 +6,13 @@
 
 	<BindAttributes>
 		<AttributeFilter Name="NodeType" Mode="string" Value="Machine" />
+		<SubItem Name="Extensions" Alias="EXTS">
+			<TrueFilter />
+		</SubItem>
 		<RelatedNode Mode="predecessor" Alias="PRE">
 			<AttributeFilter Name="NodeType" Mode="string" Value="Application" />
 		</RelatedNode>
+		
 	</BindAttributes>
 
 	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
@@ -21,6 +25,7 @@
 			<SubItem Name="JBossWorkflowHandlePKG" Alias="JWHP">
 				<AttributeFilter Name="TargetApp" Mode="string" Value="${PRE:NodeName}" />
 				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}" />
+				<AttributeFilter Name="JavaJDKBin" Mode="exists" />
 				<AttributeFilter Name="TargetTarFileName" Mode="exists" />
 				<AttributeFilter Name="UntarFolder" Mode="exists" />
 				<AttributeFilter Name="TargetPath" Mode="exists" />
@@ -42,71 +47,105 @@
 			
 			<!-- TASK1 Install openjdk-7-jdk package -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
-
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				PKG=openjdk-7-jdk
-				TargetMachine=${JWHP:TargetMachine}      
-				TargetState=Created
-				User=${JWHP:User}
-				Lib=PKG
-				Host=${JWHP:Host}
-				CurrentState=ReadState
-				TaskNumber=${PROTASKS:NumberTotal}/> 
-				</NewBlock>]]>
-			</XMLExtract>
+			
+			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK1">
+				<KeyAttributes>
+					<UID></UID>
+				</KeyAttributes>
+				<Attributes>
+					<Lib>PKG</Lib>
+					<PKG>${JWHP:JavaJDKBin}</PKG>
+					<TargetMachine>${JWHP:TargetMachine}</TargetMachine>
+					<TargetState>Created</TargetState>
+					<User>${JWHP:User}</User>
+					<Host>${JWHP:Host}</Host>
+					<CurrentState>ReadState</CurrentState>
+					<TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+				</Attributes>
+			</UpdateData>
 
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<ExtUID>${TASK1:UID}</ExtUID>
 			</GenerateData>
 
 			<!-- TASK2 Download JBoss tar file -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
-
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetTarFileName=${JWHP:TargetTarFileName}
-				TargetMachine=${JWHP:TargetMachine}            
-				TargetState=Created
-				TargetPath='${JWHP:TargetPath}'
-				DownloadUrl='${JWHP:DownloadUrl}'
-				Host=${JWHP:Host}
-				User=${JWHP:User}
-				Lib=WGET
-				TaskNumber=${PROTASKS:NumberTotal}
-				CurrentState=ReadState/> 
-				</NewBlock>]]>
-			</XMLExtract>
+			
+			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK2">
+				<KeyAttributes>
+					<UID></UID>
+				</KeyAttributes>
+				<Attributes>
+					<Lib>WGET</Lib>
+					<TargetTarFileName>${JWHP:TargetTarFileName}</TargetTarFileName>
+					<TargetPath>'${JWHP:TargetPath}'</TargetPath>
+					<DownloadUrl>'${JWHP:DownloadUrl}'</DownloadUrl>
+					<TargetMachine>${JWHP:TargetMachine}</TargetMachine>
+					<TargetState>Created</TargetState>
+					<User>${JWHP:User}</User>
+					<Host>${JWHP:Host}</Host>
+					<CurrentState>ReadState</CurrentState>
+					<TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+				</Attributes>
+			</UpdateData>
 
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<ExtUID>${TASK2:UID}</ExtUID>
 			</GenerateData>
 
 			<!-- TASK3 Extract JBoss tar file -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetTarFileName=${JWHP:TargetTarFileName}
-				TargetMachine=${JWHP:TargetMachine}      
-				TargetState=Created
-				UntarFolder=${JWHP:UntarFolder}      
-				TargetPath='${JWHP:TargetPath}'
-				Host=${JWHP:Host}
-				User=${JWHP:User}
-				Lib=TAREXTRACT
-				TaskNumber=${PROTASKS:NumberTotal}
-				CurrentState=ReadState/> 
-				</NewBlock>]]>
-			</XMLExtract>
+			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK3">
+				<KeyAttributes>
+					<UID></UID>
+				</KeyAttributes>
+				<Attributes>
+					<Lib>TAREXTRACT</Lib>
+					<TargetTarFileName>${JWHP:TargetTarFileName}</TargetTarFileName>
+					<UntarFolder>${JWHP:UntarFolder}</UntarFolder>
+					<TargetPath>'${JWHP:TargetPath}'</TargetPath>
+					<TargetMachine>${JWHP:TargetMachine}</TargetMachine>
+					<TargetState>Created</TargetState>
+					<User>${JWHP:User}</User>
+					<Host>${JWHP:Host}</Host>
+					<CurrentState>ReadState</CurrentState>
+					<TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+				</Attributes>
+			</UpdateData>
 
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<ExtUID>${TASK3:UID}</ExtUID>
 			</GenerateData>
 			
-			<!-- To Complete the workflow and to start JBoss Server please run ./standalone.sh -Djboss.bind.address=yourserverip -Djboss.bind.address.management=yourserverip& Command from bin directory -->
-			
+			<!-- TASK4 Extract Start JBoss -->
+			<IncAttribute Name="PROTASKS:NumberTotal" />
 
+			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK4">
+				<KeyAttributes>
+					<UID></UID>
+				</KeyAttributes>
+				<Attributes>
+					<Lib>STARTJBOSSSERVER</Lib>
+					<TargetTarFileName>${JWHP:TargetTarFileName}</TargetTarFileName>
+					<JBossHome>${JWHP:TargetPath}/${JWHP:UntarFolder}</JBossHome>
+					<TargetMachine>${JWHP:TargetMachine}</TargetMachine>
+					<TargetState>Created</TargetState>
+					<User>${JWHP:User}</User>
+					<Host>${JWHP:Host}</Host>
+					<CurrentState>ReadState</CurrentState>
+					<TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+				</Attributes>
+			</UpdateData>
+
+			<GenerateData Alias="VAL">
+				<DataType>Validate</DataType>
+				<ExtUID>${TASK4:UID}</ExtUID>
+			</GenerateData>
+			
 			<GenerateData>
 				<DataType>Resolve</DataType>
 				<Status>checkForResolve</Status>

@@ -1,0 +1,18 @@
+<Linux xmlns="http://mars-o-matic.com" ID="OpexSoftware:Workflow:Machine:Puja"
+	HasAgentType_WatchMe="False" MachineArchitecture="x86_64"
+	NodeType="Machine" MachineClass="Linux" NodeName="Puja">
+	<Dependencies>
+		<Node ID="OpexSoftware:Workflow:Software:JBoss" />
+	</Dependencies>
+    	<CustomerInformation ID="opex.com" Name="opex"/>
+	<Extensions>
+		<ssh User="puja" />
+		<PasswordPolicy MinLength="8" MaxLength="14" CharSet="alnum" />
+	</Extensions>
+	<OSInformation Name="Ubuntu" MajorVersion="14" Vendor="Ubuntu" />
+	<NetworkInformation>
+		<InterfaceInformation>
+			<Interface Name="eth1" IP="172.27.220.23" />
+		</InterfaceInformation>
+	</NetworkInformation>
+</Linux>

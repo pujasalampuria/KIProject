@@ -1,14 +1,15 @@
 Issue:
-  NodeID: OpexSoftware:UseCase:Application:JBoss
+  NodeID: OpexSoftware:Workflow:Application:WebApplication
   xmlns: http://www.arago.de/IssueSchema
   IssueSubject: 'Please Install JBoss Application Server'
   JBossWorkflowHandlePKG:
-    TargetApp: JBoss  
-    TargetMachine: puja 
+    TargetApp: WebApplication
+    TargetMachine: Puja
+	JavaJDKBin: openjdk-7-jdk
     TargetTarFileName: jboss-as-7.1.1.Final.tar.gz
-    TargetPath: /home/puja/JBoss
+    UntarFolder: jboss-as-7.1.1.Final
+    TargetPath: /home/ashish/JBoss
     DownloadUrl: http://download.jboss.org/jbossas/7.1/jboss-as-7.1.1.Final/jboss-as-7.1.1.Final.tar.gz
     TargetState: Created
-    UntarFolder: jboss-as-7.1.1.Final 
-    User: puja
-    Host: 192.168.1.86
+    User: ashish
+    Host: 192.168.1.17
