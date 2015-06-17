@@ -5,6 +5,10 @@
 	</Description>
 
 	  <BindAttributes>
+	   <AttributeFilter Name="NodeType" Mode="string" Value="Machine"/>
+	    <SubItem Name="Extensions" Alias="EXTS">
+            <TrueFilter/>
+        </SubItem>
 		<RelatedNode Mode="predecessor" Alias="PRE">
 			<AttributeFilter Name="NodeType" Mode="string" Value="Application" />
 		</RelatedNode>
@@ -39,120 +43,141 @@
 			<!--Task1 Update the apt Source File -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
-		       TargetMachine=${NRWHP:TargetMachine}      
-			   TargetState=Created
-			   Lib=RUNCOMMAND
-			   Command='sudo sh -c &apos;echo deb http://apt.newrelic.com/debian/ newrelic non-free > /etc/apt/sources.list.d/newrelic.list&apos;'
-			   User=${NRWHP:User}
-			   Host=${NRWHP:Host}
-			   CurrentState=ReadState
-			   TaskNumber=${PROTASKS:NumberTotal}
-			 /> </NewBlock>]]>
-			</XMLExtract>
-
+            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK1">
+            <KeyAttributes>
+               <UID> </UID>
+            </KeyAttributes>
+            <Attributes>
+                  <Lib>NEWRELICUPDATEAPTSRCFILE</Lib>
+                  <TargetMachine>${NRWHP:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <User>${NRWHP:User}</User>
+                  <Host>${NRWHP:Host}</Host>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+            </Attributes>
+            </UpdateData>
+            
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<ExtUID>${TASK1:UID}</ExtUID>
 			</GenerateData>
 
 			<!--Task2 Trust the New Relic GPG key. -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
-		       TargetMachine=${NRWHP:TargetMachine}      
-			   TargetState=Created
-			   Lib=RUNCOMMAND
-			   Command='wget -O- https://download.newrelic.com/548C16BF.gpg | sudo apt-key add -'
-			   User=${NRWHP:User}
-			   Host=${NRWHP:Host}
-			   CurrentState=ReadState
-			   TaskNumber=${PROTASKS:NumberTotal}
-			 /> </NewBlock>]]>
-			</XMLExtract>
-
+            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK2">
+            <KeyAttributes>
+               <UID> </UID>
+            </KeyAttributes>
+            <Attributes>
+                  <Lib>NEWRELICGPGKEY</Lib>
+                  <TargetMachine>${NRWHP:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <User>${NRWHP:User}</User>
+                  <Host>${NRWHP:Host}</Host>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+            </Attributes>
+            </UpdateData>
+            
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<ExtUID>${TASK2:UID}</ExtUID>
 			</GenerateData>
 
 			<!--Task3 Update the local package list. -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
-
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
-		       TargetMachine=${NRWHP:TargetMachine}      
-			   TargetState=Created
-			   Lib=PKGUPDATE
-			   User=${NRWHP:User}
-			   Host=${NRWHP:Host}
-			   CurrentState=ReadState
-			   TaskNumber=${PROTASKS:NumberTotal}
-			 /> </NewBlock>]]>
-			</XMLExtract>
+              
+            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK3">
+            <KeyAttributes>
+               <UID> </UID>
+            </KeyAttributes>
+            <Attributes>
+                  <Lib>PKGUPDATE</Lib>
+                  <TargetMachine>${NRWHP:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <User>${NRWHP:User}</User>
+                  <Host>${NRWHP:Host}</Host>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+            </Attributes>
+            </UpdateData> 
 
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<ExtUID>${TASK3:UID}</ExtUID>
 			</GenerateData>
 
 			<!--Task4 Install Servers -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
-		       TargetMachine=${NRWHP:TargetMachine}      
-			   TargetState=Created
-			   Lib=PKG
-			   PKG=newrelic-sysmond
-			   User=${NRWHP:User}
-			   Host=${NRWHP:Host}
-			   CurrentState=ReadState
-			   TaskNumber=${PROTASKS:NumberTotal}
-			 /> </NewBlock>]]>
-			</XMLExtract>
-
+            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK4">
+            <KeyAttributes>
+               <UID> </UID>
+            </KeyAttributes>
+            <Attributes>
+                  <Lib>PKG</Lib>
+                  <PKG>newrelic-sysmond</PKG>
+                  <TargetMachine>${NRWHP:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <User>${NRWHP:User}</User>
+                  <Host>${NRWHP:Host}</Host>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+            </Attributes>  
+            </UpdateData>
+             
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<ExtUID>${TASK4:UID}</ExtUID>
 			</GenerateData>
 
 			<!--Task5 Configure New Relic license key. -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
-
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
-		       TargetMachine=${NRWHP:TargetMachine}      
-			   TargetState=Created
-			   Lib=RUNCOMMAND
-		       Command='sudo nrsysmond-config --set license_key=${NRWHP:LicenseKey}'
-			   User=${NRWHP:User}
-			   Host=${NRWHP:Host}
-			   CurrentState=ReadState
-			   TaskNumber=${PROTASKS:NumberTotal}
-			 /> </NewBlock>]]>
-			</XMLExtract>
-
+            
+            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK5">
+            <KeyAttributes>
+               <UID> </UID>
+            </KeyAttributes>
+            <Attributes>
+                  <Lib>NEWRELICCONFKEY</Lib>
+                  <LicenseKey>${NRWHP:LicenseKey}</LicenseKey>
+                  <TargetMachine>${NRWHP:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <User>${NRWHP:User}</User>
+                  <Host>${NRWHP:Host}</Host>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+            </Attributes>
+            </UpdateData>
+            
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<ExtUID>${TASK5:UID}</ExtUID>
 			</GenerateData>
 
 			<!--Task6 Start nrsysmond. -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
-
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
-		       TargetMachine=${NRWHP:TargetMachine}      
-			   TargetState=Created
-			   Lib=RUNCOMMAND
-	           Command='sudo /etc/init.d/newrelic-sysmond start'
-			   User=${NRWHP:User}
-			   Host=${NRWHP:Host}
-			   CurrentState=ReadState
-			   TaskNumber=${PROTASKS:NumberTotal}
-			 /> </NewBlock>]]>
-			</XMLExtract>
-
+             
+            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK6">
+            <KeyAttributes>
+               <UID> </UID>
+            </KeyAttributes>
+            <Attributes>
+                  <Lib>NEWRELICSTARTSYSMOND</Lib>
+                  <TargetMachine>${NRWHP:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <User>${NRWHP:User}</User>
+                  <Host>${NRWHP:Host}</Host>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+            </Attributes>
+            </UpdateData>
+            
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<ExtUID>${TASK6:UID}</ExtUID>
 			</GenerateData>
 
 			<GenerateData>

@@ -1,9 +1,9 @@
 Issue:
-  NodeID: OpexSoftware:UseCase:Machine:Shree
+  NodeID: OpexSoftware:Workflow:Application:EnterpriseInfrastructure
   xmlns: http://www.arago.de/IssueSchema
   IssueSubject: 'Install NewRelic'
   NewRelicWorkflowHandlePKG:
-    TargetApp: NewRelic
+    TargetApp: EnterpriseInfrastructure
     TargetMachine: Shree
     TargetState: Created
     LicenseKey: a3668e0c9106f05e31a95dde7dc687fea708051b
