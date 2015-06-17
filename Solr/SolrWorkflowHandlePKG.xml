@@ -6,6 +6,9 @@
 
 	<BindAttributes>
 		<AttributeFilter Name="NodeType" Mode="string" Value="Machine" />
+		<SubItem Name="Extensions" Alias="EXTS">
+          <TrueFilter/>
+        </SubItem>
 		<RelatedNode Mode="predecessor" Alias="PRE">
 			<AttributeFilter Name="NodeType" Mode="string" Value="Application" />
 		</RelatedNode>
@@ -23,6 +26,10 @@
 				<AttributeFilter Name="TargetApp" Mode="string" Value="${PRE:NodeName}" />
 				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}" />
 				<AttributeFilter Name="TargetState" Mode="string" Value="Created" />
+				<AttributeFilter Name="JavaJDKBin" Mode="exists" />
+				<AttributeFilter Name="TomcatPkg" Mode="exists" />
+				<AttributeFilter Name="JavaLibTomcatPkg" Mode="exists" />
+				<AttributeFilter Name="SolrTomcatPkg" Mode="exists" />
 				<AttributeFilter Name="User" Mode="exists" />
 				<AttributeFilter Name="Host" Mode="exists" />
 				<AttributeFilter Name="Status" Mode="notexists" />
@@ -38,105 +45,132 @@
 			</GenerateData>
 
 			<!-- TASK1 Install openjdk-7-jdk package -->
+			
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				PKG=openjdk-7-jdk
-				TargetMachine=${SWHP:TargetMachine}      
-				TargetState=Created
-				User=${SWHP:User}
-				Lib=PKG
-				Host=${SWHP:Host}
-				CurrentState=ReadState
-				TaskNumber=${PROTASKS:NumberTotal}/> 
-				</NewBlock>]]>
-			</XMLExtract>
+            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK1">
+			   <KeyAttributes>
+                  <UID> </UID>
+               </KeyAttributes>
+               <Attributes> 
+				 <PKG>${SWHP:JavaJDKBin}</PKG>
+				 <TargetMachine>${SWHP:TargetMachine}</TargetMachine>      
+				 <TargetState>Created</TargetState>
+				 <User>${SWHP:User}</User>
+				 <Lib>PKG</Lib>
+				 <Host>${SWHP:Host}</Host>
+				 <CurrentState>ReadState</CurrentState>
+				 <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber> 
+			  </Attributes>
+			</UpdateData>
 
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<ExtUID>${TASK1:UID}</ExtUID>
 			</GenerateData>
 
 			<!-- TASK2 Install tomcat6 package -->
+			
 			<IncAttribute Name="PROTASKS:NumberTotal" />
-
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks       
-				PKG=tomcat6
-				TargetMachine=${SWHP:TargetMachine}      
-				TargetState=Created
-				User=${SWHP:User}
-				Lib=PKG
-				Host=${SWHP:Host}
-				CurrentState=ReadState
-				TaskNumber=${PROTASKS:NumberTotal}/> 
-				</NewBlock>]]>
-			</XMLExtract>
+            
+            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK1">
+			   <KeyAttributes>
+                  <UID> </UID>
+               </KeyAttributes>
+               <Attributes>        
+				 <PKG>tomcat6</PKG>
+				 <TargetMachine>${SWHP:TargetMachine}</TargetMachine>      
+				 <TargetState>Created</TargetState>
+				 <User>${SWHP:User}</User>
+				 <Lib>PKG</Lib>
+				 <Host>${SWHP:Host}</Host>
+				 <CurrentState>ReadState</CurrentState>
+				 <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber> 
+			   </Attributes>
+			</UpdateData>
 
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<ExtUID>${TASK1:UID}</ExtUID>
 			</GenerateData>
 
 			<!-- TASK3 Install tomcat6-common package -->
+			
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks       
-				PKG=tomcat6-common
-				TargetMachine=${SWHP:TargetMachine}      
-				TargetState=Created
-				User=${SWHP:User}
-				Lib=PKG
-				Host=${SWHP:Host}
-				CurrentState=ReadState
-				TaskNumber=${PROTASKS:NumberTotal}/> 
-				</NewBlock>]]>
-			</XMLExtract>
+            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK1">
+			   <KeyAttributes>
+                  <UID> </UID>
+               </KeyAttributes>
+               <Attributes>         
+				 <PKG>${SWHP:TomcatPkg}</PKG>
+				 <TargetMachine>${SWHP:TargetMachine}</TargetMachine>      
+				 <TargetState>Created</TargetState>
+				 <User>${SWHP:User}</User>
+				 <Lib>PKG</Lib>
+				 <Host>${SWHP:Host}</Host>
+				 <CurrentState>ReadState</CurrentState>
+				 <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber> 
+			   </Attributes>
+			</UpdateData>
 
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<ExtUID>${TASK1:UID}</ExtUID>
 			</GenerateData>
 
 			<!-- TASK4 Install libtomcat6-java package -->
+			
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks       
-				PKG=libtomcat6-java
-				TargetMachine=${SWHP:TargetMachine}      
-				TargetState=Created
-				User=${SWHP:User}
-				Lib=PKG
-				Host=${SWHP:Host}
-				CurrentState=ReadState
-				TaskNumber=${PROTASKS:NumberTotal}/> 
-				</NewBlock>]]>
-			</XMLExtract>
+            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK1">
+			   <KeyAttributes>
+                  <UID> </UID>
+               </KeyAttributes>
+               <Attributes>        
+				 <PKG>${SWHP:JavaLibTomcatPkg}</PKG>
+				 <TargetMachine>${SWHP:TargetMachine}</TargetMachine>      
+				 <TargetState>Created</TargetState>
+				 <User>${SWHP:User}</User>
+				 <Lib>PKG</Lib>
+				 <Host>${SWHP:Host}</Host>
+				 <CurrentState>ReadState</CurrentState>
+				 <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber> 
+			   </Attributes>
+			</UpdateData>
 
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<ExtUID>${TASK1:UID}</ExtUID>
 			</GenerateData>
 
 			<!-- TASK5 Install solr-tomcat package -->
+			
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks       
-				PKG=solr-tomcat
-				TargetMachine=${SWHP:TargetMachine}      
-				TargetState=Created
-				User=${SWHP:User}
-				Lib=PKG
-				Host=${SWHP:Host}
-				CurrentState=ReadState
-				TaskNumber=${PROTASKS:NumberTotal}/> 
-				</NewBlock>]]>
-			</XMLExtract>
+            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK1">
+			   <KeyAttributes>
+                  <UID> </UID>
+               </KeyAttributes>
+               <Attributes>        
+				 <PKG>${SWHP:SolrTomcatPkg}</PKG>
+				 <TargetMachine>${SWHP:TargetMachine}</TargetMachine>      
+				 <TargetState>Created</TargetState>
+				 <User>${SWHP:User}</User>
+				 <Lib>PKG</Lib>
+				 <Host>${SWHP:Host}</Host>
+				 <CurrentState>ReadState</CurrentState>
+				 <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber> 
+			   </Attributes>
+			 </UpdateData>
 
-			<GenerateData Alias="VAL">
+			 <GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
-			</GenerateData>
-
+				<ExtUID>${TASK1:UID}</ExtUID>
+			 </GenerateData>
+              
+              <!-- Resolve -->
+             
 			<GenerateData>
 				<DataType>Resolve</DataType>
 				<Status>checkForResolve</Status>

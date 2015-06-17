@@ -1,0 +1,8 @@
+<Service xmlns="http://mars-o-matic.com" ID="OpexSoftware:Workflow:Resource:SolrEnterpriseResource" 
+	NodeType="Resource" ResourceClass="Service" NodeName="SolrEnterpriseResource">
+	<Dependencies>
+		<Node ID="OpexSoftware:Workflow:Software:Solr" />
+		<Node ID="OpexSoftware:Workflow:Application:SolrEnterpriseApplication" />
+	</Dependencies>
+	<CustomerInformation ID="opex.com" Name="OpexSoftware" />
+</Service>

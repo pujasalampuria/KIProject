@@ -1,10 +1,14 @@
 Issue:
-  NodeID: OpexSoftware:UseCase:Application:Solr 
+  NodeID: OpexSoftware:Workflow:Application:SolrEnterpriseApplication 
   xmlns: http://www.arago.de/IssueSchema
   IssueSubject: 'Please Install,configure and maintain Solr'
   SolrWorkflowHandlePKG:
-    TargetApp: Solr   
-    TargetMachine: puja 
+    TargetApp: SolrEnterpriseApplication   
+    TargetMachine: Puja 
     TargetState: Created
+    JavaJDKBin: openjdk-7-jdk
+    TomcatPkg: tomcat6-common
+    JavaLibTomcatPkg: libtomcat6-java
+    SolrTomcatPkg: solr-tomcat
     User: puja
     Host: 192.168.1.86

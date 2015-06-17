@@ -1,0 +1,9 @@
+<Solr xmlns="http://mars-o-matic.com" ID="OpexSoftware:Workflow:Software:Solr"
+	NodeType="Software" SoftwareClass="SearchEngines" 
+	SoftwareSubClass="Solr" NodeName="Solr">
+	<Dependencies>
+		<Node ID="OpexSoftware:Workflow:Machine:Puja" />
+		<Node ID="OpexSoftware:Workflow:Resource:SolrEnterpriseResource" />
+	</Dependencies>
+	<CustomerInformation ID="opex.com" Name="opex"/>
+</Solr>
