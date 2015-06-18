@@ -1,0 +1,9 @@
+<AutoPilot xmlns="http://mars-o-matic.com" ID="OpexSoftware:Workflow:Software:AIDE"
+	NodeType="Software" SoftwareClass="Automation" 
+	SoftwareSubClass="AutoPilot" NodeName="AIDE">
+	<Dependencies>
+		<Node ID="OpexSoftware:Workflow:Machine:Puja" />
+		<Node ID="OpexSoftware:Workflow:Resource:AIDEResource" />
+	</Dependencies>
+	<CustomerInformation ID="opex.com" Name="opex"/>
+</AutoPilot>

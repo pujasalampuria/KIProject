@@ -1,0 +1,8 @@
+<Security xmlns="http://mars-o-matic.com" ID="OpexSoftware:Workflow:Resource:AIDEResource" 
+	NodeType="Resource" ResourceClass="Security" NodeName="AIDEResource">
+	<Dependencies>
+		<Node ID="OpexSoftware:Workflow:Software:AIDE" />
+		<Node ID="OpexSoftware:Workflow:Application:AIDEApplication" />
+	</Dependencies>
+	<CustomerInformation ID="opex.com" Name="OpexSoftware" />
+</Security>

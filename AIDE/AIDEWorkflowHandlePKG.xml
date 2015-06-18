@@ -6,6 +6,9 @@
 
 	<BindAttributes>
 		<AttributeFilter Name="NodeType" Mode="string" Value="Machine" />
+		<SubItem Name="Extensions" Alias="EXTS">
+          <TrueFilter/>
+        </SubItem>
 		<RelatedNode Mode="predecessor" Alias="PRE">
 			<AttributeFilter Name="NodeType" Mode="string" Value="Application" />
 		</RelatedNode>
@@ -23,6 +26,7 @@
 				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}" />
 				<AttributeFilter Name="TargetState" Mode="string" Value="Created" />
 				<AttributeFilter Name="EmailID" Mode="exists" />
+				<AttributeFilter Name="DebconfPkg" Mode="exists" />
 				<AttributeFilter Name="User" Mode="exists" />
 				<AttributeFilter Name="Host" Mode="exists" />
 				<AttributeFilter Name="Status" Mode="notexists" />
@@ -38,125 +42,157 @@
 			</GenerateData>
 
 			<!-- TASK1 Install debconf-utils package -->
+			
 			<IncAttribute Name="PROTASKS:NumberTotal" />
+			
+			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK1">
+			   <KeyAttributes>
+                  <UID> </UID>
+               </KeyAttributes>
+               <Attributes>
+			     <PKG>${AWHP:DebconfPkg}</PKG>
+				 <TargetMachine>${AWHP:TargetMachine}</TargetMachine>            
+				 <TargetState>Created</TargetState>
+				 <Host>${AWHP:Host}</Host>
+				 <User>${AWHP:User}</User>
+				 <Lib>PKG</Lib>
+				 <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+				 <CurrentState>ReadState</CurrentState> 
+			   </Attributes>
+			 </UpdateData>
+				
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-			    PKG=debconf-utils
-				TargetMachine=${AWHP:TargetMachine}            
-				TargetState=Created
-				Host=${AWHP:Host}
-				User=${AWHP:User}
-				Lib=PKG
-				TaskNumber=${PROTASKS:NumberTotal}
-				CurrentState=ReadState/> 
-				</NewBlock>]]>
-			</XMLExtract>
-
-			<GenerateData Alias="VAL">
+			 <GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
-			</GenerateData>
+				<ExtUID>${TASK1:UID}</ExtUID>
+			 </GenerateData>
 
 			<!-- TASK2 run the command to update debconf-set-selections with mailname string ${AWHP:EmailID} for AIDE silent install -->
+			
 			<IncAttribute Name="PROTASKS:NumberTotal" />
+             
+             <UpdateData Base="EXTS" Name="Tasks" Alias="TASK2">
+			   <KeyAttributes>
+                  <UID> </UID>
+               </KeyAttributes>
+               <Attributes>
+				  <TargetMachine>${AWHP:TargetMachine}</TargetMachine>            
+				  <TargetState>Created</TargetState>
+				  <Host>${AWHP:Host}</Host>
+				  <User>${AWHP:User}</User>
+				  <EmailID>${AWHP:EmailID}</EmailID>
+				  <Lib>AIDESETMAILNAME</Lib>
+				  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+				  <CurrentState>ReadState</CurrentState> 
+			   </Attributes>
+		     </UpdateData>
+				
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetMachine=${AWHP:TargetMachine}            
-				TargetState=Created
-				Host=${AWHP:Host}
-				User=${AWHP:User}
-				Command='sudo debconf-set-selections <<< &apos;postfix	postfix/mailname	string	${AWHP:EmailID}&apos;'
-				Lib=RUNCOMMAND
-				TaskNumber=${PROTASKS:NumberTotal}
-				CurrentState=ReadState/> 
-				</NewBlock>]]>
-			</XMLExtract>
-
-			<GenerateData Alias="VAL">
+			 <GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
-			</GenerateData>
+				<ExtUID>${TASK2:UID}</ExtUID>
+			 </GenerateData>
 
 			<!-- TASK3 Run command to update debconf-set-selections with main_mailer_type string Internet Site for AIDE silent install -->
+			
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetMachine=${AWHP:TargetMachine}            
-				TargetState=Created
-				Host=${AWHP:Host}
-				User=${AWHP:User}
-				Command='sudo debconf-set-selections <<< &apos;postfix	postfix/main_mailer_type	string	 Internet Site&apos;'
-				Lib=RUNCOMMAND
-				TaskNumber=${PROTASKS:NumberTotal}
-				CurrentState=ReadState/> 
-				</NewBlock>]]>
-			</XMLExtract>
-
-			<GenerateData Alias="VAL">
+            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK3">
+			   <KeyAttributes>
+                  <UID> </UID>
+               </KeyAttributes>
+               <Attributes>
+				 <TargetMachine>${AWHP:TargetMachine}</TargetMachine>            
+				 <TargetState>Created</TargetState>
+				 <Host>${AWHP:Host}</Host>
+				 <User>${AWHP:User}</User>
+				 <Lib>AIDESETMAILERTYPE</Lib>
+				 <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+				 <CurrentState>ReadState</CurrentState> 
+			   </Attributes>
+             </UpdateData>
+             
+			 <GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
-			</GenerateData>
+				<ExtUID>${TASK3:UID}</ExtUID>
+			 </GenerateData>
 
 			<!-- TASK4 Install aide package -->
+			
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-			    PKG=aide
-				TargetMachine=${AWHP:TargetMachine}            
-				TargetState=Created
-				Host=${AWHP:Host}
-				User=${AWHP:User}
-				Lib=PKG
-				TaskNumber=${PROTASKS:NumberTotal}
-				CurrentState=ReadState/> 
-				</NewBlock>]]>
-			</XMLExtract>
+            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK4">
+			   <KeyAttributes>
+                  <UID> </UID>
+               </KeyAttributes>
+               <Attributes> 
+			     <PKG>aide</PKG>
+				 <TargetMachine>${AWHP:TargetMachine}</TargetMachine>            
+				 <TargetState>Created</TargetState>
+				 <Host>${AWHP:Host}</Host>
+				 <User>${AWHP:User}</User>
+				 <Lib>PKG</Lib>
+				 <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+				 <CurrentState>ReadState</CurrentState> 
+			   </Attributes>
+			 </UpdateData>
 
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<ExtUID>${TASK4:UID}</ExtUID>
 			</GenerateData>
 
 			<!-- TASK5 Run command to configure aide -->
+			
 			<IncAttribute Name="PROTASKS:NumberTotal" />
-
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetMachine=${AWHP:TargetMachine}            
-				TargetState=Created
-				Host=${AWHP:Host}
-				User=${AWHP:User}
-				Command='sudo sed -i &apos;s/MAILTO=root/MAILTO=${AWHP:EmailID}/&apos; /etc/default/aide'
-				Lib=RUNCOMMAND
-				TaskNumber=${PROTASKS:NumberTotal}
-				CurrentState=ReadState/> 
-				</NewBlock>]]>
-			</XMLExtract>
+             
+             <UpdateData Base="EXTS" Name="Tasks" Alias="TASK5">
+			   <KeyAttributes>
+                  <UID> </UID>
+               </KeyAttributes>
+               <Attributes>
+				 <TargetMachine>${AWHP:TargetMachine}</TargetMachine>            
+				 <TargetState>Created</TargetState>
+				 <Host>${AWHP:Host}</Host>
+				 <User>${AWHP:User}</User>
+				 <Lib>AIDECONFIGUREEMAILID</Lib>
+				 <EmailID>${AWHP:EmailID}</EmailID>
+				 <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+				 <CurrentState>ReadState</CurrentState> 
+			   </Attributes>
+		     </UpdateData>
 
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<ExtUID>${TASK5:UID}</ExtUID>
 			</GenerateData>
 
 			<!-- TASK6 Run command to update configuration file -->
+			
 			<IncAttribute Name="PROTASKS:NumberTotal" />
-
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetMachine=${AWHP:TargetMachine}            
-				TargetState=Created
-				Host=${AWHP:Host}
-				User=${AWHP:User}
-				Command='sudo update-aide.conf'
-				Lib=RUNCOMMAND
-				TaskNumber=${PROTASKS:NumberTotal}
-				CurrentState=ReadState/> 
-				</NewBlock>]]>
-			</XMLExtract>
+             
+             <UpdateData Base="EXTS" Name="Tasks" Alias="TASK6">
+			   <KeyAttributes>
+                  <UID> </UID>
+               </KeyAttributes>
+               <Attributes>
+				 <TargetMachine>${AWHP:TargetMachine}</TargetMachine>            
+				 <TargetState>Created</TargetState>
+				 <Host>${AWHP:Host}</Host>
+				 <User>${AWHP:User}</User>
+				 <Lib>AIDEUPDATECONFIGFILE</Lib>
+				 <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+				 <CurrentState>ReadState</CurrentState> 
+		       </Attributes>
+		      </UpdateData>
 
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<ExtUID>${TASK6:UID}</ExtUID>
 			</GenerateData>
-
+			
+             <!--  RESOLVE -->
+             
 			<GenerateData>
 				<DataType>Resolve</DataType>
 				<Status>checkForResolve</Status>

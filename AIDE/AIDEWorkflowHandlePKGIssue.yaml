@@ -1,12 +1,13 @@
 Issue:
-  NodeID: OpexSoftware:UseCase:Application:AIDE
+  NodeID: OpexSoftware:Workflow:Application:AIDEApplication
   xmlns: http://www.arago.de/IssueSchema
   IssueSubject: 'Please Install and Configure AIDE'
   AIDEWorkflowHandlePKG:
-    TargetApp: AIDE 
-    TargetMachine: puja 
+    TargetApp: AIDEApplication 
+    TargetMachine: Puja 
     TargetState: Created 
     EmailID: pujasalampuria@gmail.com
     HostName: puja-Inspiron-3542
+    DebconfPkg: debconf-utils
     User: puja
     Host: 192.168.1.86
