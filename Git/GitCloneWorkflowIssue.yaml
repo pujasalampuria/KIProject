@@ -1,5 +1,5 @@
 Issue:
-  NodeID: OpexSoftware:UseCase:Machine:Shree
+  NodeID: OpexSoftware:Workflow:Machine:Shree
   xmlns: http://www.arago.de/IssueSchema
   IssueSubject: 'Clone the given Repository'
   GitCloneWorkflow:

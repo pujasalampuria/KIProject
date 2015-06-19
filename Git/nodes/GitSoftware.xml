@@ -1,0 +1,9 @@
+<AutoPilot xmlns="http://mars-o-matic.com" ID="OpexSoftware:Workflow:Software:GIT"
+	NodeType="Software" SoftwareClass="Automation" 
+	SoftwareSubClass="AutoPilot" NodeName="GIT">
+	<Dependencies>
+		<Node ID="OpexSoftware:Workflow:Machine:Shree" />
+		<Node ID="OpexSoftware:Workflow:Resource:WebResource" />
+	</Dependencies>
+	<CustomerInformation ID="opex.com" Name="opex"/>
+</AutoPilot>
