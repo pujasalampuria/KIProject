@@ -1,10 +1,10 @@
 Issue:
-  NodeID: OpexSoftware:UseCase:Application:ZooKeeper
+  NodeID: OpexSoftware:Workflow:Application:EnterpriseInfrastructure
   xmlns: http://www.arago.de/IssueSchema
   IssueSubject: 'Install and start ZooKeeper'
   ZooKeeperWorkflowHandlePKG:
-    TargetApp: ZooKeeper
-    TargetMachine: Shree
+    TargetApp: EnterpriseInfrastructure
+    TargetMachine: BD
     TargetState: Created
-    User: shreyas
-    Host: 192.168.1.69
+    User: bhagyashree
+    Host: 192.168.1.89

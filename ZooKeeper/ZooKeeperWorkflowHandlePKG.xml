@@ -4,6 +4,10 @@
 		by writing into the MARS model and creating new corresponding DataBlocks in the Issue.
 	</Description>
 	<BindAttributes>
+	<AttributeFilter Name="NodeType" Mode="string" Value="Machine"/>
+		<SubItem Name="Extensions" Alias="EXTS">
+            <TrueFilter/>
+        </SubItem>
 		<RelatedNode Mode="predecessor" Alias="PRE">
 			<AttributeFilter Name="NodeType" Mode="string" Value="Application" />
 		</RelatedNode>
@@ -35,41 +39,54 @@
 			<!--Task1 Install Zookeeper on target Machine -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
-		       TargetMachine=${ZKWHP:TargetMachine}      
-			   TargetState=Created
-			   User=${ZKWHP:User}
-			   Lib=PKG
-			   PKG=zookeeper
-			   Host=${ZKWHP:Host}
-			   CurrentState=ReadState
-			   TaskNumber=${PROTASKS:NumberTotal}
-			 /> </NewBlock>]]>
-			</XMLExtract>
+			
+			
+			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK1">
+                <KeyAttributes>
+                  <UID> </UID>
+                </KeyAttributes>
+                <Attributes>
+                  <Lib>PKG</Lib>
+                  <PKG>zookeeper</PKG>
+                  <TargetMachine>${ZKWHP:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <User>${ZKWHP:User}</User>
+                  <Host>${ZKWHP:Host}</Host>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+                </Attributes>
+             </UpdateData>
+			
 
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+                <ExtUID>${TASK1:UID}</ExtUID>
 			</GenerateData>
 
 			<!--Task2 Start ZooKeeper -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
-		       TargetMachine=${ZKWHP:TargetMachine}      
-			   TargetState=Created
-			   User=${ZKWHP:User}
-			   Lib=RUNCOMMAND
-			   Host=${ZKWHP:Host}
-			   CurrentState=ReadState
-			   Command='sudo /usr/share/zookeeper/bin/zkServer.sh start'
-			   TaskNumber=${PROTASKS:NumberTotal}
-			 /> </NewBlock>]]>
-			</XMLExtract>
+			
+			
+			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK2">
+                <KeyAttributes>
+                  <UID> </UID>
+                </KeyAttributes>
+                <Attributes>
+                  <Lib>ZOOKEEPERZKSERVERSTART</Lib>
+                  <TargetMachine>${ZKWHP:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <User>${ZKWHP:User}</User>
+                  <Host>${ZKWHP:Host}</Host>
+                  <!-- <Command>sudo /usr/share/zookeeper/bin/zkServer.sh start</Command> -->
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+                </Attributes>
+             </UpdateData>
 
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+                <ExtUID>${TASK2:UID}</ExtUID>
 			</GenerateData>
 
 			<GenerateData>
