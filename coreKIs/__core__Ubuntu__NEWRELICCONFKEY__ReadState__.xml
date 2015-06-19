@@ -15,7 +15,6 @@
 				<AttributeFilter Name="TargetMachine" Mode="exists" />
 				<AttributeFilter Name="User" Mode="exists" />
 				<AttributeFilter Name="Host" Mode="exists" />
-			    <AttributeFilter Name="Lib" Mode="exists" />
 			</SubItem>
 		</SubItem>
 	</BindAttributes>
