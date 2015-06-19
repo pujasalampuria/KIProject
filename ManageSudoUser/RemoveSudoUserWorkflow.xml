@@ -43,7 +43,6 @@
             <Attributes>
                   <TargetPath>'${RSUW:TargetPath}'</TargetPath>
                   <Lib>REMOVESUDOUSER</Lib>
-                  <Command>'sudo deluser ${RSUW:LinuxUser} sudo'</Command>
                   <TargetMachine>${RSUW:TargetMachine}</TargetMachine>      
                   <TargetState>Created</TargetState>
                   <User>${RSUW:User}</User>
