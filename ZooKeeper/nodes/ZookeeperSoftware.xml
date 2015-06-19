@@ -1,6 +1,6 @@
 <Zookeeper xmlns="http://mars-o-matic.com" ID="OpexSoftware:Workflow:Software:Zookeeper"
 	NodeType="Software" SoftwareClass="DBMS" 
-	SoftwareSubClass="Zookeeper" NodeName="BD">
+	SoftwareSubClass="Zookeeper" NodeName="Zookeeper">
 	<Dependencies>
 		<Node ID="OpexSoftware:Workflow:Machine:BD" />
 		<Node ID="OpexSoftware:Workflow:Resource:WebResource" />
