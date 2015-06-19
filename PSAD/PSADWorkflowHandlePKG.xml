@@ -6,6 +6,9 @@
 
 	<BindAttributes>
 		<AttributeFilter Name="NodeType" Mode="string" Value="Machine" />
+		<SubItem Name="Extensions" Alias="EXTS">
+          <TrueFilter/>
+        </SubItem>
 		<RelatedNode Mode="predecessor" Alias="PRE">
 			<AttributeFilter Name="NodeType" Mode="string" Value="Application" />
 		</RelatedNode>
@@ -43,211 +46,256 @@
 			</GenerateData>
 
 			<!--TASK1 Download psad tar file -->
+			
 			<IncAttribute Name="PROTASKS:NumberTotal" />
-
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetTarFileName=${PWHP:TargetTarFileName}
-				TargetMachine=${PWHP:TargetMachine}            
-				TargetState=Created
-				TargetPath='${PWHP:TargetPath}'
-				DownloadUrl='${PWHP:DownloadUrl}'
-				Host=${PWHP:Host}
-				User=${PWHP:User}
-				Lib=WGET
-				TaskNumber=${PROTASKS:NumberTotal}
-				CurrentState=ReadState/> 
-				</NewBlock>]]>
-			</XMLExtract>
+             
+             <UpdateData Base="EXTS" Name="Tasks" Alias="TASK1">
+			   <KeyAttributes>
+                  <UID> </UID>
+               </KeyAttributes>
+               <Attributes>  
+				 <TargetTarFileName>${PWHP:TargetTarFileName}</TargetTarFileName>
+				 <TargetMachine>${PWHP:TargetMachine}</TargetMachine>            
+				 <TargetState>Created</TargetState>
+				 <TargetPath>${PWHP:TargetPath}</TargetPath>
+				 <DownloadUrl>${PWHP:DownloadUrl}</DownloadUrl>
+				 <Host>${PWHP:Host}</Host>
+				 <User>${PWHP:User}</User>
+				 <Lib>WGET</Lib>
+				 <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+				 <CurrentState>ReadState</CurrentState> 
+			   </Attributes>
+		    </UpdateData>
 
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<ExtUID>${TASK1:UID}</ExtUID>
 			</GenerateData>
 
 			<!--TASK2 Extract psad tar file -->
+			
 			<IncAttribute Name="PROTASKS:NumberTotal" />
+             
+             <UpdateData Base="EXTS" Name="Tasks" Alias="TASK2">
+			   <KeyAttributes>
+                  <UID> </UID>
+               </KeyAttributes>
+               <Attributes>  
+				 <TargetTarFileName>${PWHP:TargetTarFileName}</TargetTarFileName>
+				 <TargetMachine>${PWHP:TargetMachine}</TargetMachine>      
+			     <TargetPath>${PWHP:TargetPath}</TargetPath>
+			     <UntarFolder>${PWHP:UntarFolder}</UntarFolder>
+				 <Host>${PWHP:Host}</Host>
+				 <User>${PWHP:User}</User>
+				 <Lib>TAREXTRACT</Lib>
+				 <TargetState>Created</TargetState>
+				 <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+				 <CurrentState>ReadState</CurrentState> 
+			   </Attributes>
+		     </UpdateData>
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetTarFileName=${PWHP:TargetTarFileName}
-				TargetMachine=${PWHP:TargetMachine}      
-				TargetState=Created
-				UntarFolder=${PWHP:UntarFolder}      
-				TargetPath='${PWHP:TargetPath}'
-				Host=${PWHP:Host}
-				User=${PWHP:User}
-				Lib=TAREXTRACT
-				TaskNumber=${PROTASKS:NumberTotal}
-				CurrentState=ReadState/> 
-				</NewBlock>]]>
-			</XMLExtract>
-
-			<GenerateData Alias="VAL">
+			 <GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
-			</GenerateData>
+				<ExtUID>${TASK2:UID}</ExtUID>
+		 	 </GenerateData>
 
 			<!-- TASK3 Run Command to rename install.answers.example file -->
+			
 			<IncAttribute Name="PROTASKS:NumberTotal" />
+            
+            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK3">
+			   <KeyAttributes>
+                  <UID> </UID>
+               </KeyAttributes>
+               <Attributes>   
+				 <TargetMachine>${PWHP:TargetMachine}</TargetMachine>            
+				 <TargetState>Created</TargetState>
+				 <Host>${PWHP:Host}</Host>
+				 <User>${PWHP:User}</User>
+				 <Lib>PSADRENAMEINSTALLFILE</Lib>
+				 <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+				 <CurrentState>ReadState</CurrentState> 
+			   </Attributes>
+			</UpdateData>
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetMachine=${PWHP:TargetMachine}            
-				TargetState=Created
-				Host=${PWHP:Host}
-				User=${PWHP:User}
-				Command='cd /tmp/.psad/psad-2.2 &amp;&amp; sudo mv install.answers.example install.answers'
-				Lib=RUNCOMMAND
-				TaskNumber=${PROTASKS:NumberTotal}
-				CurrentState=ReadState/> 
-				</NewBlock>]]>
-			</XMLExtract>
-
-			<GenerateData Alias="VAL">
+			 <GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
-			</GenerateData>
+				<ExtUID>${TASK3:UID}</ExtUID>
+			 </GenerateData>
 
 			<!-- TASK4 Run Command to install psad -->
+			
 			<IncAttribute Name="PROTASKS:NumberTotal" />
-
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetMachine=${PWHP:TargetMachine}            
-				TargetState=Created
-				Host=${PWHP:Host}
-				User=${PWHP:User}
-				Command='cd /tmp/.psad/psad-2.2 &amp;&amp; sudo ./install.pl --Use-answers'
-				Lib=RUNCOMMAND
-				TaskNumber=${PROTASKS:NumberTotal}
-				CurrentState=ReadState/> 
-				</NewBlock>]]>
-			</XMLExtract>
+            
+            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK4">
+			   <KeyAttributes>
+                  <UID> </UID>
+               </KeyAttributes>
+               <Attributes>    
+				 <TargetMachine>${PWHP:TargetMachine}</TargetMachine>            
+				 <TargetState>Created</TargetState>
+				 <Host>${PWHP:Host}</Host>
+				 <User>${PWHP:User}</User>
+				 <Lib>PSADINSTALLPSAD</Lib>
+				 <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+				 <CurrentState>ReadState</CurrentState> 
+			  </Attributes>
+			</UpdateData>
 
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<ExtUID>${TASK4:UID}</ExtUID>
 			</GenerateData>
 
 			<!-- TASK5 Run Command to Configure iptables -->
+			
 			<IncAttribute Name="PROTASKS:NumberTotal" />
-
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetMachine=${PWHP:TargetMachine}      
-				TargetState=Created
-				User=${PWHP:User}
-				Command='sudo iptables -A INPUT -j LOG'
-				Lib=RUNCOMMAND
-				Host=${PWHP:Host}
-				CurrentState=ReadState
-				TaskNumber=${PROTASKS:NumberTotal}/> 
-				</NewBlock>]]>
-			</XMLExtract>
+            
+            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK5">
+			   <KeyAttributes>
+                  <UID> </UID>
+               </KeyAttributes>
+               <Attributes>  
+				 <TargetMachine>${PWHP:TargetMachine}</TargetMachine>      
+				 <TargetState>Created</TargetState>
+				 <User>${PWHP:User}</User>
+				 <Lib>PSADCONFIGIPTABLES</Lib>
+				 <IPtable>INPUT</IPtable>
+				 <Host>${PWHP:Host}</Host>
+				 <CurrentState>ReadState</CurrentState>
+				 <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber> 
+				</Attributes>
+			</UpdateData>
 
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<ExtUID>${TASK5:UID}</ExtUID>
 			</GenerateData>
 
 			<!-- TASK6 Run Command to Configure iptables -->
+			
 			<IncAttribute Name="PROTASKS:NumberTotal" />
-
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetMachine=${PWHP:TargetMachine}      
-				TargetState=Created
-				User=${PWHP:User}
-				Command='sudo iptables -A FORWARD -j LOG'
-				Lib=RUNCOMMAND
-				Host=${PWHP:Host}
-				CurrentState=ReadState
-				TaskNumber=${PROTASKS:NumberTotal}/> 
-				</NewBlock>]]>
-			</XMLExtract>
+            
+            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK6">
+			   <KeyAttributes>
+                  <UID> </UID>
+               </KeyAttributes>
+               <Attributes>   
+				 <TargetMachine>${PWHP:TargetMachine}</TargetMachine>      
+				 <TargetState>Created</TargetState>
+				 <User>${PWHP:User}</User>
+				 <Lib>PSADCONFIGIPTABLES</Lib>
+				 <Host>${PWHP:Host}</Host>
+				 <IPtable>FORWARD</IPtable>
+				 <CurrentState>ReadState</CurrentState>
+				 <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber> 
+				</Attributes>
+			</UpdateData>
 
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<ExtUID>${TASK6:UID}</ExtUID>
 			</GenerateData>
 
 			<!-- TASK7 Run Command to Configure psad -->
+			
 			<IncAttribute Name="PROTASKS:NumberTotal" />
+             
+             <UpdateData Base="EXTS" Name="Tasks" Alias="TASK7">
+			   <KeyAttributes>
+                  <UID> </UID>
+               </KeyAttributes>
+               <Attributes> 
+				  <TargetMachine>${PWHP:TargetMachine}</TargetMachine>      
+				  <TargetState>Created</TargetState>
+				  <User>${PWHP:User}</User>
+				  <Lib>PSADCONFIGSYSLOG</Lib>
+				  <Host>${PWHP:Host}</Host>
+				  <CurrentState>ReadState</CurrentState>
+				  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber> 
+				</Attributes>
+			 </UpdateData>
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetMachine=${PWHP:TargetMachine}      
-				TargetState=Created
-				User=${PWHP:User}
-				Command='sudo sed -i &apos;s/\/var\/log\/messages/\/var\/log\/syslog/g&apos; /etc/psad/psad.conf'
-				Lib=RUNCOMMAND
-				Host=${PWHP:Host}
-				CurrentState=ReadState
-				TaskNumber=${PROTASKS:NumberTotal}/> 
-				</NewBlock>]]>
-			</XMLExtract>
-
-			<GenerateData Alias="VAL">
+			 <GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
-			</GenerateData>
+				<ExtUID>${TASK7:UID}</ExtUID>
+			 </GenerateData>
 
 			<!-- TASK8 Run Command to Configure psad -->
+			
 			<IncAttribute Name="PROTASKS:NumberTotal" />
-
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetMachine=${PWHP:TargetMachine}      
-				TargetState=Created
-				User=${PWHP:User}
-				Command='sudo sed -i &apos;s/root@localhost/${PWHP:EmailID}/&apos; /etc/psad/psad.conf'
-				Lib=RUNCOMMAND
-				Host=${PWHP:Host}
-				CurrentState=ReadState
-				TaskNumber=${PROTASKS:NumberTotal}/> 
-				</NewBlock>]]>
-			</XMLExtract>
+             
+             <UpdateData Base="EXTS" Name="Tasks" Alias="TASK8">
+			   <KeyAttributes>
+                  <UID> </UID>
+               </KeyAttributes>
+               <Attributes>  
+				  <TargetMachine>${PWHP:TargetMachine}</TargetMachine>      
+				  <TargetState>Created</TargetState>
+				  <User>${PWHP:User}</User>
+				  <Lib>PSADCONFIGEMAILID</Lib>
+				  <Host>${PWHP:Host}</Host>
+				  <EmailID>${PWHP:EmailID}</EmailID>
+				  <CurrentState>ReadState</CurrentState>
+				  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber> 
+				</Attributes>
+			 </UpdateData>
 
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<ExtUID>${TASK8:UID}</ExtUID>
 			</GenerateData>
 
 			<!-- TASK9 Run Command to Configure psad -->
+			
 			<IncAttribute Name="PROTASKS:NumberTotal" />
-
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetMachine=${PWHP:TargetMachine}      
-				TargetState=Created
-				User=${PWHP:User}
-				Command='sudo sed -i &apos;s/_CHANGEME_/${PWHP:HostName}/&apos; /etc/psad/psad.conf'
-				Lib=RUNCOMMAND
-				Host=${PWHP:Host}
-				CurrentState=ReadState
-				TaskNumber=${PROTASKS:NumberTotal}/> 
-				</NewBlock>]]>
-			</XMLExtract>
+             
+             <UpdateData Base="EXTS" Name="Tasks" Alias="TASK9">
+			   <KeyAttributes>
+                  <UID> </UID>
+               </KeyAttributes>
+               <Attributes>   
+				  <TargetMachine>${PWHP:TargetMachine}</TargetMachine>      
+				  <TargetState>Created</TargetState>
+				  <User>${PWHP:User}</User>
+				  <Lib>PSADCONFIGHOSTNAME</Lib>
+				  <HostName>${PWHP:HostName}</HostName>
+				  <Host>${PWHP:Host}</Host>
+				  <CurrentState>ReadState</CurrentState>
+				  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber> 
+				</Attributes>
+			 </UpdateData>
 
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<ExtUID>${TASK9:UID}</ExtUID>
 			</GenerateData>
 
 			<!-- TASK10 Run Command to Configure psad -->
+			
 			<IncAttribute Name="PROTASKS:NumberTotal" />
-
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetMachine=${PWHP:TargetMachine}      
-				TargetState=Created
-				User=${PWHP:User}
-				Command='sudo sed -i &apos;s/IGNORE_PORTS                NONE;/IGNORE_PORTS                ports_or_range_to_ignore;/&apos; /etc/psad/psad.conf'
-				Lib=RUNCOMMAND
-				Host=${PWHP:Host}
-				CurrentState=ReadState
-				TaskNumber=${PROTASKS:NumberTotal}/> 
-				</NewBlock>]]>
-			</XMLExtract>
+             
+             <UpdateData Base="EXTS" Name="Tasks" Alias="TASK10">
+			   <KeyAttributes>
+                  <UID> </UID>
+               </KeyAttributes>
+               <Attributes>  
+				  <TargetMachine>${PWHP:TargetMachine}</TargetMachine>      
+				  <TargetState>Created</TargetState>
+				  <User>${PWHP:User}</User>
+				  <Lib>PSADCONFIGPORT</Lib>
+				  <Host>${PWHP:Host}</Host>
+				  <CurrentState>ReadState</CurrentState>
+				  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber> 
+				</Attributes>
+			 </UpdateData>
 
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<ExtUID>${TASK10:UID}</ExtUID>
 			</GenerateData>
-
-            <!-- To Complete the workflow please run 1.psad -R to restart the service 2. psad --sig-update to  update psad's signature definitions 3. psad -H -->
-
+	
+	
 			<GenerateData>
 				<DataType>Resolve</DataType>
 				<Status>checkForResolve</Status>
