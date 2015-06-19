@@ -1,0 +1,8 @@
+<Service xmlns="http://mars-o-matic.com" ID="OpexSoftware:Workflow:Resource:WebResource" 
+NodeType="Resource" ResourceClass="Service" NodeName="WebResource">
+	<Dependencies>
+		<Node ID="OpexSoftware:Workflow:Software:MongoDB" />
+        <Node ID="OpexSoftware:Workflow:Application:EnterpriseInfrastructure" />
+	</Dependencies>
+	<CustomerInformation ID="opex.com" Name="OpexSoftware" />
+</Service>

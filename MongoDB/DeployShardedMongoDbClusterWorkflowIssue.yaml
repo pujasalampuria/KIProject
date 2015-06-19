@@ -1,10 +1,10 @@
 Issue:
-  NodeID: OpexSoftware:UseCase:Application:MongoDB
+  NodeID: OpexSoftware:Workflow:Application:EnterpriseInfrastructure
   xmlns: http://www.arago.de/IssueSchema
   IssueSubject: 'Deploying Sharded MongoDB cluster'
   DeployShardedMongoDbClusterWorkflow: 
-    TargetApp: MongoDB  
-    TargetMachine: Zeeshan
+    TargetApp: EnterpriseInfrastructure  
+    TargetMachine: BD
     TargetState: Created
     Path: /data/configdb
     ConfigServerHostnames: localhost 
@@ -13,5 +13,5 @@ Issue:
     ShardName: localhost
     MongosPort: 27017
     Database: TempDB  
-    User: zeeshan
-    Host: 192.168.1.90
+    User: bhagyashree
+    Host: 192.168.1.89
