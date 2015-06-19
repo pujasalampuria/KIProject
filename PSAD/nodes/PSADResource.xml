@@ -1,0 +1,8 @@
+<Security xmlns="http://mars-o-matic.com" ID="OpexSoftware:Workflow:Resource:PSADResource" 
+	NodeType="Resource" ResourceClass="Security" NodeName="PSADResource">
+	<Dependencies>
+		<Node ID="OpexSoftware:Workflow:Software:PSAD" />
+		<Node ID="OpexSoftware:Workflow:Application:PSADApplication" />
+	</Dependencies>
+	<CustomerInformation ID="opex.com" Name="OpexSoftware" />
+</Security>

@@ -1,0 +1,8 @@
+<ApplicationSuite xmlns="http://mars-o-matic.com" ID="OpexSoftware:Workflow:Application:PSADApplication" 
+	NodeType="Application" ApplicationClass="Enterprise" 
+	ApplicationSubClass="ApplicationSuite" NodeName="PSADApplication">
+	<Dependencies>
+		<Node ID="OpexSoftware:Workflow:Resource:PSADResource" />
+	</Dependencies>
+	<CustomerInformation ID="opex.com" Name="OpexSoftware" />
+</ApplicationSuite>

@@ -1,10 +1,10 @@
 Issue:
-  NodeID: OpexSoftware:UseCase:Application:PSAD
+  NodeID: OpexSoftware:Workflow:Application:PSADApplication
   xmlns: http://www.arago.de/IssueSchema
   IssueSubject: 'Please Install and Configure PSAD'
   PSADWorkflowHandlePKG:
-    TargetApp: PSAD 
-    TargetMachine: puja 
+    TargetApp: PSADApplication
+    TargetMachine: Puja 
     TargetState: Created 
     EmailID: pujasalampuria@gmail.com
     HostName: puja-Inspiron-3542
