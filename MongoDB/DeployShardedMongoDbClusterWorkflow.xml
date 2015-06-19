@@ -5,6 +5,9 @@
 	</Description>
 	<BindAttributes>
 		<AttributeFilter Name="NodeType" Mode="string" Value="Machine"/>
+		<SubItem Name="Extensions" Alias="EXTS">
+            <TrueFilter/>
+        </SubItem>
 		<RelatedNode Mode="predecessor" Alias="PRE">
 			<AttributeFilter Name="NodeType" Mode="string" Value="Application"/>
 		</RelatedNode> 
@@ -26,7 +29,8 @@
         		<AttributeFilter Name="ConfigServerPort" Mode="exists"/>
         		<AttributeFilter Name="MongosPort" Mode="exists"/>
         		<AttributeFilter Name="User" Mode="exists"/>
-        		<AttributeFilter Name="Host" Mode="exists"/>
+        		<AttributeFilter Name="User" Mode="exists"/>
+        		<AttributeFilter Name="Path" Mode="exists"/>
 				<AttributeFilter Name="TargetState" Mode="string" Value="Created"/>
 				<AttributeFilter Name="Status" Mode="notexists"/>
 			</SubItem>
@@ -43,42 +47,56 @@
            <!-- TASK1 Start config server Database Instance-->
 			<IncAttribute Name="PROTASKS:NumberTotal"/>
 			
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetMachine=${DSMDCW:TargetMachine}            
-				TargetState=Created
-				Host=${DSMDCW:Host}
-				User=${DSMDCW:User}
-				Lib=RUNCOMMAND
-				Command='sudo mkdir -p ${DSMDCW:Path} &amp;&amp; sudo mongod --fork --syslog --configsvr --dbpath ${DSMDCW:Path} --port ${DSMDCW:ConfigServerPort}'
-				TaskNumber=${PROTASKS:NumberTotal}
-				CurrentState=ReadState/> 
-				</NewBlock>]]>
-			</XMLExtract> 
+
+			
+			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK1">
+                <KeyAttributes>
+                  <UID> </UID>
+                </KeyAttributes>
+                <Attributes>
+                  <Lib>MONGODBSETDIR</Lib>
+                  <TargetMachine>${DSMDCW:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <User>${DSMDCW:User}</User>
+                  <Host>${DSMDCW:Host}</Host>
+                  <Path>${DSMDCW:Path}</Path>
+                  <ConfigServerPort>${DSMDCW:ConfigServerPort}</ConfigServerPort>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+                </Attributes>
+             </UpdateData>
       
 			<GenerateData Alias="VAL"> 
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+                <ExtUID>${TASK1:UID}</ExtUID>
 			</GenerateData>
       
       		<!-- TASK2 Start the Mongos instance -->
 			<IncAttribute Name="PROTASKS:NumberTotal"/>
 			
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetMachine=${DSMDCW:TargetMachine}      
-				TargetState=Created      
-				ConfigServerHostnames=${DSMDCW:ConfigServerHostnames}
-				Host=${DSMDCW:Host}
-				User=${DSMDCW:User}
-				Lib=RUNCOMMAND
-				Command='sudo mongos --fork --syslog --configdb ${DSMDCW:ConfigServerHostnames}:${DSMDCW:ConfigServerPort}'
-				TaskNumber=${PROTASKS:NumberTotal}
-				CurrentState=ReadState/> 
-				</NewBlock>]]>
-			</XMLExtract> 
+
+			
+			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK2">
+                <KeyAttributes>
+                  <UID> </UID>
+                </KeyAttributes>
+                <Attributes>
+                  <Lib>MONGODBCONFIGURE</Lib>
+                  <TargetMachine>${DSMDCW:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <User>${DSMDCW:User}</User>
+                  <Host>${DSMDCW:Host}</Host>
+                  <ConfigServerPort>${DSMDCW:ConfigServerPort}</ConfigServerPort>
+                  <ConfigServerHostnames>${DSMDCW:ConfigServerHostnames}</ConfigServerHostnames>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+                </Attributes>
+             </UpdateData>
+			
       
 			<GenerateData Alias="VAL"> 
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+                <ExtUID>${TASK2:UID}</ExtUID>
 			</GenerateData>
 			
 			<GenerateData> 
@@ -88,3 +106,4 @@
 		</Activate>
 	</CreateTrigger>
 </KnowledgeItem>
+
