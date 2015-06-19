@@ -36,7 +36,7 @@
 			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
 				<Parameter Name="User">${TASKS:User}</Parameter>
 				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
-				<Parameter Name="Command">"ls /tmp/${TASKS:UID}"</Parameter>
+				<Parameter Name="Command">"ps -ef | grep -v grep | grep /usr/share/java/zookeeper.jar"</Parameter>
 			</Action>
 
 			<If>
