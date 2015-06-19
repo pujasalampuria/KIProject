@@ -81,7 +81,11 @@
 				  <Host>${AWHP:Host}</Host>
 				  <User>${AWHP:User}</User>
 				  <EmailID>${AWHP:EmailID}</EmailID>
-				  <Lib>AIDESETMAILNAME</Lib>
+				  <Lib>SETDEBCONFSELECTION</Lib>
+				  <Param1>postfix</Param1>
+				  <Param2>postfix/mailname</Param2>
+				  <Param3>string</Param3>
+				  <Param4>${AWHP:EmailID}</Param4>
 				  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
 				  <CurrentState>ReadState</CurrentState> 
 			   </Attributes>
@@ -106,7 +110,11 @@
 				 <TargetState>Created</TargetState>
 				 <Host>${AWHP:Host}</Host>
 				 <User>${AWHP:User}</User>
-				 <Lib>AIDESETMAILERTYPE</Lib>
+				  <Lib>SETDEBCONFSELECTION</Lib>
+				  <Param1>postfix</Param1>
+				  <Param2>postfix/main_mailer_type</Param2>
+				  <Param3>string</Param3>
+				  <Param4>Internet Site</Param4>
 				 <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
 				 <CurrentState>ReadState</CurrentState> 
 			   </Attributes>
