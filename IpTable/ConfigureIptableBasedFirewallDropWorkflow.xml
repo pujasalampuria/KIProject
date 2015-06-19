@@ -6,6 +6,9 @@
 
 	<BindAttributes>
 		<AttributeFilter Name="NodeType" Mode="string" Value="Machine"/>
+		<SubItem Name="Extensions" Alias="EXTS">
+      		<TrueFilter/>
+    	</SubItem>
 		<RelatedNode Mode="predecessor" Alias="PRE">
 			<AttributeFilter Name="NodeType" Mode="string" Value="Application"/>
 		</RelatedNode>
@@ -41,105 +44,132 @@
 			 <!-- TASK1 Allow all current connections stay online -->
 			<IncAttribute Name="PROTASKS:NumberTotal"/>
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetMachine=${CIBFDW:TargetMachine}      
-				TargetState=Created				
-				Host=${CIBFDW:Host}
-				User=${CIBFDW:User}
-				TaskNumber=${PROTASKS:NumberTotal}
-				Lib=RUNCOMMAND
-				Command='sudo iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT'
-				CurrentState=ReadState
-				/> </NewBlock>]]>
-			</XMLExtract> 
+			
+			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK1">
+		        <KeyAttributes>
+		          <UID> </UID>
+		        </KeyAttributes>
+		        <Attributes>
+		          <LIB>IPTABLESACCEPT</LIB>
+		          <TargetMachine>${CIBFDW:TargetMachine}</TargetMachine>      
+		          <TargetState>Created</TargetState>
+		          <User>${CIBFDW:User}</User>
+		          <Host>${CIBFDW:Host}</Host>
+		          <!-- <Command>'sudo iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT'</Command> -->
+		          <CurrentState>ReadState</CurrentState>
+		          <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+		        </Attributes>
+     		</UpdateData>
+	
       
 			<GenerateData Alias="VAL"> 
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<ExtUID>${TASK1:UID}</ExtUID>
 			</GenerateData>	
 			
 			<!-- TASK2 Accepting connection on a specified port -->
 			<IncAttribute Name="PROTASKS:NumberTotal"/>
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetMachine=${CIBFDW:TargetMachine}      
-				TargetState=Created				
-				Host=${CIBFDW:Host}
-				User=${CIBFDW:User}
-				ProtocolOfRule=${CIBFDW:ProtocolOfRule}
-				PortToDrop=${CIBFDW:PortToDrop}
-				TaskNumber=${PROTASKS:NumberTotal}
-				Lib=RUNCOMMAND
-				Command='sudo iptables -A INPUT -p ${CIBFDW:ProtocolOfRule} --dport ${CIBFDW:PortToDrop} -j DROP'
-				CurrentState=ReadState
-				/> </NewBlock>]]>
-			</XMLExtract> 
+			
+			
+			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK2">
+		        <KeyAttributes>
+		          <UID> </UID>
+		        </KeyAttributes>
+		        <Attributes>
+		          <LIB>IPTABLESDROPPORT</LIB>
+		          <TargetMachine>${CIBFDW:TargetMachine}</TargetMachine>      
+		          <TargetState>Created</TargetState>
+		          <User>${CIBFDW:User}</User>
+		          <Host>${CIBFDW:Host}</Host>
+		          <ProtocolOfRule>${CIBFDW:ProtocolOfRule}</ProtocolOfRule>
+		          <PortToDrop>${CIBFDW:PortToDrop}</PortToDrop>
+		          <!-- <Command>sudo iptables -A INPUT -p ${CIBFDW:ProtocolOfRule} --dport ${CIBFDW:PortToDrop} -j DROP</Command> -->
+		          <CurrentState>ReadState</CurrentState>
+		          <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+		        </Attributes>
+     		</UpdateData>
       
 			<GenerateData Alias="VAL"> 
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<ExtUID>${TASK2:UID}</ExtUID>
 			</GenerateData>	
 			
 			<!-- TASK3 Bringing the new rule first in the List -->
 			<IncAttribute Name="PROTASKS:NumberTotal"/>
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetMachine=${CIBFDW:TargetMachine}      
-				TargetState=Created				
-				Host=${CIBFDW:Host}
-				User=${CIBFDW:User}
-				ProtocolOfRule=${CIBFDW:ProtocolOfRule}
-				PortToDrop=${CIBFDW:PortToDrop}
-				TaskNumber=${PROTASKS:NumberTotal}
-				Lib=RUNCOMMAND
-				Command='sudo iptables -I INPUT 1 -i lo -j DROP'
-				CurrentState=ReadState
-				/> </NewBlock>]]>
-			</XMLExtract> 
+			
+			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK3">
+        		<KeyAttributes>
+          		<UID> </UID>
+        		</KeyAttributes>
+        		<Attributes>
+		          <LIB>IPTABLESCOMMANDDROP</LIB>
+		          <TargetMachine>${CIBFDW:TargetMachine}</TargetMachine>      
+		          <TargetState>Created</TargetState>
+		          <User>${CIBFDW:User}</User>
+		          <Host>${CIBFDW:Host}</Host>
+		          <ProtocolOfRule>${CIBFDW:ProtocolOfRule}</ProtocolOfRule>
+		          <PortToDrop>${CIBFDW:PortToDrop}</PortToDrop>
+		          <!-- <Command>'sudo iptables -I INPUT 1 -i lo -j DROP'</Command> -->
+		          <CurrentState>ReadState</CurrentState>
+		          <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+		        </Attributes>
+		     </UpdateData>
       
 			<GenerateData Alias="VAL"> 
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<ExtUID>${TASK3:UID}</ExtUID>
 			</GenerateData>	
 			
 			<!-- TASK4 Install a iptables-persistence -->
 			<IncAttribute Name="PROTASKS:NumberTotal"/>
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetMachine=${CIBFDW:TargetMachine}      
-				TargetState=Created				
-				Host=${CIBFDW:Host}
-				User=${CIBFDW:User}
-				TaskNumber=${PROTASKS:NumberTotal}
-				Lib=PKG
-				PKG=iptables-persistent
-				CurrentState=ReadState
-				/> </NewBlock>]]>
-			</XMLExtract> 
+			
+			
+			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK4">
+		        <KeyAttributes>
+		          <UID> </UID>
+		        </KeyAttributes>
+			        <Attributes>
+			          <LIB>PKG</LIB>
+			          <PKG>iptables-persistent</PKG>
+			          <TargetMachine>${CIBFDW:TargetMachine}</TargetMachine>      
+			          <TargetState>Created</TargetState>
+			          <User>${CIBFDW:User}</User>
+			          <Host>${CIBFDW:Host}</Host>
+			          <CurrentState>ReadState</CurrentState>
+			          <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+			        </Attributes>
+     		</UpdateData>
       
 			<GenerateData Alias="VAL"> 
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<ExtUID>${TASK4:UID}</ExtUID>
 			</GenerateData>	
       
       		<!-- TASK5 Start the iptables-persistence service -->
 			<IncAttribute Name="PROTASKS:NumberTotal"/>
-
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetMachine=${CIBFDW:TargetMachine}      
-				TargetState=Created				
-				Host=${CIBFDW:Host}
-				User=${CIBFDW:User}
-				TaskNumber=${PROTASKS:NumberTotal}
-				Lib=RUNCOMMAND
-				Command='sudo service iptables-persistent start'
-				CurrentState=ReadState
-				/> </NewBlock>]]>
-			</XMLExtract> 
+			
+            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK5">
+		        <KeyAttributes>
+		          <UID> </UID>
+		        </KeyAttributes>
+		        <Attributes>
+		          <LIB>IPTABLESCOMMANDSTART</LIB>
+		          <TargetMachine>${CIBFDW:TargetMachine}</TargetMachine>      
+		          <TargetState>Created</TargetState>
+		          <User>${CIBFDW:User}</User>
+		          <Host>${CIBFDW:Host}</Host>
+		          <Command>sudo service iptables-persistent start</Command>
+		          <CurrentState>ReadState</CurrentState>
+		          <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+		        </Attributes>
+     		</UpdateData>
       
 			<GenerateData Alias="VAL"> 
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<ExtUID>${TASK5:UID}</ExtUID>
 			</GenerateData>	
       		
 			<GenerateData> 

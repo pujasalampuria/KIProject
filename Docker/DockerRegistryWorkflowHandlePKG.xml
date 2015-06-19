@@ -4,6 +4,10 @@
 		MARS model and creating new corresponding DataBlocks in the Issue.
 	</Description>
 	<BindAttributes>
+		<AttributeFilter Name="NodeType" Mode="string" Value="Machine" />
+		<SubItem Name="Extensions" Alias="EXTS">
+			<TrueFilter/>
+		</SubItem>
 		<RelatedNode Mode="predecessor" Alias="PRE">
 			<AttributeFilter Name="NodeType" Mode="string" Value="Application" />
 		</RelatedNode>
@@ -37,243 +41,310 @@
 			<!--Task1 Install preequisites package build-essential -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
-				TargetMachine=${DRWHP:TargetMachine}      
-				TargetState=Created
-				User=${DRWHP:User}
-				Lib=PKG
-				Host=${DRWHP:Host}
-				PKG='build-essential'
-				CurrentState=ReadState
-				TaskNumber=${PROTASKS:NumberTotal}
-				/> </NewBlock>]]>
-			</XMLExtract>
+			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK1">
+                <KeyAttributes>
+                  <UID> </UID>
+                </KeyAttributes>
+                <Attributes>
+                  <TargetMachine>${DRWHP:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <Lib>PKG</Lib>
+                  <Host>${DRWHP:Host}</Host>
+                  <PKG>build-essential</PKG>
+                  <User>${DRWHP:User}</User>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+                </Attributes>
+             </UpdateData>
 
 			<GenerateData Alias="VAL">
-				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<DataType>ProcessingTasks</DataType>
+				<CurrentTask>1</CurrentTask>
 			</GenerateData>
 			
 			<!--Task2 Install preequisites package python-dev -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
-				TargetMachine=${DRWHP:TargetMachine}      
-				TargetState=Created
-				User=${DRWHP:User}
-				Lib=PKG
-				Host=${DRWHP:Host}
-				PKG='python-dev'
-				CurrentState=ReadState
-				TaskNumber=${PROTASKS:NumberTotal}
-				/> </NewBlock>]]>
-			</XMLExtract>
-
+			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK2">
+                <KeyAttributes>
+                  <UID> </UID>
+                </KeyAttributes>
+                <Attributes>
+                  <TargetMachine>${DRWHP:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <Lib>PKG</Lib>
+                  <Host>${DRWHP:Host}</Host>
+                  <PKG>python-dev</PKG>
+                  <User>${DRWHP:User}</User>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+                </Attributes>
+             </UpdateData>
+			
 			<GenerateData Alias="VAL">
-				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<DataType>ProcessingTasks</DataType>
+				<CurrentTask>2</CurrentTask>
 			</GenerateData>
 
 			<!--Task3 Install preequisites package libevent-dev -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
-				TargetMachine=${DRWHP:TargetMachine}      
-				TargetState=Created
-				User=${DRWHP:User}	
-				Lib=PKG
-				Host=${DRWHP:Host}
-				PKG='libevent-dev'
-				CurrentState=ReadState
-				TaskNumber=${PROTASKS:NumberTotal}
-				/> </NewBlock>]]>
-			</XMLExtract>
+			
+			
+			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK3">
+                <KeyAttributes>
+                  <UID> </UID>
+                </KeyAttributes>
+                <Attributes>
+                  <TargetMachine>${DRWHP:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <Lib>PKG</Lib>
+                  <Host>${DRWHP:Host}</Host>
+                  <PKG>libevent-dev</PKG>
+                  <User>${DRWHP:User}</User>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+                </Attributes>
+             </UpdateData>
 
 			<GenerateData Alias="VAL">
-				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<DataType>ProcessingTasks</DataType>
+				<CurrentTask>3</CurrentTask>
 			</GenerateData>
 
 			<!--Task4 Install preequisites package python-pip -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
-				TargetMachine=${DRWHP:TargetMachine}      
-				TargetState=Created
-				User=${DRWHP:User}
-				Lib=PKG
-				Host=${DRWHP:Host}
-				PKG='python-pip'
-				CurrentState=ReadState
-				TaskNumber=${PROTASKS:NumberTotal}
-				/> </NewBlock>]]>
-			</XMLExtract>
+			
+			
+			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK4">
+                <KeyAttributes>
+                  <UID> </UID>
+                </KeyAttributes>
+                <Attributes>
+                  <TargetMachine>${DRWHP:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <Lib>PKG</Lib>
+                  <Host>${DRWHP:Host}</Host>
+                  <PKG>python-pip</PKG>
+                  <User>${DRWHP:User}</User>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+                </Attributes>
+             </UpdateData>
 
 			<GenerateData Alias="VAL">
-				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<DataType>ProcessingTasks</DataType>
+				<CurrentTask>4</CurrentTask>
 			</GenerateData>
 
 			<!--Task5 Install preequisites package liblzma-dev -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
-				TargetMachine=${DRWHP:TargetMachine}      
-				TargetState=Created
-				User=${DRWHP:User}
-				Lib=PKG
-				Host=${DRWHP:Host}
-				PKG='liblzma-dev'
-				CurrentState=ReadState
-				TaskNumber=${PROTASKS:NumberTotal}
-				/> </NewBlock>]]>
-			</XMLExtract>
+			
+			
+			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK5">
+                <KeyAttributes>
+                  <UID> </UID>
+                </KeyAttributes>
+                <Attributes>
+                  <TargetMachine>${DRWHP:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <Lib>PKG</Lib>
+                  <Host>${DRWHP:Host}</Host>
+                  <PKG>liblzma-dev</PKG>
+                  <User>${DRWHP:User}</User>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+                </Attributes>
+             </UpdateData>
+			
 
 			<GenerateData Alias="VAL">
-				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<DataType>ProcessingTasks</DataType>
+				<CurrentTask>5</CurrentTask>
 			</GenerateData>
 
 			<!--Task6 Install prerequisites package swig -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
-				TargetMachine=${DRWHP:TargetMachine}      
-				TargetState=Created
-				User=${DRWHP:User}
-				Lib=PKG
-				Host=${DRWHP:Host}
-				PKG=swig
-				CurrentState=ReadState
-				TaskNumber=${PROTASKS:NumberTotal}
-				/> </NewBlock>]]>
-			</XMLExtract>
+			
+			
+			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK6">
+                <KeyAttributes>
+                  <UID> </UID>
+                </KeyAttributes>
+                <Attributes>
+                  <TargetMachine>${DRWHP:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <Lib>PKG</Lib>
+                  <Host>${DRWHP:Host}</Host>
+                  <PKG>swig</PKG>
+                  <User>${DRWHP:User}</User>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+                </Attributes>
+             </UpdateData>
 
 			<GenerateData Alias="VAL">
-				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<DataType>ProcessingTasks</DataType>
+				<CurrentTask>6</CurrentTask>
 			</GenerateData>
 
 			<!--Task7 Install docker-registry -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
-				TargetMachine=${DRWHP:TargetMachine}      
-				TargetState=Created
-				User=${DRWHP:User}
-				Host=${DRWHP:Host}
-				Lib=RUNCOMMAND
-				Command='sudo pip install docker-registry'
-				CurrentState=ReadState
-				TaskNumber=${PROTASKS:NumberTotal}
-				/> </NewBlock>]]>
-			</XMLExtract>
+			
+			
+			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK7">
+                <KeyAttributes>
+                  <UID> </UID>
+                </KeyAttributes>
+                <Attributes>
+                  <TargetMachine>${DRWHP:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <Lib>DOCKERREGISTRYINSTALL</Lib>
+                  <Host>${DRWHP:Host}</Host>
+                  <!-- <Command>sudo pip install docker-registry</Command> -->
+                  <User>${DRWHP:User}</User>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+                </Attributes>
+             </UpdateData>
 
 			<GenerateData Alias="VAL">
-				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<DataType>ProcessingTasks</DataType>
+				<CurrentTask>7</CurrentTask>
 			</GenerateData>
 
 			<!--Task8 Create config.yml file and a directory in var named docker-registry -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
-				TargetMachine=${DRWHP:TargetMachine}      
-				TargetState=Created
-				User=${DRWHP:User}
-				Host=${DRWHP:Host}
-				Lib=RUNCOMMAND
-				Command='cd /usr/local/lib/python2.7/dist-packages/docker_registry/lib/../../config/ &amp;&amp; sudo cp config_sample.yml config.yml &amp;&amp; sudo mkdir /var/docker-registry'
-				CurrentState=ReadState
-				TaskNumber=${PROTASKS:NumberTotal}
-				/> </NewBlock>]]>
-			</XMLExtract>
+			
+			
+			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK8">
+                <KeyAttributes>
+                  <UID> </UID>
+                </KeyAttributes>
+                <Attributes>
+                  <TargetMachine>${DRWHP:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <Lib>DOCKERREGISTRYSET</Lib>
+                  <Host>${DRWHP:Host}</Host>
+                  <!-- <Command>cd /usr/local/lib/python2.7/dist-packages/docker_registry/lib/../../config/ &amp;&amp; sudo cp config_sample.yml config.yml &amp;&amp; sudo mkdir /var/docker-registry</Command> -->
+                  <User>${DRWHP:User}</User>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+                </Attributes>
+             </UpdateData>
 
 			<GenerateData Alias="VAL">
-				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<DataType>ProcessingTasks</DataType>
+				<CurrentTask>8</CurrentTask>
 			</GenerateData>
 
 			<!--Task9 Replace the /tmp to /var in config.yml -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
-				TargetMachine=${DRWHP:TargetMachine}      
-				TargetState=Created
-				User=${DRWHP:User}
-				Host=${DRWHP:Host}
-				Lib=RUNCOMMAND
-				Command='sudo sed -i &apos;s/\/var/\/tmp/&apos; /usr/local/lib/python2.7/dist-packages/docker_registry/lib/../../config/config.yml'
-				CurrentState=ReadState
-				TaskNumber=${PROTASKS:NumberTotal}
-				/> </NewBlock>]]>
-			</XMLExtract>
+			
+			
+			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK9">
+                <KeyAttributes>
+                  <UID> </UID>
+                </KeyAttributes>
+                <Attributes>
+                  <TargetMachine>${DRWHP:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <Lib>DOCKERREGISTRYCONFIG</Lib>
+                  <Host>${DRWHP:Host}</Host>
+                  <User>${DRWHP:User}</User>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+                </Attributes>
+             </UpdateData>
+             
 
 			<GenerateData Alias="VAL">
-				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<DataType>ProcessingTasks</DataType>
+				<CurrentTask>9</CurrentTask>
 			</GenerateData>
 
 			<!--Task10 Create a directory named docker-registry -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
-				TargetMachine=${DRWHP:TargetMachine}      
-				TargetState=Created
-				User=${DRWHP:User}
-				Host=${DRWHP:Host}
-				Lib=RUNCOMMAND
-				Command='sudo mkdir -p /var/log/docker-registry'
-				CurrentState=ReadState
-				TaskNumber=${PROTASKS:NumberTotal}
-				/> </NewBlock>]]>
-			</XMLExtract>
+			
+			
+			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK10">
+                <KeyAttributes>
+                  <UID> </UID>
+                </KeyAttributes>
+                <Attributes>
+                  <TargetMachine>${DRWHP:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <Lib>DOCKERREGISTRYCREATERDIR</Lib>
+                  <Host>${DRWHP:Host}</Host>
+                  <User>${DRWHP:User}</User>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+                </Attributes>
+             </UpdateData>
 
 			<GenerateData Alias="VAL">
-				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<DataType>ProcessingTasks</DataType>
+				<CurrentTask>10</CurrentTask>
 			</GenerateData>
 
 			<!--Task11 Write a file to execute the command -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
-				TargetMachine=${DRWHP:TargetMachine}      
-				TargetState=Created
-				User=${DRWHP:User}
-				Lib=FILECREATE
-				FilePath='/etc/init'
-				FileName=docker-registry.conf
-				FileContent='description &apos;Docker Registry&apos; \nstart on runlevel [2345] \nstop on runlevel [016] \nrespawn \nrespawn limit 10 5 \nscript \nexec gunicorn --access-logfile /var/log/docker-registry/access.log --error-logfile /var/log/docker-registry/server.log -k gevent --max-requests 100 --graceful-timeout 3600 -t 3600 -b localhost:5000 -w 8 docker_registry.wsgi:application \nend script'
-				Host=${DRWHP:Host}
-				CurrentState=ReadState
-				TaskNumber=${PROTASKS:NumberTotal}/> 
-				/> </NewBlock>]]>
-			</XMLExtract>
+			
+			
+			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK11">
+                <KeyAttributes>
+                  <UID> </UID>
+                </KeyAttributes>
+                <Attributes>
+                  <TargetMachine>${DRWHP:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <Lib>FILECREATE</Lib>
+                  <FilePath>/etc/init</FilePath>
+                  <FileName>docker-registry.conf</FileName>
+                  <FileContent>description &apos;Docker Registry&apos; \nstart on runlevel [2345] \nstop on runlevel [016] \nrespawn \nrespawn limit 10 5 \nscript \nexec gunicorn --access-logfile /var/log/docker-registry/access.log --error-logfile /var/log/docker-registry/server.log -k gevent --max-requests 100 --graceful-timeout 3600 -t 3600 -b localhost:5000 -w 8 docker_registry.wsgi:application \nend script</FileContent>
+                  <Host>${DRWHP:Host}</Host>
+                  <User>${DRWHP:User}</User>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+                </Attributes>
+             </UpdateData>
 
 			<GenerateData Alias="VAL">
-				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<DataType>ProcessingTasks</DataType>
+				<CurrentTask>11</CurrentTask>
 			</GenerateData>
 
 			<!--Task12 Start the docker-registry service -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks
-				TargetMachine=${DRWHP:TargetMachine}      
-				TargetState=Created
-				User=${DRWHP:User}
-				Host=${DRWHP:Host}
-				Lib=RUNCOMMAND
-				Command='sudo service docker-registry start'
-				CurrentState=ReadState
-				TaskNumber=${PROTASKS:NumberTotal}
-				/> </NewBlock>]]>
-			</XMLExtract>
+			
+			
+			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK12">
+                <KeyAttributes>
+                  <UID> </UID>
+                </KeyAttributes>
+                <Attributes>
+                  <TargetMachine>${DRWHP:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <Lib>DOCKERREGISTRYSTART</Lib>
+                  <Host>${DRWHP:Host}</Host>
+                  <User>${DRWHP:User}</User>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+                </Attributes>
+             </UpdateData>
 
 			<GenerateData Alias="VAL">
-				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<DataType>ProcessingTasks</DataType>
+				<CurrentTask>12</CurrentTask>
 			</GenerateData>
 
 			<GenerateData>

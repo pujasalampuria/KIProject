@@ -1,0 +1,9 @@
+<AutoPilot xmlns="http://mars-o-matic.com" ID="OpexSoftware:Workflow:Software:Docker"
+	NodeType="Software" SoftwareClass="Automation" 
+	SoftwareSubClass="AutoPilot" NodeName="Docker">
+	<Dependencies>
+		<Node ID="OpexSoftware:Workflow:Machine:BD" />
+		<Node ID="OpexSoftware:Workflow:Resource:WebResource" />
+	</Dependencies>
+	<CustomerInformation ID="opex.com" Name="opex"/>
+</AutoPilot>
