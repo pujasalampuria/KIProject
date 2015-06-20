@@ -1,9 +1,9 @@
-<JIRA xmlns="http://mars-o-matic.com" ID="OpexSoftware:Workflow:Software:Zookeeper"
-+	NodeType="Software" SoftwareClass="ITSM" 
-+	SoftwareSubClass="JIRA" NodeName="JIRA">
-+	<Dependencies>
-+		<Node ID="OpexSoftware:Workflow:Machine:BD" />
-+		<Node ID="OpexSoftware:Workflow:Resource:WebResource" />
-+	</Dependencies>
-+	<CustomerInformation ID="opex.com" Name="opex"/>
-+</JIRA>
+<AutoPilot xmlns="http://mars-o-matic.com" ID="OpexSoftware:Workflow:Software:IpTable"
+	NodeType="Software" SoftwareClass="Automation" 
+	SoftwareSubClass="AutoPilot" NodeName="IpTable">
+	<Dependencies>
+		<Node ID="OpexSoftware:Workflow:Machine:BD" />
+		<Node ID="OpexSoftware:Workflow:Resource:WebResource" />
+	</Dependencies>
+	<CustomerInformation ID="opex.com" Name="opex"/>
+</AutoPilot>

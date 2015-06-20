@@ -1,8 +1,8 @@
-<EnterpriseInfrastructure xmlns="http://mars-o-matic.com" ID="OpexSoftware:Workflow:Application:ZooKeeper" 
-	NodeType="Application" NodeName="ZooKeeper" 
-	ApplicationClass="Enterprise" ApplicationSubClass="EnterpriseInfrastructure">
+<EnterpriseInfrastructure xmlns="http://mars-o-matic.com" ID="OpexSoftware:Workflow:Application:EnterpriseInfrastructure" 
+NodeType="Application" ApplicationClass="Enterprise" 
+ApplicationSubClass="EnterpriseInfrastructure" NodeName="EnterpriseInfrastructure">
 	<Dependencies>
-		<Node ID="OpexSoftware:UseCase:Machine:BD" />
+		<Node ID="OpexSoftware:Workflow:Resource:WebResource" />
 	</Dependencies>
 	<CustomerInformation ID="opex.com" Name="OpexSoftware" />
 </EnterpriseInfrastructure>

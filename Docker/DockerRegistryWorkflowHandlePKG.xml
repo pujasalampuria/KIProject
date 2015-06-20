@@ -63,7 +63,7 @@
 			</GenerateData>
 			
 			<!--Task2 Install preequisites package python-dev -->
-			<IncAttribute Name="PROTASKS:NumberTotal" />
+			<!-- <IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK2">
                 <KeyAttributes>
@@ -84,10 +84,10 @@
 			<GenerateData Alias="VAL">
 				<DataType>ProcessingTasks</DataType>
 				<CurrentTask>2</CurrentTask>
-			</GenerateData>
+			</GenerateData> -->
 
 			<!--Task3 Install preequisites package libevent-dev -->
-			<IncAttribute Name="PROTASKS:NumberTotal" />
+			<!-- <IncAttribute Name="PROTASKS:NumberTotal" />
 
 			
 			
@@ -110,10 +110,10 @@
 			<GenerateData Alias="VAL">
 				<DataType>ProcessingTasks</DataType>
 				<CurrentTask>3</CurrentTask>
-			</GenerateData>
+			</GenerateData> -->
 
 			<!--Task4 Install preequisites package python-pip -->
-			<IncAttribute Name="PROTASKS:NumberTotal" />
+			<!-- <IncAttribute Name="PROTASKS:NumberTotal" />
 
 			
 			
@@ -136,14 +136,14 @@
 			<GenerateData Alias="VAL">
 				<DataType>ProcessingTasks</DataType>
 				<CurrentTask>4</CurrentTask>
-			</GenerateData>
+			</GenerateData> -->
 
 			<!--Task5 Install preequisites package liblzma-dev -->
-			<IncAttribute Name="PROTASKS:NumberTotal" />
+			<!--<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			
 			
-			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK5">
+			 <UpdateData Base="EXTS" Name="Tasks" Alias="TASK5">
                 <KeyAttributes>
                   <UID> </UID>
                 </KeyAttributes>
@@ -163,14 +163,14 @@
 			<GenerateData Alias="VAL">
 				<DataType>ProcessingTasks</DataType>
 				<CurrentTask>5</CurrentTask>
-			</GenerateData>
+			</GenerateData> -->
 
 			<!--Task6 Install prerequisites package swig -->
-			<IncAttribute Name="PROTASKS:NumberTotal" />
+			<!--<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			
 			
-			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK6">
+			 <UpdateData Base="EXTS" Name="Tasks" Alias="TASK6">
                 <KeyAttributes>
                   <UID> </UID>
                 </KeyAttributes>
@@ -189,10 +189,10 @@
 			<GenerateData Alias="VAL">
 				<DataType>ProcessingTasks</DataType>
 				<CurrentTask>6</CurrentTask>
-			</GenerateData>
+			</GenerateData> -->
 
 			<!--Task7 Install docker-registry -->
-			<IncAttribute Name="PROTASKS:NumberTotal" />
+			<!-- <IncAttribute Name="PROTASKS:NumberTotal" />
 
 			
 			
@@ -205,7 +205,7 @@
                   <TargetState>Created</TargetState>
                   <Lib>DOCKERREGISTRYINSTALL</Lib>
                   <Host>${DRWHP:Host}</Host>
-                  <!-- <Command>sudo pip install docker-registry</Command> -->
+                  <Command>sudo pip install docker-registry</Command>
                   <User>${DRWHP:User}</User>
                   <CurrentState>ReadState</CurrentState>
                   <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
@@ -215,10 +215,10 @@
 			<GenerateData Alias="VAL">
 				<DataType>ProcessingTasks</DataType>
 				<CurrentTask>7</CurrentTask>
-			</GenerateData>
+			</GenerateData> -->
 
 			<!--Task8 Create config.yml file and a directory in var named docker-registry -->
-			<IncAttribute Name="PROTASKS:NumberTotal" />
+			<!-- <IncAttribute Name="PROTASKS:NumberTotal" />
 
 			
 			
@@ -231,7 +231,7 @@
                   <TargetState>Created</TargetState>
                   <Lib>DOCKERREGISTRYSET</Lib>
                   <Host>${DRWHP:Host}</Host>
-                  <!-- <Command>cd /usr/local/lib/python2.7/dist-packages/docker_registry/lib/../../config/ &amp;&amp; sudo cp config_sample.yml config.yml &amp;&amp; sudo mkdir /var/docker-registry</Command> -->
+                  <Command>cd /usr/local/lib/python2.7/dist-packages/docker_registry/lib/../../config/ &amp;&amp; sudo cp config_sample.yml config.yml &amp;&amp; sudo mkdir /var/docker-registry</Command>
                   <User>${DRWHP:User}</User>
                   <CurrentState>ReadState</CurrentState>
                   <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
@@ -241,10 +241,10 @@
 			<GenerateData Alias="VAL">
 				<DataType>ProcessingTasks</DataType>
 				<CurrentTask>8</CurrentTask>
-			</GenerateData>
+			</GenerateData> -->
 
 			<!--Task9 Replace the /tmp to /var in config.yml -->
-			<IncAttribute Name="PROTASKS:NumberTotal" />
+			<!-- <IncAttribute Name="PROTASKS:NumberTotal" />
 
 			
 			
@@ -267,10 +267,10 @@
 			<GenerateData Alias="VAL">
 				<DataType>ProcessingTasks</DataType>
 				<CurrentTask>9</CurrentTask>
-			</GenerateData>
+			</GenerateData> -->
 
 			<!--Task10 Create a directory named docker-registry -->
-			<IncAttribute Name="PROTASKS:NumberTotal" />
+			<!-- <IncAttribute Name="PROTASKS:NumberTotal" />
 
 			
 			
@@ -292,10 +292,10 @@
 			<GenerateData Alias="VAL">
 				<DataType>ProcessingTasks</DataType>
 				<CurrentTask>10</CurrentTask>
-			</GenerateData>
+			</GenerateData> -->
 
 			<!--Task11 Write a file to execute the command -->
-			<IncAttribute Name="PROTASKS:NumberTotal" />
+			<!-- <IncAttribute Name="PROTASKS:NumberTotal" />
 
 			
 			
@@ -309,7 +309,7 @@
                   <Lib>FILECREATE</Lib>
                   <FilePath>/etc/init</FilePath>
                   <FileName>docker-registry.conf</FileName>
-                  <FileContent>description &apos;Docker Registry&apos; \nstart on runlevel [2345] \nstop on runlevel [016] \nrespawn \nrespawn limit 10 5 \nscript \nexec gunicorn --access-logfile /var/log/docker-registry/access.log --error-logfile /var/log/docker-registry/server.log -k gevent --max-requests 100 --graceful-timeout 3600 -t 3600 -b localhost:5000 -w 8 docker_registry.wsgi:application \nend script</FileContent>
+                  <FileContent>description &apos;Docker Registry&apos; \nstart on runlevel [2345] \nstop on runlevel [016] \nrespawn \nrespawn limit 10 5 \nscript \nexec gunicorn -*-access-logfile /var/log/docker-registry/access.log -*-error-logfile /var/log/docker-registry/server.log -k gevent -*-max-requests 100 -*-graceful-timeout 3600 -t 3600 -b localhost:5000 -w 8 docker_registry.wsgi:application \nend script</FileContent>
                   <Host>${DRWHP:Host}</Host>
                   <User>${DRWHP:User}</User>
                   <CurrentState>ReadState</CurrentState>
@@ -320,10 +320,10 @@
 			<GenerateData Alias="VAL">
 				<DataType>ProcessingTasks</DataType>
 				<CurrentTask>11</CurrentTask>
-			</GenerateData>
+			</GenerateData> -->
 
 			<!--Task12 Start the docker-registry service -->
-			<IncAttribute Name="PROTASKS:NumberTotal" />
+			<!-- <IncAttribute Name="PROTASKS:NumberTotal" />
 
 			
 			
@@ -350,7 +350,7 @@
 			<GenerateData>
 				<DataType>Resolve</DataType>
 				<Status>checkForResolve</Status>
-			</GenerateData>
+			</GenerateData> -->
 		</Activate>
 	</CreateTrigger>
 </KnowledgeItem>

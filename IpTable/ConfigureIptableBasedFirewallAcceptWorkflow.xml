@@ -1,4 +1,4 @@
-.<KnowledgeItem ID="OpexSofware:IpTable:ConfigureIptableBasedFirewallAcceptWorkflow" xmlns="http://www.arago.de/KiSchema">
+<KnowledgeItem ID="OpexSofware:IpTable:ConfigureIptableBasedFirewallAcceptWorkflow" xmlns="http://www.arago.de/KiSchema">
     <Title>ConfigureIptableBasedFirewallAcceptWorkflow</Title>
     <Description>Initiates the workflow for configuring Iptable-based Firewall for accepting connection on 
             particular port by writing into the MARS model and creating new corresponding DataBlocks in the Issue.
@@ -54,7 +54,6 @@
                   <TargetState>Created</TargetState>
                   <User>${CIBFW:User}</User>
                   <Host>${CIBFW:Host}</Host>
-                  <!-- <Command>sudo iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT</Command> -->
                   <CurrentState>ReadState</CurrentState>
                   <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
                 </Attributes>
@@ -68,7 +67,7 @@
             <!-- TASK2 Accepting connection on a specified port -->
             <IncAttribute Name="PROTASKS:NumberTotal"/>
 
-            
+		
               <UpdateData Base="EXTS" Name="Tasks" Alias="TASK2">
                 <KeyAttributes>
                   <UID> </UID>
@@ -80,8 +79,7 @@
                   <User>${CIBFW:User}</User>
                   <Host>${CIBFW:Host}</Host>
                   <ProtocolOfRule>${CIBFW:ProtocolOfRule}</ProtocolOfRule>
-                  <PortToDrop>${CIBFW:PortToDrop}</PortToDrop>
-                  <!-- <Command>sudo iptables -A INPUT -p ${CIBFW:ProtocolOfRule} --dport ${CIBFW:PortToAccept} -j ACCEPT</Command> -->
+                  <PortToAccept>${CIBFW:PortToAccept}</PortToAccept>
                   <CurrentState>ReadState</CurrentState>
                   <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
                 </Attributes>
@@ -107,8 +105,6 @@
                   <TargetState>Created</TargetState>
                   <User>${CIBFW:User}</User>
                   <Host>${CIBFW:Host}</Host>
-                  <ProtocolOfRule>${CIBFW:ProtocolOfRule}</ProtocolOfRule>
-                  <PortToAccept>${CIBFW:PortToAccept}</PortToAccept>
                   <!-- <Command>sudo iptables -I INPUT 1 -i lo -j ACCEPT</Command> -->
                   <CurrentState>ReadState</CurrentState>
                   <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
@@ -161,8 +157,6 @@
                   <TargetState>Created</TargetState>
                   <User>${CIBFW:User}</User>
                   <Host>${CIBFW:Host}</Host>
-                  <ProtocolOfRule>${CIBFW:ProtocolOfRule}</ProtocolOfRule>
-                  <PortToAccept>${CIBFW:PortToAccept}</PortToAccept>
                   <!-- <Command>sudo service iptables-persistent start</Command> -->
                   <CurrentState>ReadState</CurrentState>
                   <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>

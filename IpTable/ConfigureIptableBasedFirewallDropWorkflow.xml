@@ -55,7 +55,6 @@
 		          <TargetState>Created</TargetState>
 		          <User>${CIBFDW:User}</User>
 		          <Host>${CIBFDW:Host}</Host>
-		          <!-- <Command>'sudo iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT'</Command> -->
 		          <CurrentState>ReadState</CurrentState>
 		          <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
 		        </Attributes>
@@ -84,7 +83,6 @@
 		          <Host>${CIBFDW:Host}</Host>
 		          <ProtocolOfRule>${CIBFDW:ProtocolOfRule}</ProtocolOfRule>
 		          <PortToDrop>${CIBFDW:PortToDrop}</PortToDrop>
-		          <!-- <Command>sudo iptables -A INPUT -p ${CIBFDW:ProtocolOfRule} --dport ${CIBFDW:PortToDrop} -j DROP</Command> -->
 		          <CurrentState>ReadState</CurrentState>
 		          <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
 		        </Attributes>
