@@ -1,0 +1,62 @@
+<KnowledgeItem ID="OpexSofware:Reboot:RebootPrepWorkflow" xmlns="http://www.arago.de/KiSchema">
+	<Title>RebootPrepWorkflow</Title>
+	<Description>Initiates the workflow for creating DataBase on Postgre by writing into the 
+		MARS model and creating new corresponding DataBlocks in the Issue.
+	</Description>
+
+	<BindAttributes>
+		<AttributeFilter Name="NodeType" Mode="string" Value="Machine"/>
+		
+	</BindAttributes>
+
+	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+
+	<CreateTrigger>
+		<IssueCondition>
+			<Description>Searches for an Issue with DataBlock PostgreSQLDBManagementWorkflow 
+				and the necessary information for successful completion of workflow.
+			</Description>
+			<SubItem Name="RebootPrep" Alias="PSDMW">
+				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}"/>
+				<AttributeFilter Name="User" Mode="exists"/>
+				<AttributeFilter Name="Host" Mode="exists"/>
+				<AttributeFilter Name="TargetState" Mode="string" Value="Created"/>
+				<AttributeFilter Name="Status" Mode="notexists"/>
+			</SubItem>
+		</IssueCondition>
+
+		<Activate>
+			<SetAttribute Name="PSDMW:Status" Value="WorkflowStarted" /> 
+
+			<GenerateData Alias="PROTASKS"> 
+				<DataType>ProcessingTasks</DataType>
+				<CurrentTask>1</CurrentTask> 
+			</GenerateData>
+
+			 <!-- TASK1 Create DB in PostgresSQL -->
+			<IncAttribute Name="PROTASKS:NumberTotal"/>
+
+			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
+				TargetMachine=${PSDMW:TargetMachine}      
+				TargetState=Created				
+				Host=${PSDMW:Host}
+				User=${PSDMW:User}
+				Operation=${PSDMW:Operation}
+				TaskNumber=${PROTASKS:NumberTotal}
+				Lib=REBOOT
+				CurrentState=ReadState
+				/> </NewBlock>]]>
+			</XMLExtract> 
+      
+			<GenerateData Alias="VAL"> 
+				<DataType>Validate</DataType>
+				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+			</GenerateData>
+			
+			<GenerateData> 
+				<DataType>Resolve</DataType>
+				<Status>checkForResolve</Status>
+			</GenerateData>	
+		</Activate>
+	</CreateTrigger>
+</KnowledgeItem>

@@ -1,0 +1,10 @@
+Issue:
+  NodeID: OpexSoftware:UseCase:Machine:BD
+  xmlns: http://www.arago.de/IssueSchema
+  IssueSubject: 'Reboot machine'
+  RebootPrep:
+    TargetMachine: BD
+    TargetState: Created
+    Operation: Reboot
+    User: ashish
+    Host: 192.168.1.52
