@@ -45,11 +45,6 @@
 
 			<!-- TASK1: Install HA Proxy -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
-
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				/>
-				/> </NewBlock>]]>
-			</XMLExtract>
 			
 			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK1">
                 <KeyAttributes>
@@ -106,13 +101,13 @@
                 <Attributes>
 					<TargetMachine>${HAPWHP:TargetMachine}</TargetMachine>            
 					<TargetState>Created</TargetState>
-					<Target_path>"/var/lib/tomcat7/webapps"</Target_path>
-					<Download_url>'${HAPWHP:WARUrl}'</Download_url>
+					<TargetPath>"/var/lib/tomcat7/webapps"</TargetPath>
+					<DownloadUrl>${HAPWHP:WARUrl}</DownloadUrl>
 					<Host>${HAPWHP:Host}</Host>
 					<User>${HAPWHP:User}</User>
 					<Lib>WGET</Lib>
 					<CurrentState>ReadState</CurrentState>
-					<TargetTar_FileName>${HAPWHP:TargetTar_FileName}</TargetTar_FileName>
+					<TargetTarFileName>${HAPWHP:TargetTar_FileName}</TargetTarFileName>
 					<TaskNumber>${PROTASKS:NumberTotal}</TaskNumber> 	
                 </Attributes>
             </UpdateData>
@@ -132,13 +127,13 @@
                 <Attributes>
 					<TargetMachine>${HAPWHP:TargetMachine}</TargetMachine>            
 					<TargetState>Created</TargetState>
-					<Target_path>"/etc/default"</Target_path>
-					<Download_url>'${HAPWHP:ProxyEnableUrl}'</Download_url>
+					<TargetPath>"/etc/default"</TargetPath>
+					<DownloadUrl>'${HAPWHP:ProxyEnableUrl}'</DownloadUrl>
 					<Host>${HAPWHP:Host}</Host>
 					<User>${HAPWHP:User}</User>
 					<Lib>WGET</Lib>
 					<CurrentState>ReadState</CurrentState>
-					<TargetTar_FileName>haproxy</TargetTar_FileName>
+					<TargetTarFileName>haproxy</TargetTarFileName>
 					<TaskNumber>${PROTASKS:NumberTotal}</TaskNumber> 	
                 </Attributes>
             </UpdateData>
@@ -158,13 +153,13 @@
                 <Attributes>
 					<TargetMachine>${HAPWHP:TargetMachine}</TargetMachine>            
 					<TargetState>Created</TargetState>
-					<Target_path>"/etc/haproxy"</Target_path>
-					<Download_url>'${HAPWHP:ProxyConfigURL}'</Download_url>
+					<TargetPath>"/etc/haproxy"</TargetPath>
+					<DownloadUrl>'${HAPWHP:ProxyConfigURL}'</DownloadUrl>
 					<Host>${HAPWHP:Host}</Host>
 					<User>${HAPWHP:User}</User>
 					<Lib>WGET</Lib>
 					<CurrentState>ReadState</CurrentState>
-					<TargetTar_FileName>haproxy.cfg</TargetTar_FileName>
+					<TargetTarFileName>haproxy.cfg</TargetTarFileName>
 					<TaskNumber>${PROTASKS:NumberTotal}</TaskNumber> 	
                 </Attributes>
             </UpdateData>
@@ -189,7 +184,7 @@
 					<User>${HAPWHP:User}</User>
 					<Lib>STARTSERVICE</Lib>
 					<CurrentState>ReadState</CurrentState>
-					<TaskNumber>${PROTASKS:NumberTotal}<TaskNumber>
+					<TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
                 </Attributes>
             </UpdateData>
 

@@ -5,11 +5,11 @@ Issue:
   HAProxyWorkflowHandlePKG:
     TargetApp: EnterpriseInfrastructure
     TargetMachine: Ganesh
-	WARUrl: http://104.236.227.163:8080/CitrusTestKit.war
-	TargetTar_FileName: CitrusTestKit.war
+    WARUrl: http://104.236.227.163:8080/CitrusTestKit.war
+    TargetTar_FileName: CitrusTestKit.war
     ProxyEnableUrl: http://104.236.227.163:8080/haproxy
     ProxyConfigURL: http://104.236.227.163:8080/haproxy.cfg
-	TomcatPKG: tomcat7
+    TomcatPKG: tomcat7
     TargetState: Created
-    User: ashish
-    Host: 192.168.1.53
+    User: puja
+    Host: 192.168.1.86
