@@ -1,15 +1,20 @@
 Issue:
-  NodeID: OpexSoftware:UseCase:Application:WordPress 
+  NodeID: OpexSoftware:Workflow:Application:WebApplication
   xmlns: http://www.arago.de/IssueSchema
   IssueSubject: 'Run Workflow for Installation of a WordPress Package'
   WordPressWorkflowHandlePKG:
-    TargetApp: WordPress
-    TargetMachine: Ashish
+    TargetApp: WebApplication
+    TargetMachine: Shree
     TargetTarFileName: latest.tar.gz
-    TargetPath: /home/ashish/WordPress
+    TargetPath: /home/bhagyashree/WordPress
     DownloadUrl: http://wordpress.org/latest.tar.gz
     TargetState: Created
     UntarFolder: wordpress
-    User: ashish
-    Host: 192.168.1.62
-    MySQLRootPass: root123
+    PhpPkg: php5-fpm
+    PhpMysqlPkg: php5-mysql
+    DebConfDB: mysql-server
+    DebConfMysql: mysql-server/root_password
+    DebConfPassword: password
+    DebConfMysqlPassword: root
+    User: bhagyashree
+    Host: 192.168.1.89

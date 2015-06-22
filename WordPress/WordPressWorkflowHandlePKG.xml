@@ -6,9 +6,12 @@
 
 	<BindAttributes>
 		<AttributeFilter Name="NodeType" Mode="string" Value="Machine" />
+		<SubItem Name="Extensions" Alias="EXTS">
+           <TrueFilter/>
+        </SubItem> 
 		<RelatedNode Mode="predecessor" Alias="PRE">
 			<AttributeFilter Name="NodeType" Mode="string" Value="Application" />
-		</RelatedNode>
+		</RelatedNode> 
 	</BindAttributes>
 
 	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
@@ -26,9 +29,14 @@
 				<AttributeFilter Name="TargetPath" Mode="exists" />
 				<AttributeFilter Name="DownloadUrl" Mode="exists" />
 				<AttributeFilter Name="UntarFolder" Mode="exists" />
+				<AttributeFilter Name="DebConfDB" Mode="exists" />
+				<AttributeFilter Name="DebConfMysql" Mode="exists" />
+				<AttributeFilter Name="DebConfPassword" Mode="exists" />
+				<AttributeFilter Name="DebConfMysqlPassword" Mode="exists" />
 				<AttributeFilter Name="User" Mode="exists" />
 				<AttributeFilter Name="Host" Mode="exists" />
-				<AttributeFilter Name="MySQLRootPass" Mode="exists" />
+				<AttributeFilter Name="PhpPkg" Mode="exists" />
+				<AttributeFilter Name="PhpMysqlPkg" Mode="exists" />
 				<AttributeFilter Name="Status" Mode="notexists" />
 			</SubItem>
 		</IssueCondition>
@@ -42,224 +50,255 @@
 			</GenerateData>
 
 			<!-- TASK1 install nginx -->
-			<IncAttribute Name="PROTASKS:NumberTotal" />
-
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				PKG=nginx
-				TargetMachine=${WPWHP:TargetMachine}
-				TargetState=Created
-				User=${WPWHP:User}
-				Host=${WPWHP:Host}
-				Lib=PKG
-				CurrentState=ReadState
-				TaskNumber=${PROTASKS:NumberTotal}
-				/> </NewBlock>]]>
-			</XMLExtract>
-
+		 	<IncAttribute Name="PROTASKS:NumberTotal" />
+             
+            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK1">
+            <KeyAttributes>
+               <UID> </UID>
+            </KeyAttributes>
+            <Attributes>
+                  <Lib>PKG</Lib>
+                  <PKG>nginx</PKG>
+                  <TargetMachine>${WPWHP:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <User>${WPWHP:User}</User>
+                  <Host>${WPWHP:Host}</Host>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+            </Attributes>  
+            </UpdateData>
+             
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
-			</GenerateData>
+				<ExtUID>${TASK1:UID}</ExtUID>
+			</GenerateData> 
 
 			<!-- TASK2 install debconf-utils -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				PKG=debconf-utils
-				TargetMachine=${WPWHP:TargetMachine}
-				TargetState=Created
-				User=${WPWHP:User}
-				Host=${WPWHP:Host}
-				Lib=PKG
-				CurrentState=ReadState
-				TaskNumber=${PROTASKS:NumberTotal}
-				/> </NewBlock>]]>
-			</XMLExtract>
+            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK2">
+            <KeyAttributes>
+               <UID> </UID>
+            </KeyAttributes>
+            <Attributes>
+                  <Lib>PKG</Lib>
+                  <PKG>debconf-utils</PKG>
+                  <TargetMachine>${WPWHP:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <User>${WPWHP:User}</User>
+                  <Host>${WPWHP:Host}</Host>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+            </Attributes>  
+            </UpdateData>
 
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
-			</GenerateData>
+				<ExtUID>${TASK2:UID}</ExtUID>
+			</GenerateData> 
 
 			<!-- TASK3 run the command to update debconf-set-selections with mysql-server/root_password password for mysql silent install -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
-
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetMachine=${WPWHP:TargetMachine}      
-				TargetState=Created
-				Host=${WPWHP:Host}
-				User=${WPWHP:User}
-				Lib=RUNCOMMAND
-				Command='sudo debconf-set-selections <<< &apos;mysql-server mysql-server/root_password password ${WPWHP:MySQLRootPass}&apos;'
-				TaskNumber=${PROTASKS:NumberTotal}
-				CurrentState=ReadState/> 
-				</NewBlock>]]>
-			</XMLExtract>
+            
+            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK3">
+            <KeyAttributes>
+               <UID> </UID>
+            </KeyAttributes>
+            <Attributes>
+                  <Lib>SETDEBCONFSELECTION</Lib>
+                  <Param1>${WPWHP:DebConfDB}</Param1>
+                  <Param2>${WPWHP:DebConfMysql}</Param2>
+                  <Param3>${WPWHP:DebConfPassword}</Param3>
+                  <Param4>${WPWHP:DebConfMysqlPassword}</Param4>
+                  <TargetMachine>${WPWHP:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <User>${WPWHP:User}</User>
+                  <Host>${WPWHP:Host}</Host>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+            </Attributes>
+            </UpdateData>
 
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<ExtUID>${TASK3:UID}</ExtUID>
 			</GenerateData>
 
 			<!-- TASK4 run the command to update debconf-set-selections with mysql-server/root_password_again password for mysql silent install -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
-
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetMachine=${WPWHP:TargetMachine}            
-				TargetState=Created
-				Host=${WPWHP:Host}
-				User=${WPWHP:User}
-				Lib=RUNCOMMAND
-				Command='sudo debconf-set-selections <<< &apos;mysql-server mysql-server/root_password_again password ${WPWHP:MySQLRootPass}&apos;'
-				TaskNumber=${PROTASKS:NumberTotal}
-				CurrentState=ReadState/> 
-				</NewBlock>]]>
-			</XMLExtract>
-
+           
+            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK4">
+            <KeyAttributes>
+               <UID> </UID>
+            </KeyAttributes>
+            <Attributes>
+                  <Lib>SETDEBCONFSELECTION</Lib>
+                  <Param1>${WPWHP:DebConfDB}</Param1>
+                  <Param2>${WPWHP:DebConfMysql}</Param2>
+                  <Param3>${WPWHP:DebConfPassword}</Param3>
+                  <Param4>${WPWHP:DebConfMysqlPassword}</Param4>
+                  <TargetMachine>${WPWHP:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <User>${WPWHP:User}</User>
+                  <Host>${WPWHP:Host}</Host>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+            </Attributes>
+            </UpdateData>
+            
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<ExtUID>${TASK4:UID}</ExtUID>
 			</GenerateData>
 
 			<!-- TASK5 install mysql-server -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				PKG=mysql-server
-				TargetMachine=${WPWHP:TargetMachine}      
-				TargetState=Created
-				User=${WPWHP:User}
-				Host=${WPWHP:Host}
-				Lib=PKG 
-				CurrentState=ReadState
-				TaskNumber=${PROTASKS:NumberTotal}
-				/> </NewBlock>]]>
-			</XMLExtract>
-
+            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK5">
+            <KeyAttributes>
+               <UID> </UID>
+            </KeyAttributes>
+            <Attributes>
+                  <Lib>PKG</Lib>
+                  <PKG>mysql-server</PKG>
+                  <TargetMachine>${WPWHP:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <User>${WPWHP:User}</User>
+                  <Host>${WPWHP:Host}</Host>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+            </Attributes>  
+            </UpdateData>
+           
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<ExtUID>${TASK5:UID}</ExtUID>
 			</GenerateData>
 
 			<!-- TASK6 install mysql-server data base -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetMachine=${WPWHP:TargetMachine}            
-				TargetState=Created
-				Host=${WPWHP:Host}
-				User=${WPWHP:User}
-				Lib=RUNCOMMAND
-				Command='sudo mysql_install_db'
-				TaskNumber=${PROTASKS:NumberTotal}
-				CurrentState=ReadState/> 
-				</NewBlock>]]>
-			</XMLExtract>
-
+            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK6">
+            <KeyAttributes>
+               <UID> </UID>
+            </KeyAttributes>
+            <Attributes>
+                  <Lib>WORDPRESSMYSQLDBINSTALL</Lib>
+                  <TargetMachine>${WPWHP:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <User>${WPWHP:User}</User>
+                  <Host>${WPWHP:Host}</Host>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+            </Attributes>
+            </UpdateData>
+             
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<ExtUID>${TASK6:UID}</ExtUID>
 			</GenerateData>
 
 			<!-- TASK7 install php5-fpm -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
-
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				PKG=php5-fpm
-				TargetMachine=${WPWHP:TargetMachine}      
-				TargetState=Created
-				User=${WPWHP:User}
-				Host=${WPWHP:Host}
-				Lib=PKG
-				CurrentState=ReadState
-				TaskNumber=${PROTASKS:NumberTotal}
-				/> </NewBlock>]]>
-			</XMLExtract>
-
+               
+            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK7">
+            <KeyAttributes>
+               <UID> </UID>
+            </KeyAttributes>
+            <Attributes>
+                  <Lib>PKG</Lib>
+                  <PKG>${WPWHP:PhpPkg}</PKG>
+                  <TargetMachine>${WPWHP:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <User>${WPWHP:User}</User>
+                  <Host>${WPWHP:Host}</Host>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+            </Attributes>  
+            </UpdateData>
+                
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<ExtUID>${TASK7:UID}</ExtUID>
 			</GenerateData>
 
 			<!-- TASK8 install php5-mysql -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				PKG=php5-mysql
-				TargetMachine=${WPWHP:TargetMachine}      
-				TargetState=Created
-				User=${WPWHP:User}
-				Host=${WPWHP:Host}
-				Lib=PKG
-				CurrentState=ReadState
-				TaskNumber=${PROTASKS:NumberTotal}
-				/> </NewBlock>]]>
-			</XMLExtract>
-
+            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK8">
+            <KeyAttributes>
+               <UID> </UID>
+            </KeyAttributes>
+            <Attributes>
+                  <Lib>PKG</Lib>
+                  <PKG>${WPWHP:PhpMysqlPkg}</PKG>
+                  <TargetMachine>${WPWHP:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <User>${WPWHP:User}</User>
+                  <Host>${WPWHP:Host}</Host>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+            </Attributes>  
+            </UpdateData>
+            
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<ExtUID>${TASK8:UID}</ExtUID>
 			</GenerateData>
 			
-			<!--
-				This will install the LEMP Stack on your target machine.
-				We now have our PHP components installed, but we need to make a slight configuration change to make our setup more secure.
-				You may follow steps as described at link below, to complete the setup.
-				https://www.digitalocean.com/community/tutorials/how-to-install-linux-nginx-mysql-php-lemp-stack-on-ubuntu-14-04 
-			 -->
-
 			<!-- TASK9 download WordPress tar ball -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
-
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-                PKG=WordPressWGET
-                DownloadUrl='${WPWHP:DownloadUrl}'
-                TargetMachine=${WPWHP:TargetMachine}
-                TargetTarFileName=${WPWHP:TargetTarFileName}
-                UntarFolder=${WPWHP:UntarFolder}      
-                TargetPath='${WPWHP:TargetPath}'
-                TargetState=Created
-                User=${WPWHP:User}
-                Host=${WPWHP:Host}
-		  	 	Lib=WGET
-                CurrentState=ReadState
-                TaskNumber=${PROTASKS:NumberTotal}
-                /> </NewBlock>]]>
-			</XMLExtract>
+            
+            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK9">
+            <KeyAttributes>
+               <UID> </UID>
+            </KeyAttributes>
+            <Attributes>
+                  <Lib>WGET</Lib>
+                  <TargetMachine>${WPWHP:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <User>${WPWHP:User}</User>
+                  <Host>${WPWHP:Host}</Host>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+                  <DownloadUrl>${WPWHP:DownloadUrl}</DownloadUrl>
+                  <TargetTarFileName>${WPWHP:TargetTarFileName}</TargetTarFileName>
+                  <UntarFolder>${WPWHP:UntarFolder}</UntarFolder>
+                  <TargetPath>${WPWHP:TargetPath}</TargetPath>
+            </Attributes>  
+            </UpdateData>
 
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<ExtUID>${TASK9:UID}</ExtUID>
 			</GenerateData>
 
 			<!-- TASK10 extract WordPress tar ball -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-                PKG=WordPressUnTar
-                DownloadUrl='${WPWHP:DownloadUrl}'
-                TargetMachine=${WPWHP:TargetMachine}
-                TargetTarFileName=${WPWHP:TargetTarFileName}
-                UntarFolder=${WPWHP:UntarFolder}      
-                TargetPath='${WPWHP:TargetPath}'
-                TargetState=Created
-                User=${WPWHP:User}
-                Host=${WPWHP:Host}
-                Lib=TAREXTRACT 
-                CurrentState=ReadState
-                TaskNumber=${PROTASKS:NumberTotal}
-                /> </NewBlock>]]>
-			</XMLExtract>
-
+            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK10">
+            <KeyAttributes>
+               <UID> </UID>
+            </KeyAttributes>
+            <Attributes>
+                  <Lib>TAREXTRACT</Lib>
+                  <TargetMachine>${WPWHP:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <User>${WPWHP:User}</User>
+                  <Host>${WPWHP:Host}</Host>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+                  <DownloadUrl>${WPWHP:DownloadUrl}</DownloadUrl>
+                  <TargetTarFileName>${WPWHP:TargetTarFileName}</TargetTarFileName>
+                  <UntarFolder>${WPWHP:UntarFolder}</UntarFolder>
+                  <TargetPath>${WPWHP:TargetPath}</TargetPath>
+            </Attributes>  
+            </UpdateData>
+            
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<ExtUID>${TASK10:UID}</ExtUID>
 			</GenerateData>
-			
-			<!--
-				To create a MySQL Database and User for WordPress and to configure WordPress, please follow steps mentioned at 
-				https://www.digitalocean.com/community/tutorials/how-to-install-wordpress-with-nginx-on-ubuntu-14-04
-			 -->
 
 			<GenerateData>
 				<DataType>Resolve</DataType>
