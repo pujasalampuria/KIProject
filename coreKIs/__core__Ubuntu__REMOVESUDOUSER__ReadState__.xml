@@ -37,7 +37,7 @@
 			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
 				<Parameter Name="User">${TASKS:User}</Parameter>
 				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
-				<Parameter Name="Command">"sudo grep '^${TASKS:LinuxUser}' /etc/sudoers"</Parameter>
+				<Parameter Name="Command">"cat /etc/group | grep ^sudo | grep '${TASKS:LinuxUser}'"</Parameter>
 			</Action>
 
 			<If>
