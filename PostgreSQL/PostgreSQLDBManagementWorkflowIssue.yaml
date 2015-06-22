@@ -1,11 +1,11 @@
 Issue:
-  NodeID: OpexSoftware:UseCase:Application:PostgreSQL
+  NodeID: OpexSoftware:Workflow:Application:EnterpriseInfrastructure
   xmlns: http://www.arago.de/IssueSchema
   IssueSubject: 'Creation of PostgreSQL database'
   PostgreSQLDBManagementWorkflow: 
-    TargetApp: PostgreSQL  
+    TargetApp: EnterpriseInfrastructure  
     Database: TempDB
-    TargetMachine: Zeeshan
+    TargetMachine: zeeshan
     TargetState: Created 
     User: postgres
     Host: 192.168.1.90

@@ -6,6 +6,9 @@
 
 	<BindAttributes>
 		<AttributeFilter Name="NodeType" Mode="string" Value="Machine"/>
+		<SubItem Name="Extensions" Alias="EXTS">
+            <TrueFilter/>
+        </SubItem>
 		<RelatedNode Mode="predecessor" Alias="PRE">
 			<AttributeFilter Name="NodeType" Mode="string" Value="Application"/>
 		</RelatedNode>
@@ -22,8 +25,8 @@
 				<AttributeFilter Name="TargetApp" Mode="string" Value="${PRE:NodeName}"/>
 				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}"/>
 				<AttributeFilter Name="NewDBUserName" Mode="exists"/>
-				<AttributeFilter Name="NewDBPassword" Mode="exists"/>
 				<AttributeFilter Name="User" Mode="exists"/>
+				<AttributeFilter Name="Database" Mode="exists"/>
 				<AttributeFilter Name="Host" Mode="exists"/>
 				<AttributeFilter Name="TargetState" Mode="string" Value="Created"/>
 				<AttributeFilter Name="Status" Mode="notexists"/>
@@ -40,22 +43,27 @@
 			
 			<!-- TASK1 Create User Role in Postgres-->
 			<IncAttribute Name="PROTASKS:NumberTotal"/>
+		
 			
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 			
-				TargetMachine=${PSRUW:TargetMachine}      
-				TargetState=Created
-				Host=${PSRUW:Host}
-				User=${PSRUW:User}
-				TaskNumber=${PROTASKS:NumberTotal}
-				Command='psql -c \"DROP USER ${PSRUW:NewDBUserName};\"'
-				Lib=RUNCOMMAND
-				CurrentState=ReadState/> 
-				</NewBlock>]]>
-			</XMLExtract> 
+			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK1">
+                <KeyAttributes>
+                  <UID> </UID>
+                </KeyAttributes>
+                <Attributes>
+                  <Lib>POSTGRESQLDROPUSER</Lib>
+                  <TargetMachine>${PSRUW:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <User>${PSRUW:User}</User>
+                  <Host>${PSRUW:Host}</Host>
+                  <NewDBUserName>${PSRUW:NewDBUserName}</NewDBUserName>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+                </Attributes>
+             </UpdateData>
       
 			<GenerateData Alias="VAL"> 
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+                <ExtUID>${TASK1:UID}</ExtUID>
 			</GenerateData>	
 
 			<GenerateData> 

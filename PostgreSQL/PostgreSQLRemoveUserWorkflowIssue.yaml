@@ -1,13 +1,12 @@
 Issue:
-  NodeID: OpexSoftware:UseCase:Application:PostgreSQL
+  NodeID: OpexSoftware:Workflow:Application:EnterpriseInfrastructure
   xmlns: http://www.arago.de/IssueSchema
   IssueSubject: 'Remove of PostgreSQL database and Users'
   PostgreSQLRemoveUserWorkflow:
-    TargetApp: PostgreSQL  
+    TargetApp: EnterpriseInfrastructure  
     Database: TempDB
-    TargetMachine: Zeeshan
-    NewDBUserName: zeeshan19
-    NewDBPassword: zeeshan19
+    TargetMachine: zeeshan
+    NewDBUserName: PK
     TargetState: Created 
     User: postgres 
     Host: 192.168.1.90

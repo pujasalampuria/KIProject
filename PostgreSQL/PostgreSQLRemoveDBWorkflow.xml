@@ -6,10 +6,15 @@
 
 	<BindAttributes>
 		<AttributeFilter Name="NodeType" Mode="string" Value="Machine"/>
+		<SubItem Name="Extensions" Alias="EXTS">
+            <TrueFilter/>
+        </SubItem>
 		<RelatedNode Mode="predecessor" Alias="PRE">
 			<AttributeFilter Name="NodeType" Mode="string" Value="Application"/>
 		</RelatedNode>
 	</BindAttributes>
+	
+	<!--PostgreSQLRemoveDBWorkflow triggered  -->
 
 	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
 
@@ -40,21 +45,26 @@
 			 <!-- TASK1 Create DB in PostgresSQL -->
 			<IncAttribute Name="PROTASKS:NumberTotal"/>
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetMachine=${PSRDW:TargetMachine}      
-				TargetState=Created				
-				Host=${PSRDW:Host}
-				User=${PSRDW:User}
-				TaskNumber=${PROTASKS:NumberTotal}
-				Lib=RUNCOMMAND
-				Command='psql -c \"DROP DATABASE ${PSRDW:Database};\"'
-				CurrentState=ReadState
-				/> </NewBlock>]]>
-			</XMLExtract> 
+      
+			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK1">
+                <KeyAttributes>
+                  <UID> </UID>
+                </KeyAttributes>
+                <Attributes>
+                  <Lib>POSTGRESQLDROPDB</Lib>
+                  <TargetMachine>${PSRDW:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <User>${PSRDW:User}</User>
+                  <Host>${PSRDW:Host}</Host>
+                  <Database>${PSRDW:Database}</Database>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+                </Attributes>
+             </UpdateData>
       
 			<GenerateData Alias="VAL"> 
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+                <ExtUID>${TASK1:UID}</ExtUID>
 			</GenerateData>
 			
 			<GenerateData> 

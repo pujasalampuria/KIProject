@@ -1,0 +1,9 @@
+<PostgreSQL xmlns="http://mars-o-matic.com" ID="OpexSoftware:Workflow:Software:PostgreSQL"
+	NodeType="Software" SoftwareClass="DBMS" 
+	SoftwareSubClass="PostgreSQL" NodeName="zeeshan">
+	<Dependencies>
+		<Node ID="OpexSoftware:Workflow:Machine:zeeshan" />
+		<Node ID="OpexSoftware:Workflow:Resource:WebResource" />
+	</Dependencies>
+	<CustomerInformation ID="opex.com" Name="opex"/>
+</PostgreSQL>

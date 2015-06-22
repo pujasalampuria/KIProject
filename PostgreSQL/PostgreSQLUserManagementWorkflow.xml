@@ -6,11 +6,14 @@
 
 	<BindAttributes>
 		<AttributeFilter Name="NodeType" Mode="string" Value="Machine"/>
+		<SubItem Name="Extensions" Alias="EXTS">
+            <TrueFilter/>
+        </SubItem>
 		<RelatedNode Mode="predecessor" Alias="PRE">
 			<AttributeFilter Name="NodeType" Mode="string" Value="Application"/>
 		</RelatedNode>
 	</BindAttributes>
-
+	<!--  PostgreSQLUserManagementWorkflow triggered -->
 	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
 
 	<CreateTrigger>
@@ -41,21 +44,27 @@
 			<!-- TASK1 Create User Role in Postgres-->
 			<IncAttribute Name="PROTASKS:NumberTotal"/>
 			
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 			
-				TargetMachine=${PSUMW:TargetMachine}      
-				TargetState=Created
-				Host=${PSUMW:Host}
-				User=${PSUMW:User}
-				TaskNumber=${PROTASKS:NumberTotal}
-				Command='psql -c \"CREATE USER ${PSUMW:NewDBUserName} WITH PASSWORD &apos;${PSUMW:NewDBPassword}&apos;\"'
-				Lib=RUNCOMMAND
-				CurrentState=ReadState/> 
-				</NewBlock>]]>
-			</XMLExtract> 
+      
+			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK1">
+                <KeyAttributes>
+                  <UID> </UID>
+                </KeyAttributes>
+                <Attributes>
+                  <Lib>POSTGRESQLCREATEUSER</Lib>
+                  <TargetMachine>${PSUMW:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <User>${PSUMW:User}</User>
+                  <Host>${PSUMW:Host}</Host>
+                  <NewDBUserName>${PSUMW:NewDBUserName}</NewDBUserName>
+                  <NewDBPassword>${PSUMW:NewDBPassword}</NewDBPassword>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+                </Attributes>
+             </UpdateData>
       
 			<GenerateData Alias="VAL"> 
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+                <ExtUID>${TASK1:UID}</ExtUID>
 			</GenerateData>	
 
 			<GenerateData> 
