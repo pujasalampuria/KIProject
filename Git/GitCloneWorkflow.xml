@@ -24,10 +24,12 @@
 				<AttributeFilter Name="GitUser" Mode="exists" />
 				<AttributeFilter Name="GitPassword" Mode="exists" />
 				<AttributeFilter Name="TargetState" Mode="string" Value="Created" />
-				<AttributeFilter Name="Status" Mode="notexists" />
 				<AttributeFilter Name="GitRepoName" Mode="exists" />
 				<AttributeFilter Name="GitBranch" Mode="exists" />
 				<AttributeFilter Name="GitOrigin" Mode="exists" />
+				<AttributeFilter Name="User" Mode="exists" />
+				<AttributeFilter Name="Host" Mode="exists" />
+				<AttributeFilter Name="Status" Mode="notexists" />
 			</SubItem>
 		</IssueCondition>
 

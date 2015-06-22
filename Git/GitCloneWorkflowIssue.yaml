@@ -3,14 +3,14 @@ Issue:
   xmlns: http://www.arago.de/IssueSchema
   IssueSubject: 'Clone the given Repository'
   GitCloneWorkflow:
-    GitRepoUrl: https://github.com/gkhakare/CoreKIs.git
     TargetMachine: Shree
-    TargetState: Created
+    GitRepoUrl: https://github.com/gkhakare/CoreKIs.git
     TargetPath: /home/shreyas/Downloads
-    GitUser: Techy
+	GitUser: Techy
     GitPassword: shree
+    TargetState: Created
     GitRepoName: CoreKIs
-    User: shreyas
-    Host: 192.168.1.69
     GitBranch: UnderDevelopment
     GitOrigin: master
+	User: shreyas
+    Host: 192.168.1.69
