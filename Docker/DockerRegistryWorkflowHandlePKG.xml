@@ -58,12 +58,12 @@
              </UpdateData>
 
 			<GenerateData Alias="VAL">
-				<DataType>ProcessingTasks</DataType>
-				<CurrentTask>1</CurrentTask>
+				<DataType>Validate</DataType>
+                <ExtUID>${TASK1:UID}</ExtUID>
 			</GenerateData>
 			
 			<!--Task2 Install preequisites package python-dev -->
-			<!-- <IncAttribute Name="PROTASKS:NumberTotal" />
+			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK2">
                 <KeyAttributes>
@@ -82,12 +82,12 @@
              </UpdateData>
 			
 			<GenerateData Alias="VAL">
-				<DataType>ProcessingTasks</DataType>
-				<CurrentTask>2</CurrentTask>
-			</GenerateData> -->
+				<DataType>Validate</DataType>
+                <ExtUID>${TASK2:UID}</ExtUID>
+			</GenerateData>
 
 			<!--Task3 Install preequisites package libevent-dev -->
-			<!-- <IncAttribute Name="PROTASKS:NumberTotal" />
+			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			
 			
@@ -108,12 +108,12 @@
              </UpdateData>
 
 			<GenerateData Alias="VAL">
-				<DataType>ProcessingTasks</DataType>
-				<CurrentTask>3</CurrentTask>
-			</GenerateData> -->
+				<DataType>Validate</DataType>
+                <ExtUID>${TASK3:UID}</ExtUID>
+			</GenerateData>
 
 			<!--Task4 Install preequisites package python-pip -->
-			<!-- <IncAttribute Name="PROTASKS:NumberTotal" />
+			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			
 			
@@ -134,12 +134,12 @@
              </UpdateData>
 
 			<GenerateData Alias="VAL">
-				<DataType>ProcessingTasks</DataType>
-				<CurrentTask>4</CurrentTask>
-			</GenerateData> -->
+				<DataType>Validate</DataType>
+                <ExtUID>${TASK4:UID}</ExtUID>
+			</GenerateData>
 
 			<!--Task5 Install preequisites package liblzma-dev -->
-			<!--<IncAttribute Name="PROTASKS:NumberTotal" />
+			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			
 			
@@ -161,15 +161,13 @@
 			
 
 			<GenerateData Alias="VAL">
-				<DataType>ProcessingTasks</DataType>
-				<CurrentTask>5</CurrentTask>
-			</GenerateData> -->
+				<DataType>Validate</DataType>
+                <ExtUID>${TASK5:UID}</ExtUID>
+			</GenerateData>
 
 			<!--Task6 Install prerequisites package swig -->
-			<!--<IncAttribute Name="PROTASKS:NumberTotal" />
+			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			
-			
 			 <UpdateData Base="EXTS" Name="Tasks" Alias="TASK6">
                 <KeyAttributes>
                   <UID> </UID>
@@ -187,12 +185,12 @@
              </UpdateData>
 
 			<GenerateData Alias="VAL">
-				<DataType>ProcessingTasks</DataType>
-				<CurrentTask>6</CurrentTask>
-			</GenerateData> -->
+				<DataType>Validate</DataType>
+                <ExtUID>${TASK6:UID}</ExtUID>
+			</GenerateData>
 
 			<!--Task7 Install docker-registry -->
-			<!-- <IncAttribute Name="PROTASKS:NumberTotal" />
+			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			
 			
@@ -205,7 +203,6 @@
                   <TargetState>Created</TargetState>
                   <Lib>DOCKERREGISTRYINSTALL</Lib>
                   <Host>${DRWHP:Host}</Host>
-                  <Command>sudo pip install docker-registry</Command>
                   <User>${DRWHP:User}</User>
                   <CurrentState>ReadState</CurrentState>
                   <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
@@ -213,14 +210,13 @@
              </UpdateData>
 
 			<GenerateData Alias="VAL">
-				<DataType>ProcessingTasks</DataType>
-				<CurrentTask>7</CurrentTask>
-			</GenerateData> -->
+				<DataType>Validate</DataType>
+                <ExtUID>${TASK7:UID}</ExtUID>
+			</GenerateData>
 
 			<!--Task8 Create config.yml file and a directory in var named docker-registry -->
-			<!-- <IncAttribute Name="PROTASKS:NumberTotal" />
-
-			
+			<IncAttribute Name="PROTASKS:NumberTotal" />
+		
 			
 			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK8">
                 <KeyAttributes>
@@ -231,7 +227,6 @@
                   <TargetState>Created</TargetState>
                   <Lib>DOCKERREGISTRYSET</Lib>
                   <Host>${DRWHP:Host}</Host>
-                  <Command>cd /usr/local/lib/python2.7/dist-packages/docker_registry/lib/../../config/ &amp;&amp; sudo cp config_sample.yml config.yml &amp;&amp; sudo mkdir /var/docker-registry</Command>
                   <User>${DRWHP:User}</User>
                   <CurrentState>ReadState</CurrentState>
                   <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
@@ -239,12 +234,12 @@
              </UpdateData>
 
 			<GenerateData Alias="VAL">
-				<DataType>ProcessingTasks</DataType>
-				<CurrentTask>8</CurrentTask>
-			</GenerateData> -->
+				<DataType>Validate</DataType>
+                <ExtUID>${TASK8:UID}</ExtUID>
+			</GenerateData>
 
 			<!--Task9 Replace the /tmp to /var in config.yml -->
-			<!-- <IncAttribute Name="PROTASKS:NumberTotal" />
+			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			
 			
@@ -265,12 +260,12 @@
              
 
 			<GenerateData Alias="VAL">
-				<DataType>ProcessingTasks</DataType>
-				<CurrentTask>9</CurrentTask>
-			</GenerateData> -->
+				<DataType>Validate</DataType>
+                <ExtUID>${TASK9:UID}</ExtUID>
+			</GenerateData>
 
 			<!--Task10 Create a directory named docker-registry -->
-			<!-- <IncAttribute Name="PROTASKS:NumberTotal" />
+			 <IncAttribute Name="PROTASKS:NumberTotal" />
 
 			
 			
@@ -290,12 +285,12 @@
              </UpdateData>
 
 			<GenerateData Alias="VAL">
-				<DataType>ProcessingTasks</DataType>
-				<CurrentTask>10</CurrentTask>
-			</GenerateData> -->
+				<DataType>Validate</DataType>
+                <ExtUID>${TASK10:UID}</ExtUID>
+			</GenerateData>
 
 			<!--Task11 Write a file to execute the command -->
-			<!-- <IncAttribute Name="PROTASKS:NumberTotal" />
+			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			
 			
@@ -318,12 +313,12 @@
              </UpdateData>
 
 			<GenerateData Alias="VAL">
-				<DataType>ProcessingTasks</DataType>
-				<CurrentTask>11</CurrentTask>
-			</GenerateData> -->
+				<DataType>Validate</DataType>
+                <ExtUID>${TASK11:UID}</ExtUID>
+			</GenerateData>
 
 			<!--Task12 Start the docker-registry service -->
-			<!-- <IncAttribute Name="PROTASKS:NumberTotal" />
+			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			
 			
@@ -343,14 +338,14 @@
              </UpdateData>
 
 			<GenerateData Alias="VAL">
-				<DataType>ProcessingTasks</DataType>
-				<CurrentTask>12</CurrentTask>
+				<DataType>Validate</DataType>
+                <ExtUID>${TASK12:UID}</ExtUID>
 			</GenerateData>
 
 			<GenerateData>
 				<DataType>Resolve</DataType>
 				<Status>checkForResolve</Status>
-			</GenerateData> -->
+			</GenerateData>
 		</Activate>
 	</CreateTrigger>
 </KnowledgeItem>
