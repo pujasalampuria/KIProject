@@ -343,7 +343,7 @@
 				<ExtUID>${TASK12:UID}</ExtUID>
 			</GenerateData>
 			
-			<!-- TASK13  Update psad's  -->
+			<!-- TASK13  Update psad -->
 			
 			<IncAttribute Name="PROTASKS:NumberTotal" />
              
