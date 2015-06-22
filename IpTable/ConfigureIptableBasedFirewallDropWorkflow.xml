@@ -50,7 +50,7 @@
 		          <UID> </UID>
 		        </KeyAttributes>
 		        <Attributes>
-		          <LIB>IPTABLESACCEPT</LIB>
+		          <Lib>IPTABLESACCEPT</Lib>
 		          <TargetMachine>${CIBFDW:TargetMachine}</TargetMachine>      
 		          <TargetState>Created</TargetState>
 		          <User>${CIBFDW:User}</User>
@@ -76,7 +76,7 @@
 		          <UID> </UID>
 		        </KeyAttributes>
 		        <Attributes>
-		          <LIB>IPTABLESDROPPORT</LIB>
+		          <Lib>IPTABLESDROPPORT</Lib>
 		          <TargetMachine>${CIBFDW:TargetMachine}</TargetMachine>      
 		          <TargetState>Created</TargetState>
 		          <User>${CIBFDW:User}</User>
@@ -102,7 +102,7 @@
           		<UID> </UID>
         		</KeyAttributes>
         		<Attributes>
-		          <LIB>IPTABLESCOMMANDDROP</LIB>
+		          <Lib>IPTABLESCOMMANDDROP</Lib>
 		          <TargetMachine>${CIBFDW:TargetMachine}</TargetMachine>      
 		          <TargetState>Created</TargetState>
 		          <User>${CIBFDW:User}</User>
@@ -130,7 +130,7 @@
 		          <UID> </UID>
 		        </KeyAttributes>
 			        <Attributes>
-			          <LIB>PKG</LIB>
+			          <Lib>PKG</Lib>
 			          <PKG>iptables-persistent</PKG>
 			          <TargetMachine>${CIBFDW:TargetMachine}</TargetMachine>      
 			          <TargetState>Created</TargetState>
@@ -154,12 +154,12 @@
 		          <UID> </UID>
 		        </KeyAttributes>
 		        <Attributes>
-		          <LIB>IPTABLESCOMMANDSTART</LIB>
+		          <Lib>IPTABLESCOMMANDSTART</Lib>
 		          <TargetMachine>${CIBFDW:TargetMachine}</TargetMachine>      
 		          <TargetState>Created</TargetState>
 		          <User>${CIBFDW:User}</User>
 		          <Host>${CIBFDW:Host}</Host>
-		          <Command>sudo service iptables-persistent start</Command>
+		         <!--  <Command>sudo service iptables-persistent start</Command> -->
 		          <CurrentState>ReadState</CurrentState>
 		          <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
 		        </Attributes>

@@ -11,13 +11,13 @@
 		<SubItem Name="OSInformation" Alias="OSINFO">
 			<AttributeFilter Name="Name" Mode="string" Value="Ubuntu" />
 		</SubItem>
-		<!-- <SubItem Name="Extensions" Alias="EXT"> -->
+		<SubItem Name="Extensions" Alias="EXT">
 			<SubItem Name="Tasks" Alias="TASKS">
 				<AttributeFilter Name="TargetMachine" Mode="exists" />
 				<AttributeFilter Name="User" Mode="exists" />
 				<AttributeFilter Name="Host" Mode="exists" />
 			</SubItem>
-		<!-- </SubItem> -->
+		</SubItem>
 	</BindAttributes>
 
 	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
