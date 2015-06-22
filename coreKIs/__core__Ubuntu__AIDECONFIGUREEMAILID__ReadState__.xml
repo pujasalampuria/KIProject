@@ -15,6 +15,7 @@
 				<AttributeFilter Name="TargetMachine" Mode="exists" />
 				<AttributeFilter Name="User" Mode="exists" />
 				<AttributeFilter Name="Host" Mode="exists" />
+				<AttributeFilter Name="EmailID" Mode="exists" />
 			</SubItem>
 		</SubItem>
 	</BindAttributes>
@@ -36,7 +37,7 @@
 			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
 				<Parameter Name="User">${TASKS:User}</Parameter>
 				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
-				<Parameter Name="Command">"ls /tmp/${TASKS:UID}"</Parameter>
+				<Parameter Name="Command">"cat /etc/default/aide | grep MAILTO=${TASKS:EmailID}"</Parameter>
 			</Action>
 
 			<If>

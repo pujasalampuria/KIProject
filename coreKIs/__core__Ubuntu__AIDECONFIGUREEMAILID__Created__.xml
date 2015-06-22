@@ -38,7 +38,7 @@
 			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="300">
 				<Parameter Name="User">${TASKS:User}</Parameter>
 				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
-				<Parameter Name="Command"><![CDATA["sudo sed -i "s/MAILTO=root/MAILTO=${TASKS:EmailID}/" /etc/default/aide && touch /tmp/${TASKS:UID}"]]>
+				<Parameter Name="Command"><![CDATA["sudo sed -i "s/MAILTO=root/MAILTO=${TASKS:EmailID}/" /etc/default/aide"]]>
 				</Parameter>
 			</Action>
 			<If>
