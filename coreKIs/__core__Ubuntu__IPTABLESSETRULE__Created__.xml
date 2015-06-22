@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<KnowledgeItem ID="OpexSoftware:Ubuntu:IPTABLESDROPPORT:__core__Ubuntu__IPTABLESDROPPORT__Created__" xmlns="http://www.arago.de/KiSchema">
-	<Title>__core__Ubuntu__IPTABLESDROPPORT__Created__</Title>
-	<Description> This KI searches for the DataBlock called __core__Ubuntu__IPTABLESDROPPORT__Created__ 
+<KnowledgeItem ID="OpexSoftware:Ubuntu:IPTABLESSETRULE:__core__Ubuntu__IPTABLESSETRULE__Created__" xmlns="http://www.arago.de/KiSchema">
+	<Title>__core__Ubuntu__IPTABLESSETRULE__Created__</Title>
+	<Description> This KI searches for the DataBlock called __core__Ubuntu__IPTABLESSETRULE__Created__ 
 		and runs the command on the specified Target Machine and writes the current status back to the node.
 	</Description>
 
@@ -15,7 +15,8 @@
 			<SubItem Name="Tasks" Alias="TASKS">
 				<AttributeFilter Name="TargetMachine" Mode="exists" />
 				<AttributeFilter Name="ProtocolOfRule" Mode="exists" />
-				<AttributeFilter Name="PortToDrop" Mode="exists" />
+				<AttributeFilter Name="ProtocolPort" Mode="exists" />
+				<AttributeFilter Name="Rule" Mode="exists" />
 				<AttributeFilter Name="User" Mode="exists" />
 				<AttributeFilter Name="Host" Mode="exists" />
 			</SubItem>
@@ -26,10 +27,10 @@
 
 	<CreateTrigger>
 		<IssueCondition>
-			<Description> Checks Issue for DataBlock __core__Ubuntu__IPTABLESDROPPORT__Created__ 
+			<Description> Checks Issue for DataBlock __core__Ubuntu__IPTABLESSETRULE__Created__ 
 				and attribute ExtUID being the same as in the Node the KI binds to.
 			</Description>
-			<SubItem Name="__core__Ubuntu__IPTABLESDROPPORT__Created__" Alias="CHECK">
+			<SubItem Name="__core__Ubuntu__IPTABLESSETRULE__Created__" Alias="CHECK">
 				<AttributeFilter Name="ExtUID" Mode="string" Value="${TASKS:UID}" />
 				<AttributeFilter Name="Status" Mode="notexists" />
 			</SubItem>
@@ -39,7 +40,7 @@
 			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
 				<Parameter Name="User">${TASKS:User}</Parameter>
 				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
-				<Parameter Name="Command"><![CDATA["sudo iptables -A INPUT -p ${TASKS:ProtocolOfRule} --dport ${TASKS:PortToDrop} -j DROP && touch /tmp/${TASKS:UID}"]]>
+				<Parameter Name="Command"><![CDATA["sudo iptables -A INPUT -p ${TASKS:ProtocolOfRule} --dport ${TASKS:ProtocolPort} -j ${TASKS:Rule} && touch /tmp/${TASKS:UID}"]]>
 				</Parameter>
 			</Action>
 			<If>

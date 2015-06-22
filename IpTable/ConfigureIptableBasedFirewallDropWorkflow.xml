@@ -43,7 +43,6 @@
 
 			 <!-- TASK1 Allow all current connections stay online -->
 			<IncAttribute Name="PROTASKS:NumberTotal"/>
-
 			
 			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK1">
 		        <KeyAttributes>
@@ -60,29 +59,27 @@
 		        </Attributes>
      		</UpdateData>
 	
-      
 			<GenerateData Alias="VAL"> 
 				<DataType>Validate</DataType>
 				<ExtUID>${TASK1:UID}</ExtUID>
 			</GenerateData>	
 			
-			<!-- TASK2 Accepting connection on a specified port -->
+			<!-- TASK2 Drop connection on a specified port -->
 			<IncAttribute Name="PROTASKS:NumberTotal"/>
-
-			
-			
+		
 			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK2">
 		        <KeyAttributes>
 		          <UID> </UID>
 		        </KeyAttributes>
 		        <Attributes>
-		          <Lib>IPTABLESDROPPORT</Lib>
+		          <Lib>IPTABLESSETRULE</Lib>
 		          <TargetMachine>${CIBFDW:TargetMachine}</TargetMachine>      
 		          <TargetState>Created</TargetState>
 		          <User>${CIBFDW:User}</User>
 		          <Host>${CIBFDW:Host}</Host>
 		          <ProtocolOfRule>${CIBFDW:ProtocolOfRule}</ProtocolOfRule>
-		          <PortToDrop>${CIBFDW:PortToDrop}</PortToDrop>
+		          <ProtocolPort>${CIBFDW:PortToDrop}</ProtocolPort>
+				  <Rule>DROP</Rule>
 		          <CurrentState>ReadState</CurrentState>
 		          <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
 		        </Attributes>
@@ -95,21 +92,18 @@
 			
 			<!-- TASK3 Bringing the new rule first in the List -->
 			<IncAttribute Name="PROTASKS:NumberTotal"/>
-
 			
 			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK3">
         		<KeyAttributes>
           		<UID> </UID>
         		</KeyAttributes>
         		<Attributes>
-		          <Lib>IPTABLESCOMMANDDROP</Lib>
+		          <Lib>IPTABLESRULEFIRST</Lib>
 		          <TargetMachine>${CIBFDW:TargetMachine}</TargetMachine>      
 		          <TargetState>Created</TargetState>
 		          <User>${CIBFDW:User}</User>
 		          <Host>${CIBFDW:Host}</Host>
-		          <ProtocolOfRule>${CIBFDW:ProtocolOfRule}</ProtocolOfRule>
-		          <PortToDrop>${CIBFDW:PortToDrop}</PortToDrop>
-		          <!-- <Command>'sudo iptables -I INPUT 1 -i lo -j DROP'</Command> -->
+				  <Rule>DROP</Rule>
 		          <CurrentState>ReadState</CurrentState>
 		          <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
 		        </Attributes>
@@ -122,8 +116,6 @@
 			
 			<!-- TASK4 Install a iptables-persistence -->
 			<IncAttribute Name="PROTASKS:NumberTotal"/>
-
-			
 			
 			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK4">
 		        <KeyAttributes>
@@ -159,7 +151,6 @@
 		          <TargetState>Created</TargetState>
 		          <User>${CIBFDW:User}</User>
 		          <Host>${CIBFDW:Host}</Host>
-		         <!--  <Command>sudo service iptables-persistent start</Command> -->
 		          <CurrentState>ReadState</CurrentState>
 		          <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
 		        </Attributes>

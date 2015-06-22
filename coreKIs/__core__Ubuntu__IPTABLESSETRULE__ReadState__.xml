@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<KnowledgeItem ID="OpexSoftware:Ubuntu:IPTABLESINPUTACCEPT:__core__Ubuntu__IPTABLESINPUTACCEPT__ReadState__" xmlns="http://www.arago.de/KiSchema">
-	<Title>__core__Ubuntu__IPTABLESINPUTACCEPT__ReadState__</Title>
-	<Description> This KI searches for the DataBlock called __core__Ubuntu__IPTABLESINPUTACCEPT__ReadState__ 
-		and verifies the CurrentState of the package on the specified Target Machine and writes it back to the node. </Description>
-
+<KnowledgeItem ID="OpexSoftware:Ubuntu:IPTABLESSETRULE:__core__Ubuntu__IPTABLESSETRULE__ReadState__" xmlns="http://www.arago.de/KiSchema">
+	<Title>__core__Ubuntu__IPTABLESSETRULE__ReadState__</Title>
+	<Description> This KI searches for the DataBlock called __core__Ubuntu__IPTABLESSETRULE__ReadState__ 
+		and verifies the CurrentState of the package on the specified Target Machine and writes it back to the node. 
+	</Description>
 	<BindAttributes>
 		<AttributeFilter Name="NodeType" Mode="string" Value="Machine" />
 		<AttributeFilter Name="MachineClass" Mode="string" Value="Linux" />
@@ -23,10 +23,10 @@
 
 	<CreateTrigger>
 		<IssueCondition>
-			<Description> Checks Issue for DataBlock __core__Ubuntu__IPTABLESINPUTACCEPT__ReadState__ 
+			<Description> Checks Issue for DataBlock __core__Ubuntu__IPTABLESSETRULE__ReadState__ 
 				and attribute ExtUID being the same as the machine KI binds to.
 			</Description>
-			<SubItem Name="__core__Ubuntu__IPTABLESINPUTACCEPT__ReadState__" Alias="CHECK">
+			<SubItem Name="__core__Ubuntu__IPTABLESSETRULE__ReadState__" Alias="CHECK">
 				<AttributeFilter Name="ExtUID" Mode="string" Value="${TASKS:UID}" />
 				<AttributeFilter Name="Status" Mode="notexists" />
 			</SubItem>

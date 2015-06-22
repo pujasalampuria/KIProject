@@ -66,20 +66,20 @@
             
             <!-- TASK2 Accepting connection on a specified port -->
             <IncAttribute Name="PROTASKS:NumberTotal"/>
-
 		
               <UpdateData Base="EXTS" Name="Tasks" Alias="TASK2">
                 <KeyAttributes>
                   <UID> </UID>
                 </KeyAttributes>
                 <Attributes>
-                  <Lib>IPTABLESACCEPTPORT</Lib>
+                  <Lib>IPTABLESSETRULE</Lib>
                   <TargetMachine>${CIBFW:TargetMachine}</TargetMachine>      
                   <TargetState>Created</TargetState>
                   <User>${CIBFW:User}</User>
                   <Host>${CIBFW:Host}</Host>
                   <ProtocolOfRule>${CIBFW:ProtocolOfRule}</ProtocolOfRule>
-                  <PortToAccept>${CIBFW:PortToAccept}</PortToAccept>
+                  <ProtocolPort>${CIBFW:PortToAccept}</ProtocolPort>
+				  <Rule>ACCEPT</Rule>
                   <CurrentState>ReadState</CurrentState>
                   <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
                 </Attributes>
@@ -93,20 +93,18 @@
             <!-- TASK3 Bringing the new rule first in the List -->
             <IncAttribute Name="PROTASKS:NumberTotal"/>
 
-          
-            
             <UpdateData Base="EXTS" Name="Tasks" Alias="TASK3">
                 <KeyAttributes>
                   <UID> </UID>
                 </KeyAttributes>
                 <Attributes>
-                  <Lib>IPTABLESINPUTACCEPT</Lib>
+                  <Lib>IPTABLESRULEFIRST</Lib>
                   <TargetMachine>${CIBFW:TargetMachine}</TargetMachine>      
                   <TargetState>Created</TargetState>
                   <User>${CIBFW:User}</User>
                   <Host>${CIBFW:Host}</Host>
-                  <!-- <Command>sudo iptables -I INPUT 1 -i lo -j ACCEPT</Command> -->
-                  <CurrentState>ReadState</CurrentState>
+                  <Rule>ACCEPT</Rule>
+				  <CurrentState>ReadState</CurrentState>
                   <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
                 </Attributes>
              </UpdateData>
@@ -118,8 +116,6 @@
             
             <!-- TASK4 Install a iptables-persistence -->
             <IncAttribute Name="PROTASKS:NumberTotal"/>
-
-
             
             <UpdateData Base="EXTS" Name="Tasks" Alias="TASK4">
                 <KeyAttributes>
@@ -144,7 +140,6 @@
       
             <!-- TASK5 Start the iptables-persistence service -->
             <IncAttribute Name="PROTASKS:NumberTotal"/>
-
             
             <UpdateData Base="EXTS" Name="Tasks" Alias="TASK5">
                 <KeyAttributes>
