@@ -1,0 +1,9 @@
+<WebDevelopment xmlns="http://mars-o-matic.com" 
+ID="OpexSoftware:Workflow:Application:WebApplication" 
+NodeType="Application" ApplicationClass="Development" 
+ApplicationSubClass="WebDevelopment" NodeName="WebApplication">
+	<Dependencies>
+		<Node ID="OpexSoftware:Workflow:Resource:WebResource" />
+	</Dependencies>
+	<CustomerInformation ID="opex.com" Name="OpexSoftware" />
+</WebDevelopment>

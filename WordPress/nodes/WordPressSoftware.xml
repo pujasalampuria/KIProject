@@ -1,0 +1,9 @@
+<WordPress xmlns="http://mars-o-matic.com" ID="OpexSoftware:Workflow:Software:WordPress"
+	NodeType="Software" SoftwareClass="CMS" 
+	SoftwareSubClass="WordPress" NodeName="WordPress">
+	<Dependencies>
+		<Node ID="OpexSoftware:Workflow:Machine:Shree" />
+		<Node ID="OpexSoftware:Workflow:Resource:WebResource" />
+	</Dependencies>
+	<CustomerInformation ID="opex.com" Name="opex"/>
+</WordPress>
