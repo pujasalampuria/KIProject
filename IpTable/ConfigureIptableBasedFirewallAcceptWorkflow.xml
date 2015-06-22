@@ -49,7 +49,7 @@
                   <UID> </UID>
                 </KeyAttributes>
                 <Attributes>
-                  <LIB>IPTABLESACCEPT</LIB>
+                  <Lib>IPTABLESACCEPT</Lib>
                   <TargetMachine>${CIBFW:TargetMachine}</TargetMachine>      
                   <TargetState>Created</TargetState>
                   <User>${CIBFW:User}</User>
@@ -73,7 +73,7 @@
                   <UID> </UID>
                 </KeyAttributes>
                 <Attributes>
-                  <LIB>IPTABLESACCEPTPORT</LIB>
+                  <Lib>IPTABLESACCEPTPORT</Lib>
                   <TargetMachine>${CIBFW:TargetMachine}</TargetMachine>      
                   <TargetState>Created</TargetState>
                   <User>${CIBFW:User}</User>
@@ -100,7 +100,7 @@
                   <UID> </UID>
                 </KeyAttributes>
                 <Attributes>
-                  <LIB>IPTABLESINPUTACCEPT</LIB>
+                  <Lib>IPTABLESINPUTACCEPT</Lib>
                   <TargetMachine>${CIBFW:TargetMachine}</TargetMachine>      
                   <TargetState>Created</TargetState>
                   <User>${CIBFW:User}</User>
@@ -126,7 +126,7 @@
                   <UID> </UID>
                 </KeyAttributes>
                 <Attributes>
-                  <LIB>PKG</LIB>
+                  <Lib>PKG</Lib>
                   <PKG>iptables-persistent</PKG>
                   <TargetMachine>${CIBFW:TargetMachine}</TargetMachine>      
                   <TargetState>Created</TargetState>
@@ -151,13 +151,11 @@
                   <UID> </UID>
                 </KeyAttributes>
                 <Attributes>
-                  <!-- <LIB>IPTABLESCOMMANDSTART</LIB> -->
-                  <LIB>IPTABLESCOMMANDSTART</LIB>
+                  <Lib>IPTABLESCOMMANDSTART</Lib>
                   <TargetMachine>${CIBFW:TargetMachine}</TargetMachine>      
                   <TargetState>Created</TargetState>
                   <User>${CIBFW:User}</User>
                   <Host>${CIBFW:Host}</Host>
-                  <!-- <Command>sudo service iptables-persistent start</Command> -->
                   <CurrentState>ReadState</CurrentState>
                   <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
                 </Attributes>
