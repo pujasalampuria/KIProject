@@ -27,6 +27,7 @@
 				<AttributeFilter Name="DownloadUrl" Mode="exists" />
 				<AttributeFilter Name="User" Mode="exists" />
 				<AttributeFilter Name="Host" Mode="exists" />
+				<AttributeFilter Name="NexusUser" Mode="exists" />
 				<AttributeFilter Name="TargetState" Mode="string" Value="Created" />
 				<AttributeFilter Name="Status" Mode="notexists" />
 			</SubItem>
