@@ -9,9 +9,5 @@ Issue:
     Path: /data/configdb
     ConfigServerHostnames: localhost 
     ConfigServerPort: 27019
-    MachineRunningMongos: localhost
-    ShardName: localhost
-    MongosPort: 27017
-    Database: TempDB  
     User: bhagyashree
     Host: 192.168.1.89

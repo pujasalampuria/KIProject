@@ -21,12 +21,17 @@
 				and triggers the workflow for successful completion.
 			</Description>
 			<SubItem Name="MongoDBWorkflowHandlePKG" Alias="MDWHP">
+				<AttributeFilter Name="TargetApp" Mode="string" Value="${PRE:NodeName}" />
 				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}" />
 				<AttributeFilter Name="TargetState" Mode="string" Value="Created" />
-				<AttributeFilter Name="Status" Mode="notexists" />
+				<AttributeFilter Name="AptKey" Mode="exists" />
+				<AttributeFilter Name="AptRepoUrl" Mode="exists" />
+				<AttributeFilter Name="AptArchiveType" Mode="exists" />
+				<AttributeFilter Name="AptDistribution" Mode="exists" />
+				<AttributeFilter Name="AptComponents" Mode="exists" />
 				<AttributeFilter Name="User" Mode="exists" />
 				<AttributeFilter Name="Host" Mode="exists" />
-				<AttributeFilter Name="TargetApp" Mode="string" Value="${PRE:NodeName}" />
+				<AttributeFilter Name="Status" Mode="notexists" />
 			</SubItem>
 		</IssueCondition>
 

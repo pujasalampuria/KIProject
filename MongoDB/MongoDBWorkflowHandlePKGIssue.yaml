@@ -11,6 +11,5 @@ Issue:
     AptArchiveType: deb
     AptDistribution: trusty/mongodb-org/3.0
     AptComponents: multiverse
-    REPOTOBEADDED: mongodb-org-3.0.list 
     User: bhagyashree
     Host: 192.168.1.89

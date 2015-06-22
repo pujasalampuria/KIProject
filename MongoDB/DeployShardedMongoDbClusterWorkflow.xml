@@ -23,15 +23,12 @@
 			<SubItem Name="DeployShardedMongoDbClusterWorkflow" Alias="DSMDCW">
 				<AttributeFilter Name="TargetApp" Mode="exists"/> 
 				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}"/>
-				<AttributeFilter Name="Database" Mode="exists"/>
-				<AttributeFilter Name="ConfigServerHostnames" Mode="exists"/>
-        	   	<AttributeFilter Name="MachineRunningMongos" Mode="exists"/>
-        		<AttributeFilter Name="ConfigServerPort" Mode="exists"/>
-        		<AttributeFilter Name="MongosPort" Mode="exists"/>
-        		<AttributeFilter Name="User" Mode="exists"/>
-        		<AttributeFilter Name="User" Mode="exists"/>
-        		<AttributeFilter Name="Path" Mode="exists"/>
 				<AttributeFilter Name="TargetState" Mode="string" Value="Created"/>
+				<AttributeFilter Name="Path" Mode="exists"/>
+				<AttributeFilter Name="ConfigServerHostnames" Mode="exists"/>
+				<AttributeFilter Name="ConfigServerPort" Mode="exists"/>
+        		<AttributeFilter Name="User" Mode="exists"/>
+				<AttributeFilter Name="Host" Mode="exists"/>
 				<AttributeFilter Name="Status" Mode="notexists"/>
 			</SubItem>
 		</IssueCondition>
@@ -46,8 +43,6 @@
 			
            <!-- TASK1 Start config server Database Instance-->
 			<IncAttribute Name="PROTASKS:NumberTotal"/>
-			
-
 			
 			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK1">
                 <KeyAttributes>
@@ -74,8 +69,6 @@
       		<!-- TASK2 Start the Mongos instance -->
 			<IncAttribute Name="PROTASKS:NumberTotal"/>
 			
-
-			
 			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK2">
                 <KeyAttributes>
                   <UID> </UID>
@@ -93,7 +86,6 @@
                 </Attributes>
              </UpdateData>
 			
-      
 			<GenerateData Alias="VAL"> 
 				<DataType>Validate</DataType>
                 <ExtUID>${TASK2:UID}</ExtUID>
@@ -106,4 +98,3 @@
 		</Activate>
 	</CreateTrigger>
 </KnowledgeItem>
-

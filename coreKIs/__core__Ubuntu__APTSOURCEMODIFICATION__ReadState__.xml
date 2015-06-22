@@ -17,8 +17,10 @@
 				<AttributeFilter Name="TargetMachine" Mode="exists" />
 				<AttributeFilter Name="User" Mode="exists" />
 				<AttributeFilter Name="Host" Mode="exists" />
+				<AttributeFilter Name="AptArchiveType" Mode="exists" />
 				<AttributeFilter Name="AptRepoUrl" Mode="exists" />
-				<AttributeFilter Name="AptKey" Mode="exists" />
+				<AttributeFilter Name="AptDistribution" Mode="exists" />
+				<AttributeFilter Name="AptComponents" Mode="exists" />
 			</SubItem>
 		</SubItem>
 	</BindAttributes>
