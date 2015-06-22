@@ -1,0 +1,9 @@
+<Tomcat xmlns="http://mars-o-matic.com" ID="OpexSoftware:Workflow:Software:HAProxy"
+	NodeType="Software" SoftwareClass="ApplicationServer" 
+	SoftwareSubClass="Tomcat" NodeName="HAProxy">
+	<Dependencies>
+		<Node ID="OpexSoftware:Workflow:Machine:Ganesh" />
+		<Node ID="OpexSoftware:Workflow:Resource:WebResource" />
+	</Dependencies>
+	<CustomerInformation ID="opex.com" Name="opex"/>
+</Tomcat>

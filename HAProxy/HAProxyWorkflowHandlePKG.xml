@@ -1,10 +1,13 @@
 <KnowledgeItem ID="OpexSoftware:HAProxy:HAProxyWorkflowHandlePKG" xmlns="http://www.arago.de/KiSchema">
 	<Title>HAProxyWorkflowHandlePKG</Title>
-	<Description>Initiates the workflow for Installing HAProxy and Deploying war.
+	<Description>Initiates the workflow for Installing HAProxy and Deploying war 
+		by writing into the MARS model and creating new corresponding DataBlocks in the Issue.
 	</Description>
-
 	<BindAttributes>
 		<AttributeFilter Name="NodeType" Mode="string" Value="Machine" />
+		<SubItem Name="Extensions" Alias="EXTS">
+            <TrueFilter/>
+        </SubItem>
 		<RelatedNode Mode="predecessor" Alias="PRE">
 			<AttributeFilter Name="NodeType" Mode="string" Value="Application" />
 		</RelatedNode>
@@ -26,6 +29,9 @@
 				<AttributeFilter Name="Status" Mode="notexists" />
 				<AttributeFilter Name="User" Mode="exists" />
 				<AttributeFilter Name="Host" Mode="exists" />
+				<AttributeFilter Name="ProxyEnableUrl" Mode="exists" />
+				<AttributeFilter Name="ProxyConfigURL" Mode="exists" />
+				<AttributeFilter Name="TomcatPKG" Mode="exists" />
 			</SubItem>
 		</IssueCondition>
 
@@ -41,126 +47,155 @@
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
 			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				PKG=haproxy
-				TargetMachine=${HAPWHP:TargetMachine}      
-				TargetState=Created
-				User=${HAPWHP:User}
-				Host=${HAPWHP:Host}
-				Lib=PKG
-				CurrentState=ReadState
-				TaskNumber=${PROTASKS:NumberTotal}/>
+				/>
 				/> </NewBlock>]]>
 			</XMLExtract>
+			
+			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK1">
+                <KeyAttributes>
+                  <UID></UID>
+                </KeyAttributes>
+                <Attributes>
+					<PKG>haproxy</PKG>
+					<TargetMachine>${HAPWHP:TargetMachine}</TargetMachine>      
+					<TargetState>Created</TargetState>
+					<User>${HAPWHP:User}</User>
+					<Host>${HAPWHP:Host}</Host>
+					<Lib>PKG</Lib>
+					<CurrentState>ReadState</CurrentState>
+					<TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+                </Attributes>
+             </UpdateData>
 
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+                <ExtUID>${TASK1:UID}</ExtUID>
 			</GenerateData>
 
 			<!-- TASK2: Install Tomcat -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				PKG=tomcat7
-				TargetMachine=${HAPWHP:TargetMachine}      
-				TargetState=Created
-				User=${HAPWHP:User}
-				Host=${HAPWHP:Host}
-				Lib=PKG
-				CurrentState=ReadState	
-				TaskNumber=${PROTASKS:NumberTotal}
-				/> </NewBlock>]]>
-			</XMLExtract>
-
+			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK2">
+                <KeyAttributes>
+                  <UID></UID>
+                </KeyAttributes>
+                <Attributes>
+					<PKG>${HAPWHP:TomcatPKG}</PKG>
+					<TargetMachine>${HAPWHP:TargetMachine}</TargetMachine>      
+					<TargetState>Created</TargetState>
+					<User>${HAPWHP:User}</User>
+					<Host>${HAPWHP:Host}</Host>
+					<Lib>PKG</Lib>
+					<CurrentState>ReadState</CurrentState>
+					<TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+                </Attributes>
+            </UpdateData>
+			 
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<ExtUID>${TASK2:UID}</ExtUID>
 			</GenerateData>
 
 			<!-- TASK3: Copy war -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
-
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetMachine=${HAPWHP:TargetMachine}            
-				TargetState=Created
-				Target_path="/var/lib/tomcat7/webapps"
-				Download_url='${HAPWHP:WARUrl}'
-				Host=${HAPWHP:Host}
-				User=${HAPWHP:User}
-				Lib=WGET
-				CurrentState=ReadState
-				TargetTar_FileName=${HAPWHP:TargetTar_FileName}
-				TaskNumber=${PROTASKS:NumberTotal} 
-				/> </NewBlock>]]>
-			</XMLExtract>
-
+			
+			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK3">
+                <KeyAttributes>
+                  <UID></UID>
+                </KeyAttributes>
+                <Attributes>
+					<TargetMachine>${HAPWHP:TargetMachine}</TargetMachine>            
+					<TargetState>Created</TargetState>
+					<Target_path>"/var/lib/tomcat7/webapps"</Target_path>
+					<Download_url>'${HAPWHP:WARUrl}'</Download_url>
+					<Host>${HAPWHP:Host}</Host>
+					<User>${HAPWHP:User}</User>
+					<Lib>WGET</Lib>
+					<CurrentState>ReadState</CurrentState>
+					<TargetTar_FileName>${HAPWHP:TargetTar_FileName}</TargetTar_FileName>
+					<TaskNumber>${PROTASKS:NumberTotal}</TaskNumber> 	
+                </Attributes>
+            </UpdateData>
+			
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<ExtUID>${TASK3:UID}</ExtUID>
 			</GenerateData>
 
 			<!-- TASK4: Enable HAProxy -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetMachine=${HAPWHP:TargetMachine}            
-				TargetState=Created
-				Target_path="/etc/default"
-				Download_url='${HAPWHP:ProxyEnableUrl}'
-				Host=${HAPWHP:Host}
-				User=${HAPWHP:User}
-				Lib=WGET
-				CurrentState=Deleted
-				TargetTar_FileName="haproxy"
-				TaskNumber=${PROTASKS:NumberTotal}
-				/> </NewBlock>]]>
-			</XMLExtract>
-
+			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK4">
+                <KeyAttributes>
+                  <UID></UID>
+                </KeyAttributes>
+                <Attributes>
+					<TargetMachine>${HAPWHP:TargetMachine}</TargetMachine>            
+					<TargetState>Created</TargetState>
+					<Target_path>"/etc/default"</Target_path>
+					<Download_url>'${HAPWHP:ProxyEnableUrl}'</Download_url>
+					<Host>${HAPWHP:Host}</Host>
+					<User>${HAPWHP:User}</User>
+					<Lib>WGET</Lib>
+					<CurrentState>ReadState</CurrentState>
+					<TargetTar_FileName>haproxy</TargetTar_FileName>
+					<TaskNumber>${PROTASKS:NumberTotal}</TaskNumber> 	
+                </Attributes>
+            </UpdateData>
+			
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<ExtUID>${TASK4:UID}</ExtUID>
 			</GenerateData>
 
-			<!-- TASK4: Configure HAProxy -->
+			<!-- TASK5: Configure HAProxy -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetMachine=${HAPWHP:TargetMachine}            
-				TargetState=Created
-				Target_path="/etc/haproxy"
-				Download_url='${HAPWHP:ProxyConfigURL}'
-				Host=${HAPWHP:Host}
-				User=${HAPWHP:User}
-				Lib=WGET
-				CurrentState=Deleted
-				TargetTar_FileName="haproxy.cfg"
-				TaskNumber=${PROTASKS:NumberTotal}
-				/> </NewBlock>]]>
-			</XMLExtract>
+			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK5">
+                <KeyAttributes>
+                  <UID></UID>
+                </KeyAttributes>
+                <Attributes>
+					<TargetMachine>${HAPWHP:TargetMachine}</TargetMachine>            
+					<TargetState>Created</TargetState>
+					<Target_path>"/etc/haproxy"</Target_path>
+					<Download_url>'${HAPWHP:ProxyConfigURL}'</Download_url>
+					<Host>${HAPWHP:Host}</Host>
+					<User>${HAPWHP:User}</User>
+					<Lib>WGET</Lib>
+					<CurrentState>ReadState</CurrentState>
+					<TargetTar_FileName>haproxy.cfg</TargetTar_FileName>
+					<TaskNumber>${PROTASKS:NumberTotal}</TaskNumber> 	
+                </Attributes>
+            </UpdateData>
 
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<ExtUID>${TASK5:UID}</ExtUID>
 			</GenerateData>
 
-			<!-- TASK4: Start HAProxy -->
+			<!-- TASK6: Start HAProxy -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
-
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetMachine=${HAPWHP:TargetMachine}            
-				TargetState=Created
-				ServiceName="haproxy"
-				Host=${HAPWHP:Host}
-				User=${HAPWHP:User}
-				Lib=STARTSERVICE
-				CurrentState=ReadState
-				TaskNumber=${PROTASKS:NumberTotal}
-				/> </NewBlock>]]>
-			</XMLExtract>
+			
+			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK6">
+                <KeyAttributes>
+                  <UID></UID>
+                </KeyAttributes>
+                <Attributes>
+					<TargetMachine>${HAPWHP:TargetMachine}</TargetMachine>            
+					<TargetState>Created</TargetState>
+					<ServiceName>"haproxy"</ServiceName>
+					<Host>${HAPWHP:Host}</Host>
+					<User>${HAPWHP:User}</User>
+					<Lib>STARTSERVICE</Lib>
+					<CurrentState>ReadState</CurrentState>
+					<TaskNumber>${PROTASKS:NumberTotal}<TaskNumber>
+                </Attributes>
+            </UpdateData>
 
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<ExtUID>${TASK6:UID}</ExtUID>
 			</GenerateData>
 
 			<GenerateData>
