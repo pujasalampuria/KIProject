@@ -24,9 +24,8 @@
 			<SubItem Name="PostgreSQLRemoveUserWorkflow" Alias="PSRUW">
 				<AttributeFilter Name="TargetApp" Mode="string" Value="${PRE:NodeName}"/>
 				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}"/>
-				<AttributeFilter Name="NewDBUserName" Mode="exists"/>
+				<AttributeFilter Name="DBUserName" Mode="exists"/>
 				<AttributeFilter Name="User" Mode="exists"/>
-				<AttributeFilter Name="Database" Mode="exists"/>
 				<AttributeFilter Name="Host" Mode="exists"/>
 				<AttributeFilter Name="TargetState" Mode="string" Value="Created"/>
 				<AttributeFilter Name="Status" Mode="notexists"/>
@@ -44,7 +43,6 @@
 			<!-- TASK1 Create User Role in Postgres-->
 			<IncAttribute Name="PROTASKS:NumberTotal"/>
 		
-			
 			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK1">
                 <KeyAttributes>
                   <UID> </UID>
@@ -55,7 +53,7 @@
                   <TargetState>Created</TargetState>
                   <User>${PSRUW:User}</User>
                   <Host>${PSRUW:Host}</Host>
-                  <NewDBUserName>${PSRUW:NewDBUserName}</NewDBUserName>
+                  <DBUserName>${PSRUW:DBUserName}</DBUserName>
                   <CurrentState>ReadState</CurrentState>
                   <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
                 </Attributes>

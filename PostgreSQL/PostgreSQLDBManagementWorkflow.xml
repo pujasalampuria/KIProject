@@ -45,7 +45,6 @@
 			 <!-- TASK1 Create DB in PostgresSQL -->
 			<IncAttribute Name="PROTASKS:NumberTotal"/>
 
-			
 			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK1">
                 <KeyAttributes>
                   <UID> </UID>

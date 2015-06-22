@@ -24,8 +24,8 @@
 			<SubItem Name="PostgreSQLUserManagementWorkflow" Alias="PSUMW">
 				<AttributeFilter Name="TargetApp" Mode="string" Value="${PRE:NodeName}"/>
 				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}"/>
-				<AttributeFilter Name="NewDBUserName" Mode="exists"/>
-				<AttributeFilter Name="NewDBPassword" Mode="exists"/>
+				<AttributeFilter Name="DBUserName" Mode="exists"/>
+				<AttributeFilter Name="DBPassword" Mode="exists"/>
 				<AttributeFilter Name="User" Mode="exists"/>
 				<AttributeFilter Name="Host" Mode="exists"/>
 				<AttributeFilter Name="TargetState" Mode="string" Value="Created"/>
@@ -55,8 +55,8 @@
                   <TargetState>Created</TargetState>
                   <User>${PSUMW:User}</User>
                   <Host>${PSUMW:Host}</Host>
-                  <NewDBUserName>${PSUMW:NewDBUserName}</NewDBUserName>
-                  <NewDBPassword>${PSUMW:NewDBPassword}</NewDBPassword>
+                  <DBUserName>${PSUMW:DBUserName}</DBUserName>
+                  <DBPassword>${PSUMW:DBPassword}</DBPassword>
                   <CurrentState>ReadState</CurrentState>
                   <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
                 </Attributes>

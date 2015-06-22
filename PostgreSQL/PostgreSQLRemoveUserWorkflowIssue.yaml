@@ -3,10 +3,9 @@ Issue:
   xmlns: http://www.arago.de/IssueSchema
   IssueSubject: 'Remove of PostgreSQL database and Users'
   PostgreSQLRemoveUserWorkflow:
-    TargetApp: EnterpriseInfrastructure  
-    Database: TempDB
+    TargetApp: EnterpriseInfrastructure
     TargetMachine: zeeshan
-    NewDBUserName: PK
+    DBUserName: PK
     TargetState: Created 
     User: postgres 
     Host: 192.168.1.90
