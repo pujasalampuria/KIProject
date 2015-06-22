@@ -13,7 +13,6 @@
 		</SubItem>
 		<SubItem Name="Extensions" Alias="EXT">
 			<SubItem Name="Tasks" Alias="TASKS">
-				<AttributeFilter Name="TargetTarFileName" Mode="exists" />
 				<AttributeFilter Name="UntarFolder" Mode="exists" />
 				<AttributeFilter Name="TargetPath" Mode="exists" />
 				<AttributeFilter Name="User" Mode="exists" />

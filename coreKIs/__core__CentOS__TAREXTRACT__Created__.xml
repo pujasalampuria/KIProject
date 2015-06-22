@@ -38,7 +38,7 @@
 			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="600">
 				<Parameter Name="User">${TASKS:User}</Parameter>
 				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
-				<Parameter Name="Command"><![CDATA["cd ${TASKS:TargetPath} && tar -zxvf ${TASKS:TargetTarFileName}"]]></Parameter>
+				<Parameter Name="Command"><![CDATA["cd ${TASKS:TargetPath} && sudo tar -zxvf ${TASKS:TargetTarFileName}"]]></Parameter>
 			</Action>
 
 			<If>
