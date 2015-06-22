@@ -294,8 +294,81 @@
 				<DataType>Validate</DataType>
 				<ExtUID>${TASK10:UID}</ExtUID>
 			</GenerateData>
+			
+			<!-- TASK11 Restart the PSAD service -->
+			
+			<IncAttribute Name="PROTASKS:NumberTotal" />
+             
+             <UpdateData Base="EXTS" Name="Tasks" Alias="TASK11">
+			   <KeyAttributes>
+                  <UID> </UID>
+               </KeyAttributes>
+               <Attributes>  
+				  <TargetMachine>${PWHP:TargetMachine}</TargetMachine>      
+				  <TargetState>Created</TargetState>
+				  <User>${PWHP:User}</User>
+				  <Lib>PSADRESTARTPSAD</Lib>
+				  <Host>${PWHP:Host}</Host>
+				  <CurrentState>ReadState</CurrentState>
+				  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber> 
+				</Attributes>
+			 </UpdateData>
+
+			<GenerateData Alias="VAL">
+				<DataType>Validate</DataType>
+				<ExtUID>${TASK11:UID}</ExtUID>
+			</GenerateData>
+			
+			<!-- TASK12  Update psad's signature -->
+			
+			<IncAttribute Name="PROTASKS:NumberTotal" />
+             
+             <UpdateData Base="EXTS" Name="Tasks" Alias="TASK12">
+			   <KeyAttributes>
+                  <UID> </UID>
+               </KeyAttributes>
+               <Attributes>  
+				  <TargetMachine>${PWHP:TargetMachine}</TargetMachine>      
+				  <TargetState>Created</TargetState>
+				  <User>${PWHP:User}</User>
+				  <Lib>PSADUPDATESIGN</Lib>
+				  <Host>${PWHP:Host}</Host>
+				  <CurrentState>ReadState</CurrentState>
+				  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber> 
+				</Attributes>
+			 </UpdateData>
+
+			<GenerateData Alias="VAL">
+				<DataType>Validate</DataType>
+				<ExtUID>${TASK12:UID}</ExtUID>
+			</GenerateData>
+			
+			<!-- TASK13  Update psad's  -->
+			
+			<IncAttribute Name="PROTASKS:NumberTotal" />
+             
+             <UpdateData Base="EXTS" Name="Tasks" Alias="TASK13">
+			   <KeyAttributes>
+                  <UID> </UID>
+               </KeyAttributes>
+               <Attributes>  
+				  <TargetMachine>${PWHP:TargetMachine}</TargetMachine>      
+				  <TargetState>Created</TargetState>
+				  <User>${PWHP:User}</User>
+				  <Lib>PSADUPDATEPSAD</Lib>
+				  <Host>${PWHP:Host}</Host>
+				  <CurrentState>ReadState</CurrentState>
+				  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber> 
+				</Attributes>
+			 </UpdateData>
+
+			<GenerateData Alias="VAL">
+				<DataType>Validate</DataType>
+				<ExtUID>${TASK13:UID}</ExtUID>
+			</GenerateData>
 	
-	
+	          <!-- RESOLVE -->
+	          
 			<GenerateData>
 				<DataType>Resolve</DataType>
 				<Status>checkForResolve</Status>
