@@ -37,7 +37,7 @@
 			<Action Capability="ExecuteCommand" Error="ERROR" Output="OUTPUT" Result="RESULT" SystemRC="SYSTEMRC" Timeout="60">
 				<Parameter Name="User">${TASKS:User}</Parameter>
 				<Parameter Name="Hostname">${TASKS:Host}</Parameter>
-				<Parameter Name="Command">"grep '^${TASKS:LinuxUser}:' /etc/passwd"</Parameter>
+				<Parameter Name="Command">"grep '^${TASKS:LinuxUser}:' /etc/sudoers"</Parameter>
 			</Action>
 
 			<If>

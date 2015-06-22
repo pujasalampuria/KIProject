@@ -41,7 +41,6 @@
                <UID></UID>
             </KeyAttributes>
             <Attributes>
-                  <TargetPath>'${RSUW:TargetPath}'</TargetPath>
                   <Lib>REMOVESUDOUSER</Lib>
                   <TargetMachine>${RSUW:TargetMachine}</TargetMachine>      
                   <TargetState>Created</TargetState>

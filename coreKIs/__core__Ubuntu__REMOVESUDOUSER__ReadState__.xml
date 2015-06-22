@@ -15,6 +15,7 @@
 				<AttributeFilter Name="TargetMachine" Mode="exists" />
 				<AttributeFilter Name="User" Mode="exists" />
 				<AttributeFilter Name="Host" Mode="exists" />
+				<AttributeFilter Name="LinuxUser" Mode="exists" />
 			</SubItem>
 		</SubItem>
 	</BindAttributes>
@@ -42,10 +43,10 @@
 			<If>
 				<VarCondition VarString="${SYSTEMRC}" Mode="eq" Value="0" />
 				<Then>
-					<SetAttribute Name="TASKS:CurrentState" Value="Created" />
+					<SetAttribute Name="TASKS:CurrentState" Value="NotRUN" />
 				</Then>
 				<Else>
-					<SetAttribute Name="TASKS:CurrentState" Value="NotRUN" />
+					<SetAttribute Name="TASKS:CurrentState" Value="Created" />
 				</Else>
 			</If>
 			<SetAttribute Name="CHECK:Status" Value="CurrentStateRead" />
