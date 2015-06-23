@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<KnowledgeItem ID="OpexSoftware:Ubuntu:ADDSUDOUSER:__core__Ubuntu__NEWRELICSTARTSYSMOND_Created__" xmlns="http://www.arago.de/KiSchema">
+<KnowledgeItem ID="OpexSoftware:Ubuntu:NEWRELICSTARTSYSMOND:__core__Ubuntu__NEWRELICSTARTSYSMOND_Created__" xmlns="http://www.arago.de/KiSchema">
 	<Title>__core__Ubuntu__NEWRELICSTARTSYSMOND_Created__</Title>
 	<Description> This KI searches for the DataBlock called __core__Ubuntu__NEWRELICSTARTSYSMOND_Created__ 
 		and verifies the CurrentState of the package on the specified Target Machine and writes it back to the node. </Description>
