@@ -1,11 +1,11 @@
 Issue:
-  NodeID: OpexSoftware:UseCase:Application:LAMPStack 
+  NodeID: OpexSoftware:Workflow:Application:EnterpriseInfrastructure
   xmlns: http://www.arago.de/IssueSchema
   IssueSubject: 'Run Workflow for Installation of a LAMP Stack Package'
   LAMPStackWorkflowHandlePKG:
-    TargetApp: LAMPStack
-    TargetMachine: Ashish
+    TargetApp: EnterpriseInfrastructure
+    TargetMachine: BD
     TargetState: Created
-    User: ashish
-    Host: 192.168.1.62
+    User: bhagyashree
+    Host: 192.168.1.89
     MySQLRootPass: root123

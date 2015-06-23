@@ -5,10 +5,13 @@
 	</Description>
 
 	<BindAttributes>
-		<AttributeFilter Name="NodeType" Mode="string" Value="Machine" />
+		<AttributeFilter Name="NodeType" Mode="string" Value="Machine"/>
+		<SubItem Name="Extensions" Alias="EXTS">
+            <TrueFilter/>
+        </SubItem>
 		<RelatedNode Mode="predecessor" Alias="PRE">
-			<AttributeFilter Name="NodeType" Mode="string" Value="Application" />
-		</RelatedNode>
+			<AttributeFilter Name="NodeType" Mode="string" Value="Application"/>
+		</RelatedNode> 
 	</BindAttributes>
 
 	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
@@ -39,87 +42,107 @@
 			<!-- TASK1 install apache2 -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				PKG=apache2
-				TargetMachine=${LSWHP:TargetMachine}
-				TargetState=Created
-				User=${LSWHP:User}
-				Host=${LSWHP:Host}
-				Lib=PKG
-				CurrentState=ReadState
-				TaskNumber=${PROTASKS:NumberTotal}
-				/> </NewBlock>]]>
-			</XMLExtract>
+			
+			
+			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK1">
+                <KeyAttributes>
+                  <UID> </UID>
+                </KeyAttributes>
+                <Attributes>
+                  <Lib>PKG</Lib>
+                  <PKG>apache2</PKG>
+                  <TargetMachine>${LSWHP:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <User>${LSWHP:User}</User>
+                  <Host>${LSWHP:Host}</Host>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+                </Attributes>
+             </UpdateData>
 
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+                <ExtUID>${TASK1:UID}</ExtUID>
 			</GenerateData>
 
 			<!-- TASK2 install debconf-utils -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				PKG=debconf-utils
-				TargetMachine=${LSWHP:TargetMachine}
-				TargetState=Created
-				User=${LSWHP:User}
-				Host=${LSWHP:Host}
-				Lib=PKG
-				CurrentState=ReadState
-				TaskNumber=${PROTASKS:NumberTotal}
-				/> </NewBlock>]]>
-			</XMLExtract>
+			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK2">
+                <KeyAttributes>
+                  <UID> </UID>
+                </KeyAttributes>
+                <Attributes>
+                  <Lib>PKG</Lib>
+                  <PKG>debconf-utils</PKG>
+                  <TargetMachine>${LSWHP:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <User>${LSWHP:User}</User>
+                  <Host>${LSWHP:Host}</Host>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+                </Attributes>
+             </UpdateData>
 
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+                <ExtUID>${TASK2:UID}</ExtUID>
 			</GenerateData>
 
 			<!-- TASK3 run the command to update debconf-set-selections with mysql-server/root_password password for mysql silent install -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetMachine=${LSWHP:TargetMachine}      
-				TargetState=Created
-				Host=${LSWHP:Host}
-				User=${LSWHP:User}
-				Lib=RUNCOMMAND
-				Command='sudo debconf-set-selections <<< &apos;mysql-server mysql-server/root_password password ${LSWHP:MySQLRootPass}&apos;'
-				TaskNumber=${PROTASKS:NumberTotal}
-				CurrentState=ReadState/> 
-				</NewBlock>]]>
-			</XMLExtract>
+
+			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK3">
+                <KeyAttributes>
+                  <UID> </UID>
+                </KeyAttributes>
+                <Attributes>
+                  <Lib>LAMPSTACKUPDATEDEBCONF</Lib>
+                  <TargetMachine>${LSWHP:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <User>${LSWHP:User}</User>
+                  <Host>${LSWHP:Host}</Host>
+                  <MySQLRootPass>${LSWHP:MySQLRootPass}</MySQLRootPass>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+                </Attributes>
+             </UpdateData>
 
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+                <ExtUID>${TASK3:UID}</ExtUID>
 			</GenerateData>
 
 			<!-- TASK4 run the command to update debconf-set-selections with mysql-server/root_password_again password for mysql silent install -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetMachine=${LSWHP:TargetMachine}            
-				TargetState=Created
-				Host=${LSWHP:Host}
-				User=${LSWHP:User}
-				Lib=RUNCOMMAND
-				Command='sudo debconf-set-selections <<< &apos;mysql-server mysql-server/root_password_again password ${LSWHP:MySQLRootPass}&apos;'
-				TaskNumber=${PROTASKS:NumberTotal}
-				CurrentState=ReadState/> 
-				</NewBlock>]]>
-			</XMLExtract>
+			
+			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK4">
+                <KeyAttributes>
+                  <UID> </UID>
+                </KeyAttributes>
+                <Attributes>
+                  <Lib>LAMPSTACKUPDATEDEBCONFAGAIN</Lib>
+                  <TargetMachine>${LSWHP:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <User>${LSWHP:User}</User>
+                  <Host>${LSWHP:Host}</Host>
+                  <MySQLRootPass>${LSWHP:MySQLRootPass}</MySQLRootPass>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+                </Attributes>
+             </UpdateData>
 
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+                <ExtUID>${TASK4:UID}</ExtUID>
 			</GenerateData>
 
 			<!-- TASK5 install mysql-server -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
+			<!-- <XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
 				PKG=mysql-server
 				TargetMachine=${LSWHP:TargetMachine}      
 				TargetState=Created
@@ -129,87 +152,133 @@
 				CurrentState=ReadState
 				TaskNumber=${PROTASKS:NumberTotal}
 				/> </NewBlock>]]>
-			</XMLExtract>
+			</XMLExtract> -->
+			
+			
+
+			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK5">
+                <KeyAttributes>
+                  <UID> </UID>
+                </KeyAttributes>
+                <Attributes>
+                  <PKG>mysql-server</PKG>
+                  <Lib>PKG</Lib>
+                  <TargetMachine>${LSWHP:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <User>${LSWHP:User}</User>
+                  <Host>${LSWHP:Host}</Host>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+                </Attributes>
+             </UpdateData>
 
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+                <ExtUID>${TASK5:UID}</ExtUID>
 			</GenerateData>
 
 			<!-- TASK6 install php5-mysql -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				PKG=php5-mysql
-				TargetMachine=${LSWHP:TargetMachine}      
-				TargetState=Created
-				User=${LSWHP:User}
-				Host=${LSWHP:Host}
-				Lib=PKG
-				CurrentState=ReadState
-				TaskNumber=${PROTASKS:NumberTotal}
-				/> </NewBlock>]]>
-			</XMLExtract>
+			
+
+			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK6">
+                <KeyAttributes>
+                  <UID> </UID>
+                </KeyAttributes>
+                <Attributes>
+                  <PKG>php5-mysql</PKG>
+                  <Lib>PKG</Lib>
+                  <TargetMachine>${LSWHP:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <User>${LSWHP:User}</User>
+                  <Host>${LSWHP:Host}</Host>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+                </Attributes>
+             </UpdateData>
 
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+                <ExtUID>${TASK6:UID}</ExtUID>
 			</GenerateData>
 			
 			<!-- TASK7 run command to install mqsql DB -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetMachine=${LSWHP:TargetMachine}            
-				TargetState=Created
-				Host=${LSWHP:Host}
-				User=${LSWHP:User}
-				Lib=RUNCOMMAND
-				Command='sudo mysql_install_db'
-				TaskNumber=${PROTASKS:NumberTotal}
-				CurrentState=ReadState/> 
-				</NewBlock>]]>
-			</XMLExtract>
+			
+
+			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK7">
+                <KeyAttributes>
+                  <UID> </UID>
+                </KeyAttributes>
+                <Attributes>
+                <Lib>LAMPSTACKMYSQLINSTALL</Lib>
+                  <TargetMachine>${LSWHP:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <User>${LSWHP:User}</User>
+                  <Host>${LSWHP:Host}</Host>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+                </Attributes>
+             </UpdateData>
 
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+                <ExtUID>${TASK7:UID}</ExtUID>
 			</GenerateData>
 
 			<!-- TASK8 install php5 -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-            	PKG=php5
-           		TargetMachine=${LSWHP:TargetMachine}      
-        		TargetState=Created
-          		User=${LSWHP:User}
-            	Host=${LSWHP:Host}
-         		Lib=PKG
-           		CurrentState=ReadState
-        		TaskNumber=${PROTASKS:NumberTotal}
-          		/> </NewBlock>]]>
-			</XMLExtract>
+			
+
+			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK8">
+                <KeyAttributes>
+                  <UID> </UID>
+                </KeyAttributes>
+                <Attributes>
+                  <PKG>php5</PKG>
+                  <Lib>PKG</Lib>
+                  <TargetMachine>${LSWHP:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <User>${LSWHP:User}</User>
+                  <Host>${LSWHP:Host}</Host>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+                </Attributes>
+             </UpdateData>
 
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+                <ExtUID>${TASK8:UID}</ExtUID>
 			</GenerateData>
 
 			<!-- TASK9 install libapache2-mod-php5 -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-               	PKG=libapache2-mod-php5
-            	TargetMachine=${LSWHP:TargetMachine}      
-         		TargetState=Created
- 				User=${LSWHP:User}
-                Host=${LSWHP:Host}
-          		Lib=PKG
-  				CurrentState=ReadState
-              	TaskNumber=${PROTASKS:NumberTotal}
-      		/> </NewBlock>]]>
-			</XMLExtract>
+		
+			
+			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK9">
+                <KeyAttributes>
+                  <UID> </UID>
+                </KeyAttributes>
+                <Attributes>
+                  <PKG>libapache2-mod-php5</PKG>
+                  <Lib>PKG</Lib>
+                  <TargetMachine>${LSWHP:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <User>${LSWHP:User}</User>
+                  <Host>${LSWHP:Host}</Host>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+                </Attributes>
+             </UpdateData>
+
+			<GenerateData Alias="VAL">
+				<DataType>Validate</DataType>
+                <ExtUID>${TASK9:UID}</ExtUID>
+			</GenerateData>
 
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
@@ -219,21 +288,26 @@
 			<!-- TASK10 install php5-mcrypt -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-		       PKG=php5-mcrypt
-		       TargetMachine=${LSWHP:TargetMachine}      
-		       TargetState=Created
-		       User=${LSWHP:User}
-			   Host=${LSWHP:Host}
-		       Lib=PKG
-		       CurrentState=ReadState
-		       TaskNumber=${PROTASKS:NumberTotal}
-		  	/> </NewBlock>]]>
-			</XMLExtract>
+			
+			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK10">
+                <KeyAttributes>
+                  <UID> </UID>
+                </KeyAttributes>
+                <Attributes>
+                  <PKG>php5-mcrypt</PKG>
+                  <Lib>PKG</Lib>
+                  <TargetMachine>${LSWHP:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <User>${LSWHP:User}</User>
+                  <Host>${LSWHP:Host}</Host>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+                </Attributes>
+             </UpdateData>
 
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+                <ExtUID>${TASK10:UID}</ExtUID>
 			</GenerateData>
 			
 			<!--
