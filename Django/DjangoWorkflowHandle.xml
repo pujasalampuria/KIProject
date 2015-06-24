@@ -6,6 +6,9 @@
 
 	<BindAttributes>
 		<AttributeFilter Name="NodeType" Mode="string" Value="Machine" />
+		 <SubItem Name="Extensions" Alias="EXTS">
+            <TrueFilter/>
+         </SubItem>
 		<RelatedNode Mode="predecessor" Alias="PRE">
 			<AttributeFilter Name="NodeType" Mode="string" Value="Application" />
 		</RelatedNode>
@@ -39,182 +42,219 @@
 
 			<!-- TASK1 Install python-pip,apache2,libapache2-mod-wsgi packages  -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
-
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-			    PKG='python-pip apache2 libapache2-mod-wsgi'
-				TargetMachine=${DWH:TargetMachine}            
-				TargetState=Created
-				Host=${DWH:Host}
-				User=${DWH:User}
-				Lib=PKG
-				TaskNumber=${PROTASKS:NumberTotal}
-				CurrentState=ReadState/> 
-				</NewBlock>]]>
-			</XMLExtract>
+			
+			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK1">
+            <KeyAttributes>
+               <UID> </UID>
+            </KeyAttributes>
+            <Attributes>
+                  <PKG>python-pip apache2 libapache2-mod-wsgi</PKG>
+                  <Lib>PKG</Lib>
+                  <TargetMachine>${DWH:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <User>${DWH:User}</User>
+                  <Host>${DWH:Host}</Host>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+            </Attributes>
+            </UpdateData>
 
             <GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
-			</GenerateData>
+				<ExtUID>${TASK1:UID}</ExtUID>
+			</GenerateData> 
 			
 			<!-- TASK2  Install virtualenv -->
-			<IncAttribute Name="PROTASKS:NumberTotal" />
-
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetMachine=${DWH:TargetMachine}      
-				TargetState=Created
-				User=${DWH:User}
-				Command='sudo pip install virtualenv'
-				Lib=RUNCOMMAND
-				Host=${DWH:Host}
-				CurrentState=ReadState
-				TaskNumber=${PROTASKS:NumberTotal}/> 
-				</NewBlock>]]>
-			</XMLExtract>
+		 	<IncAttribute Name="PROTASKS:NumberTotal" />
+			
+			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK2">
+            <KeyAttributes>
+               <UID> </UID>
+            </KeyAttributes>
+            <Attributes>
+                  <PIPPKG>virtualenv</PIPPKG>
+                  <Lib>PIPPKG</Lib>
+                  <TargetMachine>${DWH:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <User>${DWH:User}</User>
+                  <Host>${DWH:Host}</Host>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+            </Attributes>
+            </UpdateData>
 
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
-			</GenerateData>
+				<ExtUID>${TASK2:UID}</ExtUID>
+			</GenerateData> -->
                  
             <!-- TASK3 Execute command to create a Python virtual environment-->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetMachine=${DWH:TargetMachine}      
-				TargetState=Created
-				User=${DWH:User}
-				Command='mkdir -p ${DWH:Path} &amp;&amp; cd ${DWH:Path} &amp;&amp; virtualenv myprojectenv'
-				Lib=RUNCOMMAND
-				Host=${DWH:Host}
-				CurrentState=ReadState
-				TaskNumber=${PROTASKS:NumberTotal}/> 
-				</NewBlock>]]>
-			</XMLExtract>
-
+            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK3">
+            <KeyAttributes>
+               <UID> </UID>
+            </KeyAttributes>
+            <Attributes>
+                  <Lib>DJANGOPYTHONVIRTUALENV</Lib>
+                  <TargetMachine>${DWH:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <User>${DWH:User}</User>
+                  <Host>${DWH:Host}</Host>
+                  <Path>${DWH:Path}</Path>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+            </Attributes>
+            </UpdateData>
+            
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<ExtUID>${TASK3:UID}</ExtUID>
 			</GenerateData>
 			
 			<!-- TASK4 Run Command to activate the virtual environment-->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetMachine=${DWH:TargetMachine}      
-				TargetState=Created
-				User=${DWH:User}
-				Command='cd ${DWH:Path} &amp;&amp; source myprojectenv/bin/activate'
-				Lib=RUNCOMMAND
-				Host=${DWH:Host}
-				CurrentState=ReadState
-				TaskNumber=${PROTASKS:NumberTotal}/> 
-				</NewBlock>]]>
-			</XMLExtract>
-
+            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK4">
+            <KeyAttributes>
+               <UID> </UID>
+            </KeyAttributes>
+            <Attributes>
+                  <Lib>DJANGOACTIVATEVIRTUALENV</Lib>
+                  <TargetMachine>${DWH:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <User>${DWH:User}</User>
+                  <Host>${DWH:Host}</Host>
+                  <Path>${DWH:Path}</Path>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+            </Attributes>
+            </UpdateData>
+            
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
-			</GenerateData>
+				<ExtUID>${TASK4:UID}</ExtUID>
+			</GenerateData> 
 			
 			<!-- TASK5 Install django -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetMachine=${DWH:TargetMachine}      
-				TargetState=Created
-				User=${DWH:User}
-				Command='sudo pip install django'
-				Lib=RUNCOMMAND
-				Host=${DWH:Host}
-				CurrentState=ReadState
-				TaskNumber=${PROTASKS:NumberTotal}/> 
-				</NewBlock>]]>
-			</XMLExtract>
-
+            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK5">
+            <KeyAttributes>
+               <UID> </UID>
+            </KeyAttributes>
+            <Attributes>
+                  <PIPPKG>django</PIPPKG>
+                  <Lib>PIPPKG</Lib>
+                  <TargetMachine>${DWH:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <User>${DWH:User}</User>
+                  <Host>${DWH:Host}</Host>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+            </Attributes>
+            </UpdateData>
+            
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
-			</GenerateData>
+				<ExtUID>${TASK5:UID}</ExtUID>
+			</GenerateData> 
 			
 			<!-- TASK6 Start DJango project -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
-
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetMachine=${DWH:TargetMachine}      
-				TargetState=Created
-				User=${DWH:User}
-				Command='cd ${DWH:Path} &amp;&amp; django-admin.py startproject myproject .'
-				Lib=RUNCOMMAND
-				Host=${DWH:Host}
-				CurrentState=ReadState
-				TaskNumber=${PROTASKS:NumberTotal}/> 
-				</NewBlock>]]>
-			</XMLExtract>
-
+			
+			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK6">
+            <KeyAttributes>
+               <UID> </UID>
+            </KeyAttributes>
+            <Attributes>
+                  <Lib>DJANGOSTART</Lib>
+                  <TargetMachine>${DWH:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <User>${DWH:User}</User>
+                  <Host>${DWH:Host}</Host>
+                  <Path>${DWH:Path}</Path>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+            </Attributes>
+            </UpdateData>
+			
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<ExtUID>${TASK6:UID}</ExtUID>
 			</GenerateData>
 			
 			<!-- TASK7 Run Command to adjust the Project settings -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetMachine=${DWH:TargetMachine}      
-				TargetState=Created
-				User=${DWH:User}
-				Command='echo &apos;STATIC_ROOT = os.path.join(BASE_DIR, \"static/\")&apos; >> ${DWH:Path}/myproject/settings.py'
-				Lib=RUNCOMMAND
-				Host=${DWH:Host}
-				CurrentState=ReadState
-				TaskNumber=${PROTASKS:NumberTotal}/> 
-				</NewBlock>]]>
-			</XMLExtract>
+            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK7">
+            <KeyAttributes>
+               <UID> </UID>
+            </KeyAttributes>
+            <Attributes>
+                  <Lib>DJANGOPROJSETTING</Lib>
+                  <TargetMachine>${DWH:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <User>${DWH:User}</User>
+                  <Host>${DWH:Host}</Host>
+                  <Path>${DWH:Path}</Path>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+            </Attributes>
+            </UpdateData>
 
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<ExtUID>${TASK7:UID}</ExtUID>
 			</GenerateData>
 			
 			<!-- TASK8 Run Command to migrate the initial database schema to our SQLite database using the management script -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetMachine=${DWH:TargetMachine}      
-				TargetState=Created
-				User=${DWH:User}
-				Command='cd ${DWH:Path} &amp;&amp; ./manage.py makemigrations &amp;&amp; ./manage.py migrate'
-				Lib=RUNCOMMAND
-				Host=${DWH:Host}
-				CurrentState=ReadState
-				TaskNumber=${PROTASKS:NumberTotal}/> 
-				</NewBlock>]]>
-			</XMLExtract>
-
+             <UpdateData Base="EXTS" Name="Tasks" Alias="TASK8">
+            <KeyAttributes>
+               <UID> </UID>
+            </KeyAttributes>
+            <Attributes>
+                  <Lib>DJANGODBMIGRATE</Lib>
+                  <TargetMachine>${DWH:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <User>${DWH:User}</User>
+                  <Host>${DWH:Host}</Host>
+                  <Path>${DWH:Path}</Path>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+            </Attributes>
+            </UpdateData>
+             
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<ExtUID>${TASK8:UID}</ExtUID>
 			</GenerateData>
 			
 			<!-- TASK9 Run Command to collect all of the static content into the directory location -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetMachine=${DWH:TargetMachine}      
-				TargetState=Created
-				User=${DWH:User}
-				Command='cd ${DWH:Path} &amp;&amp; ./manage.py collectstatic --noinput'
-				Lib=RUNCOMMAND
-				Host=${DWH:Host}
-				CurrentState=ReadState
-				TaskNumber=${PROTASKS:NumberTotal}/> 
-				</NewBlock>]]>
-			</XMLExtract>
 
+            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK9">
+            <KeyAttributes>
+               <UID> </UID>
+            </KeyAttributes>
+            <Attributes>
+                  <Lib>DJANGOCOLLECTSTATICCONTENT</Lib>
+                  <TargetMachine>${DWH:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <User>${DWH:User}</User>
+                  <Host>${DWH:Host}</Host>
+                  <Path>${DWH:Path}</Path>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+            </Attributes>
+            </UpdateData>
+            
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<ExtUID>${TASK9:UID}</ExtUID>
 			</GenerateData>
 			
 			<!-- To complete the workflow Create an administrative user for the project by typing 
