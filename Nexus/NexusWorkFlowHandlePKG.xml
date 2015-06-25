@@ -6,6 +6,9 @@
 
 	<BindAttributes>
 		<AttributeFilter Name="NodeType" Mode="string" Value="Machine" />
+		<SubItem Name="Extensions" Alias="EXTS">
+           <TrueFilter/>
+        </SubItem> 
 		<RelatedNode Mode="predecessor" Alias="PRE">
 			<AttributeFilter Name="NodeType" Mode="string" Value="Application" />
 		</RelatedNode>
@@ -42,207 +45,245 @@
 			</GenerateData>
 			
 			<!-- TASK1 Create a user as nexus -->
-			<IncAttribute Name="PROTASKS:NumberTotal" />
+		    <IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				UserName=${NWHP:NexusUser}
-				TargetMachine=${NWHP:TargetMachine}      
-				TargetState=Created
-				User=${NWHP:User}
-				Lib=CREATEUSER
-				Host=${NWHP:Host}
-				CurrentState=ReadState
-				TaskNumber=${PROTASKS:NumberTotal}/> 
-				</NewBlock>]]>
-			</XMLExtract>
-
+            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK1">
+            <KeyAttributes>
+               <UID> </UID>
+            </KeyAttributes>
+            <Attributes>
+                  <UserName>${NWHP:NexusUser}</UserName> 
+                  <Lib>CREATEUSER</Lib>
+                  <TargetMachine>${NWHP:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <User>${NWHP:User}</User>
+                  <Host>${NWHP:Host}</Host>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+            </Attributes>
+            </UpdateData>
+            
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
-			</GenerateData>
+				<ExtUID>${TASK1:UID}</ExtUID>
+			</GenerateData> 
 
 			<!-- TASK2 Download JBoss tar file -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetTarFileName=${NWHP:TargetTarFileName}
-				TargetMachine=${NWHP:TargetMachine}            
-				TargetState=Created
-				TargetPath='${NWHP:TargetPath}'
-				DownloadUrl='${NWHP:DownloadUrl}'
-				Host=${NWHP:Host}
-				User=${NWHP:User}
-				Lib=WGET	
-				TaskNumber=${PROTASKS:NumberTotal}
-				CurrentState=ReadState/> 
-				</NewBlock>]]>
-			</XMLExtract>
+            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK2">
+            <KeyAttributes>
+               <UID> </UID>
+            </KeyAttributes>
+            <Attributes>
+                  <Lib>WGET</Lib>
+                  <TargetMachine>${NWHP:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <TargetTarFileName>${NWHP:TargetTarFileName}</TargetTarFileName>
+                  <TargetPath>${NWHP:TargetPath}</TargetPath>
+                  <DownloadUrl>${NWHP:DownloadUrl}</DownloadUrl>
+                  <User>${NWHP:User}</User>
+                  <Host>${NWHP:Host}</Host>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+            </Attributes>
+            </UpdateData>
 
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
-			</GenerateData>
+				<ExtUID>${TASK2:UID}</ExtUID>
+			</GenerateData> 
 
 			<!-- TASK3 Create a directory for nexus-oss -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				Command='sudo mkdir /usr/lib/nexus-oss &amp;&amp; cd /usr/lib/nexus-oss/ &amp;&amp; sudo chown ${NWHP:NexusUser}:${NWHP:User} /usr/lib/nexus-oss/'
-				TargetMachine=${NWHP:TargetMachine}      
-				TargetState=Created
-				Host=${NWHP:Host}
-				User=${NWHP:User}
-				Lib=RUNCOMMAND
-				TaskNumber=${PROTASKS:NumberTotal}
-				CurrentState=ReadState/> 
-				</NewBlock>]]>
-			</XMLExtract>
-
+            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK3">
+            <KeyAttributes>
+               <UID> </UID>
+            </KeyAttributes>
+            <Attributes>
+                  <Lib>NEXUSCREATEDIR</Lib>
+                  <TargetMachine>${NWHP:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <User>${NWHP:User}</User>
+                  <Host>${NWHP:Host}</Host>
+                  <NexusUser>${NWHP:NexusUser}</NexusUser>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+            </Attributes>
+            </UpdateData>
+             
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
-			</GenerateData>
+				<ExtUID>${TASK3:UID}</ExtUID>
+			</GenerateData> 
 
 			<!-- TASK4 Extract Nexus tar file -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
-
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				TargetTarFileName='${NWHP:TargetPath}/${NWHP:TargetTarFileName}'
-				TargetMachine=${NWHP:TargetMachine}      
-				TargetState=Created
-				UntarFolder='${NWHP:UntarFolder}'      
-				TargetPath='/usr/lib/nexus-oss'
-				Host=${NWHP:Host}
-				User=${NWHP:User}
-				Lib=TAREXTRACT
-				TaskNumber=${PROTASKS:NumberTotal}
-				CurrentState=ReadState/> 
-				</NewBlock>]]>
-			</XMLExtract>
+             
+            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK4">
+            <KeyAttributes>
+               <UID> </UID>
+            </KeyAttributes>
+            <Attributes>
+                  <Lib>TAREXTRACT</Lib>
+                  <TargetMachine>${NWHP:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <TargetTarFileName>${NWHP:TargetPath}/${NWHP:TargetTarFileName}</TargetTarFileName>
+                  <UntarFolder>${NWHP:UntarFolder}</UntarFolder>
+                  <TargetPath>/usr/lib/nexus-oss</TargetPath>
+                  <User>${NWHP:User}</User>
+                  <Host>${NWHP:Host}</Host>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+            </Attributes>
+            </UpdateData>
 
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
-			</GenerateData>
+				<ExtUID>${TASK4:UID}</ExtUID>
+			</GenerateData> 
 			
 			<!-- TASK5 Creating new symlink to avoit version in path -->
-			<IncAttribute Name="PROTASKS:NumberTotal" />
+		 	<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				Command='cd /usr/lib/nexus-oss/ &amp;&amp; sudo ln -s nexus-2.1.2/ nexus'
-				TargetMachine=${NWHP:TargetMachine}      
-				TargetState=Created
-				Host=${NWHP:Host}
-				User=${NWHP:User}
-				Lib=RUNCOMMAND
-				TaskNumber=${PROTASKS:NumberTotal}
-				CurrentState=ReadState/> 
-				</NewBlock>]]>
-			</XMLExtract>
-
+            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK5">
+            <KeyAttributes>
+               <UID> </UID>
+            </KeyAttributes>
+            <Attributes>
+                  <Lib>NEXUSSYMLINK</Lib>
+                  <TargetMachine>${NWHP:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <User>${NWHP:User}</User>
+                  <Host>${NWHP:Host}</Host>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+            </Attributes>
+            </UpdateData>
+			
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
-			</GenerateData>
+				<ExtUID>${TASK5:UID}</ExtUID>
+			</GenerateData> 
 			
 			<!-- TASK6 Create a repo directory -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
-
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				Command='sudo mkdir /srv/nexus &amp;&amp; sudo mkdir /srv/nexus/main-repo &amp;&amp; sudo chown ${NWHP:NexusUser}:${NWHP:User} /srv/nexus/main-repo'
-				TargetMachine=${NWHP:TargetMachine}      
-				TargetState=Created
-				Host=${NWHP:Host}
-				User=${NWHP:User}
-				Lib=RUNCOMMAND
-				TaskNumber=${PROTASKS:NumberTotal}
-				CurrentState=ReadState/> 
-				</NewBlock>]]>
-			</XMLExtract>
+             
+            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK6">
+            <KeyAttributes>
+               <UID> </UID>
+            </KeyAttributes>
+            <Attributes>
+                  <Lib>NEXUSREPODIR</Lib>
+                  <TargetMachine>${NWHP:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <User>${NWHP:User}</User>
+                  <Host>${NWHP:Host}</Host>
+                  <NexusUser>${NWHP:NexusUser}</NexusUser>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+            </Attributes>
+            </UpdateData>
 
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
-			</GenerateData>
+				<ExtUID>${TASK6:UID}</ExtUID>
+			</GenerateData> 
 			
 			<!-- TASK7 Adding repo to nexus-work -->
-			<IncAttribute Name="PROTASKS:NumberTotal" />
+		    <IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				Command='sudo sed -i &apos;s/nexus-work.*/nexus-work=\/srv\/nexus\/main-repo/&apos; /usr/lib/nexus-oss/nexus-2.1.2/conf/nexus.properties'
-				TargetMachine=${NWHP:TargetMachine}      
-				TargetState=Created
-				Host=${NWHP:Host}
-				User=${NWHP:User}
-				Lib=RUNCOMMAND
-				TaskNumber=${PROTASKS:NumberTotal}
-				CurrentState=ReadState/> 
-				</NewBlock>]]>
-			</XMLExtract>
-
+            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK7">
+            <KeyAttributes>
+               <UID> </UID>
+            </KeyAttributes>
+            <Attributes>
+                  <Lib>NEXUSADDREPO</Lib>
+                  <TargetMachine>${NWHP:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <User>${NWHP:User}</User>
+                  <Host>${NWHP:Host}</Host>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+            </Attributes>
+            </UpdateData>
+             
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<ExtUID>${TASK7:UID}</ExtUID>
 			</GenerateData>
-			
+		
 			<!-- TASK8 Copying nexus script to /etc/init.d -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				Command='sudo cp /usr/lib/nexus-oss/nexus/bin/nexus /etc/init.d/nexus &amp;&amp; sudo chown ${NWHP:NexusUser}:${NWHP:User} /etc/init.d/nexus'
-				TargetMachine=${NWHP:TargetMachine}      
-				TargetState=Created
-				Host=${NWHP:Host}
-				User=${NWHP:User}
-				Lib=RUNCOMMAND
-				TaskNumber=${PROTASKS:NumberTotal}
-				CurrentState=ReadState/> 
-				</NewBlock>]]>
-			</XMLExtract>
-
+            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK8">
+            <KeyAttributes>
+               <UID> </UID>
+            </KeyAttributes>
+            <Attributes>
+                  <Lib>NEXUSCPYSCRIPT</Lib>
+                  <TargetMachine>${NWHP:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <User>${NWHP:User}</User>
+                  <Host>${NWHP:Host}</Host>
+                  <NexusUser>${NWHP:NexusUser}</NexusUser>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+            </Attributes>
+            </UpdateData>
+            
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<ExtUID>${TASK8:UID}</ExtUID>
 			</GenerateData>
 			
 			<!-- TASK9 Replace default location , Set PID dir and Set RUN_AS user to nexus -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				Command='sudo sed -i &apos;s/NEXUS_HOME=\"..\"/NEXUS_HOME=\"\/usr\/lib\/nexus-oss\/nexus\"/g&apos; /etc/init.d/nexus &amp;&amp; sudo sed -i &apos;s/#PIDDIR=\".\"/PIDDIR=\"\/var\/run\"/g&apos; /etc/init.d/nexus &amp;&amp; sudo sed -i &apos;s/#RUN_AS_USER=/RUN_AS_USER=root/g&apos; /etc/init.d/nexus'
-				TargetMachine=${NWHP:TargetMachine}      
-				TargetState=Created
-				Host=${NWHP:Host}
-				User=${NWHP:User}
-				Lib=RUNCOMMAND
-				TaskNumber=${PROTASKS:NumberTotal}
-				CurrentState=ReadState/> 
-				</NewBlock>]]>
-			</XMLExtract>
+            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK9">
+            <KeyAttributes>
+               <UID> </UID>
+            </KeyAttributes>
+            <Attributes>
+                  <Lib>NEXUSSETUSER</Lib>
+                  <TargetMachine>${NWHP:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <User>${NWHP:User}</User>
+                  <Host>${NWHP:Host}</Host>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+            </Attributes>
+            </UpdateData>
+            
+			<!-- Command='sudo sed -i &apos;s/NEXUS_HOME=\"..\"/NEXUS_HOME=\"\/usr\/lib\/nexus-oss\/nexus\"/g&apos; /etc/init.d/nexus &amp;&amp; sudo sed -i &apos;s/#PIDDIR=\".\"/PIDDIR=\"\/var\/run\"/g&apos; /etc/init.d/nexus &amp;&amp; sudo sed -i &apos;s/#RUN_AS_USER=/RUN_AS_USER=root/g&apos; /etc/init.d/nexus' -->
 
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<ExtUID>${TASK9:UID}</ExtUID>
 			</GenerateData>
 			
 			<!-- TASK10 Replace default location , Set PID dir and Set RUN_AS user to nexus -->
 			<IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<XMLExtract StoreTo="NODE:Extensions" Mode="simple"><![CDATA[<NewBlock><Tasks 
-				Command='sudo update-rc.d nexus defaults &amp;&amp; sudo /etc/init.d/nexus start'
-				TargetMachine=${NWHP:TargetMachine}      
-				TargetState=Created
-				Host=${NWHP:Host}
-				User=${NWHP:User}
-				Lib=RUNCOMMAND
-				TaskNumber=${PROTASKS:NumberTotal}
-				CurrentState=ReadState/> 
-				</NewBlock>]]>
-			</XMLExtract>
-
+            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK10">
+            <KeyAttributes>
+               <UID> </UID>
+            </KeyAttributes>
+            <Attributes>
+                  <Lib>NEXUSSTART</Lib>
+                  <TargetMachine>${NWHP:TargetMachine}</TargetMachine>      
+                  <TargetState>Created</TargetState>
+                  <User>${NWHP:User}</User>
+                  <Host>${NWHP:Host}</Host>
+                  <CurrentState>ReadState</CurrentState>
+                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+            </Attributes>
+            </UpdateData> 
+            
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
-				<ExtUID>${NODE:Extensions/Tasks/UID}</ExtUID>
+				<ExtUID>${TASK10:UID}</ExtUID>
 			</GenerateData>
 			
 			<!-- To Complete the workflow and to start JBoss Server please run ./standalone.sh -Djboss.bind.address=yourserverip -Djboss.bind.address.management=yourserverip& Command from bin directory -->
