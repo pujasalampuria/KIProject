@@ -256,8 +256,6 @@
             </Attributes>
             </UpdateData>
             
-			<!-- Command='sudo sed -i &apos;s/NEXUS_HOME=\"..\"/NEXUS_HOME=\"\/usr\/lib\/nexus-oss\/nexus\"/g&apos; /etc/init.d/nexus &amp;&amp; sudo sed -i &apos;s/#PIDDIR=\".\"/PIDDIR=\"\/var\/run\"/g&apos; /etc/init.d/nexus &amp;&amp; sudo sed -i &apos;s/#RUN_AS_USER=/RUN_AS_USER=root/g&apos; /etc/init.d/nexus' -->
-
 			<GenerateData Alias="VAL">
 				<DataType>Validate</DataType>
 				<ExtUID>${TASK9:UID}</ExtUID>
