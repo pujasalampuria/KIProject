@@ -18,7 +18,7 @@
 	<CreateTrigger>
 		<IssueCondition>
 			<Description>Searches for an Issue with DataBlock ZooKeeperWorkflowHandlePKG 
-				and triggers the workflow for successful completion.
+				and the necessary information for successful completion of workflow.
 			</Description>
 			<SubItem Name="ZooKeeperWorkflowHandlePKG" Alias="ZKWHP">
 				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}" />

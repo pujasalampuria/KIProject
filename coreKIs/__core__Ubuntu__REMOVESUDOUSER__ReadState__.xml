@@ -43,7 +43,7 @@
 			<If>
 				<VarCondition VarString="${SYSTEMRC}" Mode="eq" Value="0" />
 				<Then>
-					<SetAttribute Name="TASKS:CurrentState" Value="NotRUN" />
+					<SetAttribute Name="TASKS:CurrentState" Value="NotCreated" />
 				</Then>
 				<Else>
 					<SetAttribute Name="TASKS:CurrentState" Value="Created" />

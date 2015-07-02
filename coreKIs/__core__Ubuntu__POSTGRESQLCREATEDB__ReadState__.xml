@@ -45,7 +45,7 @@
 					<SetAttribute Name="TASKS:CurrentState" Value="Created" />
 				</Then>
 				<Else>
-					<SetAttribute Name="TASKS:CurrentState" Value="NotRUN" />
+					<SetAttribute Name="TASKS:CurrentState" Value="NotCreated" />
 				</Else>
 			</If>
 			<SetAttribute Name="CHECK:Status" Value="CurrentStateRead" />
