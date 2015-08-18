@@ -1,12 +1,12 @@
 Issue:
   NodeID: OpexSoftware:Workflow:Application:EnterpriseInfrastructure
   xmlns: http://www.arago.de/IssueSchema
-  IssueSubject: 'Configure a Iptables Based Firewall to Drop a connection'
-  ConfigureIptableBasedFirewallDropWorkflow: 
+  IssueSubject: 'Configure a Iptables Based Firewall to accept a connection'
+  ConfigureIptableBasedFirewallAcceptWorkflow: 
     TargetApp: EnterpriseInfrastructure  
     TargetMachine: BD
     TargetState: Created
     ProtocolOfRule: tcp
-    PortToDrop: 80
+    PortToAccept: 80
     User: bhagyashree
     Host: 192.168.1.89

@@ -1,105 +1,104 @@
 <KnowledgeItem ID="OpexSoftware:MongoDB:MongoDBWorkflowHandlePKG" xmlns="http://www.arago.de/KiSchema">
-	<Title>MongoDBWorkflowHandlePKG</Title>
-	<Description>Initiates the workflow for handling packages related to the installation of 
-		MongoDB by writing into the MARS model and creating new corresponding DataBlocks in the Issue.
-	</Description>
-	<BindAttributes>
-		<AttributeFilter Name="NodeType" Mode="string" Value="Machine" />
-		<SubItem Name="Extensions" Alias="EXTS">
-			<TrueFilter/>
-		</SubItem>
-		<RelatedNode Mode="predecessor" Alias="PRE">
-		<AttributeFilter Name="NodeType" Mode="string" Value="Application" />
-		</RelatedNode>
-	</BindAttributes>
+  <Title>MongoDBWorkflowHandlePKG</Title>
+  <Description>Initiates the workflow for handling packages related to the installation of 
+    MongoDB by writing into the MARS model and creating new corresponding DataBlocks in the Issue.
+  </Description>
+  <BindAttributes>
+    <AttributeFilter Name="NodeType" Mode="string" Value="Machine" />
+    <SubItem Name="Extensions" Alias="EXTS">
+      <TrueFilter/>
+    </SubItem>
+    <RelatedNode Mode="predecessor" Alias="PRE">
+    <AttributeFilter Name="NodeType" Mode="string" Value="Application" />
+    </RelatedNode>
+  </BindAttributes>
 
-	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+  <Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
 
-	<CreateTrigger>
-		<IssueCondition>
-			<Description>Searches for an Issue with DataBlock MongoDBWorkflowHandlePKG 
-				and triggers the workflow for successful completion.
-			</Description>
-			<SubItem Name="MongoDBWorkflowHandlePKG" Alias="MDWHP">
-				<AttributeFilter Name="TargetApp" Mode="string" Value="${PRE:NodeName}" />
-				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}" />
-				<AttributeFilter Name="TargetState" Mode="string" Value="Created" />
-				<AttributeFilter Name="AptKey" Mode="exists" />
-				<AttributeFilter Name="AptRepoUrl" Mode="exists" />
-				<AttributeFilter Name="AptArchiveType" Mode="exists" />
-				<AttributeFilter Name="AptDistribution" Mode="exists" />
-				<AttributeFilter Name="AptComponents" Mode="exists" />
-				<AttributeFilter Name="User" Mode="exists" />
-				<AttributeFilter Name="Host" Mode="exists" />
-				<AttributeFilter Name="Status" Mode="notexists" />
-			</SubItem>
-		</IssueCondition>
+  <CreateTrigger>
+    <IssueCondition>
+      <Description>Searches for an Issue with DataBlock MongoDBWorkflowHandlePKG 
+        and triggers the workflow for successful completion.
+      </Description>
+      <SubItem Name="MongoDBWorkflowHandlePKG" Alias="MDWHP">
+        <AttributeFilter Name="TargetApp" Mode="string" Value="${PRE:NodeName}" />
+        <AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}" />
+        <AttributeFilter Name="TargetState" Mode="string" Value="Created" />
+        <AttributeFilter Name="AptKey" Mode="exists" />
+        <AttributeFilter Name="AptRepoUrl" Mode="exists" />
+        <AttributeFilter Name="AptArchiveType" Mode="exists" />
+        <AttributeFilter Name="AptDistribution" Mode="exists" />
+        <AttributeFilter Name="AptComponents" Mode="exists" />
+        <AttributeFilter Name="User" Mode="exists" />
+        <AttributeFilter Name="Host" Mode="exists" />
+        <AttributeFilter Name="Status" Mode="notexists" />
+      </SubItem>
+    </IssueCondition>
 
-		<Activate>
-			<SetAttribute Name="MDWHP:Status" Value="WorkflowStarted" />
-			
-			<GenerateData Alias="PROTASKS">
-				<DataType>ProcessingTasks</DataType>
-				<CurrentTask>1</CurrentTask>
-			</GenerateData>
+    <Activate>
+      <SetAttribute Name="MDWHP:Status" Value="WorkflowStarted" />
+      
+      <GenerateData Alias="PROTASKS">
+        <DataType>ProcessingTasks</DataType>
+        <CurrentTask>1</CurrentTask>
+      </GenerateData>
 
-			<!--Task1 Updating the apt Source File -->
-			<IncAttribute Name="PROTASKS:NumberTotal" />
+      <!--Task1 Updating the apt Source File -->
+      <IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK1">
-                <KeyAttributes>
-                  <UID> </UID>
-                </KeyAttributes>
-                <Attributes>
-                  <Lib>APTSOURCEMODIFICATION</Lib>
-                  <TargetMachine>${MDWHP:TargetMachine}</TargetMachine>      
-                  <TargetState>Created</TargetState>
-                  <User>${MDWHP:User}</User>
-                  <Host>${MDWHP:Host}</Host>
-                  <AptRepoUrl>${MDWHP:AptRepoUrl}</AptRepoUrl>
-                  <AptArchiveType>${MDWHP:AptArchiveType}</AptArchiveType>
-                  <AptDistribution>${MDWHP:AptDistribution}</AptDistribution>
-                  <AptComponents>${MDWHP:AptComponents}</AptComponents>
-                  <AptKey>${MDWHP:AptKey}</AptKey>
-                  <CurrentState>ReadState</CurrentState>
-                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
-                </Attributes>
-             </UpdateData>
-			
-			<GenerateData Alias="VAL">
-				<DataType>Validate</DataType>
-				<ExtUID>${TASK1:UID}</ExtUID>
-			</GenerateData>
+      <UpdateData Base="EXTS" Name="Tasks" Alias="TASK1">
+          <KeyAttributes>
+            <UID> </UID>
+          </KeyAttributes>
+          <Attributes>
+            <Lib>APTSOURCEMODIFICATION</Lib>
+            <TargetMachine>${MDWHP:TargetMachine}</TargetMachine>      
+            <TargetState>Created</TargetState>
+            <User>${MDWHP:User}</User>
+            <Host>${MDWHP:Host}</Host>
+            <AptRepoUrl>${MDWHP:AptRepoUrl}</AptRepoUrl>
+            <AptArchiveType>${MDWHP:AptArchiveType}</AptArchiveType>
+            <AptDistribution>${MDWHP:AptDistribution}</AptDistribution>
+            <AptComponents>${MDWHP:AptComponents}</AptComponents>
+            <AptKey>${MDWHP:AptKey}</AptKey>
+            <CurrentState>ReadState</CurrentState>
+            <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+          </Attributes>
+      </UpdateData>
+      
+      <GenerateData Alias="VAL">
+        <DataType>Validate</DataType>
+        <ExtUID>${TASK1:UID}</ExtUID>
+      </GenerateData>
 
-			<!--Task2 Installing the mongoDB -->
-			<IncAttribute Name="PROTASKS:NumberTotal" />
+      <!--Task2 Installing the mongoDB -->
+      <IncAttribute Name="PROTASKS:NumberTotal" />
 
-			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK2">
-                <KeyAttributes>
-                  <UID> </UID>
-                </KeyAttributes>
-                <Attributes>
-                  <TargetMachine>${MDWHP:TargetMachine}</TargetMachine>      
-                  <TargetState>Created</TargetState>
-                  <Lib>PKG</Lib>
-                  <PKG>mongodb-org</PKG>
-                  <User>${MDWHP:User}</User>
-                  <Host>${MDWHP:Host}</Host>
-                  <CurrentState>ReadState</CurrentState>
-                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
-                </Attributes>
-             </UpdateData>
+      <UpdateData Base="EXTS" Name="Tasks" Alias="TASK2">
+          <KeyAttributes>
+            <UID> </UID>
+          </KeyAttributes>
+          <Attributes>
+            <TargetMachine>${MDWHP:TargetMachine}</TargetMachine>      
+            <TargetState>Created</TargetState>
+            <Lib>PKG</Lib>
+            <PKG>mongodb-org</PKG>
+            <User>${MDWHP:User}</User>
+            <Host>${MDWHP:Host}</Host>
+            <CurrentState>ReadState</CurrentState>
+            <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+          </Attributes>
+      </UpdateData>
 
-			<GenerateData Alias="VAL">
-				<DataType>Validate</DataType>
-				<ExtUID>${TASK2:UID}</ExtUID>
-			</GenerateData>
+      <GenerateData Alias="VAL">
+        <DataType>Validate</DataType>
+        <ExtUID>${TASK2:UID}</ExtUID>
+      </GenerateData>
 
-			<GenerateData>
-				<DataType>Resolve</DataType>
-				<Status>checkForResolve</Status>
-			</GenerateData>
-		</Activate>
-	</CreateTrigger>
+      <GenerateData>
+        <DataType>Resolve</DataType>
+        <Status>checkForResolve</Status>
+      </GenerateData>
+    </Activate>
+  </CreateTrigger>
 </KnowledgeItem>
-

@@ -1,76 +1,76 @@
 <KnowledgeItem ID="OpexSofware:PostgreSQL:PostgreSQLRemoveDBWorkflow" xmlns="http://www.arago.de/KiSchema">
-	<Title>PostgreSQLRemoveDBWorkflow</Title>
-	<Description>Initiates the workflow for creating DataBase on Postgre by writing into the 
-		MARS model and creating new corresponding DataBlocks in the Issue.
-	</Description>
+  <Title>PostgreSQLRemoveDBWorkflow</Title>
+  <Description>Initiates the workflow for creating DataBase on Postgre by writing into the 
+    MARS model and creating new corresponding DataBlocks in the Issue.
+  </Description>
 
-	<BindAttributes>
-		<AttributeFilter Name="NodeType" Mode="string" Value="Machine"/>
-		<SubItem Name="Extensions" Alias="EXTS">
-            <TrueFilter/>
-        </SubItem>
-		<RelatedNode Mode="predecessor" Alias="PRE">
-			<AttributeFilter Name="NodeType" Mode="string" Value="Application"/>
-		</RelatedNode>
-	</BindAttributes>
-	
-	<!--PostgreSQLRemoveDBWorkflow triggered  -->
+  <BindAttributes>
+    <AttributeFilter Name="NodeType" Mode="string" Value="Machine"/>
+    <SubItem Name="Extensions" Alias="EXTS">
+      <TrueFilter/>
+    </SubItem>
+    <RelatedNode Mode="predecessor" Alias="PRE">
+      <AttributeFilter Name="NodeType" Mode="string" Value="Application"/>
+    </RelatedNode>
+  </BindAttributes>
+  
+  <!--PostgreSQLRemoveDBWorkflow triggered  -->
 
-	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+  <Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
 
-	<CreateTrigger>
-		<IssueCondition>
-			<Description>Searches for an Issue with DataBlock PostgreSQLRemoveDBWorkflow 
-				and the necessary information for successful completion of workflow.
-			</Description>
-			<SubItem Name="PostgreSQLRemoveDBWorkflow" Alias="PSRDW">
-				<AttributeFilter Name="TargetApp" Mode="string" Value="${PRE:NodeName}"/>
-				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}"/>
-				<AttributeFilter Name="Database" Mode="exists"/>
-				<AttributeFilter Name="User" Mode="exists"/>
-				<AttributeFilter Name="Host" Mode="exists"/>
-				<AttributeFilter Name="TargetState" Mode="string" Value="Created"/>
-				<AttributeFilter Name="Status" Mode="notexists"/>
-			</SubItem>
-		</IssueCondition>
+  <CreateTrigger>
+    <IssueCondition>
+      <Description>Searches for an Issue with DataBlock PostgreSQLRemoveDBWorkflow 
+        and the necessary information for successful completion of workflow.
+      </Description>
+      <SubItem Name="PostgreSQLRemoveDBWorkflow" Alias="PSRDW">
+        <AttributeFilter Name="TargetApp" Mode="string" Value="${PRE:NodeName}"/>
+        <AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}"/>
+        <AttributeFilter Name="Database" Mode="exists"/>
+        <AttributeFilter Name="User" Mode="exists"/>
+        <AttributeFilter Name="Host" Mode="exists"/>
+        <AttributeFilter Name="TargetState" Mode="string" Value="Created"/>
+        <AttributeFilter Name="Status" Mode="notexists"/>
+      </SubItem>
+    </IssueCondition>
 
-		<Activate>
-			<SetAttribute Name="PSRDW:Status" Value="WorkflowStarted" /> 
+    <Activate>
+      <SetAttribute Name="PSRDW:Status" Value="WorkflowStarted" /> 
 
-			<GenerateData Alias="PROTASKS"> 
-				<DataType>ProcessingTasks</DataType>
-				<CurrentTask>1</CurrentTask> 
-			</GenerateData>
+      <GenerateData Alias="PROTASKS"> 
+        <DataType>ProcessingTasks</DataType>
+        <CurrentTask>1</CurrentTask> 
+      </GenerateData>
 
-			 <!-- TASK1 Create DB in PostgresSQL -->
-			<IncAttribute Name="PROTASKS:NumberTotal"/>
+       <!-- TASK1 Create DB in PostgresSQL -->
+      <IncAttribute Name="PROTASKS:NumberTotal"/>
 
       
-			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK1">
-                <KeyAttributes>
-                  <UID> </UID>
-                </KeyAttributes>
-                <Attributes>
-                  <Lib>POSTGRESQLDROPDB</Lib>
-                  <TargetMachine>${PSRDW:TargetMachine}</TargetMachine>      
-                  <TargetState>Created</TargetState>
-                  <User>${PSRDW:User}</User>
-                  <Host>${PSRDW:Host}</Host>
-                  <Database>${PSRDW:Database}</Database>
-                  <CurrentState>ReadState</CurrentState>
-                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
-                </Attributes>
-             </UpdateData>
+      <UpdateData Base="EXTS" Name="Tasks" Alias="TASK1">
+          <KeyAttributes>
+            <UID> </UID>
+          </KeyAttributes>
+          <Attributes>
+            <Lib>POSTGRESQLDROPDB</Lib>
+            <TargetMachine>${PSRDW:TargetMachine}</TargetMachine>      
+            <TargetState>Created</TargetState>
+            <User>${PSRDW:User}</User>
+            <Host>${PSRDW:Host}</Host>
+            <Database>${PSRDW:Database}</Database>
+            <CurrentState>ReadState</CurrentState>
+            <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+          </Attributes>
+      </UpdateData>
       
-			<GenerateData Alias="VAL"> 
-				<DataType>Validate</DataType>
-                <ExtUID>${TASK1:UID}</ExtUID>
-			</GenerateData>
-			
-			<GenerateData> 
-				<DataType>Resolve</DataType>
-				<Status>checkForResolve</Status>
-			</GenerateData>	
-		</Activate>
-	</CreateTrigger>
+      <GenerateData Alias="VAL"> 
+        <DataType>Validate</DataType>
+        <ExtUID>${TASK1:UID}</ExtUID>
+      </GenerateData>
+      
+      <GenerateData> 
+        <DataType>Resolve</DataType>
+        <Status>checkForResolve</Status>
+      </GenerateData> 
+    </Activate>
+  </CreateTrigger>
 </KnowledgeItem>

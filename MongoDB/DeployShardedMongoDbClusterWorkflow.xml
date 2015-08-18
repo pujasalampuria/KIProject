@@ -1,100 +1,100 @@
 <KnowledgeItem ID="OpexSoftware:MongoDB:DeployShardedMongoDbClusterWorkflow" xmlns="http://www.arago.de/KiSchema">
-	<Title>DeployShardedMongoDbClusterWorkflow</Title>
-	<Description>Initiates the workflow for Configure Sharded MongoDB Cluster by writing
-		into the MARS model and creating new corresponding data blocks in the Issue.
-	</Description>
-	<BindAttributes>
-		<AttributeFilter Name="NodeType" Mode="string" Value="Machine"/>
-		<SubItem Name="Extensions" Alias="EXTS">
-            <TrueFilter/>
-        </SubItem>
-		<RelatedNode Mode="predecessor" Alias="PRE">
-			<AttributeFilter Name="NodeType" Mode="string" Value="Application"/>
-		</RelatedNode> 
-	</BindAttributes>
+  <Title>DeployShardedMongoDbClusterWorkflow</Title>
+  <Description>Initiates the workflow to Configure Sharded MongoDB Cluster by writing
+    into the MARS model and creating new corresponding data blocks in the Issue.
+  </Description>
+  <BindAttributes>
+    <AttributeFilter Name="NodeType" Mode="string" Value="Machine"/>
+    <SubItem Name="Extensions" Alias="EXTS">
+        <TrueFilter/>
+    </SubItem>
+    <RelatedNode Mode="predecessor" Alias="PRE">
+      <AttributeFilter Name="NodeType" Mode="string" Value="Application"/>
+    </RelatedNode> 
+  </BindAttributes>
 
-	<Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
+  <Log>__KI ${KIID} is now bound to ${NODE:NodeID}__</Log>
 
-	<CreateTrigger>
-		<IssueCondition>
-			<Description>Searches for an Issue with DataBlock DeployShardedMongoDbClusterWorkflow 
-				and the necessary information for successful completion of workflow.
-			</Description>
-			<SubItem Name="DeployShardedMongoDbClusterWorkflow" Alias="DSMDCW">
-				<AttributeFilter Name="TargetApp" Mode="exists"/> 
-				<AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}"/>
-				<AttributeFilter Name="TargetState" Mode="string" Value="Created"/>
-				<AttributeFilter Name="Path" Mode="exists"/>
-				<AttributeFilter Name="ConfigServerHostnames" Mode="exists"/>
-				<AttributeFilter Name="ConfigServerPort" Mode="exists"/>
-        		<AttributeFilter Name="User" Mode="exists"/>
-				<AttributeFilter Name="Host" Mode="exists"/>
-				<AttributeFilter Name="Status" Mode="notexists"/>
-			</SubItem>
-		</IssueCondition>
+  <CreateTrigger>
+    <IssueCondition>
+      <Description>Searches for an Issue with DataBlock DeployShardedMongoDbClusterWorkflow 
+        and the necessary information for successful completion of workflow.
+      </Description>
+      <SubItem Name="DeployShardedMongoDbClusterWorkflow" Alias="DSMDCW">
+        <AttributeFilter Name="TargetApp" Mode="exists"/> 
+        <AttributeFilter Name="TargetMachine" Mode="string" Value="${NODE:NodeName}"/>
+        <AttributeFilter Name="TargetState" Mode="string" Value="Created"/>
+        <AttributeFilter Name="Path" Mode="exists"/>
+        <AttributeFilter Name="ConfigServerHostnames" Mode="exists"/>
+        <AttributeFilter Name="ConfigServerPort" Mode="exists"/>
+        <AttributeFilter Name="User" Mode="exists"/>
+        <AttributeFilter Name="Host" Mode="exists"/>
+        <AttributeFilter Name="Status" Mode="notexists"/>
+      </SubItem>
+    </IssueCondition>
 
-		<Activate>
-			<SetAttribute Name="DSMDCW:Status" Value="WorkflowStarted" /> 
+    <Activate>
+      <SetAttribute Name="DSMDCW:Status" Value="WorkflowStarted" /> 
 
-			<GenerateData Alias="PROTASKS"> 
-				<DataType>ProcessingTasks</DataType>
-				<CurrentTask>1</CurrentTask> 
-			</GenerateData>
-			
+      <GenerateData Alias="PROTASKS"> 
+        <DataType>ProcessingTasks</DataType>
+        <CurrentTask>1</CurrentTask> 
+      </GenerateData>
+      
            <!-- TASK1 Start config server Database Instance-->
-			<IncAttribute Name="PROTASKS:NumberTotal"/>
-			
-			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK1">
-                <KeyAttributes>
-                  <UID> </UID>
-                </KeyAttributes>
-                <Attributes>
-                  <Lib>MONGODBSETDIR</Lib>
-                  <TargetMachine>${DSMDCW:TargetMachine}</TargetMachine>      
-                  <TargetState>Created</TargetState>
-                  <User>${DSMDCW:User}</User>
-                  <Host>${DSMDCW:Host}</Host>
-                  <Path>${DSMDCW:Path}</Path>
-                  <ConfigServerPort>${DSMDCW:ConfigServerPort}</ConfigServerPort>
-                  <CurrentState>ReadState</CurrentState>
-                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
-                </Attributes>
-             </UpdateData>
+      <IncAttribute Name="PROTASKS:NumberTotal"/>
       
-			<GenerateData Alias="VAL"> 
-				<DataType>Validate</DataType>
-                <ExtUID>${TASK1:UID}</ExtUID>
-			</GenerateData>
+      <UpdateData Base="EXTS" Name="Tasks" Alias="TASK1">
+          <KeyAttributes>
+            <UID> </UID>
+          </KeyAttributes>
+          <Attributes>
+            <Lib>MONGODBSETDIR</Lib>
+            <TargetMachine>${DSMDCW:TargetMachine}</TargetMachine>      
+            <TargetState>Created</TargetState>
+            <User>${DSMDCW:User}</User>
+            <Host>${DSMDCW:Host}</Host>
+            <Path>${DSMDCW:Path}</Path>
+            <ConfigServerPort>${DSMDCW:ConfigServerPort}</ConfigServerPort>
+            <CurrentState>ReadState</CurrentState>
+            <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+          </Attributes>
+      </UpdateData>
       
-      		<!-- TASK2 Start the Mongos instance -->
-			<IncAttribute Name="PROTASKS:NumberTotal"/>
-			
-			<UpdateData Base="EXTS" Name="Tasks" Alias="TASK2">
-                <KeyAttributes>
-                  <UID> </UID>
-                </KeyAttributes>
-                <Attributes>
-                  <Lib>MONGODBCONFIGURE</Lib>
-                  <TargetMachine>${DSMDCW:TargetMachine}</TargetMachine>      
-                  <TargetState>Created</TargetState>
-                  <User>${DSMDCW:User}</User>
-                  <Host>${DSMDCW:Host}</Host>
-                  <ConfigServerPort>${DSMDCW:ConfigServerPort}</ConfigServerPort>
-                  <ConfigServerHostnames>${DSMDCW:ConfigServerHostnames}</ConfigServerHostnames>
-                  <CurrentState>ReadState</CurrentState>
-                  <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
-                </Attributes>
-             </UpdateData>
-			
-			<GenerateData Alias="VAL"> 
-				<DataType>Validate</DataType>
-                <ExtUID>${TASK2:UID}</ExtUID>
-			</GenerateData>
-			
-			<GenerateData> 
-				<DataType>Resolve</DataType>
-				<Status>checkForResolve</Status>
-			</GenerateData>	
-		</Activate>
-	</CreateTrigger>
+      <GenerateData Alias="VAL"> 
+        <DataType>Validate</DataType>
+        <ExtUID>${TASK1:UID}</ExtUID>
+      </GenerateData>
+      
+          <!-- TASK2 Start the Mongos instance -->
+      <IncAttribute Name="PROTASKS:NumberTotal"/>
+      
+      <UpdateData Base="EXTS" Name="Tasks" Alias="TASK2">
+          <KeyAttributes>
+            <UID> </UID>
+          </KeyAttributes>
+          <Attributes>
+            <Lib>MONGODBCONFIGURE</Lib>
+            <TargetMachine>${DSMDCW:TargetMachine}</TargetMachine>      
+            <TargetState>Created</TargetState>
+            <User>${DSMDCW:User}</User>
+            <Host>${DSMDCW:Host}</Host>
+            <ConfigServerPort>${DSMDCW:ConfigServerPort}</ConfigServerPort>
+            <ConfigServerHostnames>${DSMDCW:ConfigServerHostnames}</ConfigServerHostnames>
+            <CurrentState>ReadState</CurrentState>
+            <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
+          </Attributes>
+      </UpdateData>
+      
+      <GenerateData Alias="VAL"> 
+        <DataType>Validate</DataType>
+        <ExtUID>${TASK2:UID}</ExtUID>
+      </GenerateData>
+      
+      <GenerateData> 
+        <DataType>Resolve</DataType>
+        <Status>checkForResolve</Status>
+      </GenerateData> 
+    </Activate>
+  </CreateTrigger>
 </KnowledgeItem>

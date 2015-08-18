@@ -44,7 +44,7 @@
              <!-- TASK1 Allow all current connections stay online -->
             <IncAttribute Name="PROTASKS:NumberTotal"/>
 
-            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK1">
+           <UpdateData Base="EXTS" Name="Tasks" Alias="TASK1">
                 <KeyAttributes>
                   <UID> </UID>
                 </KeyAttributes>
@@ -57,7 +57,7 @@
                   <CurrentState>ReadState</CurrentState>
                   <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
                 </Attributes>
-            </UpdateData>
+             </UpdateData>
       
             <GenerateData Alias="VAL"> 
                 <DataType>Validate</DataType>
@@ -67,7 +67,7 @@
             <!-- TASK2 Accepting connection on a specified port -->
             <IncAttribute Name="PROTASKS:NumberTotal"/>
 		
-            <UpdateData Base="EXTS" Name="Tasks" Alias="TASK2">
+              <UpdateData Base="EXTS" Name="Tasks" Alias="TASK2">
                 <KeyAttributes>
                   <UID> </UID>
                 </KeyAttributes>
@@ -79,11 +79,11 @@
                   <Host>${CIBFW:Host}</Host>
                   <ProtocolOfRule>${CIBFW:ProtocolOfRule}</ProtocolOfRule>
                   <ProtocolPort>${CIBFW:PortToAccept}</ProtocolPort>
-		  <Rule>ACCEPT</Rule>
+				  <Rule>ACCEPT</Rule>
                   <CurrentState>ReadState</CurrentState>
                   <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
                 </Attributes>
-            </UpdateData>
+             </UpdateData>
               
             <GenerateData Alias="VAL"> 
                 <DataType>Validate</DataType>
@@ -104,10 +104,10 @@
                   <User>${CIBFW:User}</User>
                   <Host>${CIBFW:Host}</Host>
                   <Rule>ACCEPT</Rule>
-		  <CurrentState>ReadState</CurrentState>
+				  <CurrentState>ReadState</CurrentState>
                   <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
                 </Attributes>
-            </UpdateData>
+             </UpdateData>
       
             <GenerateData Alias="VAL"> 
                 <DataType>Validate</DataType>
@@ -131,7 +131,7 @@
                   <CurrentState>ReadState</CurrentState>
                   <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
                 </Attributes>
-            </UpdateData>
+             </UpdateData>
       
             <GenerateData Alias="VAL"> 
                 <DataType>Validate</DataType>
@@ -154,7 +154,7 @@
                   <CurrentState>ReadState</CurrentState>
                   <TaskNumber>${PROTASKS:NumberTotal}</TaskNumber>
                 </Attributes>
-            </UpdateData>
+             </UpdateData>
       
             <GenerateData Alias="VAL"> 
                 <DataType>Validate</DataType>
